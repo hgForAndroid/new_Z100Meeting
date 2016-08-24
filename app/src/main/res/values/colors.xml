@@ -10,4 +10,6 @@
     <color name="color_tab_selected">#2196f3</color>
     <!--标题栏的背景色-->
     <color name="color_navBar_bg">#00bcd4</color>
+    <!--文件名，大小，主讲人   背景色-->
+    <color name="color_file_size_bg">#9E9E9E</color>
 </resources>

@@ -18,6 +18,8 @@ import butterknife.ButterKnife;
 */
 
 public class VoteFragment extends Fragment {
+    public static VoteFragment newInstance(){return new VoteFragment();}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

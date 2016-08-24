@@ -2,8 +2,64 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
-    <TextView
-        android:layout_width="match_parent"
+
+    <EditText
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:layout_marginLeft="@dimen/distance_ten_dp"
+        android:id="@+id/id_edt_fgm_file"
+        android:layout_width="@dimen/file_search_width"
+        android:layout_height="@dimen/file_search_height"
+        android:background="@drawable/edt_selector"
+        android:paddingLeft="@dimen/distance_ten_dp"
+        android:hint="@string/string_file_search_hint"/>
+
+    <Button
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:layout_marginLeft="@dimen/distance_ten_dp"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/file_search_height"
+        android:text="@string/string_search"
+        android:id="@+id/id_btn_fgm_file"
+        android:layout_toRightOf="@id/id_edt_fgm_file"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:layout_below="@id/id_edt_fgm_file"
+        android:id="@+id/id_rev_fgm_tab"
         android:layout_height="wrap_content"
-        android:text="文件"/>
+        android:layout_width="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+    <RelativeLayout
+        android:id="@+id/id_ll_fgm_file"
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:layout_below="@id/id_rev_fgm_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="文件名"
+            android:background="@color/color_file_size_bg"/>
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="大小"
+            android:background="@color/color_file_size_bg"/>
+        <TextView
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="主讲人"
+            android:background="@color/color_file_size_bg"/>
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:layout_below="@id/id_ll_fgm_file"
+        android:id="@+id/id_rev_fgm_file_list"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
 </RelativeLayout>

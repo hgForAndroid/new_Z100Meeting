@@ -5,8 +5,9 @@
     <string name="string_main_tab_agenda">议程</string>
     <string name="string_main_tab_file">文件</string>
     <string name="string_main_tab_about">关于</string>
-    <string name="string_main_tab_ballot">表决</string>
+    <string name="string_main_tab_vote">投票</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="string_file_search_hint">文件名/人名</string>
+    <string name="string_search">搜索</string>
+
 </resources>

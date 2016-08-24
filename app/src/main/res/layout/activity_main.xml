@@ -18,13 +18,12 @@
         android:id="@+id/id_main_ViewPager">
 
     </android.support.v4.view.ViewPager>
-
     <RadioGroup
         android:id="@+id/id_main_rdg"
         android:background="@color/color_tab_bg"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/tab_width"
+        android:layout_height="@dimen/tab_height"
         android:orientation="horizontal"
         android:gravity="center">
         <RadioButton
@@ -50,7 +49,7 @@
         <RadioButton
             android:visibility="gone"
             android:id="@+id/id_main_voteTab"
-            android:text="@string/string_main_tab_ballot"
+            android:text="@string/string_main_tab_vote"
             style="@style/radio_button_same_attr"/>
     </RadioGroup>
     <View

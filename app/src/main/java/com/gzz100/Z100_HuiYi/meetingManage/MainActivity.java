@@ -78,6 +78,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mMeetingAdapter = new MeetingAdapter(getSupportFragmentManager(),mFragments);
         mViewPager.setAdapter(mMeetingAdapter);
         mViewPager.setCurrentItem(PAGE_ONE);
+        mNavBarView.mTvTitle.setText(mMeetingTab.getText());
         mViewPager.setOnPageChangeListener(this);
         mMeetingTab.setChecked(true);
         mTabGroup.setOnCheckedChangeListener(this);
@@ -88,18 +89,23 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         switch (checkedId){
             case R.id.id_main_meetingTab:
                 mViewPager.setCurrentItem(PAGE_ONE);
+                mNavBarView.mTvTitle.setText(mMeetingTab.getText());
                 break;
             case R.id.id_main_delegateTab:
                 mViewPager.setCurrentItem(PAGE_TWO);
+                mNavBarView.mTvTitle.setText(mDelegateTab.getText());
                 break;
             case R.id.id_main_agendaTab:
                 mViewPager.setCurrentItem(PAGE_THREE);
+                mNavBarView.mTvTitle.setText(mAboutTab.getText());
                 break;
             case R.id.id_main_fileTab:
                 mViewPager.setCurrentItem(PAGE_FOUR);
+                mNavBarView.mTvTitle.setText(mFileTab.getText());
                 break;
             case R.id.id_main_aboutTab:
                 mViewPager.setCurrentItem(PAGE_FIVE);
+                mNavBarView.mTvTitle.setText(mAboutTab.getText());
                 break;
 //            case R.id.id_main_voteTab:
 //                mViewPager.setCurrentItem(PAGE_SIX);
