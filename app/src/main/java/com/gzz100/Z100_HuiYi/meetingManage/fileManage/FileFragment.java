@@ -1,6 +1,5 @@
 package com.gzz100.Z100_HuiYi.meetingManage.fileManage;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.FileBean;
 
-import butterknife.ButterKnife;
+import java.util.List;
 
 /**
 * 文件详情
@@ -19,7 +20,9 @@ import butterknife.ButterKnife;
 * create at 2016/8/23 17:01
 */
 
-public class FileFragment extends Fragment {
+public class FileFragment extends Fragment implements FileContract.View{
+    private FileContract.Presenter mPresenter;
+
     public static FileFragment newInstance(){return new FileFragment();}
 
     @Override
@@ -29,8 +32,20 @@ public class FileFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        Log.e("FileFragment -->","onStart");
+        super.onStart();
+    }
+
+    @Override
+    public void setPresenter(FileContract.Presenter presenter) {
+        this.mPresenter = presenter;
+    }
+
+    @Override
     public void onResume() {
         Log.e("FileFragment -->","onResume");
+        mPresenter.start();
         super.onResume();
     }
 
@@ -42,6 +57,7 @@ public class FileFragment extends Fragment {
         Log.e("FileFragment -->","onCreateView");
         return view;
     }
+
     @Override
     public void onDestroyView() {
         Log.e("FileFragment -->","onDestroyView");
@@ -49,43 +65,43 @@ public class FileFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        Log.e("FileFragment -->","onDestroy");
-        super.onDestroy();
-    }
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.e("FileFragment -->","onActivityCreated");
-        super.onActivityCreated(savedInstanceState);
+    public void showAgendaList(List<Agenda> agendas) {
+
     }
 
     @Override
-    public void onStart() {
-        Log.e("FileFragment -->","onStart");
-        super.onStart();
+    public void showSearchResult(List<FileBean> fileBeen) {
+
     }
 
     @Override
-    public void onPause() {
-        Log.e("FileFragment -->","onPause");
-        super.onPause();
+    public void showFilesResult(List<FileBean> fileBeen) {
+
     }
 
     @Override
-    public void onStop() {
-        Log.e("FileFragment -->","onStop");
-        super.onStop();
+    public void showFileDetail() {
+
     }
 
     @Override
-    public void onDetach() {
-        Log.e("FileFragment -->","onDetach");
-        super.onDetach();
+    public boolean isActive() {
+        return isAdded();
     }
 
     @Override
-    public void onAttach(Context context) {
-        Log.e("FileFragment -->","onAttach");
-        super.onAttach(context);
+    public void showNoFileList() {
+
     }
+
+    @Override
+    public void showNoAgendaList() {
+
+    }
+
+    @Override
+    public void showNoSearchResult() {
+
+    }
+
 }

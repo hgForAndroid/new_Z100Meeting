@@ -3,7 +3,7 @@ package com.gzz100.Z100_HuiYi.data;
 /**
  * Created by XieQXiong on 2016/8/24.
  */
-public class FileInfo {
+public class FileBean {
     private String fileName;
     private String fileSize;
     private String fileAddress;

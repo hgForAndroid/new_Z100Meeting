@@ -10,7 +10,7 @@ public class Agenda {
     private String agendaTime;
     private String agendaName;
     private String keynoteSpeaker;
-    private List<FileInfo> filesList;
+    private List<FileBean> filesList;
 
     public String getAgendaIndex() {
         return agendaIndex;
@@ -44,11 +44,11 @@ public class Agenda {
         this.keynoteSpeaker = keynoteSpeaker;
     }
 
-    public List<FileInfo> getFilesList() {
+    public List<FileBean> getFilesList() {
         return filesList;
     }
 
-    public void setFilesList(List<FileInfo> filesList) {
+    public void setFilesList(List<FileBean> filesList) {
         this.filesList = filesList;
     }
 }
