@@ -1,8 +1,10 @@
 package com.gzz100.Z100_HuiYi.data.source.remote;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.source.FileDataSource;
+import com.gzz100.Z100_HuiYi.data.source.local.FileDBHelper;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 /**
@@ -13,13 +15,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FileRemoteDataSource implements FileDataSource {
     private static FileRemoteDataSource INSTANCE;
+    private final FileDBHelper mDbHelper;
 
-    private FileRemoteDataSource() {
+    private FileRemoteDataSource(@NonNull Context context) {
+        mDbHelper = FileDBHelper.getInstance(context);
     }
 
-    public static FileRemoteDataSource getInstance() {
+    public static FileRemoteDataSource getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new FileRemoteDataSource();
+            INSTANCE = new FileRemoteDataSource(context);
         }
         return INSTANCE;
     }

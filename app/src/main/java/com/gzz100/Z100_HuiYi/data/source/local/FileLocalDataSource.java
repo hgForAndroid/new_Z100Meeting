@@ -14,10 +14,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FileLocalDataSource implements FileDataSource {
     private static FileLocalDataSource INSTANCE;
+    private final FileDBHelper mDbHelper;
 
     private FileLocalDataSource(@NonNull Context context) {
         checkNotNull(context);
-//        mDbHelper = new TasksDbHelper(context);
+        mDbHelper = FileDBHelper.getInstance(context);
     }
 
     public static FileLocalDataSource getInstance(@NonNull Context context) {
