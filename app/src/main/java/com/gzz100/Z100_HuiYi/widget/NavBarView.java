@@ -25,6 +25,7 @@ public class NavBarView extends RelativeLayout {
     public TextView mTvTitle;
     public TextView mMeetingState;
     public TextView mTvTime;
+    public TextView mTvUpLevel;
 
     public NavBarView(Context context) {
         super(context);
@@ -48,9 +49,55 @@ public class NavBarView extends RelativeLayout {
         mTvTitle = (TextView) findViewById(R.id.id_tv_navBar_title);
         mMeetingState = (TextView) findViewById(R.id.id_tv_navBar_state);
         mTvTime = (TextView) findViewById(R.id.id_tv_navBar_time);
+        mTvUpLevel = (TextView) findViewById(R.id.id_tv_up_level);
     }
 
     public void setFallBackListener(OnClickListener listener){
         mLlFallBack.setOnClickListener(listener);
+    }
+
+    /**
+     * 导航栏返回按钮的显示，在 个人信息，议程文件详情 中应该显示
+     * @param flag  true:显示   false:不显示
+     */
+    public void setFallBackDisplay(boolean flag){
+        if (flag){
+            mLlFallBack.setVisibility(View.VISIBLE);
+        }else {
+            mLlFallBack.setVisibility(View.GONE);
+        }
+    }
+    /**
+     * 右侧时间和会议状态的显示 ，在个人信息界面应该隐藏
+     * @param flag  true:显示   false:不显示
+     */
+    public void setTimeAndStateDisplay(boolean flag){
+        if (flag){
+            mLlRight.setVisibility(View.VISIBLE);
+        }else {
+            mLlRight.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 设置导航栏标题
+     * @param title  标题名称
+     */
+    public void setTitle(String title){
+        mTvTitle.setText(title);
+    }
+    /**
+     * 设置导航栏 右侧状态
+     * @param state  主界面：状态  文件详情：第几个议程
+     */
+    public void setState(String state){
+        mMeetingState.setText(state);
+    }
+    /**
+     * 设置导航栏 返回中上一级的标题
+     * @param upLevelText  上一级标题
+     */
+    public void setUpLevelText(String upLevelText){
+        mTvUpLevel.setText(upLevelText);
     }
 }
