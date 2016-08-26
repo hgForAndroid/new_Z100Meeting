@@ -41,7 +41,7 @@ public class FilePresenter implements FileContract.Presenter {
 
             @Override
             public void onDataNotAvailable() {
-                mFileView.showNoFileList();
+                mFileView.showNoSearchResult();
             }
         });
 
@@ -55,12 +55,13 @@ public class FilePresenter implements FileContract.Presenter {
             mFirstLoad = false;
             mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.loadAgendaListCallback() {
                 @Override
-                public void onAgendaListLoaded(List<Agenda> files) {
+                public void onAgendaListLoaded(List<Agenda> agendas) {
                     if (!mFileView.isActive()) {
                         return;
                     }
 
-                    mFileView.showAgendaList(files);
+                    mFileView.showAgendaList(agendas);
+                    mFileView.setAgendasSum(agendas.size());
                 }
 
                 @Override
@@ -75,7 +76,7 @@ public class FilePresenter implements FileContract.Presenter {
     }
 
     @Override
-    public void fetchFileList(boolean forceUpdate, int agendaPos) {
+    public void fetchFileList(boolean forceUpdate, final int agendaPos) {
         if (forceUpdate || mFirstLoad){
             mFirstLoad = false;
 //            fileModel.getFileListByAgendaPos(agendaPos);
@@ -86,7 +87,9 @@ public class FilePresenter implements FileContract.Presenter {
                     if (!mFileView.isActive()) {
                         return;
                     }
+                    mFileView.setFileList(files);
                     mFileView.showFilesList(files);
+                    mFileView.setAgendaIndex(agendaPos);
 
                 }
 
@@ -102,9 +105,16 @@ public class FilePresenter implements FileContract.Presenter {
     }
 
     @Override
-    public void showFileDetail() {
+    public void showFileDetail(int fileIndex) {
+        mFileView.setFileIndex(fileIndex);
         mFileView.showFileDetail();
     }
+
+    @Override
+    public void setAgendaTime(String time) {
+        mFileView.setAgendaTime(time);
+    }
+
 
     @Override
     public void start() {

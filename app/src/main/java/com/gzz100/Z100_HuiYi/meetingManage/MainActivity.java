@@ -10,6 +10,7 @@ import android.widget.RadioGroup;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.adapter.MeetingAdapter;
+import com.gzz100.Z100_HuiYi.inteface.ICommunicate;
 import com.gzz100.Z100_HuiYi.meetingManage.aboutManage.AboutFragment;
 import com.gzz100.Z100_HuiYi.meetingManage.agendaManage.AgendaFragment;
 import com.gzz100.Z100_HuiYi.meetingManage.delegateManage.DelegateFragment;
@@ -25,7 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, ViewPager.OnPageChangeListener {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, ViewPager.OnPageChangeListener,ICommunicate {
     @BindView(R.id.id_main_tbv) NavBarView mNavBarView;
     @BindView(R.id.id_main_ViewPager) ViewPager mViewPager;
 
@@ -162,5 +163,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             }
         }
 
+    }
+
+    @Override
+    public String getCurrentTitle() {
+        return mNavBarView.mTvTitle.getText().toString();
     }
 }

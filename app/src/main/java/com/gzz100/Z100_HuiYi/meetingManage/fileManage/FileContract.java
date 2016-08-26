@@ -6,10 +6,12 @@ import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.FileBean;
 
 import java.util.List;
-
 /**
- * Created by XieQXiong on 2016/8/24.
- */
+* FileFragment  和  FilePresenter  的实现接口类
+* @author XieQXiong
+* create at 2016/8/26 15:56
+*/
+
 public interface FileContract {
     public interface View extends BaseView<Presenter>{
         /**
@@ -31,7 +33,7 @@ public interface FileContract {
         void showFilesList(List<FileBean> fileBean);
 
         /**
-         *初始化文件内容界面
+         *跳转文件详情界面
          */
         void showFileDetail();
 
@@ -42,9 +44,26 @@ public interface FileContract {
          */
         boolean isActive();
 
+        /**
+         * 点议程没有对应的文件列表
+         */
         void showNoFileList();
+
+        /**
+         * 刚开始加载后，没有议程列表
+         */
         void showNoAgendaList();
+
+        /**
+         * 搜索无结果
+         */
         void showNoSearchResult();
+        //以下的参数设置，是跳转到文件详情时所需的参数
+        void setAgendasSum(int size);
+        void setAgendaIndex(int index);
+        void setFileList(List<FileBean> files);
+        void setFileIndex(int fileIndex);
+        void setAgendaTime(String time);
 
     }
 
@@ -73,7 +92,13 @@ public interface FileContract {
         /**
          * 展示文件内容
          */
-        void showFileDetail();
+        void showFileDetail(int fileIndex);
+
+        /**
+         * 设置议程时间
+         * @param time
+         */
+        void setAgendaTime(String time);
 
     }
 }
