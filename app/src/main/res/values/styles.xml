@@ -10,7 +10,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!--RadioButton的共有属性-->
+    <!--主界面    RadioButton的共有属性-->
     <style name="radio_button_same_attr">
         <item name="android:textColor">@drawable/tab_textcolor_selector</item>
         <item name="android:button">@null</item>
@@ -20,4 +20,15 @@
         <item name="android:background">@drawable/tab_bg_selector</item>
     </style>
 
+    <!--文件界面   文件列表-->
+    <style name="weight_for_one">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--宽高均为自适应-->
+    <style name="wrap_content_attr">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>

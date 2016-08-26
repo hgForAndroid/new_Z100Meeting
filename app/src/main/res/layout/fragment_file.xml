@@ -37,21 +37,21 @@
         android:layout_height="wrap_content">
         <TextView
             android:layout_alignParentLeft="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="文件名"
+            android:padding="@dimen/distance_five_dp"
+            style="@style/wrap_content_attr"
+            android:text="@string/string_file_name"
             android:background="@color/color_file_size_bg"/>
         <TextView
             android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="大小"
+            android:padding="@dimen/distance_five_dp"
+            style="@style/wrap_content_attr"
+            android:text="@string/string_size"
             android:background="@color/color_file_size_bg"/>
         <TextView
             android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="主讲人"
+            android:padding="@dimen/distance_five_dp"
+            style="@style/wrap_content_attr"
+            android:text="@string/string_keynote_Speaker"
             android:background="@color/color_file_size_bg"/>
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView

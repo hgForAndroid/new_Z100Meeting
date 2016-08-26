@@ -14,7 +14,9 @@ import com.gzz100.Z100_HuiYi.meetingManage.aboutManage.AboutFragment;
 import com.gzz100.Z100_HuiYi.meetingManage.agendaManage.AgendaFragment;
 import com.gzz100.Z100_HuiYi.meetingManage.delegateManage.DelegateFragment;
 import com.gzz100.Z100_HuiYi.meetingManage.fileManage.FileFragment;
+import com.gzz100.Z100_HuiYi.meetingManage.fileManage.FilePresenter;
 import com.gzz100.Z100_HuiYi.meetingManage.voteManage.VoteFragment;
+import com.gzz100.Z100_HuiYi.utils.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.widget.NavBarView;
 
 import java.util.ArrayList;
@@ -61,12 +63,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     private void init() {
-        mMeetingFragment = new MeetingFragment();
-        mDelegateFragment = new DelegateFragment();
-        mAgendaFragment = new AgendaFragment();
-        mFileFragment = new FileFragment();
-        mAboutFragment = new AboutFragment();
-        mVoteFragment = new VoteFragment();
+        mMeetingFragment = MeetingFragment.newInstance();
+        mDelegateFragment = DelegateFragment.newInstance();
+        mAgendaFragment =  AgendaFragment.newInstance();
+        mFileFragment = FileFragment.newInstance();
+        mAboutFragment = AboutFragment.newInstance();
+        mVoteFragment = VoteFragment.newInstance();
         mFragments.add(mMeetingFragment);
         mFragments.add(mDelegateFragment);
         mFragments.add(mAgendaFragment);
@@ -79,8 +81,18 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mViewPager.setAdapter(mMeetingAdapter);
         mViewPager.setCurrentItem(PAGE_ONE);
         mNavBarView.mTvTitle.setText(mMeetingTab.getText());
-        mViewPager.setOnPageChangeListener(this);
         mMeetingTab.setChecked(true);
+        initEvent();
+        initPresenter();
+    }
+
+    private void initPresenter() {
+        new FilePresenter(RepositoryUtil.getFileRepository(this.getApplicationContext()),
+                mFileFragment);
+    }
+
+    private void initEvent() {
+        mViewPager.setOnPageChangeListener(this);
         mTabGroup.setOnCheckedChangeListener(this);
     }
 

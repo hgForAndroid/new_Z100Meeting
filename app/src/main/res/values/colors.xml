@@ -11,5 +11,7 @@
     <!--标题栏的背景色-->
     <color name="color_navBar_bg">#00bcd4</color>
     <!--文件名，大小，主讲人   背景色-->
-    <color name="color_file_size_bg">#9E9E9E</color>
+    <color name="color_file_size_bg">#E0E0E0</color>
+    <!--文件界面  议程列表的背景色-->
+    <color name="color_agenda_list_bg">#00BCD4</color>
 </resources>

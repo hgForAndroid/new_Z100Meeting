@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.gzz100.Z100_HuiYi.data.FileBean;
-import com.gzz100.Z100_HuiYi.utils.ObjectParser;
+import com.gzz100.Z100_HuiYi.utils.ObjectTransverter;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class FileDBHelper extends SQLiteOpenHelper {
     }
 
     public void insertFileList(int agendaIndex,List<FileBean> fileList){
-        byte[] data = ObjectParser.FileListToByteArr(fileList);
+        byte[] data = ObjectTransverter.FileListToByteArr(fileList);
         ContentValues values =new ContentValues();
         values.put(FilePersistenceContract.FileListEntry.COLUMN_NAME_AGENDA_INDEX,agendaIndex);
         values.put(FilePersistenceContract.FileListEntry.COLUMN_NAME_FILE_LIST,data);
@@ -72,7 +72,7 @@ public class FileDBHelper extends SQLiteOpenHelper {
         if ( cursor.moveToFirst()){
             byte[] data = cursor.getBlob(cursor.getColumnIndex(
                     FilePersistenceContract.FileListEntry.COLUMN_NAME_FILE_LIST));
-            files = ObjectParser.byteArrToFileList(data);
+            files = ObjectTransverter.byteArrToFileList(data);
         }
         return  files;
 

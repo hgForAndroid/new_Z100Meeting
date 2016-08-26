@@ -10,4 +10,9 @@
     <string name="string_file_search_hint">文件名/人名</string>
     <string name="string_search">搜索</string>
 
+
+    <string name="string_file_name">文件名</string>
+    <string name="string_size">大小</string>
+    <string name="string_keynote_Speaker">主讲人</string>
+
 </resources>

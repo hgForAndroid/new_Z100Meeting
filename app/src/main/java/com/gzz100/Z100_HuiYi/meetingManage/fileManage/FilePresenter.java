@@ -35,7 +35,7 @@ public class FilePresenter implements FileContract.Presenter {
                 if (!mFileView.isActive()) {
                     return;
                 }
-                mFileView.showFilesResult(files);
+                mFileView.showFilesList(files);
 
             }
 
@@ -86,7 +86,7 @@ public class FilePresenter implements FileContract.Presenter {
                     if (!mFileView.isActive()) {
                         return;
                     }
-                    mFileView.showFilesResult(files);
+                    mFileView.showFilesList(files);
 
                 }
 

@@ -28,7 +28,7 @@ public interface FileContract {
          * 显示切换议程后对应的所有文件
          * @param fileBean  切换议程后对应的文件列表
          */
-        void showFilesResult(List<FileBean> fileBean);
+        void showFilesList(List<FileBean> fileBean);
 
         /**
          *初始化文件内容界面

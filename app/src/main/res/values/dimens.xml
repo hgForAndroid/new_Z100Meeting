@@ -9,6 +9,7 @@
     <dimen name="file_search_height">50dp</dimen>
     <dimen name="file_search_width">600dp</dimen>
     <dimen name="distance_ten_dp">10dp</dimen>
+    <dimen name="distance_five_dp">5dp</dimen>
 
 
 </resources>
