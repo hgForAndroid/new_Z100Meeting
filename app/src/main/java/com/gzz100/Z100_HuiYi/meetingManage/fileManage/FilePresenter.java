@@ -52,7 +52,7 @@ public class FilePresenter implements FileContract.Presenter {
     @Override
     public void fetchAgendaList(boolean forceUpdate, String IMEI, String userId) {
         if (forceUpdate || mFirstLoad){
-            mFirstLoad = false;
+//            mFirstLoad = false;
             mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.loadAgendaListCallback() {
                 @Override
                 public void onAgendaListLoaded(List<Agenda> agendas) {
@@ -87,8 +87,8 @@ public class FilePresenter implements FileContract.Presenter {
                     if (!mFileView.isActive()) {
                         return;
                     }
-                    mFileView.setFileList(files);
                     mFileView.showFilesList(files);
+                    mFileView.setFileList(files);
                     mFileView.setAgendaIndex(agendaPos);
 
                 }
@@ -115,11 +115,16 @@ public class FilePresenter implements FileContract.Presenter {
         mFileView.setAgendaTime(time);
     }
 
+    @Override
+    public void setFirstLoad(boolean reLoad) {
+        mFirstLoad = reLoad;
+    }
+
 
     @Override
     public void start() {
         fetchAgendaList(false,"","");
-        fetchFileList(false,0);
+        fetchFileList(false,1);
     }
 
 }

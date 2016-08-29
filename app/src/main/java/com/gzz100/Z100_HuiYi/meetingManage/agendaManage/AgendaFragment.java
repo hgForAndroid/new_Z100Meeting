@@ -38,56 +38,56 @@ public class AgendaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_agenda, null);
 //        ButterKnife.bind(getActivity(),view);
-        Log.e("AgendaFragment -->","onCreateView");
+//        Log.e("AgendaFragment -->","onCreateView");
         return view;
     }
 
     @Override
     public void onDestroyView() {
-        Log.e("AgendaFragment -->","onDestroyView");
+//        Log.e("AgendaFragment -->","onDestroyView");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        Log.e("AgendaFragment -->","onDestroy");
+//        Log.e("AgendaFragment -->","onDestroy");
         super.onDestroy();
     }
 
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.e("AgendaFragment -->","onActivityCreated");
+//        Log.e("AgendaFragment -->","onActivityCreated");
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public void onStart() {
-        Log.e("AgendaFragment -->","onStart");
+//        Log.e("AgendaFragment -->","onStart");
         super.onStart();
     }
 
     @Override
     public void onPause() {
-        Log.e("AgendaFragment -->","onPause");
+//        Log.e("AgendaFragment -->","onPause");
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        Log.e("AgendaFragment -->","onStop");
+//        Log.e("AgendaFragment -->","onStop");
         super.onStop();
     }
 
     @Override
     public void onDetach() {
-        Log.e("AgendaFragment -->","onDetach");
+//        Log.e("AgendaFragment -->","onDetach");
         super.onDetach();
     }
 
     @Override
     public void onAttach(Context context) {
-        Log.e("AgendaFragment -->","onAttach");
+//        Log.e("AgendaFragment -->","onAttach");
         super.onAttach(context);
     }
 

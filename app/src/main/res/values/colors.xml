@@ -6,6 +6,8 @@
 
     <!--导航栏背景颜色-->
     <color name="color_tab_bg">#F5F5F5</color>
+    <!--单个导航默认的颜色-->
+    <color name="color_tab_normal">#E0E0E0</color>
     <!--单个导航选中的颜色-->
     <color name="color_tab_selected">#2196f3</color>
     <!--标题栏的背景色-->

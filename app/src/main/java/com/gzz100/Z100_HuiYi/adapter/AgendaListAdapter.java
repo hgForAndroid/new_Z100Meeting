@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.inteface.OnAgendaItemClickListener;
 
 import java.util.List;
 
@@ -19,6 +21,12 @@ import butterknife.ButterKnife;
  * Created by XieQXiong on 2016/8/26.
  */
 public class AgendaListAdapter extends RecyclerView.Adapter<AgendaHolder>{
+    private OnAgendaItemClickListener mOnItemClickListener;
+    public void setOnItemClickListener(OnAgendaItemClickListener onItemClickListener){
+        this.mOnItemClickListener = onItemClickListener;
+    }
+
+
     private Context mContext;
     private List<Agenda> mAgendas;
     private LayoutInflater mInflater;
@@ -35,9 +43,15 @@ public class AgendaListAdapter extends RecyclerView.Adapter<AgendaHolder>{
     }
 
     @Override
-    public void onBindViewHolder(AgendaHolder holder, int position) {
+    public void onBindViewHolder(AgendaHolder holder, final int position) {
         holder.mAgendaIndex.setText("议程"+(position+1));
         holder.mAgendaTitle.setText(mAgendas.get(position).getAgendaName());
+        holder.mLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onAgendaItemClick(position);
+            }
+        });
     }
 
     @Override
@@ -47,11 +61,22 @@ public class AgendaListAdapter extends RecyclerView.Adapter<AgendaHolder>{
 }
 class AgendaHolder extends RecyclerView.ViewHolder{
 
-    @BindView(R.id.id_item_agenda_index) TextView mAgendaIndex;
-    @BindView(R.id.id_item_agenda_title) TextView mAgendaTitle;
+    @BindView(R.id.id_item_agenda_index)
+    TextView mAgendaIndex;
+    @BindView(R.id.id_item_agenda_title)
+    TextView mAgendaTitle;
+    @BindView(R.id.id_item_agenda_layout)
+    LinearLayout mLayout;
+
 
     public AgendaHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this,itemView);
+//        mAgendaIndex = (TextView) itemView.findViewById(R.id.id_item_agenda_index);
+//        mAgendaTitle = (TextView) itemView.findViewById(R.id.id_item_agenda_title);
     }
+}
+
+interface OnItemClick{
+   void onItemClick(int position);
 }

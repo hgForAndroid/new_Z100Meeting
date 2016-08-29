@@ -34,7 +34,7 @@ public class DelegateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delegate, null);
-        Log.e("DelegateFragment -->","onCreateView");
+//        Log.e("DelegateFragment -->","onCreateView");
         return view;
     }
     @Override
@@ -45,44 +45,44 @@ public class DelegateFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        Log.e("DelegateFragment -->","onDestroy");
+//        Log.e("DelegateFragment -->","onDestroy");
         super.onDestroy();
     }
 
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.e("DelegateFragment -->","onActivityCreated");
+//        Log.e("DelegateFragment -->","onActivityCreated");
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public void onStart() {
-        Log.e("DelegateFragment -->","onStart");
+//        Log.e("DelegateFragment -->","onStart");
         super.onStart();
     }
 
     @Override
     public void onPause() {
-        Log.e("DelegateFragment -->","onPause");
+//        Log.e("DelegateFragment -->","onPause");
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        Log.e("DelegateFragment -->","onStop");
+//        Log.e("DelegateFragment -->","onStop");
         super.onStop();
     }
 
     @Override
     public void onDetach() {
-        Log.e("DelegateFragment -->","onDetach");
+//        Log.e("DelegateFragment -->","onDetach");
         super.onDetach();
     }
 
     @Override
     public void onAttach(Context context) {
-        Log.e("DelegateFragment -->","onAttach");
+//        Log.e("DelegateFragment -->","onAttach");
         super.onAttach(context);
     }
 

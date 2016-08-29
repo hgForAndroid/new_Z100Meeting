@@ -19,14 +19,15 @@ import com.gzz100.Z100_HuiYi.adapter.FileListAdapter;
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.FileBean;
 import com.gzz100.Z100_HuiYi.inteface.ICommunicate;
+import com.gzz100.Z100_HuiYi.inteface.OnAgendaItemClickListener;
+import com.gzz100.Z100_HuiYi.inteface.OnFileItemClickListener;
 import com.gzz100.Z100_HuiYi.meetingManage.fileManage.fileDetailManage.FileDetailActivity;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import butterknife.Unbinder;
 
 /**
 * 文件详情
@@ -34,11 +35,15 @@ import butterknife.OnItemClick;
 * create at 2016/8/23 17:01
 */
 
-public class FileFragment extends Fragment implements FileContract.View{
-    @BindView(R.id.id_edt_fgm_file) EditText mEdtSearchContent;
-    @BindView(R.id.id_btn_fgm_file) Button mBtnSearch;
-    @BindView(R.id.id_rev_fgm_tab) RecyclerView mAgendaListRecView;
-    @BindView(R.id.id_rev_fgm_file_list) RecyclerView mFileListRecView;
+public class FileFragment extends Fragment implements FileContract.View, OnAgendaItemClickListener, OnFileItemClickListener {
+//    @BindView(R.id.id_edt_fgm_file)
+ EditText mEdtSearchContent;
+//    @BindView(R.id.id_btn_fgm_file)
+ Button mBtnSearch;
+//    @BindView(R.id.id_rev_fgm_tab)
+    RecyclerView mAgendaListRecView;
+//    @BindView(R.id.id_rev_fgm_file_list)
+    RecyclerView mFileListRecView;
     private FileContract.Presenter mPresenter;
 
     private List<Agenda> mAgendas ;
@@ -52,6 +57,8 @@ public class FileFragment extends Fragment implements FileContract.View{
     private String mAgendaTime;
 
     private ICommunicate mMainActivity;
+    private Unbinder mUnbinder;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -77,25 +84,26 @@ public class FileFragment extends Fragment implements FileContract.View{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_file, container,false);
-        ButterKnife.bind(this,view);
-        Log.e("FileFragment -->","onCreateView");
+//        Log.e("FileFragment -->","onCreateView");
+        mEdtSearchContent = (EditText) view.findViewById(R.id.id_edt_fgm_file);
+        mBtnSearch = (Button) view.findViewById(R.id.id_btn_fgm_file);
+        mAgendaListRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_tab);
+        mFileListRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_file_list);
+
+//        mUnbinder = ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+//        mUnbinder.unbind();
+        mPresenter.setFirstLoad(true);
     }
 
     @OnClick(R.id.id_btn_fgm_file)
     void onClick(){
         mPresenter.searchFileOrName(mEdtSearchContent.getText().toString().trim());
-    }
-
-    @OnItemClick(R.id.id_rev_fgm_tab)
-    void onAgendaItemClick(int position){
-        mPresenter.setAgendaTime(mAgendas.get(position).getAgendaTime());
-        mPresenter.fetchFileList(true,position);
-    }
-
-    @OnItemClick(R.id.id_rev_fgm_file_list)
-    void onFileItemClick(int fileIndex){
-        mPresenter.showFileDetail(fileIndex);
     }
 
     @Override
@@ -106,6 +114,7 @@ public class FileFragment extends Fragment implements FileContract.View{
         mAgendaListRecView.setLayoutManager(
                 new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         mAgendaListRecView.setAdapter(mAgendaAdapter);
+        mAgendaAdapter.setOnItemClickListener(this);
 
     }
 
@@ -117,6 +126,7 @@ public class FileFragment extends Fragment implements FileContract.View{
         mFileListRecView.setLayoutManager(
                 new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         mFileListRecView.setAdapter(mFileListAdapter);
+        mFileListAdapter.setOnItemClickListener(this);
 
     }
 
@@ -152,7 +162,7 @@ public class FileFragment extends Fragment implements FileContract.View{
     public void showNoSearchResult() {
 
     }
-
+    @Override
     public void setAgendasSum(int size) {
         mAgendasSum = size;
     }
@@ -178,4 +188,14 @@ public class FileFragment extends Fragment implements FileContract.View{
         mAgendaTime = time;
     }
 
+    @Override
+    public void onAgendaItemClick(int position) {
+        mPresenter.setAgendaTime(mAgendas.get(position).getAgendaTime());
+        mPresenter.fetchFileList(true,position+1);
+    }
+
+    @Override
+    public void onFileItemClick(int position) {
+        mPresenter.showFileDetail(position);
+    }
 }

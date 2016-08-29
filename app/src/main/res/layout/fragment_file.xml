@@ -37,22 +37,18 @@
         android:layout_height="wrap_content">
         <TextView
             android:layout_alignParentLeft="true"
-            android:padding="@dimen/distance_five_dp"
-            style="@style/wrap_content_attr"
-            android:text="@string/string_file_name"
-            android:background="@color/color_file_size_bg"/>
+            style="@style/file_name_size_keynote_speaker"
+            android:layout_marginLeft="5dp"
+            android:text="@string/string_file_name"/>
         <TextView
             android:layout_centerInParent="true"
-            android:padding="@dimen/distance_five_dp"
-            style="@style/wrap_content_attr"
-            android:text="@string/string_size"
-            android:background="@color/color_file_size_bg"/>
+            style="@style/file_name_size_keynote_speaker"
+            android:text="@string/string_size"/>
         <TextView
+            android:layout_marginRight="5dp"
             android:layout_alignParentRight="true"
-            android:padding="@dimen/distance_five_dp"
-            style="@style/wrap_content_attr"
-            android:text="@string/string_keynote_Speaker"
-            android:background="@color/color_file_size_bg"/>
+            style="@style/file_name_size_keynote_speaker"
+            android:text="@string/string_keynote_Speaker"/>
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:layout_marginTop="@dimen/distance_ten_dp"

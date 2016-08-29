@@ -2,7 +2,6 @@ package com.gzz100.Z100_HuiYi.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.FileBean;
+import com.gzz100.Z100_HuiYi.inteface.OnFileItemClickListener;
 
 import java.util.List;
 
@@ -21,6 +21,12 @@ import butterknife.ButterKnife;
  * Created by XieQXiong on 2016/8/26.
  */
 public class FileListAdapter extends RecyclerView.Adapter<FileBeanHolder>{
+    private OnFileItemClickListener mOnItemClickListener;
+    public void setOnItemClickListener(OnFileItemClickListener onItemClickListener){
+        this.mOnItemClickListener = onItemClickListener;
+    }
+
+
     private Context mContext;
     private List<FileBean> mFiles;
     private LayoutInflater mInflater;
@@ -37,9 +43,15 @@ public class FileListAdapter extends RecyclerView.Adapter<FileBeanHolder>{
     }
 
     @Override
-    public void onBindViewHolder(FileBeanHolder holder, int position) {
+    public void onBindViewHolder(FileBeanHolder holder, final int position) {
 //        holder.mFileImage.setImageResource(mContext.getResources(),R.);
         holder.mFileName.setText(mFiles.get(position).getFileName());
+        holder.mFileName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onFileItemClick(position);
+            }
+        });
         holder.mFileSize.setText(mFiles.get(position).getFileSize());
         holder.mKeynoteSpeaker.setText(mFiles.get(position).getKeyNoteSpeaker());
 

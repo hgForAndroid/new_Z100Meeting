@@ -100,6 +100,12 @@ public interface FileContract {
          */
         void setAgendaTime(String time);
 
+        /**
+         * 当Fragment销毁后，重新设置加载
+         * @param reLoad
+         */
+        void setFirstLoad(boolean reLoad);
+
 
     }
 }

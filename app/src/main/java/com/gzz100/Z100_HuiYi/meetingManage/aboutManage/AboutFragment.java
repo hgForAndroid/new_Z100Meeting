@@ -40,13 +40,13 @@ public class AboutFragment extends Fragment {
     }
     @Override
     public void onDestroyView() {
-        Log.e("AboutFragment -->","onDestroyView");
+//        Log.e("AboutFragment -->","onDestroyView");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        Log.e("AboutFragment -->","onDestroy");
+//        Log.e("AboutFragment -->","onDestroy");
         super.onDestroy();
     }
 }

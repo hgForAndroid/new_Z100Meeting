@@ -60,4 +60,8 @@ public class FileBean implements Serializable{
     public void setKeyNoteSpeaker(String keyNoteSpeaker) {
         this.keyNoteSpeaker = keyNoteSpeaker;
     }
+
+
+
+
 }

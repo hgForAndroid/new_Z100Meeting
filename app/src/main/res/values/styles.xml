@@ -20,7 +20,7 @@
         <item name="android:background">@drawable/tab_bg_selector</item>
     </style>
 
-    <!--文件界面   文件列表-->
+    <!--文件界面   文件列表  layout:item_file_list-->
     <style name="weight_for_one">
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
@@ -30,5 +30,13 @@
     <style name="wrap_content_attr">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--文件界面，文件列表上边的标签，文件名，大小，主讲人 的共有属性-->
+    <style name="file_name_size_keynote_speaker">
+        <item name="android:padding">@dimen/distance_five_dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/color_file_size_bg</item>
     </style>
 </resources>

@@ -32,13 +32,13 @@ public class MeetingAdapter extends FragmentPagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        Log.e("instantiateItem ==>","position = "+position);
+//        Log.e("instantiateItem ==>","position = "+position);
         return super.instantiateItem(container, position);
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        Log.e("destroyItem ==>","position = "+position);
+//        Log.e("destroyItem ==>","position = "+position);
         super.destroyItem(container, position, object);
     }
 

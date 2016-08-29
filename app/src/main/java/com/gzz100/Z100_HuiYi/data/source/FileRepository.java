@@ -14,10 +14,10 @@ public class FileRepository implements FileDataSource {
 
     private final FileDataSource mFileLocalDataSource;
 
-    //文件列表是否已有本地缓存
-    boolean mFileListCacheIsDirty = false;
-    //议程列表是否已有本地缓存
-    boolean mAgendaListCacheIsDirty = false;
+    //文件列表是否已有本地缓存  TODO   测试为true
+    boolean mFileListCacheIsDirty = true;
+    //议程列表是否已有本地缓存  TODO   测试为true
+    boolean mAgendaListCacheIsDirty = true;
 
     private FileRepository(@NonNull FileDataSource fileRemoteDataSource,
                             @NonNull FileDataSource fileLocalDataSource) {

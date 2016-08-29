@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:gravity="center_vertical"
-              android:orientation="horizontal">
+    android:gravity="center_vertical">
 
-    <LinearLayout
-        style="@style/weight_for_one"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/id_item_file_image"
@@ -16,23 +11,28 @@
             android:src="@mipmap/ic_launcher"/>
 
         <TextView
+            android:layout_toRightOf="@id/id_item_file_image"
             android:id="@+id/id_item_file_name"
             style="@style/wrap_content_attr"
+            android:layout_marginTop="20dp"
             android:text="文件名"/>
-    </LinearLayout>
 
     <TextView
+        android:layout_alignBaseline="@id/id_item_file_name"
+        android:layout_centerHorizontal="true"
         android:id="@+id/id_item_file_size"
-        style="@style/weight_for_one"
+        style="@style/wrap_content_attr"
         android:gravity="center_horizontal"
         android:text="14kb"
         />
 
     <TextView
+        android:layout_alignBaseline="@id/id_item_file_name"
+        android:layout_alignParentRight="true"
         android:id="@+id/id_item_file_keynote_speaker"
-        style="@style/weight_for_one"
+        style="@style/wrap_content_attr"
         android:gravity="center_horizontal"
         android:text="人名"
         />
 
-</LinearLayout>
+</RelativeLayout>
