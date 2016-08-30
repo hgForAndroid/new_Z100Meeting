@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
-import com.gzz100.Z100_HuiYi.inteface.OnAgendaItemClickListener;
+import com.gzz100.Z100_HuiYi.meetingManage.fileManage.OnAgendaItemClickListener;
 
 import java.util.List;
 
@@ -25,11 +25,10 @@ public class AgendaListAdapter extends RecyclerView.Adapter<AgendaHolder>{
     public void setOnItemClickListener(OnAgendaItemClickListener onItemClickListener){
         this.mOnItemClickListener = onItemClickListener;
     }
-
-
     private Context mContext;
     private List<Agenda> mAgendas;
     private LayoutInflater mInflater;
+
     public AgendaListAdapter(Context context, List<Agenda> agendas) {
         mContext = context;
         mAgendas = agendas;
@@ -39,7 +38,9 @@ public class AgendaListAdapter extends RecyclerView.Adapter<AgendaHolder>{
     @Override
     public AgendaHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_agenda_list, null);
-        return new AgendaHolder(view);
+        AgendaHolder holder = new AgendaHolder(view);
+//        view.setTag(holder);
+        return holder;
     }
 
     @Override
@@ -49,15 +50,24 @@ public class AgendaListAdapter extends RecyclerView.Adapter<AgendaHolder>{
         holder.mLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnItemClickListener.onAgendaItemClick(position);
+                if (mOnItemClickListener != null)
+                mOnItemClickListener.onAgendaItemClick(v,position);
             }
         });
+        if (position == 0){
+            holder.mAgendaIndex.setTextColor(mContext.getResources().getColor(R.color.color_white));
+            holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_white));
+            holder.mLayout.setBackgroundColor(mContext.
+                    getResources().getColor(R.color.color_tab_selected));
+        }
+
     }
 
     @Override
     public int getItemCount() {
         return mAgendas.size();
     }
+
 }
 class AgendaHolder extends RecyclerView.ViewHolder{
 
@@ -74,9 +84,7 @@ class AgendaHolder extends RecyclerView.ViewHolder{
         ButterKnife.bind(this,itemView);
 //        mAgendaIndex = (TextView) itemView.findViewById(R.id.id_item_agenda_index);
 //        mAgendaTitle = (TextView) itemView.findViewById(R.id.id_item_agenda_title);
-    }
-}
+//        mLayout = (LinearLayout) itemView.findViewById(R.id.id_item_agenda_layout);
 
-interface OnItemClick{
-   void onItemClick(int position);
+    }
 }

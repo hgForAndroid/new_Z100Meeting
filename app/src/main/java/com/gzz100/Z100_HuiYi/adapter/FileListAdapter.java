@@ -6,11 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.FileBean;
-import com.gzz100.Z100_HuiYi.inteface.OnFileItemClickListener;
+import com.gzz100.Z100_HuiYi.meetingManage.fileManage.OnFileItemClickListener;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileBeanHolder>{
     public void onBindViewHolder(FileBeanHolder holder, final int position) {
 //        holder.mFileImage.setImageResource(mContext.getResources(),R.);
         holder.mFileName.setText(mFiles.get(position).getFileName());
-        holder.mFileName.setOnClickListener(new View.OnClickListener() {
+        holder.mLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnItemClickListener.onFileItemClick(position);
@@ -64,6 +65,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileBeanHolder>{
 }
 class FileBeanHolder extends RecyclerView.ViewHolder{
 
+    @BindView(R.id.id_item_file_list) RelativeLayout mLayout;
     @BindView(R.id.id_item_file_image) ImageView mFileImage;
     @BindView(R.id.id_item_file_name) TextView mFileName;
     @BindView(R.id.id_item_file_size) TextView mFileSize;

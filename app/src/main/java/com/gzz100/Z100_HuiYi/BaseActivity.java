@@ -16,9 +16,9 @@ public class BaseActivity extends AppCompatActivity {
 
 //    @Override
 //    public void setContentView(int layoutResID) {
-//        View mContentLayout = getLayoutInflater().inflate(R.layout.activity_base, null);
+//        DetailView mContentLayout = getLayoutInflater().inflate(R.layout.activity_base, null);
 //        LinearLayout rootContent = (LinearLayout) mContentLayout.findViewById(R.id.id_base_linearlayout);
-//        View contentView = getLayoutInflater().inflate(layoutResID, null);
+//        DetailView contentView = getLayoutInflater().inflate(layoutResID, null);
 //        //添加内容布局
 //        if (null != contentView) {
 //            rootContent.addView(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);

@@ -1,13 +1,20 @@
 package com.gzz100.Z100_HuiYi.meetingManage.fileManage.fileDetailManage;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.adapter.FileDetailAdapter;
 import com.gzz100.Z100_HuiYi.data.FileBean;
+import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.widget.NavBarView;
 
 import java.io.Serializable;
@@ -15,8 +22,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class FileDetailActivity extends BaseActivity {
+public class FileDetailActivity extends BaseActivity implements FileDetailContract.DetailView, View.OnClickListener, OnFileClick {
     public static final String BUNDLE = "bundle";
     public static final String AGENDAS_SUM = "agendasSum";
     public static final String AGENDA_INDEX = "agendaIndex";
@@ -31,10 +39,12 @@ public class FileDetailActivity extends BaseActivity {
     private String mAgendaTime;
     private String mUpLevelText;
     private String mFileName;
+    private int mChildCount;
+
 
     /**
      * 跳转到文件详情界面
-     * @param activity       当前Activity
+     * @param activity       context
      * @param agendasSum     议程总数
      * @param agendaIndex    当前议程序号
      * @param fileList       文件列表
@@ -42,7 +52,7 @@ public class FileDetailActivity extends BaseActivity {
      * @param agendaTime     议程时间
      * @param upLevelTitle   当前界面的标题
      */
-    public static void showFileDetailActivity(Activity activity, int agendasSum,
+    public static void showFileDetailActivity(Context activity, int agendasSum,
                                               int agendaIndex, List<FileBean> fileList,
                                               int fileIndex, String agendaTime,
                                               String upLevelTitle){
@@ -59,15 +69,29 @@ public class FileDetailActivity extends BaseActivity {
     }
 
     @BindView(R.id.id_file_detail_tbv) NavBarView mNavBarView;
+    @BindView(R.id.id_slide_layout) View mSlideLayout;
+    @BindView(R.id.id_slide_rev)
+    RecyclerView mFileNameRcv;
+    @BindView(R.id.id_content)
+    TextView mConetnt;
+
+
 
     private Bundle mBundle;
+
+    private FileDetailContract.Presenter mPresenter;
+
+    private FileDetailAdapter mFileDetailAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_detail);
+        mSlideLayout = findViewById(R.id.id_slide_layout);
         ButterKnife.bind(this);
         dataFormUpLevel();
+
+        mPresenter = new FileDetailPresenter(null,this);
 
     }
 
@@ -91,10 +115,98 @@ public class FileDetailActivity extends BaseActivity {
         initData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.start();
+
+    }
+
     private void initData() {
         mNavBarView.setFallBackDisplay(true);
         mNavBarView.setTitle(mFileName);
         mNavBarView.setUpLevelText(mUpLevelText);
         mNavBarView.setState("议程"+mAgendaIndex+"/"+mAgendaSum);
+        mNavBarView.setTime(mAgendaTime);
+        mNavBarView.setFallBackListener(this);
+
+        mFileDetailAdapter = new FileDetailAdapter(mFileList,this);
+        mFileNameRcv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        mFileNameRcv.setAdapter(mFileDetailAdapter);
+        mFileDetailAdapter.setOnFileClivk(this);
+        mFileNameRcv.scrollToPosition(mFileIndex);
+
+        mConetnt.setText(mFileList.get(mFileIndex).getFileAddress());
+
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus){
+            mChildCount = mFileNameRcv.getChildCount();
+            setBackgroundColor(mChildCount,mFileIndex);
+        }
+    }
+
+    private void setBackgroundColor(int childCount, int fileIndex) {
+        for (int i = 0; i < childCount; i++) {
+            ((LinearLayout)mFileNameRcv.getChildAt(i).findViewById(R.id.id_ll_file_name_all)).
+                    setBackgroundColor(getResources().getColor(R.color.color_tab_normal));
+            ((TextView)mFileNameRcv.getChildAt(i).findViewById(R.id.id_tv_item_file_name)).setTextColor(
+                    getResources().getColor(R.color.color_black));
+        }
+        ((LinearLayout)mFileNameRcv.getChildAt(fileIndex).findViewById(R.id.id_ll_file_name_all)).
+                setBackgroundColor(getResources().getColor(R.color.color_tab_selected));
+        ((TextView)mFileNameRcv.getChildAt(fileIndex).findViewById(R.id.id_tv_item_file_name)).setTextColor(
+                getResources().getColor(R.color.color_white));
+    }
+
+    @OnClick(R.id.id_iv_slide_to_left)
+    void onToLeft(){
+        mPresenter.slideLeft(null);
+    }
+
+    @OnClick(R.id.id_iv_slide_to_right)
+    void toRight(){
+        mPresenter.slideRight(null);
+    }
+    //返回
+    @Override
+    public void fallback() {
+        ActivityStackManager.pop();
+    }
+
+    @Override
+    public void slideLeft(int distanceX) {
+        mSlideLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void slideRight(int distanceX) {
+        mSlideLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void setContent(String content) {
+        mConetnt.setText(content);
+    }
+
+    @Override
+    public void setPresenter(FileDetailContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
+
+    //点击返回上一级
+    @Override
+    public void onClick(View v) {
+        mPresenter.fallback();
+    }
+
+    //点击文件
+    @Override
+    public void onFileClick(int position) {
+        mPresenter.setContent(mFileList.get(position).getFileAddress());
+        setBackgroundColor(mChildCount,position);
     }
 }

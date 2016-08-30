@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="color_white">#FFffff</color>
+    <color name="color_black">#000000</color>
+
     <!--导航栏背景颜色-->
     <color name="color_tab_bg">#F5F5F5</color>
     <!--单个导航默认的颜色-->

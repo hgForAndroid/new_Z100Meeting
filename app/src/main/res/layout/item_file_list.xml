@@ -1,38 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-    android:gravity="center_vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/id_item_file_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/file_list_min_height">
 
 
         <ImageView
             android:id="@+id/id_item_file_image"
             style="@style/wrap_content_attr"
+            android:layout_centerVertical="true"
             android:src="@mipmap/ic_launcher"/>
 
         <TextView
-            android:layout_toRightOf="@id/id_item_file_image"
             android:id="@+id/id_item_file_name"
             style="@style/wrap_content_attr"
-            android:layout_marginTop="20dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/id_item_file_image"
             android:text="文件名"/>
 
-    <TextView
-        android:layout_alignBaseline="@id/id_item_file_name"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/id_item_file_size"
-        style="@style/wrap_content_attr"
-        android:gravity="center_horizontal"
-        android:text="14kb"
-        />
+        <TextView
+            android:id="@+id/id_item_file_size"
+            style="@style/wrap_content_attr"
+            android:layout_alignBaseline="@id/id_item_file_name"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="14kb"
+            />
 
-    <TextView
-        android:layout_alignBaseline="@id/id_item_file_name"
-        android:layout_alignParentRight="true"
-        android:id="@+id/id_item_file_keynote_speaker"
-        style="@style/wrap_content_attr"
-        android:gravity="center_horizontal"
-        android:text="人名"
-        />
+        <TextView
+            android:id="@+id/id_item_file_keynote_speaker"
+            style="@style/wrap_content_attr"
+            android:layout_alignBaseline="@id/id_item_file_name"
+            android:layout_alignParentRight="true"
+            android:gravity="center_horizontal"
+            android:paddingRight="@dimen/distance_twenty_dp"
+            android:text="人名"
+            />
 
-</RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

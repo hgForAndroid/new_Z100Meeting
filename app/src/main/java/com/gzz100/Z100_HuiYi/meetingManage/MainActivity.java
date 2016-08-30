@@ -3,14 +3,12 @@ package com.gzz100.Z100_HuiYi.meetingManage;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.adapter.MeetingAdapter;
-import com.gzz100.Z100_HuiYi.inteface.ICommunicate;
 import com.gzz100.Z100_HuiYi.meetingManage.aboutManage.AboutFragment;
 import com.gzz100.Z100_HuiYi.meetingManage.agendaManage.AgendaFragment;
 import com.gzz100.Z100_HuiYi.meetingManage.delegateManage.DelegateFragment;

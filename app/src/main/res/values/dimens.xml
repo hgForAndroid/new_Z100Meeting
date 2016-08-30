@@ -10,6 +10,8 @@
     <dimen name="nav_bar_height">70dp</dimen>
     <!--导航栏的中间标题的字体大小-->
     <dimen name="nav_title_text_size">40sp</dimen>
+    <!--导航栏，上一级标题字体大小-->
+    <dimen name="nav_uplevel_text_size">25sp</dimen>
     <!--文件界面搜索框的宽高-->
     <dimen name="file_search_height">50dp</dimen>
     <dimen name="file_search_width">600dp</dimen>
@@ -21,6 +23,9 @@
     <dimen name="distance_one_hundred_dp">100dp</dimen>
     <!--style 中被引用-->
     <dimen name="distance_five_dp">5dp</dimen>
+
+    <!--文件界面   文件列表的最小高度-->
+    <dimen name="file_list_min_height">80dp</dimen>
 
 
 </resources>

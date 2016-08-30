@@ -1,5 +1,7 @@
 package com.gzz100.Z100_HuiYi.data;
 
+import android.widget.ImageView;
+
 import java.io.Serializable;
 
 /**
@@ -61,7 +63,16 @@ public class FileBean implements Serializable{
         this.keyNoteSpeaker = keyNoteSpeaker;
     }
 
-
+    public void setImageForFile(ImageView imageView){
+        if (!this.fileName.isEmpty() && this.fileName.contains(".txt")){
+            imageView.setImageResource(android.R.mipmap.sym_def_app_icon);
+        }else if (!this.fileName.isEmpty() &&
+                (this.fileName.contains(".doc") || this.fileName.contains(".docx"))){
+            imageView.setImageResource(android.R.mipmap.sym_def_app_icon);
+        }else if (!this.fileName.isEmpty() && this.fileName.contains(".xlsx")){
+            imageView.setImageResource(android.R.mipmap.sym_def_app_icon);
+        }
+    }
 
 
 }

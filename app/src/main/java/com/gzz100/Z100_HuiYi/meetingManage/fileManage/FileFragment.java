@@ -12,41 +12,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.adapter.AgendaListAdapter;
 import com.gzz100.Z100_HuiYi.adapter.FileListAdapter;
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.FileBean;
-import com.gzz100.Z100_HuiYi.inteface.ICommunicate;
-import com.gzz100.Z100_HuiYi.inteface.OnAgendaItemClickListener;
-import com.gzz100.Z100_HuiYi.inteface.OnFileItemClickListener;
 import com.gzz100.Z100_HuiYi.meetingManage.fileManage.fileDetailManage.FileDetailActivity;
+import com.gzz100.Z100_HuiYi.meetingManage.ICommunicate;
 
 import java.util.List;
 
 import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.Unbinder;
 
 /**
-* 文件详情
-* @author XieQXiong
-* create at 2016/8/23 17:01
-*/
+ * 文件详情
+ *
+ * @author XieQXiong
+ *         create at 2016/8/23 17:01
+ */
 
 public class FileFragment extends Fragment implements FileContract.View, OnAgendaItemClickListener, OnFileItemClickListener {
-//    @BindView(R.id.id_edt_fgm_file)
- EditText mEdtSearchContent;
-//    @BindView(R.id.id_btn_fgm_file)
- Button mBtnSearch;
-//    @BindView(R.id.id_rev_fgm_tab)
+    //    @BindView(R.id.id_edt_fgm_file)
+    EditText mEdtSearchContent;
+    //    @BindView(R.id.id_btn_fgm_file)
+    Button mBtnSearch;
+    //    @BindView(R.id.id_rev_fgm_tab)
     RecyclerView mAgendaListRecView;
-//    @BindView(R.id.id_rev_fgm_file_list)
+    //    @BindView(R.id.id_rev_fgm_file_list)
     RecyclerView mFileListRecView;
     private FileContract.Presenter mPresenter;
 
-    private List<Agenda> mAgendas ;
+    private List<Agenda> mAgendas;
     private AgendaListAdapter mAgendaAdapter;
     private FileListAdapter mFileListAdapter;
 
@@ -57,7 +56,6 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     private String mAgendaTime;
 
     private ICommunicate mMainActivity;
-    private Unbinder mUnbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -66,7 +64,9 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     }
 
-    public static FileFragment newInstance(){return new FileFragment();}
+    public static FileFragment newInstance() {
+        return new FileFragment();
+    }
 
     @Override
     public void setPresenter(FileContract.Presenter presenter) {
@@ -75,7 +75,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void onResume() {
-        Log.e("FileFragment -->","onResume");
+        Log.e("FileFragment -->", "onResume");
         mPresenter.start();
         super.onResume();
     }
@@ -83,7 +83,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_file, container,false);
+        View view = inflater.inflate(R.layout.fragment_file, container, false);
 //        Log.e("FileFragment -->","onCreateView");
         mEdtSearchContent = (EditText) view.findViewById(R.id.id_edt_fgm_file);
         mBtnSearch = (Button) view.findViewById(R.id.id_btn_fgm_file);
@@ -102,17 +102,17 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
 
     @OnClick(R.id.id_btn_fgm_file)
-    void onClick(){
+    void onClick() {
         mPresenter.searchFileOrName(mEdtSearchContent.getText().toString().trim());
     }
 
     @Override
     public void showAgendaList(List<Agenda> agendas) {
         mAgendas = agendas;
-        mAgendaAdapter = new AgendaListAdapter(getContext(),agendas);
+        mAgendaAdapter = new AgendaListAdapter(getContext(), agendas);
         //横向展示
         mAgendaListRecView.setLayoutManager(
-                new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mAgendaListRecView.setAdapter(mAgendaAdapter);
         mAgendaAdapter.setOnItemClickListener(this);
 
@@ -121,10 +121,10 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public void showFilesList(List<FileBean> fileBeen) {
 //        mFileBeen = fileBeen;
-        mFileListAdapter = new FileListAdapter(getContext(),fileBeen);
+        mFileListAdapter = new FileListAdapter(getContext(), fileBeen);
         //纵向展示
         mFileListRecView.setLayoutManager(
-                new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+                new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mFileListRecView.setAdapter(mFileListAdapter);
         mFileListAdapter.setOnItemClickListener(this);
 
@@ -138,8 +138,8 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public void showFileDetail() {
         String currentTitle = mMainActivity.getCurrentTitle();
-        FileDetailActivity.showFileDetailActivity(getActivity(),mAgendasSum,mAgendaIndex,
-                mFileBeen,mFileIndex,mAgendaTime,currentTitle);
+        FileDetailActivity.showFileDetailActivity(getActivity(), mAgendasSum, mAgendaIndex,
+                mFileBeen, mFileIndex, mAgendaTime, currentTitle);
 
     }
 
@@ -162,6 +162,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     public void showNoSearchResult() {
 
     }
+
     @Override
     public void setAgendasSum(int size) {
         mAgendasSum = size;
@@ -179,7 +180,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void setFileIndex(int fileIndex) {
-         mFileIndex =  fileIndex;
+        mFileIndex = fileIndex;
 
     }
 
@@ -189,10 +190,35 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
 
     @Override
-    public void onAgendaItemClick(int position) {
+    public void onAgendaItemClick(View v, int position) {
         mPresenter.setAgendaTime(mAgendas.get(position).getAgendaTime());
-        mPresenter.fetchFileList(true,position+1);
+        mPresenter.fetchFileList(true, position + 1);
+        int childCount = mAgendaListRecView.getChildCount();
+        setBackgroundColor(childCount, position);
+
     }
+
+    private void setBackgroundColor(int childCount, int position) {
+        for (int i = 0; i < childCount; i++) {
+            ((LinearLayout) mAgendaListRecView.getChildAt(i)
+                    .findViewById(R.id.id_item_agenda_layout)).setBackgroundColor(
+                    getResources().getColor(R.color.color_tab_normal));
+            ((TextView) mAgendaListRecView.getChildAt(i).findViewById(R.id.id_item_agenda_index)).
+                    setTextColor(getResources().getColor(R.color.color_black));
+            ((TextView) mAgendaListRecView.getChildAt(i).findViewById(R.id.id_item_agenda_title)).
+                    setTextColor(getResources().getColor(R.color.color_black));
+
+        }
+        ((LinearLayout) mAgendaListRecView.getChildAt(position)
+                .findViewById(R.id.id_item_agenda_layout)).setBackgroundColor(
+                getResources().getColor(R.color.color_tab_selected));
+        ((TextView) mAgendaListRecView.getChildAt(position).findViewById(R.id.id_item_agenda_index)).
+                setTextColor(getResources().getColor(R.color.color_white));
+        ((TextView) mAgendaListRecView.getChildAt(position).findViewById(R.id.id_item_agenda_title)).
+                setTextColor(getResources().getColor(R.color.color_white));
+
+    }
+
 
     @Override
     public void onFileItemClick(int position) {

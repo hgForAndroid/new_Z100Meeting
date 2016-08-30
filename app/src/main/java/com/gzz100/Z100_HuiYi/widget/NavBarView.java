@@ -100,4 +100,8 @@ public class NavBarView extends RelativeLayout {
     public void setUpLevelText(String upLevelText){
         mTvUpLevel.setText(upLevelText);
     }
+
+    public void setTime(String time){
+        mTvTime.setText(time);
+    }
 }

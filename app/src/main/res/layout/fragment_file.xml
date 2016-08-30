@@ -22,6 +22,7 @@
         android:id="@+id/id_btn_fgm_file"
         android:layout_toRightOf="@id/id_edt_fgm_file"/>
     <android.support.v7.widget.RecyclerView
+        android:layout_marginLeft="@dimen/distance_five_dp"
         android:layout_marginTop="@dimen/distance_ten_dp"
         android:layout_below="@id/id_edt_fgm_file"
         android:id="@+id/id_rev_fgm_tab"
@@ -54,7 +55,7 @@
         android:layout_marginTop="@dimen/distance_ten_dp"
         android:layout_below="@id/id_ll_fgm_file"
         android:id="@+id/id_rev_fgm_file_list"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_width="match_parent">
 
     </android.support.v7.widget.RecyclerView>
