@@ -6,8 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.gzz100.Z100_HuiYi.data.FileBean;
-import com.gzz100.Z100_HuiYi.utils.ObjectTransverter;
+import com.gzz100.Z100_HuiYi.data.File;
 
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class FileDBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void insertFileList(int agendaIndex,List<FileBean> fileList){
+    public void insertFileList(int agendaIndex,List<File> fileList){
         byte[] data = ObjectTransverter.FileListToByteArr(fileList);
         ContentValues values =new ContentValues();
         values.put(FilePersistenceContract.FileListEntry.COLUMN_NAME_AGENDA_INDEX,agendaIndex);
@@ -63,8 +62,8 @@ public class FileDBHelper extends SQLiteOpenHelper {
         mDatabase.insert(FilePersistenceContract.FileListEntry.TABLE_NAME,null,values);
     }
 
-    public List<FileBean> queryFileList(int agendaIndex){
-        List<FileBean> files = null;
+    public List<File> queryFileList(int agendaIndex){
+        List<File> files = null;
         mDatabase = instance.getReadableDatabase();
         String sql = "select * from " + FilePersistenceContract.FileListEntry.TABLE_NAME + " where " +
                 FilePersistenceContract.FileListEntry.COLUMN_NAME_AGENDA_INDEX + " = ?";

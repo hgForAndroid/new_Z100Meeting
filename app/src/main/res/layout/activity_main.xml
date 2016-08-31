@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".meetingManage.MainActivity">
-    <com.gzz100.Z100_HuiYi.widget.NavBarView
+    tools:context=".meeting.MainActivity">
+    <com.gzz100.Z100_HuiYi.meeting.NavBarView
         android:id="@+id/id_main_tbv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </com.gzz100.Z100_HuiYi.widget.NavBarView>
+    </com.gzz100.Z100_HuiYi.meeting.NavBarView>
     <android.support.v4.view.ViewPager
         android:layout_below="@id/id_main_tbv"
         android:layout_width="match_parent"

@@ -1,7 +1,5 @@
 package com.gzz100.Z100_HuiYi.data;
 
-import java.util.List;
-
 /**
  * Created by XieQXiong on 2016/8/24.
  */
@@ -9,7 +7,7 @@ public class Agenda {
     private String agendaIndex;
     private String agendaTime;
     private String agendaName;
-    private String keynoteSpeaker;
+    private String agendaSpeaker;
 
     public String getAgendaIndex() {
         return agendaIndex;
@@ -35,11 +33,11 @@ public class Agenda {
         this.agendaName = agendaName;
     }
 
-    public String getKeynoteSpeaker() {
-        return keynoteSpeaker;
+    public String getAgendaSpeaker() {
+        return agendaSpeaker;
     }
 
-    public void setKeynoteSpeaker(String keynoteSpeaker) {
-        this.keynoteSpeaker = keynoteSpeaker;
+    public void setAgendaSpeaker(String agendaSpeaker) {
+        this.agendaSpeaker = agendaSpeaker;
     }
 }

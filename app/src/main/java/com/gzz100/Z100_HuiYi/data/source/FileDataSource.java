@@ -3,7 +3,7 @@ package com.gzz100.Z100_HuiYi.data.source;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
-import com.gzz100.Z100_HuiYi.data.FileBean;
+import com.gzz100.Z100_HuiYi.data.File;
 
 import java.util.List;
 /**
@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface FileDataSource {
     interface loadFileListCallback {
-        void onFileListLoaded(List<FileBean> files);
+        void onFileListLoaded(List<File> files);
 
         void onDataNotAvailable();
     }
