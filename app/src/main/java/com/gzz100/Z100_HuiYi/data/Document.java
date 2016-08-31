@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by XieQXiong on 2016/8/24.
  */
-public class File implements Serializable{
+public class Document implements Serializable{
     private String agendaIndex;
     private String fileIndex;
     private String fileName;

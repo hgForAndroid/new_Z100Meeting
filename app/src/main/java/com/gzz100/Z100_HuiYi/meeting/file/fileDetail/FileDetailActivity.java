@@ -1,4 +1,4 @@
-package com.gzz100.Z100_HuiYi.meeting.file.fileDetailManage;
+package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,14 +9,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.barteksc.pdfviewer.PDFView;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
-import com.gzz100.Z100_HuiYi.data.File;
+import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.meeting.NavBarView;
 
 import java.io.Serializable;
 import java.util.List;
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +35,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     private int mAgendaSum;
     private int mAgendaIndex;
     private int mFileIndex;
-    private List<File> mFileList;
+    private List<Document> mFileList;
     private String mAgendaTime;
     private String mUpLevelText;
     private String mFileName;
@@ -51,7 +53,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
      * @param upLevelTitle   当前界面的标题
      */
     public static void showFileDetailActivity(Context activity, int agendasSum,
-                                              int agendaIndex, List<File> fileList,
+                                              int agendaIndex, List<Document> fileList,
                                               int fileIndex, String agendaTime,
                                               String upLevelTitle){
         Intent intent = new Intent(activity,FileDetailActivity.class);
@@ -70,8 +72,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     @BindView(R.id.id_slide_layout) View mSlideLayout;
     @BindView(R.id.id_slide_rev)
     RecyclerView mFileNameRcv;
-    @BindView(R.id.id_content)
-    TextView mConetnt;
+    @BindView(R.id.id_file_pdf_view)
+    PDFView mPDFView;
 
 
 
@@ -99,7 +101,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mAgendaSum = mBundle.getInt(AGENDAS_SUM);
             mAgendaIndex = mBundle.getInt(AGENDA_INDEX);
             mFileIndex = mBundle.getInt(FILE_INDEX);
-            mFileList = (List<File>) mBundle.getSerializable(FILE_LIST);
+            mFileList = (List<Document>) mBundle.getSerializable(FILE_LIST);
             mAgendaTime = mBundle.getString(AGENDA_TIME);
             mUpLevelText = mBundle.getString(UP_LEVEL_TITLE);
 
@@ -133,9 +135,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mFileNameRcv.setAdapter(mFileDetailAdapter);
         mFileDetailAdapter.setOnFileClivk(this);
         mFileNameRcv.scrollToPosition(mFileIndex);
-
-        mConetnt.setText(mFileList.get(mFileIndex).getFileURL());
-
+        mPresenter.loadFile(mFileList.get(0).getFileName());
     }
 
     @Override
@@ -187,7 +187,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void setContent(String content) {
-        mConetnt.setText(content);
     }
 
     @Override
@@ -204,7 +203,18 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     //点击文件
     @Override
     public void onFileClick(int position) {
+        mPresenter.loadFile(mFileList.get(position).getFileName());
         mPresenter.setContent(mFileList.get(position).getFileURL());
         setBackgroundColor(mChildCount,position);
+    }
+
+    @Override
+    public void loadFile(File file) {
+        mPDFView.fromFile(file)
+                .enableSwipe(true)
+                .swipeHorizontal(false)
+                .enableDoubletap(true)
+                .defaultPage(1)
+                .load();
     }
 }

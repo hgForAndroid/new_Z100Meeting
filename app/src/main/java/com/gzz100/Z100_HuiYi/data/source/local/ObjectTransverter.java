@@ -1,6 +1,6 @@
 package com.gzz100.Z100_HuiYi.data.source.local;
 
-import com.gzz100.Z100_HuiYi.data.File;
+import com.gzz100.Z100_HuiYi.data.Document;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class ObjectTransverter {
 
-    public static byte[] FileListToByteArr(List<File> filelList){
+    public static byte[] FileListToByteArr(List<Document> filelList){
         ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(arrayOutputStream);
@@ -29,17 +29,17 @@ public class ObjectTransverter {
         return null;
     }
 
-    public static List<File> byteArrToFileList(byte[] data){
-        List<File> files = null;
+    public static List<Document> byteArrToFileList(byte[] data){
+        List<Document> documents = null;
         ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(data);
         try {
             ObjectInputStream inputStream = new ObjectInputStream(arrayInputStream);
-            files = (List<File>) inputStream.readObject();
+            documents = (List<Document>) inputStream.readObject();
             inputStream.close();
             arrayInputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return files;
+        return documents;
     }
 }

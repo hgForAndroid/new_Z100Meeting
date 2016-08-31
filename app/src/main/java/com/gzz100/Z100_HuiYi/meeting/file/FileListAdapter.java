@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
-import com.gzz100.Z100_HuiYi.data.File;
+import com.gzz100.Z100_HuiYi.data.Document;
 
 import java.util.List;
 
@@ -28,11 +28,11 @@ public class FileListAdapter extends RecyclerView.Adapter<FileBeanHolder>{
 
 
     private Context mContext;
-    private List<File> mFiles;
+    private List<Document> mDocuments;
     private LayoutInflater mInflater;
-    public FileListAdapter(Context context, List<File> files) {
+    public FileListAdapter(Context context, List<Document> documents) {
         mContext = context;
-        mFiles = files;
+        mDocuments = documents;
         mInflater = LayoutInflater.from(context);
     }
 
@@ -45,21 +45,21 @@ public class FileListAdapter extends RecyclerView.Adapter<FileBeanHolder>{
     @Override
     public void onBindViewHolder(FileBeanHolder holder, final int position) {
 //        holder.mFileImage.setImageResource(mContext.getResources(),R.);
-        holder.mFileName.setText(mFiles.get(position).getFileName());
+        holder.mFileName.setText(mDocuments.get(position).getFileName());
         holder.mLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnItemClickListener.onFileItemClick(position);
             }
         });
-        holder.mFileSize.setText(mFiles.get(position).getFileSize());
-        holder.mKeynoteSpeaker.setText(mFiles.get(position).getFileSpeaker());
+        holder.mFileSize.setText(mDocuments.get(position).getFileSize());
+        holder.mKeynoteSpeaker.setText(mDocuments.get(position).getFileSpeaker());
 
     }
 
     @Override
     public int getItemCount() {
-        return mFiles.size();
+        return mDocuments.size();
     }
 }
 class FileBeanHolder extends RecyclerView.ViewHolder{

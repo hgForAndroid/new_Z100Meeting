@@ -3,7 +3,7 @@ package com.gzz100.Z100_HuiYi.meeting.file;
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
 import com.gzz100.Z100_HuiYi.data.Agenda;
-import com.gzz100.Z100_HuiYi.data.File;
+import com.gzz100.Z100_HuiYi.data.Document;
 
 import java.util.List;
 /**
@@ -22,15 +22,15 @@ public interface FileContract {
 
         /**
          * 显示搜索的结果
-         * @param file 搜索结果列表
+         * @param document 搜索结果列表
          */
-        void showSearchResult(List<File> file);
+        void showSearchResult(List<Document> document);
 
         /**
          * 显示切换议程后对应的所有文件
-         * @param file  切换议程后对应的文件列表
+         * @param document  切换议程后对应的文件列表
          */
-        void showFilesList(List<File> file);
+        void showFilesList(List<Document> document);
 
         /**
          *跳转文件详情界面
@@ -61,7 +61,7 @@ public interface FileContract {
         //以下的参数设置，是跳转到文件详情时所需的参数
         void setAgendasSum(int size);
         void setAgendaIndex(int index);
-        void setFileList(List<File> files);
+        void setFileList(List<Document> documents);
         void setFileIndex(int fileIndex);
         void setAgendaTime(String time);
 

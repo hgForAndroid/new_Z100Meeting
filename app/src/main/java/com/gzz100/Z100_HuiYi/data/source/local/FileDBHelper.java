@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.gzz100.Z100_HuiYi.data.File;
+import com.gzz100.Z100_HuiYi.data.Document;
 
 import java.util.List;
 
@@ -53,8 +53,8 @@ public class FileDBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void insertFileList(int agendaIndex,List<File> fileList){
-        byte[] data = ObjectTransverter.FileListToByteArr(fileList);
+    public void insertFileList(int agendaIndex,List<Document> documentList){
+        byte[] data = ObjectTransverter.FileListToByteArr(documentList);
         ContentValues values =new ContentValues();
         values.put(FilePersistenceContract.FileListEntry.COLUMN_NAME_AGENDA_INDEX,agendaIndex);
         values.put(FilePersistenceContract.FileListEntry.COLUMN_NAME_FILE_LIST,data);
@@ -62,8 +62,8 @@ public class FileDBHelper extends SQLiteOpenHelper {
         mDatabase.insert(FilePersistenceContract.FileListEntry.TABLE_NAME,null,values);
     }
 
-    public List<File> queryFileList(int agendaIndex){
-        List<File> files = null;
+    public List<Document> queryFileList(int agendaIndex){
+        List<Document> documents = null;
         mDatabase = instance.getReadableDatabase();
         String sql = "select * from " + FilePersistenceContract.FileListEntry.TABLE_NAME + " where " +
                 FilePersistenceContract.FileListEntry.COLUMN_NAME_AGENDA_INDEX + " = ?";
@@ -71,9 +71,9 @@ public class FileDBHelper extends SQLiteOpenHelper {
         if ( cursor.moveToFirst()){
             byte[] data = cursor.getBlob(cursor.getColumnIndex(
                     FilePersistenceContract.FileListEntry.COLUMN_NAME_FILE_LIST));
-            files = ObjectTransverter.byteArrToFileList(data);
+            documents = ObjectTransverter.byteArrToFileList(data);
         }
-        return  files;
+        return documents;
 
     }
 }

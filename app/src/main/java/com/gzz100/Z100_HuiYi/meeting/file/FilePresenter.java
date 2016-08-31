@@ -3,7 +3,7 @@ package com.gzz100.Z100_HuiYi.meeting.file;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
-import com.gzz100.Z100_HuiYi.data.File;
+import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.source.FileDataSource;
 import com.gzz100.Z100_HuiYi.data.source.FileRepository;
 
@@ -30,12 +30,12 @@ public class FilePresenter implements FileContract.Presenter {
     public void searchFileOrName(String fileOrName) {
         mFileRepository.getSearchResult(fileOrName, new FileDataSource.loadFileListCallback() {
             @Override
-            public void onFileListLoaded(List<File> files) {
+            public void onFileListLoaded(List<Document> documents) {
 
                 if (!mFileView.isActive()) {
                     return;
                 }
-                mFileView.showFilesList(files);
+                mFileView.showFilesList(documents);
 
             }
 
@@ -84,13 +84,13 @@ public class FilePresenter implements FileContract.Presenter {
 //            fileModel.getFileListByAgendaPos(agendaPos);
             mFileRepository.getFileList(agendaPos, new FileDataSource.loadFileListCallback() {
                 @Override
-                public void onFileListLoaded(List<File> files) {
+                public void onFileListLoaded(List<Document> documents) {
 
                     if (!mFileView.isActive()) {
                         return;
                     }
-                    mFileView.showFilesList(files);
-                    mFileView.setFileList(files);
+                    mFileView.showFilesList(documents);
+                    mFileView.setFileList(documents);
                     mFileView.setAgendaIndex(agendaPos);
 
                 }

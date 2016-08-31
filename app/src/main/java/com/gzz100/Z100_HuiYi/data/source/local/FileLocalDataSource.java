@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
-import com.gzz100.Z100_HuiYi.data.File;
+import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.source.FileDataSource;
 import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 
@@ -38,7 +38,7 @@ public class FileLocalDataSource implements FileDataSource {
         //加载本地数据
 
         //假数据
-        List<File> list = FakeDataProvider.getFileListByindex(agendaPos);
+        List<Document> list = FakeDataProvider.getFileListByindex(agendaPos);
         if (list != null && list.size()>0){
             callback.onFileListLoaded(list);
         }else {

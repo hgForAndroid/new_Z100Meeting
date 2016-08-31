@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gzz100.Z100_HuiYi.meeting.file.fileDetailManage.FileDetailActivity">
+    tools:context="com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity">
     <com.gzz100.Z100_HuiYi.meeting.NavBarView
         android:id="@+id/id_file_detail_tbv"
         android:layout_width="match_parent"
@@ -18,12 +18,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/id_content"
+            <com.github.barteksc.pdfviewer.PDFView
+                android:id="@+id/id_file_pdf_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="内容"
-                android:gravity="center"/>
+                android:layout_height="match_parent" />
         </LinearLayout>
         <ImageView
             android:id="@+id/id_iv_slide_to_right"

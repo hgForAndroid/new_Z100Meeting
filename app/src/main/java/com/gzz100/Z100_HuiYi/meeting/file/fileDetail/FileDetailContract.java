@@ -1,9 +1,12 @@
-package com.gzz100.Z100_HuiYi.meeting.file.fileDetailManage;
+package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
 import android.view.View;
 
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
+
+import java.io.File;
+
 /**
 * 文件详情的契约接口
 * @author XieQXiong
@@ -16,6 +19,7 @@ public interface FileDetailContract {
         void slideLeft(int distanceX);
         void slideRight(int distanceX);
         void setContent(String content);
+        void loadFile(File file);
     }
 
     interface Presenter extends BasePresenter{
@@ -32,5 +36,6 @@ public interface FileDetailContract {
 
         void slideRight(View v);
         void setContent(String content);
+        void loadFile(String fileName);
     }
 }

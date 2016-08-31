@@ -1,5 +1,6 @@
-package com.gzz100.Z100_HuiYi.meeting.file.fileDetailManage;
+package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
+import android.os.Environment;
 import android.view.View;
 
 import com.gzz100.Z100_HuiYi.data.source.FileDetailRepository;
@@ -43,5 +44,20 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void start() {
 
+    }
+
+    @Override
+    public void loadFile(String fileName) {
+        java.io.File file = new java.io.File(Environment.getExternalStorageDirectory().getPath()
+                + "/" +  fileName + ".pdf");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+        mView.loadFile(file);
     }
 }

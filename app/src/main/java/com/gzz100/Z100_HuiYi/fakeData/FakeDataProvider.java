@@ -1,7 +1,7 @@
 package com.gzz100.Z100_HuiYi.fakeData;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
-import com.gzz100.Z100_HuiYi.data.File;
+import com.gzz100.Z100_HuiYi.data.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,48 +34,48 @@ public class FakeDataProvider {
         return agendas;
     }
 
-    public static List<File> getFileListByindex(int index) {
-        List<File> files = new ArrayList<>();
+    public static List<Document> getFileListByindex(int index) {
+        List<Document> documents = new ArrayList<>();
         switch (index) {
             case 1:
                 for (int i = 1; i < 4; i++) {
-                    File file = new File();
-                    file.setAgendaIndex(1 + "");
-                    file.setFileURL("agenda_one_address" + i);
-                    file.setFileIndex(i + "");
-                    file.setFileName("agenda_one_fileName" + i);
-                    file.setFileSize((12 + i) + "kb");
-                    file.setFileSpeaker("张三");
-                    files.add(file);
+                    Document document = new Document();
+                    document.setAgendaIndex(1 + "");
+                    document.setFileURL("agenda_one_address" + i);
+                    document.setFileIndex(i + "");
+                    document.setFileName("agenda_one_fileName" + i);
+                    document.setFileSize((12 + i) + "kb");
+                    document.setFileSpeaker("张三");
+                    documents.add(document);
                 }
 
                 break;
             case 2:
                 for (int i = 1; i < 5; i++) {
-                    File file = new File();
-                    file.setAgendaIndex(1 + "");
-                    file.setFileURL("agenda_two_address" + i);
-                    file.setFileIndex(i + "");
-                    file.setFileName("agenda_two_fileName" + i);
-                    file.setFileSize((16 + i) + "kb");
-                    file.setFileSpeaker("李四");
-                    files.add(file);
+                    Document document = new Document();
+                    document.setAgendaIndex(1 + "");
+                    document.setFileURL("agenda_two_address" + i);
+                    document.setFileIndex(i + "");
+                    document.setFileName("agenda_two_fileName" + i);
+                    document.setFileSize((16 + i) + "kb");
+                    document.setFileSpeaker("李四");
+                    documents.add(document);
                 }
                 break;
 
             case 3:
                 for (int i = 1; i < 5; i++) {
-                    File file = new File();
-                    file.setAgendaIndex(1 + "");
-                    file.setFileURL("agenda_three_address" + i);
-                    file.setFileIndex(i + "");
-                    file.setFileName("agenda_three_fileName" + i);
-                    file.setFileSize((14 + i) + "kb");
-                    file.setFileSpeaker("王五");
-                    files.add(file);
+                    Document document = new Document();
+                    document.setAgendaIndex(1 + "");
+                    document.setFileURL("agenda_three_address" + i);
+                    document.setFileIndex(i + "");
+                    document.setFileName("agenda_three_fileName" + i);
+                    document.setFileSize((14 + i) + "kb");
+                    document.setFileSpeaker("王五");
+                    documents.add(document);
                 }
                 break;
         }
-        return files;
+        return documents;
     }
 }

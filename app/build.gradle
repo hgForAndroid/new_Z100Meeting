@@ -41,4 +41,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.3.0'
     compile 'com.google.guava:guava:19.0'
     compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.github.barteksc:android-pdf-viewer:2.0.3'
 }

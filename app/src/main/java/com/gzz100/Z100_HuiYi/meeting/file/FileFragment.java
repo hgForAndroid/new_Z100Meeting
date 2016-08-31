@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
-import com.gzz100.Z100_HuiYi.data.File;
-import com.gzz100.Z100_HuiYi.meeting.file.fileDetailManage.FileDetailActivity;
+import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     private AgendaListTabAdapter mAgendaAdapter;
     private FileListAdapter mFileListAdapter;
 
-    private List<File> mFileBeen;
+    private List<Document> mDocumentBeen;
     private int mAgendasSum;
     private int mAgendaIndex;
     private int mFileIndex;
@@ -117,9 +117,9 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
 
     @Override
-    public void showFilesList(List<File> fileBeen) {
-//        mFileBeen = fileBeen;
-        mFileListAdapter = new FileListAdapter(getContext(), fileBeen);
+    public void showFilesList(List<Document> documentBeen) {
+//        mDocumentBeen = documentBeen;
+        mFileListAdapter = new FileListAdapter(getContext(), documentBeen);
         //纵向展示
         mFileListRecView.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -129,7 +129,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
 
     @Override
-    public void showSearchResult(List<File> fileBeen) {
+    public void showSearchResult(List<Document> documentBeen) {
 
     }
 
@@ -137,7 +137,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     public void showFileDetail() {
         String currentTitle = mMainActivity.getCurrentTitle();
         FileDetailActivity.showFileDetailActivity(getActivity(), mAgendasSum, mAgendaIndex,
-                mFileBeen, mFileIndex, mAgendaTime, currentTitle);
+                mDocumentBeen, mFileIndex, mAgendaTime, currentTitle);
 
     }
 
@@ -172,8 +172,8 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
 
     @Override
-    public void setFileList(List<File> files) {
-        mFileBeen = files;
+    public void setFileList(List<Document> documents) {
+        mDocumentBeen = documents;
     }
 
     @Override

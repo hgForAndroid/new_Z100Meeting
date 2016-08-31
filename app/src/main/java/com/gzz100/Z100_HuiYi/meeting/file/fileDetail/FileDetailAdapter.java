@@ -1,4 +1,4 @@
-package com.gzz100.Z100_HuiYi.meeting.file.fileDetailManage;
+package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
-import com.gzz100.Z100_HuiYi.data.File;
+import com.gzz100.Z100_HuiYi.data.Document;
 
 import java.util.List;
 
@@ -19,12 +19,12 @@ import butterknife.ButterKnife;
  * Created by XieQXiong on 2016/8/30.
  */
 public class FileDetailAdapter extends RecyclerView.Adapter<ViewHolder>{
-    private List<File> files;
+    private List<Document> documents;
     private Context mContext;
     private LayoutInflater mInflater;
 
-    public FileDetailAdapter(List<File> files, Context context) {
-        this.files = files;
+    public FileDetailAdapter(List<Document> documents, Context context) {
+        this.documents = documents;
         mContext = context;
         mInflater = LayoutInflater.from(context);
     }
@@ -41,7 +41,7 @@ public class FileDetailAdapter extends RecyclerView.Adapter<ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.mTvFileName.setText(files.get(position).getFileName());
+        holder.mTvFileName.setText(documents.get(position).getFileName());
         holder.mTvFileName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +53,7 @@ public class FileDetailAdapter extends RecyclerView.Adapter<ViewHolder>{
 
     @Override
     public int getItemCount() {
-        return files.size();
+        return documents.size();
     }
 }
 class ViewHolder extends RecyclerView.ViewHolder{
