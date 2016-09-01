@@ -10,6 +10,7 @@ import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.meeting.about.AboutFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaFragment;
+import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaPresenter;
 import com.gzz100.Z100_HuiYi.meeting.delegate.DelegateFragment;
 import com.gzz100.Z100_HuiYi.meeting.file.FileFragment;
 import com.gzz100.Z100_HuiYi.meeting.file.FilePresenter;
@@ -87,6 +88,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private void initPresenter() {
         new FilePresenter(RepositoryUtil.getFileRepository(this.getApplicationContext()),
                 mFileFragment);
+        new AgendaPresenter(RepositoryUtil.getFileRepository(this.getApplicationContext()),
+                mAgendaFragment);
     }
 
     private void initEvent() {
@@ -107,7 +110,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 break;
             case R.id.id_main_agendaTab:
                 mViewPager.setCurrentItem(PAGE_THREE);
-                mNavBarView.mTvTitle.setText(mAboutTab.getText());
+                mNavBarView.mTvTitle.setText(mAgendaTab.getText());
                 break;
             case R.id.id_main_fileTab:
                 mViewPager.setCurrentItem(PAGE_FOUR);
