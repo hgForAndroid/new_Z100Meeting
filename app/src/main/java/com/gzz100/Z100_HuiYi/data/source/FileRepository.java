@@ -15,7 +15,7 @@ public class FileRepository implements FileDataSource {
     private final FileDataSource mFileLocalDataSource;
 
     //文件列表是否已有本地缓存  TODO   测试为true
-    boolean mFileListCacheIsDirty = false;
+    boolean mFileListCacheIsDirty = true;
     //议程列表是否已有本地缓存  TODO   测试为true
     boolean mAgendaListCacheIsDirty = true;
 
@@ -50,7 +50,7 @@ public class FileRepository implements FileDataSource {
         }else{
             mFileRemoteDataSource.getFileList(agendaPos,callback);
             //注明已存本地
-//            setFileListCacheIsDirty(true);
+            setFileListCacheIsDirty(true);
         }
     }
 
