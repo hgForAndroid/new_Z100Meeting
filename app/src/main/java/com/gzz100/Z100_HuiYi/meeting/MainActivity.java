@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     private void initPresenter() {
-        new FilePresenter(RepositoryUtil.getFileRepository(this.getApplicationContext()),
+        new FilePresenter(RepositoryUtil.getFileRepository(this),
                 mFileFragment);
         new AgendaPresenter(RepositoryUtil.getFileRepository(this.getApplicationContext()),
                 mAgendaFragment);
