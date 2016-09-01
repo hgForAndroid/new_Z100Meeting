@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.source.FileDataSource;
 import com.gzz100.Z100_HuiYi.data.source.local.FileDBHelper;
 import com.gzz100.Z100_HuiYi.fakeData.OneTitle;
@@ -11,6 +12,7 @@ import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
 import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
 import com.gzz100.Z100_HuiYi.fakeData.OnePost;
+import com.gzz100.Z100_HuiYi.network.entity.DocumentPost;
 
 import java.util.List;
 
@@ -41,22 +43,23 @@ public class FileRemoteDataSource implements FileDataSource {
     public void getFileList(int agendaPos, @NonNull final loadFileListCallback callback) {
         checkNotNull(callback);
         //加载服务器数据
-//        DocumentPost documentPost = new DocumentPost(
-//                new ProgressSubscriber(new HttpRxCallbackListener<List<Document>>(){
-//                    @Override
-//                    public void onNext(List<Document> documents) {
-//                        callback.onFileListLoaded(documents);
-//                    }
-//                }, mContext), true, agendaPos);
-//        HttpManager.getInstance().doHttpDeal(documentPost);
+        DocumentPost documentPost = new DocumentPost(
+                new ProgressSubscriber(new HttpRxCallbackListener<List<Document>>(){
+                    @Override
+                    public void onNext(List<Document> documents) {
+                        callback.onFileListLoaded(documents);
+                    }
+                }, mContext), true, agendaPos);
+        HttpManager.getInstance().doHttpDeal(documentPost);
 
-        OnePost onePost = new OnePost(new ProgressSubscriber(new HttpRxCallbackListener<List<OneTitle>>() {
-            @Override
-            public void onNext(List<OneTitle> oneTitles) {
-                Log.e("getList ===", oneTitles.size() + "");
-            }
-        }, mContext));
-        HttpManager.getInstance().doHttpDeal(onePost);
+        //测试
+//        OnePost onePost = new OnePost(new ProgressSubscriber(new HttpRxCallbackListener<List<OneTitle>>() {
+//            @Override
+//            public void onNext(List<OneTitle> oneTitles) {
+//                Log.e("getList ===", oneTitles.size() + "");
+//            }
+//        }, mContext));
+//        HttpManager.getInstance().doHttpDeal(onePost);
 
         //去完数据需存在本地
     }
