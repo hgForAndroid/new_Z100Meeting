@@ -43,7 +43,7 @@ public class FakeDataProvider {
                     document.setAgendaIndex(1 + "");
                     document.setFileURL("agenda_one_address" + i);
                     document.setFileIndex(i + "");
-                    document.setFileName("agenda_one_fileName" + i);
+                    document.setFileName("agenda_one_fileName.txt" + i);
                     document.setFileSize((12 + i) + "kb");
                     document.setFileSpeaker("张三");
                     documents.add(document);
@@ -56,7 +56,7 @@ public class FakeDataProvider {
                     document.setAgendaIndex(1 + "");
                     document.setFileURL("agenda_two_address" + i);
                     document.setFileIndex(i + "");
-                    document.setFileName("agenda_two_fileName" + i);
+                    document.setFileName("agenda_two_fileName.doc" + i);
                     document.setFileSize((16 + i) + "kb");
                     document.setFileSpeaker("李四");
                     documents.add(document);
@@ -69,7 +69,7 @@ public class FakeDataProvider {
                     document.setAgendaIndex(1 + "");
                     document.setFileURL("agenda_three_address" + i);
                     document.setFileIndex(i + "");
-                    document.setFileName("agenda_three_fileName" + i);
+                    document.setFileName("agenda_three_fileName.xlsx" + i);
                     document.setFileSize((14 + i) + "kb");
                     document.setFileSpeaker("王五");
                     documents.add(document);
