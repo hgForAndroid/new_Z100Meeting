@@ -32,7 +32,6 @@ dependencies {
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     //okhttp
     compile 'com.android.support:appcompat-v7:23.3.0'
-
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
@@ -44,4 +43,5 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.github.barteksc:android-pdf-viewer:2.0.3'
+    compile 'com.squareup.picasso:picasso:2.3.2'
 }
