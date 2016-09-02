@@ -17,8 +17,9 @@ import rx.schedulers.Schedulers;
  */
 public class HttpManager {
 
-
+    //测试用
     public static final String BASE_URL = "https://api.douban.com/v2/book/";
+
     private static final int DEFAULT_TIMEOUT = 6;
     private ApiService mApiService;
     private volatile static HttpManager INSTANCE;
