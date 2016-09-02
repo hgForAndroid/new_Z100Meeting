@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -186,10 +187,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     }
 
     @Override
-    public void setContent(String content) {
-    }
-
-    @Override
     public void setPresenter(FileDetailContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -204,7 +201,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     @Override
     public void onFileClick(int position) {
         mPresenter.loadFile(mFileList.get(position).getFileName());
-        mPresenter.setContent(mFileList.get(position).getFileURL());
         setBackgroundColor(mChildCount,position);
     }
 

@@ -37,11 +37,6 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void setContent(String content) {
-        mView.setContent(content);
-    }
-
-    @Override
     public void start() {
 
     }

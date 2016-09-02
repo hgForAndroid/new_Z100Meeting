@@ -18,7 +18,6 @@ public interface FileDetailContract {
         void fallback();
         void slideLeft(int distanceX);
         void slideRight(int distanceX);
-        void setContent(String content);
         void loadFile(File file);
     }
 
@@ -35,7 +34,6 @@ public interface FileDetailContract {
         void slideLeft(View v);
 
         void slideRight(View v);
-        void setContent(String content);
         void loadFile(String fileName);
     }
 }
