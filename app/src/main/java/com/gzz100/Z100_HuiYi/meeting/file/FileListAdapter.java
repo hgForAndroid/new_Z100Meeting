@@ -54,6 +54,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileBeanHolder>{
         });
         holder.mFileSize.setText(mDocuments.get(position).getFileSize());
         holder.mKeynoteSpeaker.setText(mDocuments.get(position).getFileSpeaker());
+        mDocuments.get(position).setImageForFile(mContext,holder.mFileImage);
 
     }
 
