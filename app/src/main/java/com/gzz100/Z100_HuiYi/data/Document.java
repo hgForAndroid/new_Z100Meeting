@@ -1,6 +1,10 @@
 package com.gzz100.Z100_HuiYi.data;
 
+import android.content.Context;
 import android.widget.ImageView;
+
+import com.gzz100.Z100_HuiYi.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 
@@ -63,14 +67,14 @@ public class Document implements Serializable{
         this.fileSpeaker = fileSpeaker;
     }
 
-    public void setImageForFile(ImageView imageView){
+    public void setImageForFile(Context context,ImageView imageView){
         if (!this.fileName.isEmpty() && this.fileName.contains(".txt")){
-            imageView.setImageResource(android.R.mipmap.sym_def_app_icon);
+            Picasso.with(context).load("http://p3.so.qhmsg.com/bdr/_240_/t0146723952b5d73a1d.png").into(imageView);
         }else if (!this.fileName.isEmpty() &&
                 (this.fileName.contains(".doc") || this.fileName.contains(".docx"))){
-            imageView.setImageResource(android.R.mipmap.sym_def_app_icon);
+            Picasso.with(context).load("http://p1.so.qhmsg.com/bdr/_240_/t01b16d40e4a51d6241.png").into(imageView);
         }else if (!this.fileName.isEmpty() && this.fileName.contains(".xlsx")){
-            imageView.setImageResource(android.R.mipmap.sym_def_app_icon);
+            Picasso.with(context).load("http://p0.so.qhmsg.com/bdr/_240_/t01d509fc4c1cb60a9a.png").into(imageView);
         }
     }
 
