@@ -19,4 +19,7 @@
     <color name="color_file_size_bg">#E0E0E0</color>
     <!--文件界面  议程列表的背景色-->
     <color name="color_agenda_list_bg">#00BCD4</color>
+
+    <!--会议桌的背景色-->
+    <color name="color_meeting_room_bg">#7A7D7D</color>
 </resources>
