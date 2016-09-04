@@ -17,6 +17,7 @@ import com.gzz100.Z100_HuiYi.meeting.file.FilePresenter;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingFragment;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.source.RepositoryUtil;
+import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +74,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mFragments.add(mAgendaFragment);
         mFragments.add(mFileFragment);
         mFragments.add(mAboutFragment);
-
-//        mFragments.add(mVoteFragment);
+        //测试
+        mFragments.add(mVoteFragment);
 
         mMainFragmentAdapter = new MainFragmentAdapter(getSupportFragmentManager(),mFragments);
         mViewPager.setAdapter(mMainFragmentAdapter);
@@ -88,8 +89,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private void initPresenter() {
         new FilePresenter(RepositoryUtil.getFileRepository(this),
                 mFileFragment);
-        new AgendaPresenter(RepositoryUtil.getFileRepository(this.getApplicationContext()),
+        new AgendaPresenter(RepositoryUtil.getFileRepository(this),
                 mAgendaFragment);
+        new VotePresenter(RepositoryUtil.getVoteRepository(this),
+                mVoteFragment);
     }
 
     private void initEvent() {
@@ -120,9 +123,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 mViewPager.setCurrentItem(PAGE_FIVE);
                 mNavBarView.mTvTitle.setText(mAboutTab.getText());
                 break;
-//            case R.id.id_main_voteTab:
-//                mViewPager.setCurrentItem(PAGE_SIX);
-//                break;
+            case R.id.id_main_voteTab:
+                mViewPager.setCurrentItem(PAGE_SIX);
+                mNavBarView.mTvTitle.setText(mVoteTab.getText());
+                break;
         }
 
     }
@@ -156,9 +160,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 case PAGE_FIVE:
                     mAboutTab.setChecked(true);
                     break;
-//                case PAGE_SIX:
-//                    mMeetingTab.setChecked(true);
-//                    break;
+                case PAGE_SIX:
+                    mVoteTab.setChecked(true);
+                    break;
 
             }
         }

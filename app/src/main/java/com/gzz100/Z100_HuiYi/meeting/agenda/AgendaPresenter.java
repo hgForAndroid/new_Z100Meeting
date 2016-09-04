@@ -21,8 +21,8 @@ public class AgendaPresenter implements AgendaContract.Presenter{
     private boolean mFirstLoad = true;
 
     public AgendaPresenter(@NonNull FileRepository fileRepository, @NonNull AgendaContract.View agendaView){
-        mFileRepository = fileRepository;
-        mAgendaView = agendaView;
+        mFileRepository = checkNotNull(fileRepository, "fileRepository cannot be null");
+        mAgendaView = checkNotNull(agendaView, "agendaView connot be null");
         mAgendaView.setPresenter(this);
     }
 
