@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
     private TextView mVoteQuestionTextView;
     private TextView mVoteNumberNeededTextView;
     private TextView mVoteNumberSelectedTextView;
+    private Button mVoteSubmitButton;
 
     public int optionNeededNumber = 0;
     private int optionSelectedNumber = 0;
@@ -64,8 +66,19 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
         mVoteQuestionTextView = (TextView) view.findViewById(R.id.id_text_view_vote_question);
         mVoteNumberNeededTextView = (TextView) view.findViewById(R.id.id_text_view_vote_needed_number);
         mVoteNumberSelectedTextView = (TextView) view.findViewById(R.id.id_text_view_vote_selected_number);
+        mVoteSubmitButton = (Button) view.findViewById(R.id.id_btn_submit_vote);
+        initViews();
 //        ButterKnife.bind(getActivity(),view);
         return view;
+    }
+
+    private void initViews(){
+        mVoteSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.submitVoteResult();
+            }
+        });
     }
 
     @Override

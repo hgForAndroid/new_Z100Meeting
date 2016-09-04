@@ -49,6 +49,6 @@ public class VotePresenter implements VoteContract.Presenter{
 
     @Override
     public void submitVoteResult() {
-
+        //提交投票结果（通过网络层）
     }
 }

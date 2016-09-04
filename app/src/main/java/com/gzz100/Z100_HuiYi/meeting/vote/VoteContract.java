@@ -32,7 +32,6 @@ public interface VoteContract {
         /**
          * 提交投票结果
          */
-
         void submitVoteResult();
     }
 }
