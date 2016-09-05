@@ -72,6 +72,13 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.setFirstLoad(true);
+        optionNeededNumber = optionSelectedNumber = 0;
+    }
+
     private void initViews(){
         mVoteSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,25 +94,29 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
     }
 
     @Override
-    public void showVoteInf(Vote vote) {
+    public void setVoteInf(Vote vote) {
         this.mVote = vote;
+    }
+
+    @Override
+    public void showVoteInf() {
         optionStateList = new ArrayList<Boolean>();
-        for(int i = 0; i < vote.getVoteOptionsList().size(); i++){
+        for(int i = 0; i < mVote.getVoteOptionsList().size(); i++){
             optionStateList.add(false);
         }
 
         //显示投票标题
-        mVoteTitleTextView.setText(vote.getVoteTitle());
+        mVoteTitleTextView.setText(mVote.getVoteTitle());
 
         //显示投票问题
-        mVoteQuestionTextView.setText(vote.getVoteQuestion());
+        mVoteQuestionTextView.setText(mVote.getVoteQuestion());
 
         //显示需要选择的数量
-        mVoteNumberNeededTextView.setText("请选择" + vote.getVoteNumberNeeded() + "项:");
-        optionNeededNumber = vote.getVoteNumberNeeded();
+        mVoteNumberNeededTextView.setText("请选择" + mVote.getVoteNumberNeeded() + "项:");
+        optionNeededNumber = mVote.getVoteNumberNeeded();
 
         //显示选项
-        VoteOptionListAdapter adapter = new VoteOptionListAdapter(getContext(), vote.getVoteOptionsList());
+        VoteOptionListAdapter adapter = new VoteOptionListAdapter(getContext(), mVote.getVoteOptionsList());
         adapter.setOnVoteOptionClickListener(this);
         mVoteOptionRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));

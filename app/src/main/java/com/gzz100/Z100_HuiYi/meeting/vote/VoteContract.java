@@ -15,9 +15,14 @@ public interface VoteContract {
         boolean isActive();
 
         /**
+         * 设置投票信息
+         */
+        void setVoteInf(Vote vote);
+
+        /**
          * 显示投票信息
          */
-        void showVoteInf(Vote vote);
+        void showVoteInf();
     }
 
     public interface Presenter extends BasePresenter{
@@ -33,5 +38,11 @@ public interface VoteContract {
          * 提交投票结果
          */
         void submitVoteResult();
+
+        /**
+         * 设置页面重新加载
+         * @param reLoad 重新加载
+         */
+        void setFirstLoad(Boolean reLoad);
     }
 }

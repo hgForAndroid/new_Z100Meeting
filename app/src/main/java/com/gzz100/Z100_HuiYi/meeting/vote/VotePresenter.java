@@ -30,13 +30,15 @@ public class VotePresenter implements VoteContract.Presenter{
     @Override
     public void fetchVoteInf(boolean forceUpdate, String IMEI, String userID, String agendaIndex) {
         if(forceUpdate || mFirstLoad){
+            mFirstLoad = false;
             mVoteRepository.getVoteDetail(IMEI, userID, agendaIndex, new VoteDataSource.LoadVoteDetailCallback() {
                 @Override
                 public void onVoteDetailLoaded(Vote vote) {
                     if(!mVoteView.isActive()){
                         return;
                     }
-                    mVoteView.showVoteInf(vote);
+                    mVoteView.setVoteInf(vote);
+                    mVoteView.showVoteInf();
                 }
 
                 @Override
@@ -50,5 +52,10 @@ public class VotePresenter implements VoteContract.Presenter{
     @Override
     public void submitVoteResult() {
         //提交投票结果（通过网络层）
+    }
+
+    @Override
+    public void setFirstLoad(Boolean reLoad) {
+        mFirstLoad = reLoad;
     }
 }
