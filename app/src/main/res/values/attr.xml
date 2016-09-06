@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="MeetingRoomView">
-        <attr name="table_color" format="color|reference"/>
         <attr name="left" format="float|dimension"/>
         <attr name="top" format="float|dimension"/>
         <attr name="right" format="float|dimension"/>
