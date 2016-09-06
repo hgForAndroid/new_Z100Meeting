@@ -3,6 +3,7 @@ package com.gzz100.Z100_HuiYi.meeting;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by XieQXiong on 2016/8/23.
  */
-public class MainFragmentAdapter extends FragmentPagerAdapter {
+public class MainFragmentAdapter extends FragmentStatePagerAdapter {
     private List<Fragment> mFragments;
     public MainFragmentAdapter(FragmentManager fm, List<Fragment> fragments) {
         super(fm);
@@ -40,11 +41,5 @@ public class MainFragmentAdapter extends FragmentPagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
 //        Log.e("destroyItem ==>","position = "+position);
         super.destroyItem(container, position, object);
-    }
-
-    @Override
-    public void finishUpdate(ViewGroup container) {
-        super.finishUpdate(container);
-
     }
 }
