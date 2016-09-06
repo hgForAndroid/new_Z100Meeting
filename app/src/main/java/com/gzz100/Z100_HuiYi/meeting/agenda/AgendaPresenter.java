@@ -21,8 +21,8 @@ public class AgendaPresenter implements AgendaContract.Presenter{
     private boolean mFirstLoad = true;
 
     public AgendaPresenter(@NonNull FileRepository fileRepository, @NonNull AgendaContract.View agendaView){
-        mFileRepository = fileRepository;
-        mAgendaView = agendaView;
+        mFileRepository = checkNotNull(fileRepository, "fileRepository cannot be null");
+        mAgendaView = checkNotNull(agendaView, "agendaView connot be null");
         mAgendaView.setPresenter(this);
     }
 
@@ -34,8 +34,8 @@ public class AgendaPresenter implements AgendaContract.Presenter{
     @Override
     public void fetchAgendaList(boolean forceUpdate, String IMEI, String userId) {
         if (forceUpdate || mFirstLoad){
-//            mFirstLoad = false;
-            mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.LoadAgendaListCallback() {
+            mFirstLoad = false;
+            mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.loadAgendaListCallback() {
                 @Override
                 public void onAgendaListLoaded(List<Agenda> agendas) {
                     if (!mAgendaView.isActive()) {
@@ -56,25 +56,30 @@ public class AgendaPresenter implements AgendaContract.Presenter{
 
     @Override
     public void fetchFileListAndShow(boolean forceUpdate, int agendaPos) {
-        mFirstLoad = false;
+        if(forceUpdate || mFirstLoad){
+            mFirstLoad = false;
 //            fileModel.getFileListByAgendaPos(agendaPos);
+            mFileRepository.getFileList(agendaPos, new FileDataSource.loadFileListCallback() {
+                @Override
+                public void onFileListLoaded(List<Document> documents) {
         mFileRepository.getFileList(agendaPos, new FileDataSource.LoadFileListCallback() {
             @Override
             public void onFileListLoaded(List<Document> documents) {
 
-                if (!mAgendaView.isActive()) {
-                    return;
+                    if (!mAgendaView.isActive()) {
+                        return;
+                    }
+                    mAgendaView.setFileList(documents);
+                    mAgendaView.showFileDetail();
                 }
-                mAgendaView.setFileList(documents);
-                mAgendaView.showFileDetail();
-            }
 
-            @Override
-            public void onDataNotAvailable() {
-                mAgendaView.showNoFileList();
+                @Override
+                public void onDataNotAvailable() {
+                    mAgendaView.showNoFileList();
 
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override

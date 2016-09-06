@@ -2,6 +2,7 @@ package com.gzz100.Z100_HuiYi.fakeData;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.Vote;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,5 +78,50 @@ public class FakeDataProvider {
                 break;
         }
         return documents;
+    }
+
+    public static Vote getVoteDetailByIndex(int index){
+        Vote vote = new Vote();
+        switch (index){
+            case 1:
+                vote.setVoteID("1");
+                vote.setVoteTitle("议程1投票标题");
+                vote.setVoteNumberNeeded(1);
+                vote.setVoteQuestion("议程1投票问题");
+                List<String> options1 = new ArrayList<String>();
+                options1.add("议程1:选项1");
+                options1.add("议程1:选项2");
+                options1.add("议程1:选项3");
+                vote.setVoteOptionsList(options1);
+                break;
+
+            case 2:
+                vote.setVoteID("2");
+                vote.setVoteTitle("议程2投票标题");
+                vote.setVoteNumberNeeded(2);
+                vote.setVoteQuestion("议程2投票问题");
+                List<String> options2 = new ArrayList<String>();
+                options2.add("议程2:选项1");
+                options2.add("议程2:选项2");
+                options2.add("议程2:选项3");
+                options2.add("议程2:选项4");
+                vote.setVoteOptionsList(options2);
+                break;
+
+            case 3:
+                vote.setVoteID("3");
+                vote.setVoteTitle("议程3投票标题");
+                vote.setVoteNumberNeeded(1);
+                vote.setVoteQuestion("议程3投票问题");
+                List<String> options3 = new ArrayList<String>();
+                options3.add("议程3:选项1");
+                options3.add("议程3:选项2");
+                options3.add("议程3:选项3");
+                options3.add("议程3:选项4");
+                vote.setVoteOptionsList(options3);
+                break;
+        }
+
+        return vote;
     }
 }
