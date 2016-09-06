@@ -15,8 +15,13 @@ import com.gzz100.Z100_HuiYi.meeting.delegate.DelegateFragment;
 import com.gzz100.Z100_HuiYi.meeting.file.FileFragment;
 import com.gzz100.Z100_HuiYi.meeting.file.FilePresenter;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingFragment;
+import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingPresenter;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.source.RepositoryUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,8 +93,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private void initPresenter() {
         new FilePresenter(RepositoryUtil.getFileRepository(this),
                 mFileFragment);
-        new AgendaPresenter(RepositoryUtil.getFileRepository(this.getApplicationContext()),
+        new AgendaPresenter(RepositoryUtil.getFileRepository(this),
                 mAgendaFragment);
+        new MeetingPresenter(mMeetingFragment);
     }
 
     private void initEvent() {
@@ -168,5 +174,23 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public String getCurrentTitle() {
         return mNavBarView.mTvTitle.getText().toString();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showDelegate(Boolean showDelegate){
+        if (showDelegate)
+        mDelegateTab.setChecked(showDelegate);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }
