@@ -11,13 +11,11 @@ import rx.Subscriber;
 public class DocumentPost extends BaseEntity {
 
     private Subscriber mSubscriber;
-    private boolean all;
     private int mAgendaIndex;
 
 
-    public DocumentPost(Subscriber subscriber, boolean all,int agendaIndex) {
+    public DocumentPost(Subscriber subscriber,int agendaIndex) {
         this.mSubscriber = subscriber;
-        this.all = all;
         this.mAgendaIndex = agendaIndex;
     }
     @Override
