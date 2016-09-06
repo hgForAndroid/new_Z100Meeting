@@ -35,7 +35,7 @@ public class AgendaPresenter implements AgendaContract.Presenter{
     public void fetchAgendaList(boolean forceUpdate, String IMEI, String userId) {
         if (forceUpdate || mFirstLoad){
 //            mFirstLoad = false;
-            mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.loadAgendaListCallback() {
+            mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.LoadAgendaListCallback() {
                 @Override
                 public void onAgendaListLoaded(List<Agenda> agendas) {
                     if (!mAgendaView.isActive()) {
@@ -58,7 +58,7 @@ public class AgendaPresenter implements AgendaContract.Presenter{
     public void fetchFileListAndShow(boolean forceUpdate, int agendaPos) {
         mFirstLoad = false;
 //            fileModel.getFileListByAgendaPos(agendaPos);
-        mFileRepository.getFileList(agendaPos, new FileDataSource.loadFileListCallback() {
+        mFileRepository.getFileList(agendaPos, new FileDataSource.LoadFileListCallback() {
             @Override
             public void onFileListLoaded(List<Document> documents) {
 
