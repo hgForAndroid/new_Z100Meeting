@@ -13,12 +13,12 @@ import java.util.List;
 
 
 public interface FileDataSource {
-    interface loadFileListCallback {
+    interface LoadFileListCallback {
         void onFileListLoaded(List<Document> documents);
 
         void onDataNotAvailable();
     }
-    interface loadAgendaListCallback{
+    interface LoadAgendaListCallback {
         void onAgendaListLoaded(List<Agenda> files);
 
         void onDataNotAvailable();
@@ -29,7 +29,7 @@ public interface FileDataSource {
      * @param agendaPos   议程序号，根据该序号获取
      * @param callback    获取结果回调函数
      */
-    void getFileList(int agendaPos,@NonNull loadFileListCallback callback);
+    void getFileList(int agendaPos,@NonNull LoadFileListCallback callback);
 
     /**
      * 获取议程列表
@@ -37,12 +37,12 @@ public interface FileDataSource {
      * @param userId   用户id
      * @param callback 获取结果回调函数
      */
-    void getAgendaList(String IMEI,String userId,@NonNull loadAgendaListCallback callback);
+    void getAgendaList(String IMEI,String userId,@NonNull LoadAgendaListCallback callback);
 
     /**
      * 获取关键字搜索结果
      * @param fileOrName   文件名/人名
      * @param callback     获取结果回调函数
      */
-    void getSearchResult(String fileOrName,@NonNull loadFileListCallback callback);
+    void getSearchResult(String fileOrName,@NonNull LoadFileListCallback callback);
 }
