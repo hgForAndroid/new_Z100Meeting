@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.network;
 
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.fakeData.OneTitle;
 import com.gzz100.Z100_HuiYi.network.entity.BaseResultEntity;
@@ -40,4 +41,7 @@ public interface ApiService {
 
     @POST("login")
     Observable<BaseResultEntity<String>> login(@Field("IMEI") String IMEI,@Field("userId") String userId);
+
+    @GET("getMeetingInfo")
+    Observable<BaseResultEntity<MeetingInfo>> getMeetingInfo();
 }
