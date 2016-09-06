@@ -6,18 +6,14 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <ImageView
-        android:id="@+id/id_imv_user_pic_meeting_room"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"/>
-
     <TextView
+        android:drawableTop="@drawable/ic_normal_delegate"
         android:id="@+id/id_tv_user_name_meeting_room"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="5dp"
+        android:textSize="@dimen/delegate_text_size"
         android:text="aaa"/>
 
 </LinearLayout>
