@@ -44,4 +44,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.github.barteksc:android-pdf-viewer:2.0.3'
     compile 'com.squareup.picasso:picasso:2.3.2'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }
