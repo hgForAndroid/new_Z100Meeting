@@ -18,7 +18,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by XieQXiong on 2016/9/6.
  */
 public class MeetingRemoteDataSource implements MeetingDataSource {
-
     private static MeetingRemoteDataSource INSTANCE;
 //    private final FileDBHelper mDbHelper;
     private static Context mContext;
