@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
@@ -7,8 +7,33 @@
         android:id="@+id/id_meeting_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:align_inner_rect="120">
+        app:align_inner_rect="120"
+        app:round_rect="true">
 
     </com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingRoomView>
+    <TextView
+        android:layout_marginLeft="@dimen/distance_five_dp"
+        android:layout_marginRight="@dimen/distance_five_dp"
+        android:id="@+id/id_tv_meeting_fragment_streamer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/streamer_height"
+        android:text="@string/string_streamer"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/streamer_text_size"
+        android:background="#9E9E9E"
+        android:layout_marginTop="@dimen/distance_five_dp"
+        android:padding="@dimen/distance_five_dp"
+        android:gravity="center"/>
+    <TextView
+        android:layout_marginBottom="64dp"
+        android:id="@+id/id_tv_meeting_fragment_others"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/distance_five_dp"
+        android:gravity="center"
+        android:layout_gravity="bottom|right"
+        android:text="其他参会人员（8）"
+        android:textSize="20sp"
+        android:drawableLeft="@drawable/ic_normal_delegate"/>
 
-</RelativeLayout>
+</FrameLayout>
