@@ -33,7 +33,7 @@ public class FileLocalDataSource implements FileDataSource {
         return INSTANCE;
     }
     @Override
-    public void getFileList(int agendaPos, @NonNull loadFileListCallback callback) {
+    public void getFileList(int agendaPos, @NonNull LoadFileListCallback callback) {
         checkNotNull(callback);
         //加载本地数据
 
@@ -47,7 +47,7 @@ public class FileLocalDataSource implements FileDataSource {
     }
 
     @Override
-    public void getAgendaList(String IMEI, String userId, @NonNull loadAgendaListCallback callback) {
+    public void getAgendaList(String IMEI, String userId, @NonNull LoadAgendaListCallback callback) {
         checkNotNull(callback);
         //假数据
         List<Agenda> agendas = FakeDataProvider.getAgendas();
@@ -60,7 +60,7 @@ public class FileLocalDataSource implements FileDataSource {
     }
 
     @Override
-    public void getSearchResult(String fileOrName, @NonNull loadFileListCallback callback) {
+    public void getSearchResult(String fileOrName, @NonNull LoadFileListCallback callback) {
 
     }
 }

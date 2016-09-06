@@ -1,101 +1,50 @@
 package com.gzz100.Z100_HuiYi.meeting.meetingScenario;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.UserBean;
+import com.gzz100.Z100_HuiYi.utils.Constant;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
-* 文件详情
+* 会议界面
 * @author XieQXiong
 * create at 2016/8/23 17:01
 */
 
-public class MeetingFragment extends Fragment {
+public class MeetingFragment extends Fragment implements MeetingContract.View, OnUserClickListener {
 
     private MeetingRoomView mMeetingRoomView;
 
-    private List<UserBean> users = new ArrayList<>();
+    private List<UserBean> mUsers = new ArrayList<>();
 
     public static MeetingFragment newInstance(){return new MeetingFragment();}
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        Log.e("MeetingFragment -->","onCreate");
-        super.onCreate(savedInstanceState);
-        UserBean user1 = new UserBean(1,"张三","android开发",2);
-        UserBean user2 = new UserBean(2,"王麻子","Java开发",2);
-        UserBean user3 = new UserBean(3,"临到","iOS开发",2);
-        UserBean user4 = new UserBean(4,"李四","c++开发",2);
-        UserBean user5 = new UserBean(5,"王五","c开发",2);
-        UserBean user6 = new UserBean(6,"王小二","c#开发",2);
-        UserBean user7 = new UserBean(7,"赵烈","技术支持",2);
-        UserBean user8 = new UserBean(8,"饼子","客服",2);
-        UserBean user9 = new UserBean(9,"胡子","经理",1);
-        UserBean user10 = new UserBean(10,"阿毛","助理",3);
-        users.add(user1);
-        users.add(user2);
-        users.add(user3);
-        users.add(user4);
-        users.add(user5);
-        users.add(user6);
-        users.add(user7);
-        users.add(user8);
-        users.add(user9);
-        users.add(user10);
-
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mMeetingRoomView.addUsers(users, new OnUserClickListener() {
-            @Override
-            public void onUserClick(View v, int position) {
-                Toast.makeText(getActivity(),users.get(position).getUserName(),Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    @Override
-    public void onPause() {
-//        Log.e("MeetingFragment -->","onPause");
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-//        Log.e("MeetingFragment -->","onStop");
-        super.onStop();
-    }
-
-    @Override
-    public void onDetach() {
-//        Log.e("MeetingFragment -->","onDetach");
-        super.onDetach();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-//        Log.e("MeetingFragment -->","onAttach");
-        super.onAttach(context);
-    }
+    private MeetingContract.Presenter mPresenter;
 
     @Override
     public void onResume() {
-//        Log.e("MeetingFragment -->","onResume");
+        if (Constant.DEBUG)
+        Log.e("MeetingFragment -->","onResume");
         super.onResume();
+        mPresenter.start();
     }
 
     @Nullable
@@ -103,28 +52,70 @@ public class MeetingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meeting, null);
         mMeetingRoomView = (MeetingRoomView) view.findViewById(R.id.id_meeting_view);
+        ButterKnife.bind(this,view);
         return view;
     }
 
     @Override
     public void onDestroyView() {
-//        Log.e("MeetingFragment -->","onDestroyView");
+        if (Constant.DEBUG)
+        Log.e("MeetingFragment -->","onDestroyView");
         super.onDestroyView();
+        mPresenter.resetFirstLoad();
+        mMeetingRoomView.resetUpAndDownValue();
+        mUsers.clear();
+    }
+
+    @OnClick(R.id.id_tv_meeting_fragment_streamer)
+    void onStreamerClick(){
+        Toast.makeText(getActivity(),"横幅",Toast.LENGTH_SHORT).show();
+    }
+    @OnClick(R.id.id_tv_meeting_fragment_others)
+    void onOthersClick(){
+        mPresenter.showDelegate();
     }
 
     @Override
-    public void onDestroy() {
-//        Log.e("MeetingFragment -->","onDestroy");
-        super.onDestroy();
+    public void showMeetingInfo() {
+
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-//        Log.e("MeetingFragment -->","onSaveInstanceState");
-        outState.putString("key","saveBundle");
+    public void showOthers() {
 
     }
 
+    @Override
+    public void showUserInfo() {
+//        Intent intent = new Intent(getActivity(),null);
+//        startActivity(intent);
 
+    }
+
+    @Override
+    public void setPresenter(MeetingContract.Presenter presenter) {
+        this.mPresenter = presenter;
+    }
+
+    @Override
+    public void showMeetingRoom(List<UserBean> users) {
+        mUsers = users;
+        mMeetingRoomView.addUsers(users,"李四",this);
+    }
+
+    @Override
+    public void setOthersNum(boolean isShow, int othersNum) {
+
+    }
+
+    @Override
+    public void showDelegate(Boolean isShowDelegate) {
+        EventBus.getDefault().post(isShowDelegate);
+    }
+
+    @Override
+    public void onUserClick(View v, int position) {
+        Toast.makeText(getActivity(),mUsers.get(position).getUserName(),Toast.LENGTH_SHORT).show();
+        mPresenter.fetchUserInfo(mUsers.get(position).getUserId());
+    }
 }
