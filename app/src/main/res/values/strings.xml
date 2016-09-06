@@ -14,5 +14,6 @@
     <string name="string_file_name">文件名</string>
     <string name="string_size">大小</string>
     <string name="string_keynote_Speaker">主讲人</string>
+    <string name="string_streamer">横幅</string>
 
 </resources>
