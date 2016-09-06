@@ -2,16 +2,13 @@ package com.gzz100.Z100_HuiYi.data.source.remote;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.source.FileDataSource;
 import com.gzz100.Z100_HuiYi.data.source.local.FileDBHelper;
-import com.gzz100.Z100_HuiYi.fakeData.OneTitle;
 import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
 import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
-import com.gzz100.Z100_HuiYi.fakeData.OnePost;
 import com.gzz100.Z100_HuiYi.network.entity.DocumentPost;
 
 import java.util.List;
@@ -40,7 +37,7 @@ public class FileRemoteDataSource implements FileDataSource {
         return INSTANCE;
     }
     @Override
-    public void getFileList(int agendaPos, @NonNull final loadFileListCallback callback) {
+    public void getFileList(int agendaPos, @NonNull final LoadFileListCallback callback) {
         checkNotNull(callback);
         //加载服务器数据
         DocumentPost documentPost = new DocumentPost(
@@ -49,7 +46,7 @@ public class FileRemoteDataSource implements FileDataSource {
                     public void onNext(List<Document> documents) {
                         callback.onFileListLoaded(documents);
                     }
-                }, mContext), true, agendaPos);
+                }, mContext), agendaPos);
         HttpManager.getInstance().doHttpDeal(documentPost);
 
         //测试
@@ -66,12 +63,12 @@ public class FileRemoteDataSource implements FileDataSource {
 
 
     @Override
-    public void getAgendaList(String IMEI, String userId, @NonNull loadAgendaListCallback callback) {
+    public void getAgendaList(String IMEI, String userId, @NonNull LoadAgendaListCallback callback) {
 
     }
 
     @Override
-    public void getSearchResult(String fileOrName, @NonNull loadFileListCallback callback) {
+    public void getSearchResult(String fileOrName, @NonNull LoadFileListCallback callback) {
 
     }
 }
