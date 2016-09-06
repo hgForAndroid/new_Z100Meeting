@@ -26,6 +26,11 @@
 
     <!--文件界面   文件列表的最小高度-->
     <dimen name="file_list_min_height">80dp</dimen>
+    <!--横幅的高度-->
+    <dimen name="streamer_height">45dp</dimen>
+    <dimen name="streamer_text_size">20sp</dimen>
+    <!--参会人员名字的字体大小-->
+    <dimen name="delegate_text_size">20sp</dimen>
 
 
 </resources>
