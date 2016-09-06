@@ -1,10 +1,11 @@
 package com.gzz100.Z100_HuiYi.data;
 
 import android.content.Context;
-import android.widget.ImageView;
+import android.graphics.drawable.Drawable;
+import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
-import com.squareup.picasso.Picasso;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 
 /**
  * Created by XieQXiong on 2016/9/2.
@@ -54,14 +55,49 @@ public class UserBean {
         this.type = type;
     }
 
-    public void setPicForUser(Context context, ImageView imageView){
-        if (getType() == 1){//主持人
-            Picasso.with(context).load(R.mipmap.ic_launcher).into(imageView);
-        }else if (getType() == 2){//主讲人
-            Picasso.with(context).load(R.mipmap.ic_launcher).into(imageView);
-        }else {//其他参会人员
-            Picasso.with(context).load(R.mipmap.ic_launcher).into(imageView);
+    /**
+     * 为不同类型的用户设置不同的图片
+     * @param context  上下文，用于加载Drawable
+     * @param textView  显示当前人员的TextView
+     */
+    public void setPicForUser(Context context, TextView textView){
+        Drawable drawable = null;
+        if (getType() == Constant.HOST){//主持人
+            drawable = context.getResources().getDrawable(R.drawable.ic_host);
+
+        }else if(getType() == Constant.KEYNOTE_SPEAKER){//主讲人
+            drawable = context.getResources().getDrawable(R.drawable.ic_keynote_speaker);
+
+        }else {//普通参会人员
+            drawable = context.getResources().getDrawable(R.drawable.ic_normal_delegate);
+
         }
+
+        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+        textView.setCompoundDrawables(null,drawable,null,null);
+
+    }
+
+    /**
+     * 为当前参会人员设置选中的图片
+     * @param context  上下文，用于加载Drawable
+     * @param textView 显示当前人员的TextView
+     */
+    public void setCurrentDelegate(Context context, TextView textView){
+        Drawable drawable = null;
+        if (getType() == Constant.HOST){//主持人
+            drawable = context.getResources().getDrawable(R.drawable.ic_host_selected);
+
+        }else if(getType() == Constant.KEYNOTE_SPEAKER){//主讲人
+            drawable = context.getResources().getDrawable(R.drawable.ic_keynote_speaker_selected);
+
+        }else {//普通参会人员
+            drawable = context.getResources().getDrawable(R.drawable.ic_normal_delegate_selected);
+
+        }
+
+        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+        textView.setCompoundDrawables(null,drawable,null,null);
 
     }
 }
