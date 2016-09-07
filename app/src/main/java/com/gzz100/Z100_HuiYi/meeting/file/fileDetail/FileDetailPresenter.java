@@ -3,7 +3,7 @@ package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 import android.os.Environment;
 import android.view.View;
 
-import com.gzz100.Z100_HuiYi.data.source.FileDetailRepository;
+import com.gzz100.Z100_HuiYi.data.file.FileDetailRepository;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
