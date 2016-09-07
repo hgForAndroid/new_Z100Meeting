@@ -1,14 +1,17 @@
-package com.gzz100.Z100_HuiYi.data.source.remote;
+package com.gzz100.Z100_HuiYi.data.meeting.remote;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
-import com.gzz100.Z100_HuiYi.data.source.MeetingDataSource;
-import com.gzz100.Z100_HuiYi.data.source.local.FileDBHelper;
+import com.gzz100.Z100_HuiYi.data.UserBean;
+import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
+import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
+import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
 import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
 import com.gzz100.Z100_HuiYi.network.entity.MeetingInfoPost;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;
 
@@ -19,11 +22,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class MeetingRemoteDataSource implements MeetingDataSource {
     private static MeetingRemoteDataSource INSTANCE;
-//    private final FileDBHelper mDbHelper;
     private static Context mContext;
+    private MeetingOperate mMeetingOperate;
 
     private MeetingRemoteDataSource(@NonNull Context context) {
-//        mDbHelper = FileDBHelper.getInstance(context);
+        mMeetingOperate = MeetingOperate.getInstance(context);
     }
 
     public static MeetingRemoteDataSource getInstance(@NonNull Context context) {
@@ -37,6 +40,15 @@ public class MeetingRemoteDataSource implements MeetingDataSource {
     @Override
     public void getDelegateList(LoadDelegateCallback callback) {
         checkNotNull(callback);
+        List<UserBean> users = FakeDataProvider.getUsers();
+        if (users != null && users.size() > 0){
+            callback.onDelegateLoaded(users);
+            mMeetingOperate.insertUserList(Constant.COLUMNS_USER,users);
+        }else {
+            callback.onDataNotAvailable();
+        }
+
+        //这里的UsrPost的参数未知
 
     }
 
