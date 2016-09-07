@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.fakeData;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.Vote;
@@ -81,6 +82,74 @@ public class FakeDataProvider {
         return documents;
     }
 
+    public static List<DelegateBean> getDelegateBeanByRolePos(int rolePos){
+        List<DelegateBean> delegateBeans=new ArrayList<>();
+        ArrayList<String> speakerNames=new ArrayList<>();
+        speakerNames.add("张三");
+        speakerNames.add("李四");
+        speakerNames.add("王五");
+
+        ArrayList<String> departmentNames=new ArrayList<>();
+        departmentNames.add("技术部");
+        departmentNames.add("销售部");
+        departmentNames.add("运营部");
+        departmentNames.add("后勤部");
+
+        ArrayList<String> hostNames=new ArrayList<>();
+        hostNames.add("王五");
+
+        ArrayList<String> otherDelegateNames=new ArrayList<>();
+        otherDelegateNames.add("张1");
+        otherDelegateNames.add("李2");
+        otherDelegateNames.add("王3");
+        otherDelegateNames.add("张4");
+        otherDelegateNames.add("李5");
+        otherDelegateNames.add("王6");
+
+
+
+        switch (rolePos)
+        {
+            case 1:
+                for(int a=0;a<speakerNames.size();a++) {
+                    DelegateBean delegateBean1 = new DelegateBean();
+                    delegateBean1.setDelegateName(speakerNames.get(a));
+                    delegateBean1.setDelegateDepartment(departmentNames.get(a));
+                    delegateBean1.setRole("主讲人");
+                    ArrayList agendaIndex1 = new ArrayList();
+                    agendaIndex1.add(a);
+                    delegateBean1.setDelegateAgendaList(agendaIndex1);
+                    delegateBean1.setDelegateDetailInfo("我是好人");
+                    delegateBeans.add(delegateBean1);
+                }
+                break;
+            case 2:
+                for(int a=0;a<hostNames.size();a++) {
+                    DelegateBean delegateBean1 = new DelegateBean();
+                    delegateBean1.setDelegateName(hostNames.get(a));
+                    delegateBean1.setDelegateDepartment(hostNames.get(a));
+                    delegateBean1.setRole("主持人");
+                    ArrayList agendaIndex1 = new ArrayList();
+                    delegateBean1.setDelegateAgendaList(agendaIndex1);
+                    delegateBean1.setDelegateDetailInfo("他是好人");
+                    delegateBeans.add(delegateBean1);
+                }
+                break;
+            case 3:
+                for(int a=0;a<otherDelegateNames.size();a++) {
+                    DelegateBean delegateBean1 = new DelegateBean();
+                    delegateBean1.setDelegateName(otherDelegateNames.get(a));
+                    delegateBean1.setDelegateDepartment(otherDelegateNames.get(a%4));
+                    delegateBean1.setRole("参会代表");
+                    delegateBean1.setDelegateDetailInfo("他不是好人");
+                    delegateBeans.add(delegateBean1);
+                }
+                break;
+
+
+        }
+        return delegateBeans;
+    }
     public static Vote getVoteDetailByIndex(int index){
         Vote vote = new Vote();
         switch (index){

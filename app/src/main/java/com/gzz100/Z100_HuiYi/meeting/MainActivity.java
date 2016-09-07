@@ -12,6 +12,7 @@ import com.gzz100.Z100_HuiYi.meeting.about.AboutFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaPresenter;
 import com.gzz100.Z100_HuiYi.meeting.delegate.DelegateFragment;
+import com.gzz100.Z100_HuiYi.meeting.delegate.DelegatePresenter;
 import com.gzz100.Z100_HuiYi.meeting.file.FileFragment;
 import com.gzz100.Z100_HuiYi.meeting.file.FilePresenter;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingFragment;
@@ -96,6 +97,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 mFileFragment);
         new AgendaPresenter(RepositoryUtil.getFileRepository(this),
                 mAgendaFragment);
+        new DelegatePresenter(RepositoryUtil.getDelegateRepository(this.getApplicationContext()),
+                mDelegateFragment);
         new VotePresenter(RepositoryUtil.getVoteRepository(this),
                 mVoteFragment);
         new MeetingPresenter(RepositoryUtil.getMeetingRepository(this),

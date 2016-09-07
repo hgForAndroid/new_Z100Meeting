@@ -1,10 +1,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="人员"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <EditText
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:layout_marginLeft="@dimen/distance_ten_dp"
+        android:id="@+id/id_edt_fgm_delegate"
+        android:layout_width="@dimen/file_search_width"
+        android:layout_height="@dimen/file_search_height"
+        android:background="@drawable/edt_selector"
+        android:paddingLeft="@dimen/distance_ten_dp"
+        android:hint="@string/string_delegate_seach_hint" />
+    <Button
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:layout_marginLeft="@dimen/distance_ten_dp"
+        android:id="@+id/id_btn_fgm_delegate"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/file_search_height"
+        android:text="搜索"
+        android:layout_toRightOf="@id/id_edt_fgm_delegate"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:layout_below="@id/id_edt_fgm_delegate"
+        android:id="@+id/id_rev_fgm_tab"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:id="@+id/id_rev_fgm_delegate_list"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_below="@id/id_rev_fgm_tab">
+    </android.support.v7.widget.RecyclerView>
 </RelativeLayout>
