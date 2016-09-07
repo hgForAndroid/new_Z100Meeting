@@ -1,5 +1,7 @@
-package com.gzz100.Z100_HuiYi.data.source.local;
+package com.gzz100.Z100_HuiYi.data.file.local;
 
+import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.BaseBean;
 import com.gzz100.Z100_HuiYi.data.Document;
 
 import java.io.ByteArrayInputStream;
@@ -13,11 +15,16 @@ import java.util.List;
  */
 public class ObjectTransverter {
 
-    public static byte[] FileListToByteArr(List<Document> filelList){
+    /**
+     * 将对象数组转换成字节数组
+     * @param objectList 对象数组
+     * @return   字节数组
+     */
+    public static byte[] ListToByteArr(List<? extends BaseBean> objectList){
         ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(arrayOutputStream);
-            objectOutputStream.writeObject(filelList);
+            objectOutputStream.writeObject(objectList);
             objectOutputStream.flush();
             byte data[] = arrayOutputStream.toByteArray();
             objectOutputStream.close();
@@ -29,12 +36,17 @@ public class ObjectTransverter {
         return null;
     }
 
-    public static List<Document> byteArrToFileList(byte[] data){
-        List<Document> documents = null;
+    /**
+     * 强字节数组转换成对象数组
+     * @param data   字节数组
+     * @return     对象数组
+     */
+    public static List<? extends BaseBean> byteArrToList(byte[] data){
+        List<? extends BaseBean> documents = null;
         ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(data);
         try {
             ObjectInputStream inputStream = new ObjectInputStream(arrayInputStream);
-            documents = (List<Document>) inputStream.readObject();
+            documents = (List<? extends BaseBean>) inputStream.readObject();
             inputStream.close();
             arrayInputStream.close();
         } catch (Exception e) {
@@ -42,4 +54,6 @@ public class ObjectTransverter {
         }
         return documents;
     }
+
+
 }
