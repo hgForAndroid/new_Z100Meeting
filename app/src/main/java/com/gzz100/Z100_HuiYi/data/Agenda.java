@@ -1,9 +1,11 @@
 package com.gzz100.Z100_HuiYi.data;
 
+import java.io.Serializable;
+
 /**
  * Created by XieQXiong on 2016/8/24.
  */
-public class Agenda {
+public class Agenda extends BaseBean{
     private String agendaIndex;
     private String agendaTime;
     private String agendaName;
