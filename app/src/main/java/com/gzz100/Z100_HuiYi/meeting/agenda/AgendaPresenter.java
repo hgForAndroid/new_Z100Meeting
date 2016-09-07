@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
-import com.gzz100.Z100_HuiYi.data.source.FileDataSource;
-import com.gzz100.Z100_HuiYi.data.source.FileRepository;
+import com.gzz100.Z100_HuiYi.data.file.FileDataSource;
+import com.gzz100.Z100_HuiYi.data.file.FileRepository;
 
 import java.util.List;
 
@@ -14,15 +14,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Created by Lee on 2016/8/31.
  */
-public class AgendaPresenter implements AgendaContract.Presenter{
+public class AgendaPresenter implements AgendaContract.Presenter {
     private FileRepository mFileRepository;
     private AgendaContract.View mAgendaView;
 
     private boolean mFirstLoad = true;
 
-    public AgendaPresenter(@NonNull FileRepository fileRepository, @NonNull AgendaContract.View agendaView){
+    public AgendaPresenter(@NonNull FileRepository fileRepository, @NonNull AgendaContract.View agendaView) {
         mFileRepository = checkNotNull(fileRepository, "fileRepository cannot be null");
-        mAgendaView = checkNotNull(agendaView, "agendaView connot be null");
+        mAgendaView = checkNotNull(agendaView, "agendaView cannot be null");
         mAgendaView.setPresenter(this);
     }
 
@@ -33,9 +33,9 @@ public class AgendaPresenter implements AgendaContract.Presenter{
 
     @Override
     public void fetchAgendaList(boolean forceUpdate, String IMEI, String userId) {
-        if (forceUpdate || mFirstLoad){
+        if (forceUpdate || mFirstLoad) {
             mFirstLoad = false;
-            mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.loadAgendaListCallback() {
+            mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.LoadAgendaListCallback() {
                 @Override
                 public void onAgendaListLoaded(List<Agenda> agendas) {
                     if (!mAgendaView.isActive()) {
@@ -55,40 +55,35 @@ public class AgendaPresenter implements AgendaContract.Presenter{
     }
 
     @Override
-    public void fetchFileListAndShow(boolean forceUpdate, int agendaPos) {
-        if(forceUpdate || mFirstLoad){
+    public void fetchFileListAndShow(boolean forceUpdate, final int agendaPos) {
+        if (forceUpdate || mFirstLoad) {
             mFirstLoad = false;
 //            fileModel.getFileListByAgendaPos(agendaPos);
-            mFileRepository.getFileList(agendaPos, new FileDataSource.loadFileListCallback() {
+            mFileRepository.getFileList(agendaPos, new FileDataSource.LoadFileListCallback() {
                 @Override
                 public void onFileListLoaded(List<Document> documents) {
-        mFileRepository.getFileList(agendaPos, new FileDataSource.LoadFileListCallback() {
-            @Override
-            public void onFileListLoaded(List<Document> documents) {
 
-                    if (!mAgendaView.isActive()) {
-                        return;
-                    }
-                    mAgendaView.setFileList(documents);
-                    mAgendaView.showFileDetail();
-                }
+                            if (!mAgendaView.isActive()) {
+                                return;
+                            }
+                            mAgendaView.setFileList(documents);
+                            mAgendaView.showFileDetail();
+                        }
 
                 @Override
                 public void onDataNotAvailable() {
                     mAgendaView.showNoFileList();
-
                 }
             });
         }
     }
-
     @Override
-    public void showAgendaDetail(Agenda agenda) {
+    public void showAgendaDetail (Agenda agenda){
         mAgendaView.showAgendaDetail(agenda);
     }
 
     @Override
-    public void setFirstLoad(boolean reLoad) {
+    public void setFirstLoad ( boolean reLoad){
         mFirstLoad = true;
     }
 }
