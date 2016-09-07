@@ -17,7 +17,7 @@ import com.gzz100.Z100_HuiYi.meeting.file.FilePresenter;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingFragment;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingPresenter;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
-import com.gzz100.Z100_HuiYi.data.source.RepositoryUtil;
+import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -98,7 +98,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 mAgendaFragment);
         new VotePresenter(RepositoryUtil.getVoteRepository(this),
                 mVoteFragment);
-        new MeetingPresenter(mMeetingFragment);
+        new MeetingPresenter(RepositoryUtil.getMeetingRepository(this),
+                mMeetingFragment);
     }
 
     private void initEvent() {
