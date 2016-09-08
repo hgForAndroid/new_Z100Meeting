@@ -31,6 +31,8 @@
     <dimen name="streamer_text_size">20sp</dimen>
     <!--参会人员名字的字体大小-->
     <dimen name="delegate_text_size">20sp</dimen>
+    <!--会议概况中全部字体的大小-->
+    <dimen name="dialog_meeting_info_text_size">25sp</dimen>
 
 
 </resources>
