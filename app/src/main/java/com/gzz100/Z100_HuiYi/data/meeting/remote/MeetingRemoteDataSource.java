@@ -55,15 +55,24 @@ public class MeetingRemoteDataSource implements MeetingDataSource {
     @Override
     public void getMetingInfo(final LoadMeetingInfoCallback callback) {
         checkNotNull(callback);
-        MeetingInfoPost meetingInfoPost = new MeetingInfoPost(new ProgressSubscriber(
-                new HttpRxCallbackListener<MeetingInfo>(){
+        MeetingInfo meetingInfo = FakeDataProvider.getMeetingInfo();
+        if (meetingInfo != null){
+            callback.onMeetingInfoLoaded(meetingInfo);
+            mMeetingOperate.insertMeetingInfo(Constant.COLUMNS_MEETING_INFO,meetingInfo);
+        }else {
+            callback.onDataNotAvailable();
+        }
 
-                    @Override
-                    public void onNext(MeetingInfo meetingInfo) {
-                        callback.onMeetingInfoLoaded(meetingInfo);
 
-                    }
-                },mContext
-        ));
+//        MeetingInfoPost meetingInfoPost = new MeetingInfoPost(new ProgressSubscriber(
+//                new HttpRxCallbackListener<MeetingInfo>(){
+//
+//                    @Override
+//                    public void onNext(MeetingInfo meetingInfo) {
+//                        callback.onMeetingInfoLoaded(meetingInfo);
+//
+//                    }
+//                },mContext
+//        ));
     }
 }
