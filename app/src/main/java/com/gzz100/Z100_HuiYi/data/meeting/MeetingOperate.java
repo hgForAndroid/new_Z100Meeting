@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.data.db.PersistenceContract;
@@ -54,7 +55,7 @@ public class MeetingOperate {
     }
 
     /**
-     * 向2数据库查询参会人员列表
+     * 向数据库查询参会人员列表
      * @param userColumn   数据库中参会人员列表对应的字段值，Constant.COLUMNS_USER
      * @return   参会人员列表
      */
@@ -71,6 +72,40 @@ public class MeetingOperate {
         }
         cursor.close();
         return userList;
+    }
+
+    /**
+     * 向数据库中插入 会议概况
+     * @param infoColumn     数据库中会议概况对应的字段值  Constant.COLUMNS_MEETING_INFO
+     * @param meetingInfo    会议概况对象
+     */
+    public void insertMeetingInfo(int infoColumn, MeetingInfo meetingInfo){
+        byte[] data = ObjectTransverter.ObjectToByte(meetingInfo);
+        ContentValues values =new ContentValues();
+        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO,infoColumn);
+        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO_DATA,data);
+        mDatabase = mDBHelper.getReadableDatabase();
+        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME,null,values);
+    }
+
+    /**
+     * 向数据库中 查询会议概况
+     * @param infoColumn   数据库中会议概况对应的字段值 Constant.COLUMNS_MEETING_INFO
+     * @return    会议概况对象
+     */
+    public MeetingInfo queryMeetingInfo(int infoColumn){
+        MeetingInfo meetingInfo = null;
+        mDatabase = mDBHelper.getReadableDatabase();
+        String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME + " where " +
+                PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO + " = ?";
+        Cursor cursor = mDatabase.rawQuery(sql, new String[]{infoColumn + ""});
+        if ( cursor.moveToFirst()){
+            byte[] data = cursor.getBlob(cursor.getColumnIndex(
+                    PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO_DATA));
+            meetingInfo = (MeetingInfo) ObjectTransverter.ByteToObject(data);
+        }
+        cursor.close();
+        return meetingInfo;
     }
 
 }
