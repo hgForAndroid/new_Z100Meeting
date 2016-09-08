@@ -26,6 +26,8 @@ public class DBHelper extends SQLiteOpenHelper {
             + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST + TEXT_TYPE
             + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_USERS + INTEGER_TYPE
             + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_USERS_LIST + TEXT_TYPE
+            + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO + INTEGER_TYPE
+            + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO_DATA + TEXT_TYPE
             + ")";
     private SQLiteDatabase mDatabase;
 
