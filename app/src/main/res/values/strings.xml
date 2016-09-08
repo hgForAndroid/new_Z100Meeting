@@ -17,4 +17,10 @@
     <string name="string_keynote_Speaker">主讲人</string>
     <string name="string_streamer">横幅</string>
 
+    <string name="string_meeting_name">名&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;称 :</string>
+    <string name="string_meeting_begin_time">开会时间 :</string>
+    <string name="string_meeting_time">开会时长 :</string>
+    <string name="string_meeting_delegate">参会人员 :</string>
+    <string name="string_meeting_agenda">议&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;程 :</string>
+
 </resources>
