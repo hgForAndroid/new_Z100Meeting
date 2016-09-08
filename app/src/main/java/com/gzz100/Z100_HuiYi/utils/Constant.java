@@ -14,5 +14,8 @@ public class Constant {
     public static final boolean DEBUG = true;
     //议程列表存储数据库的对应字段值，用于查询数据库中是否有议程列表
     public static final int COLUMNS_AGENDAS = 4;
+    //用户列表存储数据库的对应字段值，用于查询数据库中是否有用户列表
     public static final int COLUMNS_USER = 5;
+    //会议概况存储数据库的对应字段值，用于查询数据库中是否有会议概况
+    public static final int COLUMNS_MEETING_INFO = 6;
 }
