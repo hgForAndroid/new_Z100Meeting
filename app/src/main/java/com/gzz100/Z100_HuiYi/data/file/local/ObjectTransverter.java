@@ -55,5 +55,33 @@ public class ObjectTransverter {
         return documents;
     }
 
+    public static Object ByteToObject(byte[] bytes) {
+        Object obj = null;
+        ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
+        try {
+            ObjectInputStream inputStream = new ObjectInputStream(arrayInputStream);
+            obj = inputStream.readObject();
+            inputStream.close();
+            arrayInputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
+    }
 
+    public static byte[] ObjectToByte(java.lang.Object obj) {
+        ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(arrayOutputStream);
+            objectOutputStream.writeObject(obj);
+            objectOutputStream.flush();
+            byte data[] = arrayOutputStream.toByteArray();
+            objectOutputStream.close();
+            arrayOutputStream.close();
+            return data ;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
