@@ -1,7 +1,12 @@
 package com.gzz100.Z100_HuiYi.meeting.meetingScenario;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.view.View;
+
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
+import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 
 import java.util.List;
@@ -13,8 +18,15 @@ public interface MeetingContract {
     interface View extends BaseView<Presenter>{
         /**
          * 显示会议概况。该方法中应该有参数，该参数为会议概况的实体类
+         * @param dialog 会议概况弹窗
          */
-        void showMeetingInfo();
+        void showMeetingInfo(Dialog dialog, android.view.View contentView,MeetingInfo meetingInfo);
+
+        /**
+         * 关闭弹窗
+         * @param dialog  弹窗
+         */
+        void dismissDialog(Dialog dialog);
 
         /**
          * 跳转到人员界面中的其他参会人员标签
@@ -48,8 +60,9 @@ public interface MeetingContract {
     interface Presenter extends BasePresenter{
         /**
          * 获取会议概况，封装成一个会议概况实体类，再调用 MeetingContract.View 的 showMeetingInfo
+         * @param context 上下文，用于创建弹窗
          */
-        void getMeetingInfo();
+        void getMeetingInfo(Context context);
 
         /**
          * 调用 MeetingContract.View 的 showOthers()
