@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+    android:background="#FAFAFA">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/distance_ten_dp">
+        <TextView
+            style="@style/dialog_meeting_left_text_view_attr"
+            android:id="@+id/id_tv_temp_dialog_name"
+            android:text="@string/string_meeting_name"/>
+
+        <TextView
+            style="@style/dialog_meeting_right_text_view_attr"
+            android:layout_toRightOf="@+id/id_tv_temp_dialog_name"
+            android:id="@+id/id_tv_dialog_name"
+            android:text="Small Text"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/distance_ten_dp">
+        <TextView
+            style="@style/dialog_meeting_left_text_view_attr"
+            android:id="@+id/id_tv_temp_dialog_begin_time"
+            android:text="@string/string_meeting_begin_time"/>
+
+        <TextView
+            style="@style/dialog_meeting_right_text_view_attr"
+            android:layout_toRightOf="@+id/id_tv_temp_dialog_begin_time"
+            android:id="@+id/id_tv_dialog_begin_time"
+            android:text="Small Text"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/distance_ten_dp">
+        <TextView
+            style="@style/dialog_meeting_left_text_view_attr"
+            android:id="@+id/id_tv_temp_dialog_time"
+            android:text="@string/string_meeting_time"/>
+
+        <TextView
+            style="@style/dialog_meeting_right_text_view_attr"
+            android:layout_toRightOf="@+id/id_tv_temp_dialog_time"
+            android:id="@+id/id_tv_dialog_time"
+            android:text="Small Text"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/distance_ten_dp">
+        <TextView
+            style="@style/dialog_meeting_left_text_view_attr"
+            android:id="@+id/id_tv_temp_dialog_delegate"
+            android:text="@string/string_meeting_delegate"/>
+
+        <TextView
+            style="@style/dialog_meeting_right_text_view_attr"
+            android:layout_toRightOf="@+id/id_tv_temp_dialog_delegate"
+            android:id="@+id/id_tv_dialog_delegate"
+            android:text="Small Text"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/distance_ten_dp">
+        <TextView
+            style="@style/dialog_meeting_left_text_view_attr"
+            android:id="@+id/id_tv_temp_dialog_agenda"
+            android:text="@string/string_meeting_agenda"/>
+
+        <TextView
+            style="@style/dialog_meeting_right_text_view_attr"
+            android:layout_toRightOf="@+id/id_tv_temp_dialog_agenda"
+            android:id="@+id/id_tv_dialog_agenda"
+            android:text="Small Text"/>
+    </RelativeLayout>
+</LinearLayout>
