@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+        android:background="@color/color_navBar_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_bar_height"
+        android:text="会议概况"
+        android:textSize="@dimen/dialog_meeting_info_text_size"
+        android:gravity="center"/>
+
+</LinearLayout>

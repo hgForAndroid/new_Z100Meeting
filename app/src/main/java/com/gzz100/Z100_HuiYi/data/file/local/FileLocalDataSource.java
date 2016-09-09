@@ -1,16 +1,19 @@
-package com.gzz100.Z100_HuiYi.data.source.local;
+package com.gzz100.Z100_HuiYi.data.file.local;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
-import com.gzz100.Z100_HuiYi.data.source.FileDataSource;
-import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
+import com.gzz100.Z100_HuiYi.data.file.FileDataSource;
+import com.gzz100.Z100_HuiYi.data.file.FileOperate;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkPositionIndex;
+
 /**
 * 加载本地数据
 * @author XieQXiong
@@ -19,11 +22,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FileLocalDataSource implements FileDataSource {
     private static FileLocalDataSource INSTANCE;
-    private final FileDBHelper mDbHelper;
+//    private final DBHelper mDbHelper;
+    private FileOperate mFileOperate;
 
     private FileLocalDataSource(@NonNull Context context) {
         checkNotNull(context);
-        mDbHelper = FileDBHelper.getInstance(context);
+//        mDbHelper = DBHelper.getInstance(context);
+        mFileOperate = FileOperate.getInstance(context);
     }
 
     public static FileLocalDataSource getInstance(@NonNull Context context) {
@@ -36,11 +41,9 @@ public class FileLocalDataSource implements FileDataSource {
     public void getFileList(int agendaPos, @NonNull LoadFileListCallback callback) {
         checkNotNull(callback);
         //加载本地数据
-
-        //假数据
-        List<Document> list = FakeDataProvider.getFileListByindex(agendaPos);
-        if (list != null && list.size()>0){
-            callback.onFileListLoaded(list);
+        List<Document> documents = mFileOperate.queryFileList(agendaPos);
+        if (documents != null && documents.size() > 0){
+            callback.onFileListLoaded(documents);
         }else {
             callback.onDataNotAvailable();
         }
@@ -49,10 +52,10 @@ public class FileLocalDataSource implements FileDataSource {
     @Override
     public void getAgendaList(String IMEI, String userId, @NonNull LoadAgendaListCallback callback) {
         checkNotNull(callback);
-        //假数据
-        List<Agenda> agendas = FakeDataProvider.getAgendas();
-        if (agendas != null && agendas.size() > 0){
-            callback.onAgendaListLoaded(agendas);
+        //加载本地数据
+        List<Agenda> agendasList = mFileOperate.queryAgendaList(Constant.COLUMNS_AGENDAS);
+        if (agendasList != null && agendasList.size() > 0){
+            callback.onAgendaListLoaded(agendasList);
         }else {
             callback.onDataNotAvailable();
         }

@@ -1,5 +1,6 @@
 package com.gzz100.Z100_HuiYi.meeting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -20,6 +21,7 @@ import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingPresenter;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
+import com.gzz100.Z100_HuiYi.multicast.MulticastService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,6 +70,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         init();
     }
 
+    private void initMulticastService(){
+        Intent intent = new Intent(MainActivity.this, MulticastService.class);
+        startService(intent);
+    }
+
     private void init() {
         mMeetingFragment = MeetingFragment.newInstance();
         mDelegateFragment = DelegateFragment.newInstance();
@@ -90,6 +97,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mMeetingTab.setChecked(true);
         initEvent();
         initPresenter();
+        initMulticastService();
     }
 
     private void initPresenter() {
@@ -101,7 +109,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 mDelegateFragment);
         new VotePresenter(RepositoryUtil.getVoteRepository(this),
                 mVoteFragment);
-        new MeetingPresenter(mMeetingFragment);
+        new MeetingPresenter(RepositoryUtil.getMeetingRepository(this),
+                mMeetingFragment);
     }
 
     private void initEvent() {

@@ -1,4 +1,4 @@
-package com.gzz100.Z100_HuiYi.data.source;
+package com.gzz100.Z100_HuiYi.data.meeting;
 
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;

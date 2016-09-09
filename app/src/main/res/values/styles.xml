@@ -39,4 +39,20 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@color/color_file_size_bg</item>
     </style>
+    <!--会议概况左边textView的共同属性-->
+    <style name="dialog_meeting_left_text_view_attr">
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/dialog_meeting_info_text_size</item>
+        <item name="android:padding">@dimen/distance_five_dp</item>
+    </style>
+    <!--会议概况右边textView的共同属性-->
+    <style name="dialog_meeting_right_text_view_attr">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/dialog_meeting_info_text_size</item>
+        <item name="android:paddingLeft">@dimen/distance_five_dp</item>
+        <item name="android:padding">@dimen/distance_five_dp</item>
+    </style>
 </resources>

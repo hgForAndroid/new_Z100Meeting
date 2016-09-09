@@ -1,12 +1,22 @@
-package com.gzz100.Z100_HuiYi.data.source;
+package com.gzz100.Z100_HuiYi.data.file;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.db.DBHelper;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 /**
- * Created by XieQXiong on 2016/8/25.
- */
+* 文件仓库，将获取数据的请求分发给本地或远程
+* @author XieQXiong
+* create at 2016/9/7 16:21
+*/
+
 public class FileRepository implements FileDataSource {
     private static FileRepository INSTANCE = null;
 
@@ -14,55 +24,45 @@ public class FileRepository implements FileDataSource {
 
     private final FileDataSource mFileLocalDataSource;
 
-    //文件列表是否已有本地缓存  TODO   测试为true
-    boolean mFileListCacheIsDirty = true;
-    //议程列表是否已有本地缓存  TODO   测试为true
-    boolean mAgendaListCacheIsDirty = true;
+    private Context mContext;
 
     private FileRepository(@NonNull FileDataSource fileRemoteDataSource,
-                            @NonNull FileDataSource fileLocalDataSource) {
+                           @NonNull FileDataSource fileLocalDataSource,
+                           Context context) {
         mFileRemoteDataSource = checkNotNull(fileRemoteDataSource);
         mFileLocalDataSource = checkNotNull(fileLocalDataSource);
+        this.mContext = context;
     }
 
     public static FileRepository getInstance(@NonNull FileDataSource fileRemoteDataSource,
-                                             @NonNull FileDataSource fileLocalDataSource) {
+                                             @NonNull FileDataSource fileLocalDataSource,
+                                             Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new FileRepository(fileRemoteDataSource, fileLocalDataSource);
+            INSTANCE = new FileRepository(fileRemoteDataSource, fileLocalDataSource,context);
         }
         return INSTANCE;
     }
-
-
-    public void setFileListCacheIsDirty(boolean cacheIsDirty){
-        this.mFileListCacheIsDirty = cacheIsDirty;
-    }
-    //如果有临时添加议程，在发起获取 包括新议程的全部议程 的请求时，需设置该值为false
-    public void setAgendaListCacheIsDirty(boolean cacheIsDirty){
-        this.mAgendaListCacheIsDirty = cacheIsDirty;
-    }
-
     @Override
     public void getFileList(int agendaPos, @NonNull LoadFileListCallback callback) {
         checkNotNull(callback);
-        if (mFileListCacheIsDirty){
+        List<Document> documents = FileOperate.getInstance(mContext).queryFileList(agendaPos);
+        //查询数据库中是否有该议程序号对应的文件列表
+        if (documents != null && documents.size() > 0){
             mFileLocalDataSource.getFileList(agendaPos,callback);
         }else{
             mFileRemoteDataSource.getFileList(agendaPos,callback);
-            //注明已存本地
-            setFileListCacheIsDirty(true);
         }
     }
 
     @Override
     public void getAgendaList(String IMEI, String userId, @NonNull LoadAgendaListCallback callback) {
         checkNotNull(callback);
-        if (mAgendaListCacheIsDirty){
+        List<Agenda> agendas = FileOperate.getInstance(mContext).queryAgendaList(Constant.COLUMNS_AGENDAS);
+        //查询数据库中是否有议程列表
+        if (agendas != null && agendas.size() > 0){
             mFileLocalDataSource.getAgendaList(IMEI,userId,callback);
-        }else{
+        }else {
             mFileRemoteDataSource.getAgendaList(IMEI,userId,callback);
-            //注明已存本地
-            setAgendaListCacheIsDirty(true);
         }
     }
 

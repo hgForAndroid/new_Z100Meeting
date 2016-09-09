@@ -76,7 +76,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
     public void onDestroyView() {
         super.onDestroyView();
         mPresenter.setFirstLoad(true);
-        optionNeededNumber = optionSelectedNumber = 0;
+        optionNeededNumber = optionSelectedNumber = 0; //防止当销毁之后，选择的数目不归O导致无法选择的BUG
     }
 
     private void initViews(){

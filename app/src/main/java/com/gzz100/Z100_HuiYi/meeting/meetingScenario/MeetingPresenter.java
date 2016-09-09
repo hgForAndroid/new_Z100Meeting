@@ -1,25 +1,71 @@
 package com.gzz100.Z100_HuiYi.meeting.meetingScenario;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+
+import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
+import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
+import com.gzz100.Z100_HuiYi.data.meeting.MeetingRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by XieQXiong on 2016/9/5.
  */
 public class MeetingPresenter implements MeetingContract.Presenter {
     private MeetingContract.View mView;
-    public MeetingPresenter(MeetingContract.View view) {
-        this.mView = view;
+    private MeetingRepository mMeetingRepository;
+    private Dialog mDialog;
+
+    public MeetingPresenter(@NonNull MeetingRepository meetingRepository, @NonNull MeetingContract.View view) {
+        this.mMeetingRepository = checkNotNull(meetingRepository,"meetingRepository cannot be null");
+        this.mView = checkNotNull(view,"view cannot be null");
         this.mView.setPresenter(this);
     }
 
     @Override
-    public void getMeetingInfo() {
+    public void getMeetingInfo(final Context context ) {
+        mMeetingRepository.getMetingInfo(new MeetingDataSource.LoadMeetingInfoCallback() {
+            @Override
+            public void onMeetingInfoLoaded(MeetingInfo meetingInfo) {
+                View titleView = LayoutInflater.from(context).inflate(R.layout.dialog_custom_title, null);
+                View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_meeting_info, null);
+                //                        .setTitle("会议概况")
+                mDialog = new AlertDialog.Builder(context)
+                        .setCustomTitle(titleView)
+//                        .setTitle("会议概况")
+                        .setView(contentView)
+                        .setNegativeButton("确定",new DismissDialog())
+                        .create();
+                mDialog.setCanceledOnTouchOutside(false);
+                mView.showMeetingInfo(mDialog,contentView,meetingInfo);
+            }
 
-        mView.showMeetingInfo();
+            @Override
+            public void onDataNotAvailable() {
 
+            }
+        });
+
+    }
+    //关闭弹窗
+    class DismissDialog implements DialogInterface.OnClickListener {
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            mView.dismissDialog(mDialog);
+        }
     }
 
     @Override
@@ -35,33 +81,21 @@ public class MeetingPresenter implements MeetingContract.Presenter {
     }
 
     boolean firstLoad = true;
-    private List<UserBean> mUsers = new ArrayList<>();
     @Override
     public void fetchMainUsers() {
         if (firstLoad){
             firstLoad = false;
-            UserBean user1 = new UserBean(1,"张三张三","android开发",2);
-            UserBean user2 = new UserBean(2,"王麻子","Java开发",2);
-            UserBean user3 = new UserBean(3,"临到","iOS开发",2);
-            UserBean user4 = new UserBean(4,"李四","c++开发",2);
-            UserBean user5 = new UserBean(5,"王五","c开发",2);
-            UserBean user6 = new UserBean(6,"王小二","c#开发",2);
-            UserBean user7 = new UserBean(7,"赵烈","技术支持",2);
-            UserBean user8 = new UserBean(8,"饼子","客服",2);
-            UserBean user9 = new UserBean(9,"胡子","经理",1);
-            UserBean user10 = new UserBean(10,"阿毛","助理",3);
-            mUsers.add(user1);
-            mUsers.add(user2);
-            mUsers.add(user3);
-            mUsers.add(user4);
-            mUsers.add(user5);
-        mUsers.add(user6);
-        mUsers.add(user7);
-        mUsers.add(user8);
-        mUsers.add(user9);
-        mUsers.add(user10);
+            mMeetingRepository.getDelegateList(new MeetingDataSource.LoadDelegateCallback() {
+                @Override
+                public void onDelegateLoaded(List<UserBean> users) {
+                    mView.showMeetingRoom(users);
 
-            mView.showMeetingRoom(mUsers);
+                }
+                @Override
+                public void onDataNotAvailable() {
+
+                }
+            });
         }
 
     }

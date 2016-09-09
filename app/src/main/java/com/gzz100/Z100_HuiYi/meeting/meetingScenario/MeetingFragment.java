@@ -1,5 +1,6 @@
 package com.gzz100.Z100_HuiYi.meeting.meetingScenario;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
+import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,7 +71,8 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
     @OnClick(R.id.id_tv_meeting_fragment_streamer)
     void onStreamerClick(){
-        Toast.makeText(getActivity(),"横幅",Toast.LENGTH_SHORT).show();
+        mPresenter.getMeetingInfo(getActivity());
+//        Toast.makeText(getActivity(),"横幅",Toast.LENGTH_SHORT).show();
     }
     @OnClick(R.id.id_tv_meeting_fragment_others)
     void onOthersClick(){
@@ -76,8 +80,25 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     }
 
     @Override
-    public void showMeetingInfo() {
+    public void showMeetingInfo(Dialog dialog,View contentView,MeetingInfo meetingInfo) {
+        ((TextView)contentView.findViewById(R.id.id_tv_dialog_name)).setText(
+                meetingInfo.getMeetingName());
+        ((TextView)contentView.findViewById(R.id.id_tv_dialog_begin_time)).setText(
+                meetingInfo.getMeetingBeginTime());
+        ((TextView)contentView.findViewById(R.id.id_tv_dialog_time)).setText(
+                meetingInfo.getMeetingTime() + "分钟");
+        ((TextView)contentView.findViewById(R.id.id_tv_dialog_delegate)).setText("计划参会"
+                + meetingInfo.getAllDelegate() + "人，实际参会"
+                + meetingInfo.getSignDelegate() + "人");
+        ((TextView)contentView.findViewById(R.id.id_tv_dialog_agenda)).setText(
+                meetingInfo.getAgendaNum() + "个");
+        dialog.show();
+    }
 
+    @Override
+    public void dismissDialog(Dialog dialog) {
+        dialog.dismiss();
+        dialog = null;
     }
 
     @Override
@@ -87,8 +108,9 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
     @Override
     public void showUserInfo() {
-//        Intent intent = new Intent(getActivity(),null);
-//        startActivity(intent);
+//        DelegateDetailActivity.showDelegateDetailActivity(getActivity(),);
+        Intent intent = new Intent(getActivity(), DelegateDetailActivity.class);
+        startActivity(intent);
 
     }
 
@@ -115,7 +137,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
     @Override
     public void onUserClick(View v, int position) {
-        Toast.makeText(getActivity(),mUsers.get(position).getUserName(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(),mUsers.get(position).getUserName(),Toast.LENGTH_SHORT).show();
         mPresenter.fetchUserInfo(mUsers.get(position).getUserId());
     }
 }

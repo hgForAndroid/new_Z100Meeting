@@ -7,10 +7,12 @@ import android.widget.TextView;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
+import java.io.Serializable;
+
 /**
  * Created by XieQXiong on 2016/9/2.
  */
-public class UserBean {
+public class UserBean extends BaseBean{
     private int userId;
     private String userName;
     private String userTitle;

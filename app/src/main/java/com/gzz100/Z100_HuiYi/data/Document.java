@@ -3,7 +3,6 @@ package com.gzz100.Z100_HuiYi.data;
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.gzz100.Z100_HuiYi.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
@@ -11,7 +10,7 @@ import java.io.Serializable;
 /**
  * Created by XieQXiong on 2016/8/24.
  */
-public class Document implements Serializable{
+public class Document  extends BaseBean {
     private String agendaIndex;
     private String fileIndex;
     private String fileName;
