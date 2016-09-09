@@ -15,18 +15,17 @@ public interface DelegateContract {
 
         void showRoleList(List<String> roleList);
 
-        void showNoRoleList();
+        void showDelegateDetail(DelegateBean delegateBean, int delegateDetailPos);
 
         void showDelegateList(List<DelegateBean> delegateBean);
 
-        void showNoDelegateList();
-
         void showRoleSwitch();
 
-        void showDelegateDetail(List<DelegateBean> delegateBeans, int delegateDetailPos);
         void showNoDelegateDetail();
 
+        void showNoDelegateList();
 
+        void showNoRoleList();
     }
     interface Presenter extends BasePresenter {
 
@@ -34,9 +33,9 @@ public interface DelegateContract {
 
         void fetchDelegateList(boolean forceUpdate, int position);
 
-        void searchByName();
-
         void showDelegateDetail(boolean forceUpdate, int position);
+
+        void searchByName();
 
         void switchRole();
         void setRoleListFirstLoad(boolean roleListFirstLoad, boolean reLoad);

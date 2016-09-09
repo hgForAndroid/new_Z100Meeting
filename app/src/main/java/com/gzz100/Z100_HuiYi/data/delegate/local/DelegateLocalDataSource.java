@@ -50,7 +50,10 @@ public class DelegateLocalDataSource implements DelegateDataSource {
     @Override
     public void getRoleList(@NonNull LoadRoleListCallback callback) {
         checkNotNull(callback);
-        initRoleList();
+        if(!mRoleListIsInit) {
+            initRoleList();
+            mRoleListIsInit=true;
+        }
         callback.onRoleListLoaded(roleList);
     }
 
@@ -71,9 +74,9 @@ public class DelegateLocalDataSource implements DelegateDataSource {
         checkNotNull(callback);
 
         //假数据
-        List<DelegateBean> delegateBean= FakeDataProvider.getDelegateBeanByRolePos(delegateNamePos);
+        DelegateBean delegateBean= FakeDataProvider.getDelegateDetailByNamePos(delegateNamePos);
 
-        if(delegateBean!=null&&delegateBean.size()>0)
+        if(delegateBean!=null)
             callback.onDelegateDetailLoaded(delegateBean);
         else
             callback.onDataNotAvailable();

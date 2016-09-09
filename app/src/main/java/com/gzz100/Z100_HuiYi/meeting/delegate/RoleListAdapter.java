@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
@@ -70,7 +71,7 @@ class RoleHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.id_item_role_name)
     TextView mRoleName;
     @BindView(R.id.id_item_role_layout)
-    LinearLayout mRoleLayout;
+    RelativeLayout mRoleLayout;
     public RoleHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this,itemView);

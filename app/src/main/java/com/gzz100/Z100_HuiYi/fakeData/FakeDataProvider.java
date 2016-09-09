@@ -12,6 +12,8 @@ import java.util.List;
  * Created by XieQXiong on 2016/8/29.
  */
 public class FakeDataProvider {
+    private  static int currRoleNum=0;
+
     public static List<Agenda> getAgendas() {
         List<Agenda> agendas = new ArrayList<>();
         Agenda agenda1 = new Agenda();
@@ -55,7 +57,7 @@ public class FakeDataProvider {
             case 2:
                 for (int i = 1; i < 5; i++) {
                     Document document = new Document();
-                    document.setAgendaIndex(1 + "");
+                    document.setAgendaIndex(2 + "");
                     document.setFileURL("agenda_two_address" + i);
                     document.setFileIndex(i + "");
                     document.setFileName("agenda_two_fileName.doc" + i);
@@ -68,7 +70,7 @@ public class FakeDataProvider {
             case 3:
                 for (int i = 1; i < 5; i++) {
                     Document document = new Document();
-                    document.setAgendaIndex(1 + "");
+                    document.setAgendaIndex(3 + "");
                     document.setFileURL("agenda_three_address" + i);
                     document.setFileIndex(i + "");
                     document.setFileName("agenda_three_fileName.xlsx" + i);
@@ -83,6 +85,7 @@ public class FakeDataProvider {
 
     public static List<DelegateBean> getDelegateBeanByRolePos(int rolePos){
         List<DelegateBean> delegateBeans=new ArrayList<>();
+
         ArrayList<String> speakerNames=new ArrayList<>();
         speakerNames.add("张三");
         speakerNames.add("李四");
@@ -109,45 +112,130 @@ public class FakeDataProvider {
 
         switch (rolePos)
         {
-            case 1:
+            case 0:
                 for(int a=0;a<speakerNames.size();a++) {
                     DelegateBean delegateBean1 = new DelegateBean();
                     delegateBean1.setDelegateName(speakerNames.get(a));
                     delegateBean1.setDelegateDepartment(departmentNames.get(a));
                     delegateBean1.setRole("主讲人");
                     ArrayList agendaIndex1 = new ArrayList();
-                    agendaIndex1.add(a);
+                    agendaIndex1.add(a+1);
                     delegateBean1.setDelegateAgendaList(agendaIndex1);
                     delegateBean1.setDelegateDetailInfo("我是好人");
                     delegateBeans.add(delegateBean1);
+                    currRoleNum=0;
                 }
                 break;
-            case 2:
+            case 1:
                 for(int a=0;a<hostNames.size();a++) {
                     DelegateBean delegateBean1 = new DelegateBean();
                     delegateBean1.setDelegateName(hostNames.get(a));
-                    delegateBean1.setDelegateDepartment(hostNames.get(a));
+                    delegateBean1.setDelegateDepartment(departmentNames.get(a));
                     delegateBean1.setRole("主持人");
                     ArrayList agendaIndex1 = new ArrayList();
                     delegateBean1.setDelegateAgendaList(agendaIndex1);
                     delegateBean1.setDelegateDetailInfo("他是好人");
                     delegateBeans.add(delegateBean1);
+                    currRoleNum=1;
                 }
                 break;
-            case 3:
+            case 2:
                 for(int a=0;a<otherDelegateNames.size();a++) {
                     DelegateBean delegateBean1 = new DelegateBean();
                     delegateBean1.setDelegateName(otherDelegateNames.get(a));
-                    delegateBean1.setDelegateDepartment(otherDelegateNames.get(a%4));
+                    delegateBean1.setDelegateDepartment(departmentNames.get(a%4));
                     delegateBean1.setRole("参会代表");
                     delegateBean1.setDelegateDetailInfo("他不是好人");
                     delegateBeans.add(delegateBean1);
+                    currRoleNum=2;
                 }
                 break;
 
 
         }
         return delegateBeans;
+    }
+    public static DelegateBean getDelegateDetailByNamePos(int namePos){
+        List<DelegateBean> delegateBeans=new ArrayList<>();
+
+        ArrayList<String> speakerNames=new ArrayList<>();
+        speakerNames.add("张三");
+        speakerNames.add("李四");
+        speakerNames.add("王五");
+
+        ArrayList<String> departmentNames=new ArrayList<>();
+        departmentNames.add("技术部");
+        departmentNames.add("销售部");
+        departmentNames.add("运营部");
+        departmentNames.add("后勤部");
+
+        ArrayList<String> jobName=new ArrayList<>();
+        jobName.add("技术人员");
+        jobName.add("业务人员");
+        jobName.add("后勤人员");
+
+        ArrayList<String> hostNames=new ArrayList<>();
+        hostNames.add("王五");
+
+        ArrayList<String> otherDelegateNames=new ArrayList<>();
+        otherDelegateNames.add("张1");
+        otherDelegateNames.add("李2");
+        otherDelegateNames.add("王3");
+        otherDelegateNames.add("张4");
+        otherDelegateNames.add("李5");
+        otherDelegateNames.add("王6");
+
+        DelegateBean delegateBean=new DelegateBean();
+
+
+
+        switch (currRoleNum)
+        {
+            case 0:
+                for(int a=0;a<speakerNames.size();a++) {
+                    DelegateBean delegateBean1 = new DelegateBean();
+                    delegateBean1.setDelegateName(speakerNames.get(a));
+                    delegateBean1.setDelegateDepartment(departmentNames.get(a));
+                    delegateBean1.setDelegateJob(jobName.get(a));
+                    delegateBean1.setRole("主讲人");
+                    ArrayList agendaIndex1 = new ArrayList();
+                    agendaIndex1.add(a+1);
+                    delegateBean1.setDelegateAgendaList(agendaIndex1);
+                    delegateBean1.setDelegateDetailInfo("我是好人");
+                    delegateBeans.add(delegateBean1);
+                    delegateBean=delegateBeans.get(namePos);
+                }
+                break;
+            case 1:
+                for(int a=0;a<hostNames.size();a++) {
+                    DelegateBean delegateBean1 = new DelegateBean();
+                    delegateBean1.setDelegateName(hostNames.get(a));
+                    delegateBean1.setDelegateDepartment(departmentNames.get(a));
+                    delegateBean1.setDelegateJob(jobName.get(a));
+                    delegateBean1.setRole("主持人");
+                    ArrayList agendaIndex1 = new ArrayList();
+                    delegateBean1.setDelegateAgendaList(agendaIndex1);
+                    delegateBean1.setDelegateDetailInfo("他是好人");
+                    delegateBeans.add(delegateBean1);
+                    delegateBean=delegateBeans.get(namePos);
+                }
+                break;
+            case 2:
+                for(int a=0;a<otherDelegateNames.size();a++) {
+                    DelegateBean delegateBean1 = new DelegateBean();
+                    delegateBean1.setDelegateName(otherDelegateNames.get(a));
+                    delegateBean1.setDelegateDepartment(departmentNames.get(a%4));
+                    delegateBean1.setDelegateJob(jobName.get(a));
+                    delegateBean1.setRole("参会代表");
+                    delegateBean1.setDelegateDetailInfo("他不是好人");
+                    delegateBeans.add(delegateBean1);
+                    delegateBean=delegateBeans.get(namePos);
+                }
+                break;
+
+
+        }
+        return delegateBean;
     }
     public static Vote getVoteDetailByIndex(int index){
         Vote vote = new Vote();

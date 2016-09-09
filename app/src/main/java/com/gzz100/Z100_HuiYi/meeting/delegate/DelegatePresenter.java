@@ -29,7 +29,7 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     @Override
     public void start() {
         fetchRoleList();
-        fetchDelegateList(true,1);
+        fetchDelegateList(true,0);
     }
 
 
@@ -89,7 +89,7 @@ public class DelegatePresenter implements DelegateContract.Presenter {
         mDelegateRepository.getDelegateBean(delegateDetailPos,new DelegateDataSource.LoadDelegateDetailCallback() {
 
             @Override
-            public void onDelegateDetailLoaded(List<DelegateBean> delegateBeans) {
+            public void onDelegateDetailLoaded(DelegateBean delegateBeans) {
                 mDelegateView.showDelegateDetail(delegateBeans,delegateDetailPos);
             }
 

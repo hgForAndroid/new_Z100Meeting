@@ -8,9 +8,21 @@ import java.util.ArrayList;
 public class DelegateBean {
     private String delegateName;
     private String delegateDepartment;
+    private String delegateJob;
     private String role;
     private String delegateDetailInfo;
-    private ArrayList delegateAgendaList;
+    private ArrayList<Integer> delegateAgendaList;
+
+
+
+
+    public String getDelegateJob() {
+        return delegateJob;
+    }
+
+    public void setDelegateJob(String delegateJob) {
+        this.delegateJob = delegateJob;
+    }
 
     public String getDelegateDetailInfo() {
         return delegateDetailInfo;

@@ -25,7 +25,7 @@ public interface DelegateDataSource {
         void onDataNotAvailable();
     }
     interface LoadDelegateDetailCallback{
-        void onDelegateDetailLoaded(List<DelegateBean> delegateBeans);
+        void onDelegateDetailLoaded(DelegateBean delegateBeans);
 
         void onDataNotAvailable();
     }
