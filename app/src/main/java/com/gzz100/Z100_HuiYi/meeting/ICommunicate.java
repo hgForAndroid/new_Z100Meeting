@@ -6,5 +6,9 @@ package com.gzz100.Z100_HuiYi.meeting;
 */
 
 public interface ICommunicate {
+    /**
+     * 获取当前界面的标题
+     * @return
+     */
     String getCurrentTitle();
 }
