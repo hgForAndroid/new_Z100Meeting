@@ -13,6 +13,15 @@
         android:textSize="@dimen/nav_title_text_size"
         android:text="标题"
         android:layout_centerInParent="true"/>
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/id_tv_navBar_meeting_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/id_tv_navBar_title"
+        android:layout_alignBaseline="@+id/id_tv_navBar_title"
+        android:textSize="@dimen/nav_uplevel_text_size"
+        android:text="(进行中)"/>
     <LinearLayout
         android:visibility="gone"
         android:id="@+id/id_ll_navBar_fallBack"
@@ -43,14 +52,33 @@
             android:textSize="@dimen/nav_uplevel_text_size"
             android:paddingRight="10dp"
             android:gravity="center"/>
-        <TextView
-            android:id="@+id/id_tv_navBar_time"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="00:30"
-            android:textSize="@dimen/nav_uplevel_text_size"
-            android:paddingRight="5dp"
-            android:gravity="center"/>
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/id_tv_navBar_time_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="00"
+                android:textSize="@dimen/nav_uplevel_text_size"
+                android:gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=":"
+                android:padding="@dimen/distance_five_dp"
+                android:textSize="@dimen/nav_uplevel_text_size"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/id_tv_navBar_time_min"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="00"
+                android:textSize="@dimen/nav_uplevel_text_size"
+                android:gravity="center"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>
