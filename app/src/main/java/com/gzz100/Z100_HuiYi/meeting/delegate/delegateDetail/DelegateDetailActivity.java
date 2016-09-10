@@ -75,14 +75,16 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
     }
     public void handleDataFromUpLevel(){
         mBundle=getIntent().getExtras().getBundle(BUNDLE);
-        mTvDelelgateName.setText(mBundle.getString(DELEGATE_NAME));
-        mTvDelegateDepartment.setText(mBundle.getString(DELEGATE_DEPARTMENT));
-        mTvDelegateJob.setText(mBundle.getString(DELEGATE_JOB));
-        mTvDelegateRole.setText(mBundle.getString(DELEGATE_ROLE));
-        mTvDelegateDetailInfo.setText(mBundle.getString(DELEGATE_DETAIL_INFO));
+        if (mBundle != null){
+            mTvDelelgateName.setText(mBundle.getString(DELEGATE_NAME));
+            mTvDelegateDepartment.setText(mBundle.getString(DELEGATE_DEPARTMENT));
+            mTvDelegateJob.setText(mBundle.getString(DELEGATE_JOB));
+            mTvDelegateRole.setText(mBundle.getString(DELEGATE_ROLE));
+            mTvDelegateDetailInfo.setText(mBundle.getString(DELEGATE_DETAIL_INFO));
 
+            delegateAgendaIndexList=(ArrayList<Integer>) mBundle.getSerializable(DELEGATE_AGENDALIST);
+        }
 
-        delegateAgendaIndexList=(ArrayList<Integer>) mBundle.getSerializable(DELEGATE_AGENDALIST);
     }
 
     public void showDelegateAgendaList(){
