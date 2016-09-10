@@ -34,6 +34,7 @@
 
     <!--文件界面，文件列表上边的标签，文件名，大小，主讲人 的共有属性-->
     <style name="file_name_size_keynote_speaker">
+        <item name="android:textSize">@dimen/item_file_text_size</item>
         <item name="android:padding">@dimen/distance_five_dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
