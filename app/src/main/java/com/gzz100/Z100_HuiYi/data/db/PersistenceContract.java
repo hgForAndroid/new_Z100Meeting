@@ -9,14 +9,21 @@ import android.provider.BaseColumns;
 public class PersistenceContract {
 
     public static abstract class ColumnsName implements BaseColumns {
-        public static final String TABLE_NAME = "meeting";
-        public static final String COLUMN_NAME_AGENDA_INDEX = "agenda_index";
+        //文件表，放文件列表
+        public static final String TABLE_NAME_FILE = "file";
+        public static final String COLUMN_NAME_AGENDA_INDEX = "files";
         public static final String COLUMN_NAME_FILE_LIST = "file_list";
+        //议程表，放议程列表
+        public static final String TABLE_NAME_AGENDA = "agenda";
         public static final String COLUMN_NAME_AGENDAS = "agendas";
         public static final String COLUMN_NAME_AGENDA_LIST = "agenda_list";
+        //人员表，放参会人员列表
+        public static final String TABLE_NAME_DELEGATE = "delegate";
         public static final String COLUMN_NAME_USERS = "users";
         public static final String COLUMN_NAME_USERS_LIST = "user_list";
-        public static final String COLUMN_NAME_MEETING_INFO = "info";
+        //会议概况表，放会议概况
+        public static final String TABLE_NAME_SUMMARY = "meetingSummary";
+        public static final String COLUMN_NAME_MEETING_INFO = "summary";
         public static final String COLUMN_NAME_MEETING_INFO_DATA = "meeting_info";
     }
 }
