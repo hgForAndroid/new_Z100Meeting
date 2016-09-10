@@ -50,7 +50,7 @@ public class FileOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_INDEX,agendaIndex);
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_FILE_LIST,data);
         mDatabase = mDBHelper.getReadableDatabase();
-        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME,null,values);
+        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_FILE,null,values);
     }
 
     /**
@@ -61,7 +61,7 @@ public class FileOperate {
     public List<Document> queryFileList(int agendaIndex){
         List<Document> documents = null;
         mDatabase = mDBHelper.getReadableDatabase();
-        String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME + " where " +
+        String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_FILE + " where " +
                 PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_INDEX + " = ?";
         Cursor cursor = mDatabase.rawQuery(sql, new String[]{agendaIndex + ""});
         if ( cursor.moveToFirst()){
@@ -85,7 +85,7 @@ public class FileOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDAS,agendas);
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST,data);
         mDatabase = mDBHelper.getReadableDatabase();
-        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME,null,values);
+        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_AGENDA,null,values);
     }
     /**
      * 查询议程列表
@@ -95,7 +95,7 @@ public class FileOperate {
     public List<Agenda> queryAgendaList(int agendas){
         List<Agenda> baseBeen = null;
         mDatabase = mDBHelper.getReadableDatabase();
-        String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME + " where " +
+        String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_AGENDA + " where " +
                 PersistenceContract.ColumnsName.COLUMN_NAME_AGENDAS + " = ?";
         Cursor cursor = mDatabase.rawQuery(sql, new String[]{agendas + ""});
         if ( cursor.moveToFirst()){
@@ -112,7 +112,9 @@ public class FileOperate {
      */
     public void deleteTable(){
         mDatabase = mDBHelper.getReadableDatabase();
-        String sql = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME;
-        mDatabase.execSQL(sql);
+        String sql1 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_FILE;
+        String sql2 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_AGENDA;
+        mDatabase.execSQL(sql1);
+        mDatabase.execSQL(sql2);
     }
 }
