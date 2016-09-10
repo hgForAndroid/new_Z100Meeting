@@ -12,23 +12,36 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
-    private  static final String DB_NAME = "meetingData.db";
+    private  static final String DB_NAME = "meeting.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
     private static final String COMMA_SEP = ",";
 
-    private static final String CREATE_TABLE =
-            "CREATE TABLE " + PersistenceContract.ColumnsName.TABLE_NAME+ " (" +
+    private static final String CREATE_TABLE_FILE =
+            "CREATE TABLE " + PersistenceContract.ColumnsName.TABLE_NAME_FILE+ " (" +
             PersistenceContract.ColumnsName._ID + TEXT_TYPE + " PRIMARY KEY,"  +
             PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_INDEX + INTEGER_TYPE
             + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_FILE_LIST + TEXT_TYPE
-            + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_AGENDAS + INTEGER_TYPE
-            + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST + TEXT_TYPE
-            + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_USERS + INTEGER_TYPE
-            + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_USERS_LIST + TEXT_TYPE
-            + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO + INTEGER_TYPE
-            + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO_DATA + TEXT_TYPE
             + ")";
+
+    private static final String CREATE_TABLE_AGENDA =
+            "CREATE TABLE " + PersistenceContract.ColumnsName.TABLE_NAME_AGENDA+ " (" +
+                    PersistenceContract.ColumnsName._ID + TEXT_TYPE + " PRIMARY KEY,"  +
+                    PersistenceContract.ColumnsName.COLUMN_NAME_AGENDAS + INTEGER_TYPE
+                    + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST + TEXT_TYPE
+                    + ")";
+    private static final String CREATE_TABLE_DELEGATE =
+            "CREATE TABLE " + PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE+ " (" +
+                    PersistenceContract.ColumnsName._ID + TEXT_TYPE + " PRIMARY KEY,"  +
+                    PersistenceContract.ColumnsName.COLUMN_NAME_USERS + INTEGER_TYPE
+                    + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_USERS_LIST + TEXT_TYPE
+                    + ")";
+    private static final String CREATE_TABLE_MEETING_SUMMARY =
+            "CREATE TABLE " + PersistenceContract.ColumnsName.TABLE_NAME_SUMMARY+ " (" +
+                    PersistenceContract.ColumnsName._ID + TEXT_TYPE + " PRIMARY KEY,"  +
+                    PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO + INTEGER_TYPE
+                    + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO_DATA + TEXT_TYPE
+                    + ")";
     private SQLiteDatabase mDatabase;
 
     private DBHelper(Context context) {
@@ -49,7 +62,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(CREATE_TABLE_FILE);
+        db.execSQL(CREATE_TABLE_AGENDA);
+        db.execSQL(CREATE_TABLE_DELEGATE);
+        db.execSQL(CREATE_TABLE_MEETING_SUMMARY);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -61,7 +77,13 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     public void deleteTable(){
         mDatabase = instance.getReadableDatabase();
-        String sql = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME;
-        mDatabase.execSQL(sql);
+        String sql1 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_FILE;
+        String sql2 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_AGENDA;
+        String sql3 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE;
+        String sql4 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_SUMMARY;
+        mDatabase.execSQL(sql1);
+        mDatabase.execSQL(sql2);
+        mDatabase.execSQL(sql3);
+        mDatabase.execSQL(sql4);
     }
 }
