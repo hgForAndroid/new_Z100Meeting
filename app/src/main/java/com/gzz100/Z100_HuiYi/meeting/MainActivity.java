@@ -2,10 +2,14 @@ package com.gzz100.Z100_HuiYi.meeting;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
@@ -29,9 +33,17 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Observer;
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, ViewPager.OnPageChangeListener,ICommunicate {
     @BindView(R.id.id_main_tbv) NavBarView mNavBarView;
@@ -98,6 +110,41 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         initEvent();
         initPresenter();
         initMulticastService();
+
+        timeCounting();
+    }
+
+    private void timeCounting() {
+
+        mHandler.post(mRunnable);
+
+    }
+
+    private int hour = 0;
+    private int min = 0;
+    private Handler mHandler = new Handler();
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.postDelayed(this,60000);
+            mNavBarView.setTimeMin(getMin());
+            min++;
+            mNavBarView.setTimeHour(getHour());
+        }
+    };
+
+    public String getHour(){
+        String newHour = hour >=10 ? "" + hour : "0"+hour;
+        return newHour;
+    }
+    public String getMin(){
+        String newMin = min >= 10 ? "" + min : "0"+min;
+        if (newMin.equals("60")){
+            hour++;
+            min = 0 ;
+            return "00";
+        }
+        return newMin;
     }
 
     private void initPresenter() {
@@ -192,6 +239,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         return mNavBarView.mTvTitle.getText().toString();
     }
 
+    /**
+     * 跳转到人员界面的  其他参会人员
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showDelegate(Boolean showDelegate){
         if (showDelegate)
