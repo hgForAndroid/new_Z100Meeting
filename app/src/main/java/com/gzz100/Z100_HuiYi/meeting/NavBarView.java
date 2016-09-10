@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 /**
 * 标题栏View
 * @author XieQXiong
@@ -23,9 +21,11 @@ public class NavBarView extends RelativeLayout {
     //时间和状态，默认显示，在个人信息界面隐藏
     public LinearLayout mLlRight;
     public TextView mTvTitle;
-    public TextView mMeetingState;
-    public TextView mTvTime;
+    public TextView mStateOrAgenda;
+    public TextView mTvTimeHour;
+    public TextView mTvTimeMin;
     public TextView mTvUpLevel;
+    public TextView mTvState;
 
     public NavBarView(Context context) {
         super(context);
@@ -47,8 +47,10 @@ public class NavBarView extends RelativeLayout {
         mLlFallBack = (LinearLayout) findViewById(R.id.id_ll_navBar_fallBack);
         mLlRight = (LinearLayout) findViewById(R.id.id_ll_bavBar_right);
         mTvTitle = (TextView) findViewById(R.id.id_tv_navBar_title);
-        mMeetingState = (TextView) findViewById(R.id.id_tv_navBar_state);
-        mTvTime = (TextView) findViewById(R.id.id_tv_navBar_time);
+        mTvState = (TextView) findViewById(R.id.id_tv_navBar_meeting_state);
+        mStateOrAgenda = (TextView) findViewById(R.id.id_tv_navBar_state);
+        mTvTimeHour = (TextView) findViewById(R.id.id_tv_navBar_time_hour);
+        mTvTimeMin = (TextView) findViewById(R.id.id_tv_navBar_time_min);
         mTvUpLevel = (TextView) findViewById(R.id.id_tv_up_level);
     }
 
@@ -90,8 +92,8 @@ public class NavBarView extends RelativeLayout {
      * 设置导航栏 右侧状态
      * @param state  主界面：状态  文件详情：第几个议程
      */
-    public void setState(String state){
-        mMeetingState.setText(state);
+    public void setMeetingStateOrAgendaState(String state){
+        mStateOrAgenda.setText(state);
     }
     /**
      * 设置导航栏 返回中上一级的标题
@@ -101,7 +103,14 @@ public class NavBarView extends RelativeLayout {
         mTvUpLevel.setText(upLevelText);
     }
 
-    public void setTime(String time){
-        mTvTime.setText(time);
+    public void setTimeHour(String time){
+        mTvTimeHour.setText(time);
+    }
+    public void setTimeMin(String time){
+        mTvTimeMin.setText(time);
+    }
+    public void setCurrentMeetingState(String currentState){
+        mTvState.setText(currentState);
+        mTvState.setVisibility(View.VISIBLE);
     }
 }
