@@ -12,10 +12,11 @@
         android:background="@color/color_tab_normal">
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             android:id="@+id/id_tv_item_file_name"
             android:text="aaaa"
-            android:padding="@dimen/distance_five_dp"/>
+            android:textSize="@dimen/item_file_text_size"
+            android:gravity="center"/>
     </LinearLayout>
 
 </LinearLayout>
