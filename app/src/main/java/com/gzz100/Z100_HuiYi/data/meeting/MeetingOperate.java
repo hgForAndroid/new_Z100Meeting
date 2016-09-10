@@ -51,7 +51,7 @@ public class MeetingOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_USERS,userColumn);
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_USERS_LIST,data);
         mDatabase = mDBHelper.getReadableDatabase();
-        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME,null,values);
+        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE,null,values);
     }
 
     /**
@@ -62,7 +62,7 @@ public class MeetingOperate {
     public List<UserBean> queryUserList(int userColumn){
         List<UserBean> userList = null;
         mDatabase = mDBHelper.getReadableDatabase();
-        String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME + " where " +
+        String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE + " where " +
                 PersistenceContract.ColumnsName.COLUMN_NAME_USERS + " = ?";
         Cursor cursor = mDatabase.rawQuery(sql, new String[]{userColumn + ""});
         if ( cursor.moveToFirst()){
@@ -85,7 +85,7 @@ public class MeetingOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO,infoColumn);
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO_DATA,data);
         mDatabase = mDBHelper.getReadableDatabase();
-        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME,null,values);
+        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_SUMMARY,null,values);
     }
 
     /**
@@ -96,7 +96,7 @@ public class MeetingOperate {
     public MeetingInfo queryMeetingInfo(int infoColumn){
         MeetingInfo meetingInfo = null;
         mDatabase = mDBHelper.getReadableDatabase();
-        String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME + " where " +
+        String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_SUMMARY + " where " +
                 PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO + " = ?";
         Cursor cursor = mDatabase.rawQuery(sql, new String[]{infoColumn + ""});
         if ( cursor.moveToFirst()){
