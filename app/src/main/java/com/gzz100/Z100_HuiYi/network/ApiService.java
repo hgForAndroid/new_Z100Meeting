@@ -45,4 +45,6 @@ public interface ApiService {
 
     @GET("getMeetingInfo")
     Observable<BaseResultEntity<MeetingInfo>> getMeetingInfo();
+
+
 }
