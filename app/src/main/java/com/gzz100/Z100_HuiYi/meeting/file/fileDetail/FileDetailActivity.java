@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -98,7 +97,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     private void dataFormUpLevel() {
         mBundle = getIntent().getExtras().getBundle(BUNDLE);
-        if (mBundle != null){
             mAgendaSum = mBundle.getInt(AGENDAS_SUM);
             mAgendaIndex = mBundle.getInt(AGENDA_INDEX);
             mFileIndex = mBundle.getInt(FILE_INDEX);
@@ -107,7 +105,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mUpLevelText = mBundle.getString(UP_LEVEL_TITLE);
 
             mFileName = mFileList.get(mFileIndex).getFileName();
-        }
     }
 
     @Override
@@ -127,8 +124,9 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mNavBarView.setFallBackDisplay(true);
         mNavBarView.setTitle(mFileName);
         mNavBarView.setUpLevelText(mUpLevelText);
-        mNavBarView.setState("议程"+mAgendaIndex+"/"+mAgendaSum);
-        mNavBarView.setTime(mAgendaTime);
+        mNavBarView.setMeetingStateOrAgendaState("议程"+mAgendaIndex+"/"+mAgendaSum);
+//        mNavBarView.setTime(mAgendaTime);
+        mNavBarView.setCurrentMeetingState("（开会中）");
         mNavBarView.setFallBackListener(this);
 
         mFileDetailAdapter = new FileDetailAdapter(mFileList,this);
@@ -136,7 +134,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mFileNameRcv.setAdapter(mFileDetailAdapter);
         mFileDetailAdapter.setOnFileClivk(this);
         mFileNameRcv.scrollToPosition(mFileIndex);
-        mPresenter.loadFile(mFileList.get(0).getFileName());
+        mPresenter.loadFile(mFileList.get(mFileIndex).getFileName());
     }
 
     @Override
@@ -202,6 +200,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     public void onFileClick(int position) {
         mPresenter.loadFile(mFileList.get(position).getFileName());
         setBackgroundColor(mChildCount,position);
+        mNavBarView.setTitle(mFileList.get(position).getFileName());
     }
 
     @Override
