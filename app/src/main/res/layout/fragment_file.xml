@@ -19,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/file_search_height"
         android:text="@string/string_search"
+        android:textSize="@dimen/item_file_text_size"
         android:id="@+id/id_btn_fgm_file"
         android:layout_toRightOf="@id/id_edt_fgm_file"/>
     <android.support.v7.widget.RecyclerView
