@@ -33,6 +33,11 @@
     <dimen name="delegate_text_size">20sp</dimen>
     <!--会议概况中全部字体的大小-->
     <dimen name="dialog_meeting_info_text_size">25sp</dimen>
+    <!--文件界面 文件列表  文字大小-->
+    <dimen name="item_file_text_size">20sp</dimen>
+    <!--文件详情界面侧滑栏的宽度-->
+    <dimen name="file_detail_slide_width">200dp</dimen>
+    <dimen name="file_detail_slide_search_width">100dp</dimen>
 
 
 </resources>
