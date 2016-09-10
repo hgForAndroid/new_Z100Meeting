@@ -14,6 +14,7 @@
         android:gravity="center_horizontal">
 
         <TextView
+            android:textSize="@dimen/item_file_text_size"
             android:id="@+id/id_item_agenda_index"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,6 +23,7 @@
             android:textColor="@android:color/black"/>
 
         <TextView
+            android:textSize="@dimen/item_file_text_size"
             android:id="@+id/id_item_agenda_title"
             android:layout_width="@dimen/distance_one_hundred_dp"
             android:layout_height="wrap_content"
