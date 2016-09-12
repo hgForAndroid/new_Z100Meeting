@@ -6,5 +6,5 @@ import android.view.View;
  * Created by Lee on 2016/8/31.
  */
 public interface OnAgendaClickListener {
-    void onAgendaItemClick(View view, int position);
+    void onAgendaItemClick(int position);
 }

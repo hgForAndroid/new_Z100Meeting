@@ -10,6 +10,7 @@
     </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
+        android:id="@+id/id_agenda_detail_layout"
         android:background="#afbfff"
         android:layout_marginLeft="100dp"
         android:layout_marginRight="100dp"

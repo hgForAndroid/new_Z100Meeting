@@ -1,5 +1,7 @@
 package com.gzz100.Z100_HuiYi.meeting.agenda;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -9,11 +11,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
@@ -38,6 +42,10 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
     TextView mAgendaSpeakerTextView;
     TextView mAgendaTimeTextView;
     Button mAgendaShowFileButton;
+    LinearLayout mAgendaDetailLayout;
+
+    private float mX;
+    private float mY;
 
     private AgendaContract.Presenter mPresenter;
 
@@ -83,7 +91,74 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
         mAgendaShowFileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.fetchFileListAndShow(false, currentAgendaPositon+1);
+                mPresenter.fetchFileListAndShow(true, currentAgendaPositon+1);
+            }
+        });
+        mAgendaDetailLayout = (LinearLayout) view.findViewById(R.id.id_agenda_detail_layout);
+        mAgendaDetailLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    mX = event.getX();
+                    mY = event.getY();
+                } else if (event.getAction() == MotionEvent.ACTION_UP){
+                    if(event.getY()-mY > 50){
+                        Log.d("test", "DOWN!");
+                        ObjectAnimator animator = ObjectAnimator
+                                .ofFloat(v, "translationY", v.getTranslationY(), v.getTranslationY()+200f, v.getTranslationY())
+                                .setDuration(150);
+                        animator.addListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                onAgendaItemClick((currentAgendaPositon + 1) % mAgendasList.size());
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
+                        animator.start();
+                    } else if(mY - event.getY() > 50){
+                        Log.d("test" ," UP!");
+                        ObjectAnimator animator = ObjectAnimator
+                                .ofFloat(v, "translationY", v.getTranslationY(), v.getTranslationY()-200f, v.getTranslationY())
+                                .setDuration(150);
+                        animator.addListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                onAgendaItemClick((currentAgendaPositon-1 >= 0 ? currentAgendaPositon-1 : mAgendasList.size()-1) % mAgendasList.size());
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
+                        animator.start();
+                    }
+                }
+                return true;
             }
         });
         return view;
@@ -203,7 +278,7 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
     }
 
     @Override
-    public void onAgendaItemClick(View view, int position) {
+    public void onAgendaItemClick(int position) {
         int childCount = mAgendaRecyclerView.getChildCount();
         setBackgroundColor(childCount, position);
         currentAgendaPositon = position;

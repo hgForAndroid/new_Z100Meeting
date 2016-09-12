@@ -14,7 +14,7 @@ public class VoteRepository implements VoteDataSource{
 
     private final VoteDataSource mVoteLocalDataSource;
 
-    //投票信息是否已有本地缓存  TODO   测试为true
+    //投票信息是否已有本地缓存  TODO   测试为true，实际使用应一直为false
     boolean mHaveVoteCache = true;
 
     private VoteRepository(@NonNull VoteDataSource voteRemoteDataSource,
@@ -42,7 +42,7 @@ public class VoteRepository implements VoteDataSource{
             mVoteLocalDataSource.getVoteDetail(IMEI, userID, agendaIndex, callback);
         } else {
             mVoteRemoteDataSource.getVoteDetail(IMEI, userID, agendaIndex, callback);
-            setHaveVoteCache(true);
+            setHaveVoteCache(true); //不从本地取数据 实际使用应一直设为false
         }
     }
 }

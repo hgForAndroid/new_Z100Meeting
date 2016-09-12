@@ -50,7 +50,7 @@ public class AgendaListAdapter extends RecyclerView.Adapter<AgendaHolder> {
             @Override
             public void onClick(View v) {
                 if(mOnItemClickListener != null){
-                    mOnItemClickListener.onAgendaItemClick(v, position);
+                    mOnItemClickListener.onAgendaItemClick(position);
                 }
             }
         });
