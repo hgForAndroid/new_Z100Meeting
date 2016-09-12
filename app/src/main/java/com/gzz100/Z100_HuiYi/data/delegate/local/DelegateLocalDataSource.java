@@ -24,6 +24,8 @@ public class DelegateLocalDataSource implements DelegateDataSource {
     private List<String> roleList=new ArrayList<>();
     private boolean mRoleListIsInit =false;
 
+    private boolean mIsFakeData=true;
+
     private DelegateLocalDataSource(@NonNull Context context){
         super();
 
@@ -60,26 +62,35 @@ public class DelegateLocalDataSource implements DelegateDataSource {
     @Override
     public void getDelegateList(int rolePos,@NonNull LoadDelegateListCallback callback) {
         checkNotNull(callback);
-        //假数据
-        List<DelegateBean> delegateBean= FakeDataProvider.getDelegateBeanByRolePos(rolePos);
 
-        if(delegateBean!=null&&delegateBean.size()>0)
-            callback.onDelegateListLoaded(delegateBean);
-        else
-            callback.onDataNotAvailable();
+        if(mIsFakeData) {
+            //假数据
+            List<DelegateBean> delegateBean = FakeDataProvider.getDelegateBeanByRolePos(rolePos);
+
+            if (delegateBean != null && delegateBean.size() > 0)
+                callback.onDelegateListLoaded(delegateBean);
+            else
+                callback.onDataNotAvailable();
+        }
+        //留给DB
+        else;
+
     }
 
     @Override
     public void getDelegateBean(int delegateNamePos,@NonNull LoadDelegateDetailCallback callback) {
         checkNotNull(callback);
 
-        //假数据
-        DelegateBean delegateBean= FakeDataProvider.getDelegateDetailByNamePos(delegateNamePos);
+        if(mIsFakeData) {
+            //假数据
+            DelegateBean delegateBean = FakeDataProvider.getDelegateDetailByNamePos(delegateNamePos);
 
-        if(delegateBean!=null)
-            callback.onDelegateDetailLoaded(delegateBean);
-        else
-            callback.onDataNotAvailable();
-
+            if (delegateBean != null)
+                callback.onDelegateDetailLoaded(delegateBean);
+            else
+                callback.onDataNotAvailable();
+        }
+        //留给DB
+        else;
     }
 }

@@ -19,8 +19,6 @@ public interface DelegateContract {
 
         void showDelegateList(List<DelegateBean> delegateBean);
 
-        void showRoleSwitch();
-
         void showNoDelegateDetail();
 
         void showNoDelegateList();
@@ -31,16 +29,11 @@ public interface DelegateContract {
 
         void fetchRoleList();
 
-        void fetchDelegateList(boolean forceUpdate, int position);
+        void fetchDelegateList(int position);
 
-        void showDelegateDetail(boolean forceUpdate, int position);
+        void showDelegateDetail( int position);
 
         void searchByName();
-
-        void switchRole();
-        void setRoleListFirstLoad(boolean roleListFirstLoad, boolean reLoad);
-        void setDelegateListFirstLoad(boolean delegateListFirstLoad, boolean reLoad);
-
 
 
     }

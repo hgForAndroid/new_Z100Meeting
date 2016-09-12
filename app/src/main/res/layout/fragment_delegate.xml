@@ -21,6 +21,7 @@
         android:layout_toRightOf="@id/id_edt_fgm_delegate"
         />
     <android.support.v7.widget.RecyclerView
+        android:layout_marginLeft="@dimen/distance_five_dp"
         android:layout_marginTop="@dimen/distance_ten_dp"
         android:layout_below="@id/id_edt_fgm_delegate"
         android:id="@+id/id_rev_fgm_tab"
@@ -31,6 +32,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_marginTop="@dimen/distance_ten_dp"
+        android:layout_marginLeft="@dimen/distance_ten_dp"
         android:id="@+id/id_rev_fgm_delegate_list"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"

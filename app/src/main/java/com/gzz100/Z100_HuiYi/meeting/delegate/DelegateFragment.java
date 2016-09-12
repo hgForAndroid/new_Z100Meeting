@@ -27,10 +27,13 @@ import java.util.List;
 public class DelegateFragment extends Fragment implements DelegateContract.View,OnRoleItemClickListener,OnDelegateNameItemClickListener {
     EditText mEdtSearchContent;
     Button mBntSearch;
-
     RecyclerView mRoleListRecView;
     RecyclerView mDelegateListRecView;
+
+
+
     private DelegatePresenter mPresenter;
+
     public static DelegateFragment newInstance(){return new DelegateFragment();}
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,8 +117,7 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
 
     @Override
     public void showRoleList(List<String> roleList) {
-         RoleListAdapter mRoleListAdapter;
-
+        RoleListAdapter mRoleListAdapter;
         mRoleListAdapter=new RoleListAdapter(getContext(),roleList);
         mRoleListRecView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false));
         mRoleListRecView.setAdapter(mRoleListAdapter);
@@ -130,7 +132,6 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
     @Override
     public void showDelegateList(List<DelegateBean> delegateBean) {
         DelegateListAdapter mDelegateListAdapter;
-
         mDelegateListAdapter=new DelegateListAdapter(getContext(),delegateBean);
         mDelegateListRecView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false));
         mDelegateListRecView.setAdapter(mDelegateListAdapter);
@@ -142,10 +143,6 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
 
     }
 
-    @Override
-    public void showRoleSwitch() {
-
-    }
 
     @Override
     public void showDelegateDetail(DelegateBean delegateBean,int delegateDetailPos) {
@@ -161,11 +158,11 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
 
     @Override
     public void onRoleItemClickListener(int position) {
-        mPresenter.fetchDelegateList(false,position);
+        mPresenter.fetchDelegateList(position);
     }
 
     @Override
     public void onDelegateNameItemClickListener(int position) {
-        mPresenter.showDelegateDetail(false,position);
+        mPresenter.showDelegateDetail(position);
     }
 }

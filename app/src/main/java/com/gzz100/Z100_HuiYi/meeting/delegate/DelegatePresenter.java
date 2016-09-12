@@ -18,8 +18,6 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     private final DelegateRepository mDelegateRepository;
     private final DelegateContract.View mDelegateView;
 
-    private boolean mRoleListIsFirstLoad =true;
-    private boolean mDelegateListIsFirstLoad=true;
 
     public DelegatePresenter (@NonNull DelegateRepository delegateRepository, DelegateContract.View delegateView) {
         this.mDelegateRepository = checkNotNull(delegateRepository,"delegateRepository cannot be null");
@@ -29,13 +27,13 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     @Override
     public void start() {
         fetchRoleList();
-        fetchDelegateList(true,0);
+        fetchDelegateList(0);
     }
 
 
     @Override
     public void fetchRoleList() {
-//        if(mRoleListIsFirstLoad) {
+
             mDelegateRepository.getRoleList(new DelegateDataSource.LoadRoleListCallback() {
                 @Override
                 public void onRoleListLoaded(List<String> roleList) {
@@ -48,19 +46,12 @@ public class DelegatePresenter implements DelegateContract.Presenter {
                 }
             });
 
-//            setRoleListFirstLoad(mRoleListIsFirstLoad,false);
-   /*     }
-        else
-            return;*/
-
 
     }
 
     @Override
-    public void fetchDelegateList(boolean forceUpdate,int rolePos) {
-        //保留给强制刷新和第一次加载(虽然不更新)
+    public void fetchDelegateList(int rolePos) {
 
-//        if(mDelegateListIsFirstLoad) {
             mDelegateRepository.getDelegateList(rolePos, new DelegateDataSource.LoadDelegateListCallback() {
                 @Override
                 public void onDelegateListLoaded(List<DelegateBean> delegateBeans) {
@@ -72,11 +63,6 @@ public class DelegatePresenter implements DelegateContract.Presenter {
                     mDelegateView.showNoDelegateList();
                 }
             });
-//            setDelegateListFirstLoad(mDelegateListIsFirstLoad,false);
-  /*      }
-        else
-            return;*/
-
     }
 
     @Override
@@ -85,12 +71,13 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     }
 
     @Override
-    public void showDelegateDetail(boolean forceUpdate, final int delegateDetailPos) {
-        mDelegateRepository.getDelegateBean(delegateDetailPos,new DelegateDataSource.LoadDelegateDetailCallback() {
+    public void showDelegateDetail( final int delegateNamePos) {
+
+        mDelegateRepository.getDelegateBean(delegateNamePos,new DelegateDataSource.LoadDelegateDetailCallback() {
 
             @Override
             public void onDelegateDetailLoaded(DelegateBean delegateBeans) {
-                mDelegateView.showDelegateDetail(delegateBeans,delegateDetailPos);
+                mDelegateView.showDelegateDetail(delegateBeans,delegateNamePos);
             }
 
             @Override
@@ -102,19 +89,5 @@ public class DelegatePresenter implements DelegateContract.Presenter {
 
 
     }
-
-    @Override
-    public void switchRole() {
-
-    }
-
-    @Override
-    public void setRoleListFirstLoad(boolean roleListFirstLoad,boolean reLoad) {
-        mRoleListIsFirstLoad=reLoad;
-    }
-
-    @Override
-    public void setDelegateListFirstLoad(boolean delegateListFirstLoad, boolean reLoad) {
-        mDelegateListIsFirstLoad=reLoad;
-    }
 }
+

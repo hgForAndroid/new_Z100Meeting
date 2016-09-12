@@ -36,27 +36,20 @@ public class DelegateRepository implements DelegateDataSource {
 
     @Override
     public void getRoleList(final LoadRoleListCallback callback) {
-        if(mRoleListIsDirty)
              mDelegateLocalDataSource.getRoleList(callback);
-        else
-            mDelegateRemoteDataSource.getRoleList(callback);
     }
 
     @Override
     public void getDelegateList(int rolePos,@NonNull LoadDelegateListCallback callback) {
         checkNotNull(callback);
-        if(mDelegateListIsDirty)
             mDelegateLocalDataSource.getDelegateList(rolePos,callback);
-        else
-            mDelegateRemoteDataSource.getDelegateList(rolePos,callback);
     }
 
     @Override
     public void getDelegateBean(int delegateDetailPos, LoadDelegateDetailCallback callback) {
-        if(mDelegateDetailListIsDirty)
+
           mDelegateLocalDataSource.getDelegateBean(delegateDetailPos,callback);
-        else
-            mDelegateRemoteDataSource.getDelegateBean(delegateDetailPos,callback);
+
     }
 
 
