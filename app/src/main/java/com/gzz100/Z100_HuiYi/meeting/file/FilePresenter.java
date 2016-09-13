@@ -62,7 +62,7 @@ public class FilePresenter implements FileContract.Presenter {
                     mFileView.showAgendaList(agendas);
                     mFileView.setAgendasSum(agendas.size());
                     if (mFirstLoad){
-                        mFileView.setAgendaTime(agendas.get(0).getAgendaTime());
+                        mFileView.setAgendaTime(agendas.get(0).getAgendaDuration());
                     }
                 }
 
