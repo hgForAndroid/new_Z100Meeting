@@ -37,7 +37,12 @@ public interface MeetingContract {
         /**
          * 跳转到用户详情界面
          */
-        void showUserInfo();
+        void showUserInfo(DelegateBean delegateBean);
+
+        /**
+         * 跳转到个人详情时，查询没有这个人
+         */
+        void showNoUser();
 
         /**
          * 显示会议桌
