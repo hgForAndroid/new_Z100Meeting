@@ -3,6 +3,7 @@ package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -36,7 +37,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     private int mAgendaIndex;
     private int mFileIndex;
     private List<Document> mFileList;
-    private String mAgendaTime;
+    private String mAgendaDuration;
     private String mUpLevelText;
     private String mFileName;
     private int mChildCount;
@@ -75,13 +76,11 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     @BindView(R.id.id_file_pdf_view)
     PDFView mPDFView;
 
-
-
     private Bundle mBundle;
-
     private FileDetailContract.Presenter mPresenter;
-
     private FileDetailAdapter mFileDetailAdapter;
+
+    private int mMin,mSec;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,19 +96,22 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     private void dataFormUpLevel() {
         mBundle = getIntent().getExtras().getBundle(BUNDLE);
+        if (mBundle != null){
             mAgendaSum = mBundle.getInt(AGENDAS_SUM);
             mAgendaIndex = mBundle.getInt(AGENDA_INDEX);
             mFileIndex = mBundle.getInt(FILE_INDEX);
             mFileList = (List<Document>) mBundle.getSerializable(FILE_LIST);
-            mAgendaTime = mBundle.getString(AGENDA_TIME);
+            mAgendaDuration = mBundle.getString(AGENDA_TIME);
             mUpLevelText = mBundle.getString(UP_LEVEL_TITLE);
-
             mFileName = mFileList.get(mFileIndex).getFileName();
+
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        if (mBundle != null)
         initData();
     }
 
@@ -117,7 +119,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     protected void onResume() {
         super.onResume();
         mPresenter.start();
-
     }
 
     private void initData() {
@@ -125,9 +126,16 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mNavBarView.setTitle(mFileName);
         mNavBarView.setUpLevelText(mUpLevelText);
         mNavBarView.setMeetingStateOrAgendaState("议程"+mAgendaIndex+"/"+mAgendaSum);
-//        mNavBarView.setTime(mAgendaTime);
+//        mNavBarView.setTime(mAgendaDuration);
         mNavBarView.setCurrentMeetingState("（开会中）");
         mNavBarView.setFallBackListener(this);
+        //时间
+        String[] split = mAgendaDuration.split(":");
+        mMin = Integer.valueOf(split[0]);
+        mSec = Integer.valueOf(split[1]);
+        mNavBarView.setTimeHour(resetNum(mMin));
+        mNavBarView.setTimeMin(resetNum(mSec));
+        countingTime();
 
         mFileDetailAdapter = new FileDetailAdapter(mFileList,this);
         mFileNameRcv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
@@ -135,7 +143,43 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mFileDetailAdapter.setOnFileClivk(this);
         mFileNameRcv.scrollToPosition(mFileIndex);
         mPresenter.loadFile(mFileList.get(mFileIndex).getFileName());
+
+
     }
+    private String resetNum(int num){
+        return num > 9 ? num + "" : "0"+num;
+    }
+    //倒计时
+    private void countingTime() {
+        mHandler.post(mRunnable);
+    }
+    private Handler mHandler = new Handler();
+
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.postDelayed(this,1000);
+            mNavBarView.setTimeHour(getMin());
+            mNavBarView.setTimeMin(getSex());
+            mSec--;
+        }
+    };
+
+    private String getMin(){
+        String newHour = mMin >=10 ? "" + mMin : "0"+mMin;
+        return newHour;
+    }
+    private String getSex(){
+        String newSex = mSec >= 10 ? "" + mSec : "0"+mSec;
+        if (newSex.equals("00")){
+            mMin--;
+            mSec = 60 ;
+            return "00";
+        }
+        return newSex;
+    }
+
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
