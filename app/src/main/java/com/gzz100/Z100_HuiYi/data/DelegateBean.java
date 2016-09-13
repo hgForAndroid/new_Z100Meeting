@@ -8,6 +8,7 @@ import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by DELL on 2016/8/31.
@@ -19,7 +20,7 @@ public class DelegateBean extends BaseBean{
     private String delegateJob;
     private int role;
     private String delegateDetailInfo;
-    private ArrayList<Integer> delegateAgendaList;
+    private List<Integer> delegateAgendaList;
 
     public int getDelegateId() {
         return delegateId;
@@ -45,12 +46,12 @@ public class DelegateBean extends BaseBean{
         this.delegateDetailInfo = delegateDetailInfo;
     }
 
-    public ArrayList getDelegateAgendaList() {
+    public List<Integer> getDelegateAgendaList() {
 
         return delegateAgendaList;
     }
 
-    public void setDelegateAgendaList(ArrayList delegateAgendaList) {
+    public void setDelegateAgendaList(List<Integer> delegateAgendaList) {
         this.delegateAgendaList = delegateAgendaList;
     }
 
