@@ -1,13 +1,11 @@
 package com.gzz100.Z100_HuiYi.data;
 
-import java.io.Serializable;
-
 /**
  * Created by XieQXiong on 2016/8/24.
  */
 public class Agenda extends BaseBean{
     private String agendaIndex;
-    private String agendaTime;
+    private String agendaDuration;
     private String agendaName;
     private String agendaSpeaker;
 
@@ -19,12 +17,12 @@ public class Agenda extends BaseBean{
         this.agendaIndex = agendaIndex;
     }
 
-    public String getAgendaTime() {
-        return agendaTime;
+    public String getAgendaDuration() {
+        return agendaDuration;
     }
 
-    public void setAgendaTime(String agendaTime) {
-        this.agendaTime = agendaTime;
+    public void setAgendaDuration(String agendaDuration) {
+        this.agendaDuration = agendaDuration;
     }
 
     public String getAgendaName() {
