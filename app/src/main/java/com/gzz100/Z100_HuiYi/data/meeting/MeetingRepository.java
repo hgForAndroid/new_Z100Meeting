@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
@@ -51,7 +52,7 @@ public class MeetingRepository implements MeetingDataSource {
 
     @Override
     public void getDelegateList(LoadDelegateCallback callback) {
-        List<UserBean> users = MeetingOperate.getInstance(mContext).queryUserList(Constant.COLUMNS_USER);
+        List<DelegateBean> users = MeetingOperate.getInstance(mContext).queryUserList(Constant.COLUMNS_USER);
         if (users != null && users.size() > 0){
 //            mMeetingLocalDataSource.getDelegateList(callback);
             //数据库中已经保存，不必再去取，直接返回，避免在MeetingLocalDataSource写重复代码
