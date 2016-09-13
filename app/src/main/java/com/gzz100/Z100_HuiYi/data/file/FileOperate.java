@@ -110,10 +110,10 @@ public class FileOperate {
     /**
      * 删除表，在有新增议程时调用
      */
-    public void deleteTable(){
+    public void deleteTableAgendaAndFile(){
         mDatabase = mDBHelper.getReadableDatabase();
-        String sql1 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_FILE;
-        String sql2 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_AGENDA;
+        String sql1 = "delete * from "+PersistenceContract.ColumnsName.TABLE_NAME_FILE;
+        String sql2 = "delete * from "+PersistenceContract.ColumnsName.TABLE_NAME_AGENDA;
         mDatabase.execSQL(sql1);
         mDatabase.execSQL(sql2);
     }
