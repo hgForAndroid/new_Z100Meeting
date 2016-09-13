@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
@@ -45,7 +46,7 @@ public class MeetingOperate {
      * @param userColumn  议程序号
      * @param userList 文件列表
      */
-    public void insertUserList(int userColumn,List<UserBean> userList){
+    public void insertUserList(int userColumn,List<DelegateBean> userList){
         byte[] data = ObjectTransverter.ListToByteArr(userList);
         ContentValues values =new ContentValues();
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_USERS,userColumn);
@@ -59,8 +60,8 @@ public class MeetingOperate {
      * @param userColumn   数据库中参会人员列表对应的字段值，Constant.COLUMNS_USER
      * @return   参会人员列表
      */
-    public List<UserBean> queryUserList(int userColumn){
-        List<UserBean> userList = null;
+    public List<DelegateBean> queryUserList(int userColumn){
+        List<DelegateBean> userList = null;
         mDatabase = mDBHelper.getReadableDatabase();
         String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE + " where " +
                 PersistenceContract.ColumnsName.COLUMN_NAME_USERS + " = ?";
@@ -68,7 +69,7 @@ public class MeetingOperate {
         if ( cursor.moveToFirst()){
             byte[] data = cursor.getBlob(cursor.getColumnIndex(
                     PersistenceContract.ColumnsName.COLUMN_NAME_USERS_LIST));
-            userList = (List<UserBean>) ObjectTransverter.byteArrToList(data);
+            userList = (List<DelegateBean>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();
         return userList;
