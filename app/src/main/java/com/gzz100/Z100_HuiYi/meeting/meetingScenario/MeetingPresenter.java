@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
@@ -87,7 +88,7 @@ public class MeetingPresenter implements MeetingContract.Presenter {
             firstLoad = false;
             mMeetingRepository.getDelegateList(new MeetingDataSource.LoadDelegateCallback() {
                 @Override
-                public void onDelegateLoaded(List<UserBean> users) {
+                public void onDelegateLoaded(List<DelegateBean> users) {
                     mView.showMeetingRoom(users);
 
                 }
