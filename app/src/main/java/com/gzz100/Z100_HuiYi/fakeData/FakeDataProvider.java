@@ -6,6 +6,7 @@ import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.Vote;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +120,7 @@ public class FakeDataProvider {
                     DelegateBean delegateBean = new DelegateBean();
                     delegateBean.setDelegateName(speakerNames.get(a));
                     delegateBean.setDelegateDepartment(departmentNames.get(a));
-                    delegateBean.setRole("主讲人");
+                    delegateBean.setRole(Constant.KEYNOTE_SPEAKER);
                     ArrayList agendaIndexList = new ArrayList();
                     agendaIndexList.add(a+1);
                     delegateBean.setDelegateAgendaList(agendaIndexList);
@@ -133,7 +134,7 @@ public class FakeDataProvider {
                     DelegateBean delegateBean = new DelegateBean();
                     delegateBean.setDelegateName(hostNames.get(a));
                     delegateBean.setDelegateDepartment(departmentNames.get(a));
-                    delegateBean.setRole("主持人");
+                    delegateBean.setRole(Constant.HOST);
                     ArrayList agendaIndexList = new ArrayList();
                     delegateBean.setDelegateAgendaList(agendaIndexList);
                     delegateBean.setDelegateDetailInfo("他是好人");
@@ -146,7 +147,7 @@ public class FakeDataProvider {
                     DelegateBean delegateBean = new DelegateBean();
                     delegateBean.setDelegateName(otherDelegateNames.get(a));
                     delegateBean.setDelegateDepartment(departmentNames.get(a%4));
-                    delegateBean.setRole("参会代表");
+                    delegateBean.setRole(Constant.NORMAL_DELEGATE);
                     delegateBean.setDelegateDetailInfo("他不是好人");
                     delegateBeans.add(delegateBean);
                     currRoleNum=2;
@@ -199,7 +200,7 @@ public class FakeDataProvider {
                     delegateBean1.setDelegateName(speakerNames.get(a));
                     delegateBean1.setDelegateDepartment(departmentNames.get(a));
                     delegateBean1.setDelegateJob(jobName.get(a%3));
-                    delegateBean1.setRole("主讲人");
+                    delegateBean1.setRole(Constant.KEYNOTE_SPEAKER);
                     ArrayList agendaIndex1 = new ArrayList();
                     agendaIndex1.add(a+1);
                     delegateBean1.setDelegateAgendaList(agendaIndex1);
@@ -213,7 +214,7 @@ public class FakeDataProvider {
                     delegateBean1.setDelegateName(hostNames.get(a));
                     delegateBean1.setDelegateDepartment(departmentNames.get(a));
                     delegateBean1.setDelegateJob(jobName.get(a%3));
-                    delegateBean1.setRole("主持人");
+                    delegateBean1.setRole(Constant.HOST);
                     ArrayList agendaIndex1 = new ArrayList();
                     delegateBean1.setDelegateAgendaList(agendaIndex1);
                     delegateBean1.setDelegateDetailInfo("他是好人");
@@ -227,7 +228,7 @@ public class FakeDataProvider {
                     delegateBean1.setDelegateName(otherDelegateNames.get(a));
                     delegateBean1.setDelegateDepartment(departmentNames.get(a%4));
                     delegateBean1.setDelegateJob(jobName.get(a%3));
-                    delegateBean1.setRole("参会代表");
+                    delegateBean1.setRole(Constant.NORMAL_DELEGATE);
                     delegateBean1.setDelegateDetailInfo("他不是好人");
                     delegateBeans.add(delegateBean1);
 
@@ -306,6 +307,91 @@ public class FakeDataProvider {
         mUsers.add(user8);
         mUsers.add(user9);
         mUsers.add(user10);
+        return mUsers;
+    }
+
+    public static List<DelegateBean> getDelegates(){
+        List<DelegateBean> mUsers = new ArrayList<>();
+        DelegateBean d1 = new DelegateBean();
+        d1.setDelegateId(1);
+        d1.setDelegateName("张三张三");
+        d1.setDelegateDepartment("技术部");
+        d1.setDelegateJob("android开发");
+        d1.setRole(2);
+
+        DelegateBean d2 = new DelegateBean();
+        d2.setDelegateId(2);
+        d2.setDelegateName("王麻子");
+        d2.setDelegateDepartment("技术部");
+        d2.setDelegateJob("Java开发");
+        d2.setRole(2);
+
+        DelegateBean d3 = new DelegateBean();
+        d3.setDelegateId(3);
+        d3.setDelegateName("临到");
+        d3.setDelegateDepartment("技术部");
+        d3.setDelegateJob("iOS开发");
+        d3.setRole(2);
+
+        DelegateBean d4 = new DelegateBean();
+        d4.setDelegateId(4);
+        d4.setDelegateName("李四");
+        d4.setDelegateDepartment("技术部");
+        d4.setDelegateJob("c++开发");
+        d4.setRole(2);
+
+        DelegateBean d5 = new DelegateBean();
+        d5.setDelegateId(5);
+        d5.setDelegateName("王五");
+        d5.setDelegateDepartment("技术部");
+        d5.setDelegateJob("c开发");
+        d5.setRole(2);
+
+        DelegateBean d6 = new DelegateBean();
+        d6.setDelegateId(6);
+        d6.setDelegateName("王小二");
+        d6.setDelegateDepartment("技术部");
+        d6.setDelegateJob("c#开发");
+        d6.setRole(2);
+
+        DelegateBean d7 = new DelegateBean();
+        d7.setDelegateId(7);
+        d7.setDelegateName("赵烈");
+        d7.setDelegateDepartment("后勤部");
+        d7.setDelegateJob("技术支持");
+        d7.setRole(2);
+
+        DelegateBean d8 = new DelegateBean();
+        d8.setDelegateId(8);
+        d8.setDelegateName("饼子");
+        d8.setDelegateDepartment("服务部");
+        d8.setDelegateJob("客服");
+        d8.setRole(2);
+
+        DelegateBean d9 = new DelegateBean();
+        d9.setDelegateId(9);
+        d9.setDelegateName("胡子");
+        d9.setDelegateDepartment("管理部");
+        d9.setDelegateJob("经理");
+        d9.setRole(1);
+
+        DelegateBean d10 = new DelegateBean();
+        d10.setDelegateId(10);
+        d10.setDelegateName("阿毛");
+        d10.setDelegateDepartment("管理部");
+        d10.setDelegateJob("助理");
+        d10.setRole(3);
+
+        mUsers.add(d1);
+        mUsers.add(d2);
+        mUsers.add(d3);
+        mUsers.add(d4);
+        mUsers.add(d5);
+        mUsers.add(d6);
+        mUsers.add(d7);
+        mUsers.add(d8);
+        mUsers.add(d9);
+        mUsers.add(d10);
         return mUsers;
     }
 
