@@ -315,55 +315,88 @@ public class FakeDataProvider {
         DelegateBean d1 = new DelegateBean();
         d1.setDelegateId(1);
         d1.setDelegateName("张三张三");
+        d1.setDelegateDetailInfo("我是张三张三啊");
         d1.setDelegateDepartment("技术部");
         d1.setDelegateJob("android开发");
         d1.setRole(2);
+        ArrayList<Integer> arrayList1 = new ArrayList<>();
+        arrayList1.add(1);
+        arrayList1.add(2);
+        d1.setDelegateAgendaList(arrayList1);
 
         DelegateBean d2 = new DelegateBean();
         d2.setDelegateId(2);
         d2.setDelegateName("王麻子");
+        d2.setDelegateDetailInfo("我叫王麻子，但是我脸上木有麻子！");
         d2.setDelegateDepartment("技术部");
         d2.setDelegateJob("Java开发");
         d2.setRole(2);
+        ArrayList<Integer> arrayList2 = new ArrayList<>();
+        arrayList2.add(1);
+        arrayList2.add(3);
+        d2.setDelegateAgendaList(arrayList2);
 
         DelegateBean d3 = new DelegateBean();
         d3.setDelegateId(3);
         d3.setDelegateName("临到");
+        d3.setDelegateDetailInfo("我叫临到，欢迎光临您的来到。");
         d3.setDelegateDepartment("技术部");
         d3.setDelegateJob("iOS开发");
         d3.setRole(2);
+        ArrayList<Integer> arrayList3 = new ArrayList<>();
+        arrayList3.add(2);
+        arrayList3.add(3);
+        d3.setDelegateAgendaList(arrayList3);
 
         DelegateBean d4 = new DelegateBean();
         d4.setDelegateId(4);
         d4.setDelegateName("李四");
         d4.setDelegateDepartment("技术部");
+        d4.setDelegateDetailInfo("我叫李四，就是传说中的李四。");
         d4.setDelegateJob("c++开发");
         d4.setRole(2);
+        ArrayList<Integer> arrayList4 = new ArrayList<>();
+        arrayList4.add(1);
+        d4.setDelegateAgendaList(arrayList4);
 
         DelegateBean d5 = new DelegateBean();
         d5.setDelegateId(5);
         d5.setDelegateName("王五");
+        d5.setDelegateDetailInfo("我叫王五，就是传说中的王五。");
         d5.setDelegateDepartment("技术部");
         d5.setDelegateJob("c开发");
         d5.setRole(2);
+        ArrayList<Integer> arrayList5 = new ArrayList<>();
+        arrayList5.add(1);
+        arrayList5.add(2);
+        d5.setDelegateAgendaList(arrayList5);
 
         DelegateBean d6 = new DelegateBean();
         d6.setDelegateId(6);
         d6.setDelegateName("王小二");
+        d6.setDelegateDetailInfo("我叫王小二，不是王二小。");
         d6.setDelegateDepartment("技术部");
         d6.setDelegateJob("c#开发");
         d6.setRole(2);
+        ArrayList<Integer> arrayList6 = new ArrayList<>();
+        arrayList6.add(2);
+        d6.setDelegateAgendaList(arrayList6);
 
         DelegateBean d7 = new DelegateBean();
         d7.setDelegateId(7);
         d7.setDelegateName("赵烈");
+        d7.setDelegateDetailInfo("我叫赵烈，火气不烈。");
         d7.setDelegateDepartment("后勤部");
         d7.setDelegateJob("技术支持");
         d7.setRole(2);
+        ArrayList<Integer> arrayList7 = new ArrayList<>();
+        arrayList7.add(1);
+        d7.setDelegateAgendaList(arrayList7);
 
         DelegateBean d8 = new DelegateBean();
         d8.setDelegateId(8);
         d8.setDelegateName("饼子");
+        d8.setDelegateDetailInfo("我叫饼子，但是不能吃。");
         d8.setDelegateDepartment("服务部");
         d8.setDelegateJob("客服");
         d8.setRole(2);
@@ -371,6 +404,7 @@ public class FakeDataProvider {
         DelegateBean d9 = new DelegateBean();
         d9.setDelegateId(9);
         d9.setDelegateName("胡子");
+        d9.setDelegateDetailInfo("我叫胡子，就是脸上的那个。");
         d9.setDelegateDepartment("管理部");
         d9.setDelegateJob("经理");
         d9.setRole(1);
@@ -378,6 +412,7 @@ public class FakeDataProvider {
         DelegateBean d10 = new DelegateBean();
         d10.setDelegateId(10);
         d10.setDelegateName("阿毛");
+        d10.setDelegateDetailInfo("我叫阿毛，头发不多。");
         d10.setDelegateDepartment("管理部");
         d10.setDelegateJob("助理");
         d10.setRole(3);
