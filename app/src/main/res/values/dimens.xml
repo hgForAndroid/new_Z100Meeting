@@ -38,6 +38,10 @@
     <!--文件详情界面侧滑栏的宽度-->
     <dimen name="file_detail_slide_width">200dp</dimen>
     <dimen name="file_detail_slide_search_width">100dp</dimen>
+    <!--人员详情界面全部字体大小-->
+    <dimen name="delegate_detail_text_size">25sp</dimen>
+    <!--人员界面  内容靠左的距离   ,个人详情界面-->
+    <dimen name="distance_sixteen">16dp</dimen>
 
 
 </resources>
