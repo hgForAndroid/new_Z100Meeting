@@ -30,13 +30,13 @@ public class MeetingPresenter implements MeetingContract.Presenter {
     private Dialog mDialog;
 
     public MeetingPresenter(@NonNull MeetingRepository meetingRepository, @NonNull MeetingContract.View view) {
-        this.mMeetingRepository = checkNotNull(meetingRepository,"meetingRepository cannot be null");
-        this.mView = checkNotNull(view,"view cannot be null");
+        this.mMeetingRepository = checkNotNull(meetingRepository, "meetingRepository cannot be null");
+        this.mView = checkNotNull(view, "view cannot be null");
         this.mView.setPresenter(this);
     }
 
     @Override
-    public void getMeetingInfo(final Context context ) {
+    public void getMeetingInfo(final Context context) {
         mMeetingRepository.getMetingInfo(new MeetingDataSource.LoadMeetingInfoCallback() {
             @Override
             public void onMeetingInfoLoaded(MeetingInfo meetingInfo) {
@@ -47,10 +47,10 @@ public class MeetingPresenter implements MeetingContract.Presenter {
                         .setCustomTitle(titleView)
 //                        .setTitle("会议概况")
                         .setView(contentView)
-                        .setNegativeButton("确定",new DismissDialog())
+                        .setNegativeButton("确定", new DismissDialog())
                         .create();
                 mDialog.setCanceledOnTouchOutside(false);
-                mView.showMeetingInfo(mDialog,contentView,meetingInfo);
+                mView.showMeetingInfo(mDialog, contentView, meetingInfo);
             }
 
             @Override
@@ -60,6 +60,7 @@ public class MeetingPresenter implements MeetingContract.Presenter {
         });
 
     }
+
     //关闭弹窗
     class DismissDialog implements DialogInterface.OnClickListener {
 
@@ -74,24 +75,41 @@ public class MeetingPresenter implements MeetingContract.Presenter {
         mView.showOthers();
     }
 
+    //这个是全部参会人员
+    private List<DelegateBean> mDelegateBeen = null;
+
     @Override
     public void fetchUserInfo(int userId) {
+        DelegateBean delegate = null;
+        for (DelegateBean tempDelegate :mDelegateBeen) {
+            if (tempDelegate.getDelegateId() == userId){
+                delegate = tempDelegate;
+                break;
+            }
+        }
+        if (delegate != null){
+            mView.showUserInfo(delegate);
+        }else {
+            mView.showNoUser();
+        }
 
-        mView.showUserInfo();
 
     }
 
     boolean firstLoad = true;
+
     @Override
     public void fetchMainUsers() {
-        if (firstLoad){
+        if (firstLoad) {
             firstLoad = false;
             mMeetingRepository.getDelegateList(new MeetingDataSource.LoadDelegateCallback() {
                 @Override
                 public void onDelegateLoaded(List<DelegateBean> users) {
+                    mDelegateBeen = users;
                     mView.showMeetingRoom(users);
 
                 }
+
                 @Override
                 public void onDataNotAvailable() {
 
@@ -102,7 +120,7 @@ public class MeetingPresenter implements MeetingContract.Presenter {
     }
 
     @Override
-    public void resetFirstLoad(){
+    public void resetFirstLoad() {
         firstLoad = true;
     }
 
