@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.meeting.meetingScenario;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
+import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
@@ -42,6 +44,13 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     public static MeetingFragment newInstance(){return new MeetingFragment();}
 
     private MeetingContract.Presenter mPresenter;
+
+    private ICommunicate mainActivity;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mainActivity = (ICommunicate) context;
+    }
 
     @Override
     public void onResume() {
@@ -108,11 +117,16 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     }
 
     @Override
-    public void showUserInfo() {
-//        DelegateDetailActivity.showDelegateDetailActivity(getActivity(),);
-        Intent intent = new Intent(getActivity(), DelegateDetailActivity.class);
-        startActivity(intent);
+    public void showUserInfo(DelegateBean delegateBean) {
+        DelegateDetailActivity.showDelegateDetailActivity(getActivity(),delegateBean,mainActivity.getCurrentTitle());
+//        Intent intent = new Intent(getActivity(), DelegateDetailActivity.class);
+//        startActivity(intent);
 
+    }
+
+    @Override
+    public void showNoUser() {
+        //查询用户个人详情，没有该用户
     }
 
     @Override
