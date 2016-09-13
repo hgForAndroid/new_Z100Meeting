@@ -3,6 +3,7 @@ package com.gzz100.Z100_HuiYi.data.meeting.remote;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
@@ -40,7 +41,7 @@ public class MeetingRemoteDataSource implements MeetingDataSource {
     @Override
     public void getDelegateList(LoadDelegateCallback callback) {
         checkNotNull(callback);
-        List<UserBean> users = FakeDataProvider.getUsers();
+        List<DelegateBean> users = FakeDataProvider.getDelegates();
         if (users != null && users.size() > 0){
             callback.onDelegateLoaded(users);
             mMeetingOperate.insertUserList(Constant.COLUMNS_USER,users);
