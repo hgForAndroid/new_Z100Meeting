@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.utils.ScreenSize;
 
@@ -142,13 +143,13 @@ public class MeetingRoomView extends ViewGroup {
         down = 1;
     }
 
-    public void addUsers(List<UserBean> users, String currentName,final OnUserClickListener onUserClickListener) {
+    public void addUsers(List<DelegateBean> users, String currentName, final OnUserClickListener onUserClickListener) {
         this.removeAllViews();
         for (int i = 0; i < users.size(); i++) {
             View view = View.inflate(this.getContext(), R.layout.user_for_meeting_room, null);
             TextView name = (TextView) view.findViewById(R.id.id_tv_user_name_meeting_room);
             users.get(i).setPicForUser(mContext,name);
-            String userName = users.get(i).getUserName();
+            String userName = users.get(i).getDelegateName();
             name.setText(userName);
             final int finalI = i;
             view.setOnClickListener(new OnClickListener() {
