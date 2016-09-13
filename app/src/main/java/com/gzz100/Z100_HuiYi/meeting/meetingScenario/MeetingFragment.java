@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
@@ -36,7 +37,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
     private MeetingRoomView mMeetingRoomView;
 
-    private List<UserBean> mUsers = new ArrayList<>();
+    private List<DelegateBean> mUsers = new ArrayList<>();
 
     public static MeetingFragment newInstance(){return new MeetingFragment();}
 
@@ -120,7 +121,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     }
 
     @Override
-    public void showMeetingRoom(List<UserBean> users) {
+    public void showMeetingRoom(List<DelegateBean> users) {
         mUsers = users;
         mMeetingRoomView.addUsers(users,"李四",this);
     }
@@ -138,6 +139,6 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     @Override
     public void onUserClick(View v, int position) {
 //        Toast.makeText(getActivity(),mUsers.get(position).getUserName(),Toast.LENGTH_SHORT).show();
-        mPresenter.fetchUserInfo(mUsers.get(position).getUserId());
+        mPresenter.fetchUserInfo(mUsers.get(position).getDelegateId());
     }
 }
