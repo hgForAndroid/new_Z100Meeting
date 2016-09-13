@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
+import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 
@@ -42,7 +43,7 @@ public interface MeetingContract {
          * 显示会议桌
          * @param users 用户列表
          */
-        void showMeetingRoom(List<UserBean> users);
+        void showMeetingRoom(List<DelegateBean> users);
 
         /**
          * 设置其他人员个数
