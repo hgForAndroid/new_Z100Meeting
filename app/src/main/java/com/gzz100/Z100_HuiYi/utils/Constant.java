@@ -7,7 +7,7 @@ package com.gzz100.Z100_HuiYi.utils;
 
 public class Constant {
     //主场景会议桌中显示的各个参会人员的类型
-    public static final int NORMAL_DEGELATE = 1;
+    public static final int NORMAL_DELEGATE = 1;
     public static final int KEYNOTE_SPEAKER = 2;
     public static final int HOST = 3;
     //测试控制
