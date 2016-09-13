@@ -189,7 +189,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void onAgendaItemClick(View v, int position) {
-        mPresenter.setAgendaTime(mAgendas.get(position).getAgendaTime());
+        mPresenter.setAgendaTime(mAgendas.get(position).getAgendaDuration());
         mPresenter.fetchFileList(true, position + 1);
         int childCount = mAgendaListRecView.getChildCount();
         setBackgroundColor(childCount, position);
