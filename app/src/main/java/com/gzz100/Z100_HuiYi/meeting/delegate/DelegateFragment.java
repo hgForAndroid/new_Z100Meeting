@@ -146,7 +146,7 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
 
     @Override
     public void showDelegateDetail(DelegateBean delegateBean,int delegateDetailPos) {
-        DelegateDetailActivity.showDelegateDetailActivity(getActivity(),delegateBean );
+        DelegateDetailActivity.showDelegateDetailActivity(getActivity(),delegateBean ,"人员");
 
         }
 
