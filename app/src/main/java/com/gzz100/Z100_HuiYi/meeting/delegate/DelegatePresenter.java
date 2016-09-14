@@ -28,8 +28,9 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     public void start() {
         fetchRoleList();
         fetchDelegateList(0);
-    }
+        mDelegateView.setIsFirstLoad(false);
 
+    }
 
     @Override
     public void fetchRoleList() {
@@ -38,6 +39,7 @@ public class DelegatePresenter implements DelegateContract.Presenter {
                 @Override
                 public void onRoleListLoaded(List<String> roleList) {
                     mDelegateView.showRoleList(roleList);
+
                 }
 
                 @Override
@@ -48,6 +50,7 @@ public class DelegatePresenter implements DelegateContract.Presenter {
 
 
     }
+
 
     @Override
     public void fetchDelegateList(int rolePos) {

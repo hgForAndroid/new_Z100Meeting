@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.meeting.delegate;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ public class DelegateListAdapter extends RecyclerView.Adapter<DelegateNameHolder
     OnDelegateNameItemClickListener mListener;
     LayoutInflater mInflate;
 
+
     public void setDelegateBeanItemClickListener(OnDelegateNameItemClickListener listener){
         this.mListener=listener;
     }
@@ -32,6 +34,8 @@ public class DelegateListAdapter extends RecyclerView.Adapter<DelegateNameHolder
     public DelegateListAdapter(Context context, List<DelegateBean> delegateBean) {
         mDelegateBean=delegateBean;
         mInflate= LayoutInflater.from(context);
+
+
     }
 
     @Override
@@ -49,6 +53,8 @@ public class DelegateListAdapter extends RecyclerView.Adapter<DelegateNameHolder
                 mListener.onDelegateNameItemClickListener(position);
             }
         });
+
+
     }
 
     @Override
@@ -67,5 +73,22 @@ class DelegateNameHolder extends RecyclerView.ViewHolder{
     public DelegateNameHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this,itemView);
+
+    }
+}
+class DelegateItemSpaceDecoration extends RecyclerView.ItemDecoration {
+
+    private int space;
+
+    public DelegateItemSpaceDecoration(int space) {
+        this.space = space;
+    }
+
+    @Override
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        super.getItemOffsets(outRect, view, parent, state);
+
+        outRect.top=space;
+//        outRect.bottom=space;
     }
 }

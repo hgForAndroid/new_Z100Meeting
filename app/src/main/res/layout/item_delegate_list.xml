@@ -4,16 +4,20 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/id_item_delegate_list_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
         android:orientation="horizontal"
+        android:background="@drawable/delegate_name_bolder"
+        android:gravity="center"
        >
 
         <TextView
             android:id="@+id/id_item_delegate_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="参会代表姓名"/>
+            android:textSize="@dimen/distance_twenty_dp"
+            android:text="参会代表姓名"
+            />
 
     </LinearLayout>
 

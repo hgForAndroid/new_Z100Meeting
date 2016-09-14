@@ -24,6 +24,10 @@ public interface DelegateContract {
         void showNoDelegateList();
 
         void showNoRoleList();
+
+        void setIsFirstLoad(boolean state);
+
+        void setRoleItemClickInit();
     }
     interface Presenter extends BasePresenter {
 

@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.meeting.delegate;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
  */
 public class RoleListAdapter extends RecyclerView.Adapter<RoleHolder> {
 
+    Context mContext;
     private OnRoleItemClickListener mOnClickListener;
     public void setRoleItemOnClickListener(OnRoleItemClickListener onRoleItemClickListener)
     {
@@ -36,6 +38,7 @@ public class RoleListAdapter extends RecyclerView.Adapter<RoleHolder> {
 
         mRoleList=roleList;
         mInflater=LayoutInflater.from(context);
+        mContext=context;
     }
 
     @Override
@@ -55,6 +58,10 @@ public class RoleListAdapter extends RecyclerView.Adapter<RoleHolder> {
                 mOnClickListener.onRoleItemClickListener(position);
             }
         });
+        if(position==0) {
+            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_white));
+            holder.mRoleLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color_tab_selected));
+        }
     }
 
     @Override
@@ -75,5 +82,20 @@ class RoleHolder extends RecyclerView.ViewHolder{
     public RoleHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this,itemView);
+    }
+}
+class RoleItemSpaceDecoration extends RecyclerView.ItemDecoration{
+
+    private int space;
+
+    public RoleItemSpaceDecoration(int space) {
+        this.space = space;
+    }
+
+    @Override
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        super.getItemOffsets(outRect, view, parent, state);
+
+        outRect.right=space;
     }
 }
