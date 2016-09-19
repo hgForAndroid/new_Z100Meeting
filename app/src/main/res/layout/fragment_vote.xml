@@ -1,8 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/id_layout_vote_main"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
         android:id="@+id/id_text_view_vote_title"
         android:layout_width="match_parent"
@@ -73,5 +76,16 @@
             android:layout_width="200dp"
             android:layout_height="50dp" />
     </RelativeLayout>
+    </LinearLayout>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/id_text_view_vote_finished_inf"
+        android:visibility="invisible"
+        android:layout_marginTop="50dp"
+        android:textSize="25sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="投票成功，请等待主持人下一步操作"/>
+
+</FrameLayout>

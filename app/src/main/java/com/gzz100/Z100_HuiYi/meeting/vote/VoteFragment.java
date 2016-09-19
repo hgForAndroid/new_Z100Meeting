@@ -1,14 +1,18 @@
 package com.gzz100.Z100_HuiYi.meeting.vote;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +38,10 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
     private TextView mVoteNumberNeededTextView;
     private TextView mVoteNumberSelectedTextView;
     private Button mVoteSubmitButton;
+    private LinearLayout mVoteMainLayout;
+    private TextView mVoteFinishedInfTextView;
 
-    public int optionNeededNumber = 0;
+    private int optionNeededNumber = 0;
     private int optionSelectedNumber = 0;
     private List<Boolean> optionStateList;
 
@@ -67,6 +73,8 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
         mVoteNumberNeededTextView = (TextView) view.findViewById(R.id.id_text_view_vote_needed_number);
         mVoteNumberSelectedTextView = (TextView) view.findViewById(R.id.id_text_view_vote_selected_number);
         mVoteSubmitButton = (Button) view.findViewById(R.id.id_btn_submit_vote);
+        mVoteMainLayout = (LinearLayout) view.findViewById(R.id.id_layout_vote_main);
+        mVoteFinishedInfTextView = (TextView) view.findViewById(R.id.id_text_view_vote_finished_inf);
         initViews();
 //        ButterKnife.bind(getActivity(),view);
         return view;
@@ -83,7 +91,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
         mVoteSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.submitVoteResult();
+                showCheckDialog();
             }
         });
     }
@@ -121,6 +129,64 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
         mVoteOptionRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mVoteOptionRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void showCheckDialog() {
+        if (optionSelectedNumber != optionNeededNumber){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("投票未完成");
+            builder.setMessage("您只选择了" + optionSelectedNumber + "项，请继续选择");
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.create().show();
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("您的选择是");
+        List<String> listSelected = new ArrayList<String>();
+        for(int i = 0; i < optionStateList.size(); i++){
+            if (optionStateList.get(i).equals(true)){
+                listSelected.add(mVote.getVoteOptionsList().get(i));
+            }
+        }
+        //builder.setMessage("您的选择是：\n");
+
+        final String items[] = listSelected.toArray(new String[listSelected.size()]);
+        builder.setItems(items, null);
+        DialogInterface.OnClickListener dialogOnclickListener=new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch(which){
+                    case Dialog.BUTTON_POSITIVE:
+                        dialog.dismiss();
+                        mPresenter.submitVoteResult();
+                        break;
+                    case Dialog.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+        builder.setPositiveButton("确定", dialogOnclickListener);
+        builder.setNegativeButton("取消", dialogOnclickListener);
+        builder.create().show();
+    }
+
+    @Override
+    public void showVoteFinishedInf(boolean isSuccessful) {
+        mVoteMainLayout.setVisibility(View.INVISIBLE);
+        if(isSuccessful){
+            mVoteFinishedInfTextView.setText("投票成功，等待主持人下一步操作");
+        } else {
+            mVoteFinishedInfTextView.setText("投票失败，请确认网络环境是否正常");
+        }
+        mVoteFinishedInfTextView.setVisibility(View.VISIBLE);
     }
 
     @Override

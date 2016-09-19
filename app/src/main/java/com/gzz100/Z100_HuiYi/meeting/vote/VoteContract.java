@@ -23,6 +23,17 @@ public interface VoteContract {
          * 显示投票信息
          */
         void showVoteInf();
+
+        /**
+         * 显示投票确认对话框
+         */
+        void showCheckDialog();
+
+        /**
+         * 显示投票完成信息
+         * @param isSuccessful 是否投票成功
+         */
+        void showVoteFinishedInf(boolean isSuccessful);
     }
 
     public interface Presenter extends BasePresenter{
