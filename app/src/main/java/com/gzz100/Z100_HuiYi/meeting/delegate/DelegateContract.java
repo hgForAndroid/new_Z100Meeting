@@ -25,9 +25,11 @@ public interface DelegateContract {
 
         void showNoRoleList();
 
-        void setIsFirstLoad(boolean state);
+        void showRoleItemDecoration();
 
-        void setRoleItemClickInit();
+        void showDelegateNameGridItemDecoration();
+
+
     }
     interface Presenter extends BasePresenter {
 
@@ -39,6 +41,7 @@ public interface DelegateContract {
 
         void searchByName();
 
+        void setFirstLoad(boolean reLoad);
 
     }
 }
