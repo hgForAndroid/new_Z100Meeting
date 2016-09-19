@@ -14,9 +14,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DelegateRepository implements DelegateDataSource {
     private static DelegateRepository INSTANCE;
 
-    private boolean mDelegateListIsDirty=true;
-    private boolean mRoleListIsDirty=true;
-    private boolean mDelegateDetailListIsDirty=true;
 
     private final DelegateRemoteDataSource mDelegateRemoteDataSource;
     private final DelegateLocalDataSource mDelegateLocalDataSource;

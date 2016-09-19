@@ -34,8 +34,6 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
     RecyclerView mDelegateListRecView;
 
 
-    private  static boolean IsFirstLoad=true;
-
     private DelegatePresenter mPresenter;
 
     public static DelegateFragment newInstance(){return new DelegateFragment();}
@@ -49,7 +47,7 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
     public void onResume() {
         Log.e("DelegateFragment -->","onResume");
         super.onResume();
-        mPresenter.start();
+
 
     }
 
@@ -62,19 +60,23 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
         mBntSearch=(Button)view.findViewById(R.id.id_btn_fgm_delegate);
         mRoleListRecView=(RecyclerView)view.findViewById(R.id.id_rev_fgm_tab);
         mDelegateListRecView=(RecyclerView)view.findViewById(R.id.id_rev_fgm_delegate_list);
-        setIsFirstLoad(true);
+        mPresenter.start();
+        mPresenter.setFirstLoad(false);
         return view;
     }
     @Override
     public void onDestroyView() {
         Log.e("DelegateFragment -->","onDestroyView");
         super.onDestroyView();
+        mPresenter.setFirstLoad(true);
+        mLastClickedRoleItemPositon=0;
     }
 
     @Override
     public void onDestroy() {
 //        Log.e("DelegateFragment -->","onDestroy");
         super.onDestroy();
+
     }
 
 
@@ -95,13 +97,13 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
 
     @Override
     public void onPause() {
-//        Log.e("DelegateFragment -->","onPause");
+     Log.e("DelegateFragment -->","onPause");
         super.onPause();
     }
 
     @Override
     public void onStop() {
-//        Log.e("DelegateFragment -->","onStop");
+        Log.e("DelegateFragment -->","onStop");
         super.onStop();
     }
 
@@ -131,13 +133,7 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
         mRoleListAdapter=new RoleListAdapter(getContext(),roleList);
         mRoleListRecView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false));
         mRoleListRecView.setAdapter(mRoleListAdapter);
-        if(IsFirstLoad) {
-            int space = getResources().getDimensionPixelSize(R.dimen.distance_one_hundred_dp);
-            mRoleListRecView.addItemDecoration(new RoleItemSpaceDecoration(space));
-        }
         mRoleListAdapter.setRoleItemOnClickListener(this);
-
-
     }
 
     @Override
@@ -146,16 +142,17 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
     }
 
     @Override
-    public void setIsFirstLoad(boolean state) {
-
-        IsFirstLoad=state;
-
+    public void showRoleItemDecoration() {
+        int space = getResources().getDimensionPixelSize(R.dimen.distance_one_hundred_dp);
+        mRoleListRecView.addItemDecoration(new RoleItemSpaceDecoration(space));
     }
 
     @Override
-    public void setRoleItemClickInit() {
-        setRoleItemBackgroundColor(0,0);
+    public void showDelegateNameGridItemDecoration() {
+        int space = getResources().getDimensionPixelSize(R.dimen.distance_twenty_dp);
+        mDelegateListRecView.addItemDecoration(new DelegateItemSpaceDecoration(space));
     }
+
 
     @Override
     public void showDelegateList(List<DelegateBean> delegateBean) {
@@ -163,10 +160,6 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
         mDelegateListAdapter=new DelegateListAdapter(getContext(),delegateBean);
         mDelegateListRecView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         mDelegateListRecView.setAdapter(mDelegateListAdapter);
-        if(IsFirstLoad) {
-            int space = getResources().getDimensionPixelSize(R.dimen.distance_twenty_dp);
-            mDelegateListRecView.addItemDecoration(new DelegateItemSpaceDecoration(space));
-        }
         mDelegateListAdapter.setDelegateBeanItemClickListener(this);
     }
 

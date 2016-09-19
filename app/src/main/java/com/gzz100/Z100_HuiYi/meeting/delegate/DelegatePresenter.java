@@ -19,6 +19,8 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     private final DelegateContract.View mDelegateView;
 
 
+    private boolean IsFirstLoad=true;
+
     public DelegatePresenter (@NonNull DelegateRepository delegateRepository, DelegateContract.View delegateView) {
         this.mDelegateRepository = checkNotNull(delegateRepository,"delegateRepository cannot be null");
         this.mDelegateView = checkNotNull(delegateView,"delegateView cannot be null");
@@ -28,8 +30,6 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     public void start() {
         fetchRoleList();
         fetchDelegateList(0);
-        mDelegateView.setIsFirstLoad(false);
-
     }
 
     @Override
@@ -39,6 +39,10 @@ public class DelegatePresenter implements DelegateContract.Presenter {
                 @Override
                 public void onRoleListLoaded(List<String> roleList) {
                     mDelegateView.showRoleList(roleList);
+
+                    if(IsFirstLoad){
+                        mDelegateView.showRoleItemDecoration();
+                    }
 
                 }
 
@@ -59,6 +63,9 @@ public class DelegatePresenter implements DelegateContract.Presenter {
                 @Override
                 public void onDelegateListLoaded(List<DelegateBean> delegateBeans) {
                     mDelegateView.showDelegateList(delegateBeans);
+                    if(IsFirstLoad){
+                        mDelegateView.showDelegateNameGridItemDecoration();
+                    }
                 }
 
                 @Override
@@ -71,6 +78,11 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     @Override
     public void searchByName() {
 
+    }
+
+    @Override
+    public void setFirstLoad(boolean reLoad) {
+        IsFirstLoad=reLoad;
     }
 
     @Override
