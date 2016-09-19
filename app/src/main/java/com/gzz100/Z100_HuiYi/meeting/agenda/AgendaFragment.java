@@ -2,6 +2,7 @@ package com.gzz100.Z100_HuiYi.meeting.agenda;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,15 +17,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
-import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
 * 文件详情
@@ -32,8 +36,9 @@ import java.util.List;
 * create at 2016/8/23 17:01
 */
 
-public class AgendaFragment extends Fragment implements AgendaContract.View, OnAgendaClickListener {
+public class AgendaFragment extends Fragment implements AgendaContract.View, OnAgendaClickListener, OnFileDetailClickListener {
     RecyclerView mAgendaRecyclerView;
+    RecyclerView mAgendaDetailRecyclerView;
     TextView mAgendaTitleTextView;
     TextView mAgendaSpeakerTextView;
     TextView mAgendaTimeTextView;
@@ -46,8 +51,9 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
     private AgendaContract.Presenter mPresenter;
 
     private List<Agenda> mAgendasList;
-    private int currentAgendaPosition;
+    private int currentAgendaPositon;
     private AgendaListAdapter mAgendaListAdapter;
+    private AgendaDetailListAdapter mAgendaDetailAdapter;
 
     private List<Document> mDocumentsList;
 
@@ -68,7 +74,6 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
 
     @Override
     public void onResume() {
-        if (Constant.DEBUG)
         Log.e("AgendaFragment -->","onResume");
         mPresenter.start();
         super.onResume();
@@ -81,6 +86,7 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
         //ButterKnife.bind(this,view);
 //        Log.e("AgendaFragment -->","onCreateView");
         mAgendaRecyclerView = (RecyclerView) view.findViewById(R.id.id_rev_agenda);
+        mAgendaDetailRecyclerView = (RecyclerView) view.findViewById(R.id.id_rev_agenda_detail);
         mAgendaTitleTextView = (TextView) view.findViewById(R.id.id_text_view_agenda_title);
         mAgendaSpeakerTextView = (TextView) view.findViewById(R.id.id_text_view_agenda_speaker);
         mAgendaTimeTextView = (TextView) view.findViewById(R.id.id_text_view_agenda_time);
@@ -88,7 +94,7 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
         mAgendaShowFileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.fetchFileListAndShow(true, currentAgendaPosition +1);
+                mPresenter.fetchFileListAndShow(true, currentAgendaPositon+1);
             }
         });
         mAgendaDetailLayout = (LinearLayout) view.findViewById(R.id.id_agenda_detail_layout);
@@ -112,7 +118,7 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
-                                onAgendaItemClick((currentAgendaPosition + 1) % mAgendasList.size());
+                                onAgendaItemClick((currentAgendaPositon + 1) % mAgendasList.size());
                             }
 
                             @Override
@@ -139,7 +145,7 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
-                                onAgendaItemClick((currentAgendaPosition -1 >= 0 ? currentAgendaPosition -1 : mAgendasList.size()-1) % mAgendasList.size());
+                                onAgendaItemClick((currentAgendaPositon-1 >= 0 ? currentAgendaPositon-1 : mAgendasList.size()-1) % mAgendasList.size());
                             }
 
                             @Override
@@ -175,10 +181,38 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
         mAgendaRecyclerView.setAdapter(mAgendaListAdapter);
         mAgendaListAdapter.setOnItemClickListener(this);
         mPresenter.showAgendaDetail(agendas.get(0));
+
+        mAgendaDetailAdapter = new AgendaDetailListAdapter(getContext(), mAgendasList);
+        mAgendaDetailAdapter.setOnFileDetailClickListener(this);
+        mAgendaDetailRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mAgendaDetailRecyclerView.setAdapter(mAgendaDetailAdapter);
+        mAgendaDetailRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    mX = event.getX();
+                    mY = event.getY();
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getY() - mY > 50) {
+                        Log.d("test", "Scroll to" + currentAgendaPositon);
+                        onAgendaItemClick(currentAgendaPositon - 1 >= 0 ? --currentAgendaPositon
+                        : 0);
+                    } else if (mY - event.getY() > 50) {
+                        onAgendaItemClick(currentAgendaPositon + 1  < mAgendasList.size() ? ++currentAgendaPositon
+                                : currentAgendaPositon);
+                        Log.d("test", "Scroll to" + currentAgendaPositon);
+                    }
+                }
+
+                return false;
+            }
+        });
     }
 
     @Override
     public void showAgendaDetail(Agenda agenda) {
+        mAgendaDetailRecyclerView.smoothScrollToPosition(currentAgendaPositon);
         mAgendaTitleTextView.setText(agenda.getAgendaName());
         mAgendaSpeakerTextView.setText("主讲人：" + agenda.getAgendaSpeaker());
         mAgendaTimeTextView.setText("议程时长：" + agenda.getAgendaDuration());
@@ -187,8 +221,8 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
     @Override
     public void showFileDetail() {
         String currentTitle = mMainActivity.getCurrentTitle();
-        FileDetailActivity.showFileDetailActivity(getActivity(), mAgendasList.size(), currentAgendaPosition + 1,
-                mDocumentsList, 0, mAgendasList.get(currentAgendaPosition).getAgendaDuration(), currentTitle);
+        FileDetailActivity.showFileDetailActivity(getActivity(), mAgendasList.size(), currentAgendaPositon + 1,
+                mDocumentsList, 0, mAgendasList.get(currentAgendaPositon).getAgendaDuration(), currentTitle);
     }
 
     @Override
@@ -230,6 +264,42 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
         mPresenter.setFirstLoad(true);
     }
 
+    @Override
+    public void onDestroy() {
+//        Log.e("AgendaFragment -->","onDestroy");
+        super.onDestroy();
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        Log.e("AgendaFragment -->","onActivityCreated");
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+//        Log.e("AgendaFragment -->","onStart");
+        super.onStart();
+    }
+
+    @Override
+    public void onPause() {
+//        Log.e("AgendaFragment -->","onPause");
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+//        Log.e("AgendaFragment -->","onStop");
+        super.onStop();
+    }
+
+    @Override
+    public void onDetach() {
+//        Log.e("AgendaFragment -->","onDetach");
+        super.onDetach();
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -242,7 +312,13 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
     public void onAgendaItemClick(int position) {
         int childCount = mAgendaRecyclerView.getChildCount();
         setBackgroundColor(childCount, position);
-        currentAgendaPosition = position;
+        currentAgendaPositon = position;
+        Log.d("test", "Click:" + currentAgendaPositon);
         mPresenter.showAgendaDetail(mAgendasList.get(position));
+    }
+
+    @Override
+    public void onFileDetailClickListener(int position) {
+        mPresenter.fetchFileListAndShow(true, position+1);
     }
 }
