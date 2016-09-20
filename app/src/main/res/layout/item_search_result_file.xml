@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
-    android:paddingBottom="@dimen/distance_five_dp">
+    android:paddingBottom="@dimen/distance_five_dp"
+    android:id="@+id/id_ll_item_file_search_result">
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -12,17 +13,17 @@
         android:layout_weight="1">
 
         <ImageView
-            android:id="@+id/id_item_file_image_result"
+            android:id="@+id/id_iv_item_file_image_result"
             style="@style/wrap_content_attr"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:src="@mipmap/ic_launcher"/>
 
         <TextView
-            android:id="@+id/id_item_file_name"
+            android:id="@+id/id_tv_item_file_name"
             style="@style/wrap_content_attr"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/id_item_file_image_result"
+            android:layout_toRightOf="@id/id_iv_item_file_image_result"
             android:text="文件名"
             android:textSize="@dimen/item_file_text_size"/>
     </RelativeLayout>
@@ -41,7 +42,7 @@
             android:textSize="@dimen/item_file_text_size"/>
 
         <TextView
-            android:id="@+id/id_tv_item_file_name_result"
+            android:id="@+id/id_tv_item_file_key_note_speaker_result"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
