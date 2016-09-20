@@ -1,9 +1,11 @@
 package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -158,10 +160,19 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            mHandler.postDelayed(this,1000);
-            mNavBarView.setTimeHour(getMin());
-            mNavBarView.setTimeMin(getSex());
-            mSec--;
+            if (getMin().equals("00") && getSec().equals("00")){
+                Dialog dialog = new AlertDialog.Builder(FileDetailActivity.this)
+                        .setTitle("提示")
+                        .setMessage("议程时间已到")
+                        .create();
+                dialog.show();
+            }else {
+                mHandler.postDelayed(this,1000);
+                mNavBarView.setTimeHour(getMin());
+                mNavBarView.setTimeMin(getSec());
+                mSec--;
+            }
+
         }
     };
 
@@ -169,7 +180,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         String newHour = mMin >=10 ? "" + mMin : "0"+mMin;
         return newHour;
     }
-    private String getSex(){
+    private String getSec(){
         String newSex = mSec >= 10 ? "" + mSec : "0"+mSec;
         if (newSex.equals("00")){
             mMin--;
