@@ -98,6 +98,8 @@ public interface FileContract {
          */
         void showFileDetail(int fileIndex);
 
+        void showSearchFileDetail(int fileIndex,int agendaIndex);
+
         /**
          * 根据搜索的议程号搜索对应的所有文件
          * @param agendaIndex 议程序号
