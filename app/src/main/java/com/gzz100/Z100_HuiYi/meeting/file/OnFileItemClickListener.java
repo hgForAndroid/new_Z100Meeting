@@ -6,5 +6,9 @@ package com.gzz100.Z100_HuiYi.meeting.file;
 */
 
 public interface OnFileItemClickListener {
+    /**
+     * 点击文件的监听
+     * @param position  文件序号
+     */
     void onFileItemClick(int position);
 }
