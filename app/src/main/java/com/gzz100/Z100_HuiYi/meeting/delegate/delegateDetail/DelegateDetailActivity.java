@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
@@ -33,7 +34,7 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
      * @param activity     当前Activity
      * @param delegateBean 传输的信息
      */
-    public static void showDelegateDetailActivity(Activity activity, DelegateBean delegateBean,String upLevelText) {
+    public static void showDelegateDetailActivity(Activity activity, DelegateBean delegateBean, String upLevelText) {
         Intent intent = new Intent(activity, DelegateDetailActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(UP_LEVEL_TEXT, upLevelText);
@@ -73,6 +74,8 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
     RecyclerView mRecyclerView ;
     @BindView(R.id.id_id_tv_delegate_detail_no_agenda)
     TextView mTvNoAgenda;
+    @BindView(R.id.id_delegate_detail_role_image)
+    ImageView mIvRole;
 
     private SpeakeAgendaAdapter mSpeakeAgendaAdapter;
 
@@ -133,10 +136,13 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
      */
     private void setRoleByType(int roleType){
         if (roleType == Constant.KEYNOTE_SPEAKER){//主讲人
+            mIvRole.setImageResource(R.drawable.ic_delagate_detail_key_note_speaker);
             mTvDelegateRole.setText("主讲人");
         }else if (roleType == Constant.HOST){//主持人
+            mIvRole.setImageResource(R.drawable.ic_dalegate_detail_host);
             mTvDelegateRole.setText("主持人");
         }else {//普通参会人员
+            mIvRole.setImageResource(R.drawable.ic_delegate_detail_normal);
             mTvDelegateRole.setText("其他参会代表");
         }
     }
