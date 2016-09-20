@@ -36,6 +36,10 @@ public interface FileContract {
          *跳转文件详情界面
          */
         void showFileDetail();
+        /**
+         *跳转文件详情界面
+         */
+        void showSearchFileDetail();
 
         /**
          * 用于判断Fragment是否已经添加到其对应的Activity上，
@@ -93,6 +97,12 @@ public interface FileContract {
          * 展示文件内容
          */
         void showFileDetail(int fileIndex);
+
+        /**
+         * 根据搜索的议程号搜索对应的所有文件
+         * @param agendaIndex 议程序号
+         */
+        void fetchSearchFileList(int agendaIndex);
 
         /**
          * 设置议程时间
