@@ -21,12 +21,12 @@
         </activity>
         <activity android:name=".BaseActivity">
         </activity>
-        <activity android:name=".meeting.file.fileDetail.FileDetailActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
         <activity android:name=".meeting.delegate.delegateDetail.DelegateDetailActivity"
                   android:launchMode="singleTop"></activity>
+        <activity android:name=".meeting.file.fileDetail.FileDetailActivity"
+                  android:launchMode="singleTop">
+
+        </activity>
 
         <service
             android:name=".multicast.MulticastService"
