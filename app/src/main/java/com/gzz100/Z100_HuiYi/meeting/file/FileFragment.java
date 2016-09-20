@@ -13,13 +13,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
-import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
+import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;
 
@@ -32,28 +34,39 @@ import butterknife.OnClick;
  *         create at 2016/8/23 17:01
  */
 
-public class FileFragment extends Fragment implements FileContract.View, OnAgendaTabClickListener, OnFileItemClickListener {
+public class FileFragment extends Fragment implements FileContract.View, OnAgendaTabClickListener, OnFileItemClickListener, OnSearchItemClickListener {
     //    @BindView(R.id.id_edt_fgm_file)
-    EditText mEdtSearchContent;
+    private EditText mEdtSearchContent;
     //    @BindView(R.id.id_btn_fgm_file)
-    Button mBtnSearch;
+    private Button mBtnSearch;
     //    @BindView(R.id.id_rev_fgm_tab)
-    RecyclerView mAgendaListRecView;
+    private RecyclerView mAgendaListRecView;
     //    @BindView(R.id.id_rev_fgm_file_list)
-    RecyclerView mFileListRecView;
+    private RecyclerView mFileListRecView;
+    private RecyclerView mSearchResultRecView;
     private FileContract.Presenter mPresenter;
 
     private List<Agenda> mAgendas;
     private AgendaListTabAdapter mAgendaAdapter;
     private FileListAdapter mFileListAdapter;
+    private SearchResultAdapter mSearchResultAdapter;
 
     private List<Document> mDocumentBeen;
+    private List<Document> mResultDocumentBeen;
     private int mAgendasSum;
     private int mAgendaIndex;
     private int mFileIndex;
     private String mAgendaTime;
 
     private ICommunicate mMainActivity;
+    //正常显示结果的布局
+    private RelativeLayout mRlNormal;
+    //搜索后的布局
+    private LinearLayout mLlSearchResult;
+    //搜索后的结果的当前议程序号
+    private Integer mSearchAgendaIndex;
+    //搜索后的文件序号
+    private int mSearchFileIndex1;
 
     @Override
     public void onAttach(Context context) {
@@ -73,6 +86,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void onResume() {
+        if (Constant.DEBUG)
         Log.e("FileFragment -->", "onResume");
         mPresenter.start();
         super.onResume();
@@ -87,6 +101,10 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         mBtnSearch = (Button) view.findViewById(R.id.id_btn_fgm_file);
         mAgendaListRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_tab);
         mFileListRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_file_list);
+        mSearchResultRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_file_search_result);
+
+        mRlNormal = (RelativeLayout) view.findViewById(R.id.id_rl_fgm_file_normal);
+        mLlSearchResult = (LinearLayout) view.findViewById(R.id.id_ll_fgm_file_search_result);
 
 //        mUnbinder = ButterKnife.bind(this, view);
         return view;
@@ -130,6 +148,12 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void showSearchResult(List<Document> documentBeen) {
+        mResultDocumentBeen = documentBeen;
+        mSearchResultAdapter = new SearchResultAdapter(getActivity(),documentBeen);
+
+        mSearchResultRecView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+        mSearchResultRecView.setAdapter(mSearchResultAdapter);
+        mSearchResultAdapter.setOnSearchItemClickListener(this);
 
     }
 
@@ -139,6 +163,13 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         FileDetailActivity.showFileDetailActivity(getActivity(), mAgendasSum, mAgendaIndex,
                 mDocumentBeen, mFileIndex, mAgendaTime, currentTitle);
 
+    }
+
+    @Override
+    public void showSearchFileDetail() {
+        String currentTitle = mMainActivity.getCurrentTitle();
+        FileDetailActivity.showFileDetailActivity(getActivity(), mAgendasSum, mSearchAgendaIndex,
+                mResultDocumentBeen, mSearchFileIndex1, mAgendas.get(mSearchAgendaIndex).getAgendaDuration(), currentTitle);
     }
 
     @Override
@@ -221,5 +252,15 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public void onFileItemClick(int position) {
         mPresenter.showFileDetail(position);
+    }
+
+    @Override
+    public void onSearchClick(int position) {
+        if (mResultDocumentBeen != null && mResultDocumentBeen.size() > 0){
+            mSearchFileIndex1 = Integer.valueOf(mResultDocumentBeen.get(position).getFileIndex());
+            mSearchAgendaIndex = Integer.valueOf(mResultDocumentBeen.get(position).getAgendaIndex());
+            mPresenter.showFileDetail(mSearchFileIndex1);
+        }
+
     }
 }
