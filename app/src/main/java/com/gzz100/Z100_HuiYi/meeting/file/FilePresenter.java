@@ -113,6 +113,38 @@ public class FilePresenter implements FileContract.Presenter {
     }
 
     @Override
+    public void showSearchFileDetail(int fileIndex,int agendaIndex) {
+        mFileView.setFileIndex(fileIndex);
+        fetchSearchFileList(agendaIndex);
+    }
+
+    @Override
+    public void fetchSearchFileList(final int agendaIndex) {
+        mFileRepository.getFileList(agendaIndex, new FileDataSource.LoadFileListCallback() {
+            @Override
+            public void onFileListLoaded(List<Document> documents) {
+
+                if (!mFileView.isActive()) {
+                    return;
+                }
+                mFileView.setFileList(documents);
+                mFileView.setAgendaIndex(agendaIndex);
+
+                mFileView.showSearchFileDetail();
+
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+                mFileView.showNoFileList();
+
+            }
+        });
+
+    }
+
+    @Override
     public void setAgendaTime(String time) {
         mFileView.setAgendaTime(time);
     }
