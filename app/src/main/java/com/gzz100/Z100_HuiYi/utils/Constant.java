@@ -6,6 +6,14 @@ package com.gzz100.Z100_HuiYi.utils;
 */
 
 public class Constant {
+
+
+    //参会代表界面中，角色标签的类型
+    public static final int DEFAULT_SPEAKER=0;
+    public static final int HOSTS=1;
+    public static final int OTHER_DELEGATE=2;
+
+
     //主场景会议桌中显示的各个参会人员的类型
     public static final int NORMAL_DELEGATE = 1;
     public static final int KEYNOTE_SPEAKER = 2;

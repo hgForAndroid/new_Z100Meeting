@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateDataSource;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateRepository;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     @Override
     public void start() {
         fetchRoleList();
-        fetchDelegateList(0);
+        fetchDelegateList(Constant.DEFAULT_SPEAKER);
     }
 
     @Override

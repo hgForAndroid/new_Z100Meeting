@@ -19,6 +19,11 @@ import android.widget.TextView;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
+import com.gzz100.Z100_HuiYi.utils.Constant;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -69,7 +74,7 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
         Log.e("DelegateFragment -->","onDestroyView");
         super.onDestroyView();
         mPresenter.setFirstLoad(true);
-        mLastClickedRoleItemPositon=0;
+        mLastClickedRoleItemPositon=Constant.DEFAULT_SPEAKER;
     }
 
     @Override
@@ -91,6 +96,7 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
     public void onStart() {
 //        Log.e("DelegateFragment -->","onStart");
         super.onStart();
+        EventBus.getDefault().register(this);
 
 
     }
@@ -105,6 +111,7 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
     public void onStop() {
         Log.e("DelegateFragment -->","onStop");
         super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -204,5 +211,10 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
         ( (TextView)mRoleListRecView.getChildAt(currPosition).findViewById(R.id.id_item_role_name)).setTextColor(getResources().getColor(R.color.color_white));
 
         mLastClickedRoleItemPositon=currPosition;
+    }
+    @Subscribe (threadMode = ThreadMode.MAIN)
+    public void setTabToOtherDelegate(Boolean showOtherDelegate){
+        mPresenter.fetchDelegateList(Constant.OTHER_DELEGATE);
+        setRoleItemBackgroundColor(mLastClickedRoleItemPositon,Constant.OTHER_DELEGATE);
     }
 }
