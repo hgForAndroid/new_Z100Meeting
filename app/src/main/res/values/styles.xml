@@ -13,6 +13,7 @@
     <!--主界面    RadioButton的共有属性-->
     <style name="radio_button_same_attr">
         <item name="android:textColor">@drawable/tab_textcolor_selector</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:button">@null</item>
         <item name="android:layout_width">@dimen/each_tab_width</item>
         <item name="android:layout_height">match_parent</item>
