@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
@@ -34,7 +36,7 @@ import butterknife.OnClick;
  *         create at 2016/8/23 17:01
  */
 
-public class FileFragment extends Fragment implements FileContract.View, OnAgendaTabClickListener, OnFileItemClickListener, OnSearchItemClickListener {
+public class FileFragment extends Fragment implements FileContract.View, OnAgendaTabClickListener, OnFileItemClickListener, OnSearchItemClickListener, View.OnClickListener {
     //    @BindView(R.id.id_edt_fgm_file)
     private EditText mEdtSearchContent;
     //    @BindView(R.id.id_btn_fgm_file)
@@ -105,6 +107,8 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
         mRlNormal = (RelativeLayout) view.findViewById(R.id.id_rl_fgm_file_normal);
         mLlSearchResult = (LinearLayout) view.findViewById(R.id.id_ll_fgm_file_search_result);
+
+        mBtnSearch.setOnClickListener(this);
 
 //        mUnbinder = ButterKnife.bind(this, view);
         return view;
@@ -262,5 +266,13 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
             mPresenter.showSearchFileDetail(mSearchFileIndex1,mSearchAgendaIndex);
         }
 
+    }
+
+    //搜索
+    @Override
+    public void onClick(View v) {
+        String content = mEdtSearchContent.getText().toString();
+        if (TextUtils.isEmpty(content))
+            Toast.makeText(getActivity(), "请输入搜索关键字", Toast.LENGTH_SHORT).show();
     }
 }
