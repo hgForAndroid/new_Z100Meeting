@@ -2,13 +2,11 @@ package com.gzz100.Z100_HuiYi.meeting.meetingScenario;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.View;
 
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
-import com.gzz100.Z100_HuiYi.data.UserBean;
 
 import java.util.List;
 
@@ -28,11 +26,6 @@ public interface MeetingContract {
          * @param dialog  弹窗
          */
         void dismissDialog(Dialog dialog);
-
-        /**
-         * 跳转到人员界面中的其他参会人员标签
-         */
-        void showOthers();
 
         /**
          * 跳转到用户详情界面
@@ -69,11 +62,6 @@ public interface MeetingContract {
          * @param context 上下文，用于创建弹窗
          */
         void getMeetingInfo(Context context);
-
-        /**
-         * 调用 MeetingContract.View 的 showOthers()
-         */
-        void showOthers();
 
         /**
          * 根据用户id获取用户信息，再调用 MeetingContract.View 的 showUserInfo

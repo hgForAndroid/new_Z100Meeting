@@ -7,16 +7,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
-import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -68,11 +65,6 @@ public class MeetingPresenter implements MeetingContract.Presenter {
         public void onClick(DialogInterface dialog, int which) {
             mView.dismissDialog(mDialog);
         }
-    }
-
-    @Override
-    public void showOthers() {
-        mView.showOthers();
     }
 
     //这个是全部参会人员
