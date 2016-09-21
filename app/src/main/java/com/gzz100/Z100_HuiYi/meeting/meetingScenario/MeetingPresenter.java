@@ -99,6 +99,10 @@ public class MeetingPresenter implements MeetingContract.Presenter {
                 public void onDelegateLoaded(List<DelegateBean> users) {
                     mDelegateBeen = users;
                     mView.showMeetingRoom(users);
+                    //参会人数大于10个人
+                    int othersNum = users.size() - 10;
+                    if (othersNum > 0)
+                        mView.setOthersNum(true,othersNum);
 
                 }
 
