@@ -23,7 +23,6 @@ public class DelegateLocalDataSource implements DelegateDataSource {
 
     private List<String> roleList=new ArrayList<>();
     private boolean mRoleListIsInit =false;
-
     private boolean mIsFakeData=true;
 
     private DelegateLocalDataSource(@NonNull Context context){
@@ -39,14 +38,9 @@ public class DelegateLocalDataSource implements DelegateDataSource {
 
 
     public void initRoleList() {
-  /*      if(mRoleListIsInit)
-            return;
-        else {*/
             roleList.add(speaker);
             roleList.add(host);
             roleList.add(otherDelegate);
-       /* }*/
-
     }
 
     @Override
