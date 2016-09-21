@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
@@ -37,6 +39,17 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     private MeetingRoomView mMeetingRoomView;
 
     private List<DelegateBean> mUsers = new ArrayList<>();
+    //会议结束后显示的布局
+    private RelativeLayout mTopLayout;
+    //会议未结束显示的布局
+    private FrameLayout mBottomLayout;
+    //会议结束后的  会议开始于   会议结束于  会议时长   会议纪要
+    private TextView mEndBegin;
+    private TextView mEndEnding;
+    private TextView mEndDuration;
+    private TextView mEndRecord;
+    //用于设置 其他参会人员人数
+    private TextView mOthers;
 
     public static MeetingFragment newInstance(){return new MeetingFragment();}
 
@@ -62,6 +75,15 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meeting, null);
         mMeetingRoomView = (MeetingRoomView) view.findViewById(R.id.id_meeting_view);
+        mTopLayout = (RelativeLayout) view.findViewById(R.id.id_rl_meeting_fragment_top);
+        mBottomLayout = (FrameLayout) view.findViewById(R.id.id_fl_meeting_fragment_bottom);
+        mEndBegin = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_begin);
+        mEndEnding = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_ending);
+        mEndDuration = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_duration);
+        mEndRecord = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_record);
+
+
+        mOthers = (TextView) view.findViewById(R.id.id_tv_meeting_fragment_others);
         ButterKnife.bind(this,view);
         return view;
     }
@@ -135,12 +157,39 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
     @Override
     public void setOthersNum(boolean isShow, int othersNum) {
-
+        if (isShow)
+            mOthers.setText("其他参会人员（"+othersNum+")");
     }
 
     @Override
     public void showDelegate(Boolean isShowDelegate) {
         EventBus.getDefault().post(isShowDelegate);
+    }
+
+    @Override
+    public void setEndBegin(String beginTime) {
+        mEndBegin.setText(beginTime);
+    }
+
+    @Override
+    public void setEndEnding(String endingTime) {
+        mEndEnding.setText(endingTime);
+    }
+
+    @Override
+    public void setEndDuration(String duration) {
+        mEndDuration.setText(duration);
+    }
+
+    @Override
+    public void setEndRecord(String record) {
+        mEndRecord.setText(record);
+    }
+
+    @Override
+    public void setEndingLayoutShow() {
+        mTopLayout.setVisibility(View.VISIBLE);
+        mBottomLayout.setVisibility(View.GONE);
     }
 
     @Override
