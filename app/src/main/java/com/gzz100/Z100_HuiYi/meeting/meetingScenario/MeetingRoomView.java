@@ -142,6 +142,12 @@ public class MeetingRoomView extends ViewGroup {
         down = 1;
     }
 
+    /**
+     * 为会议桌添加用户
+     * @param Users                 需要显示的用户列表
+     * @param currentName           当前人员的名字
+     * @param onUserClickListener   单个用户点击监听
+     */
     public void addUsers(List<DelegateBean> Users, String currentName, final OnUserClickListener onUserClickListener) {
         this.removeAllViews();
         for (int i = 0; i < Users.size(); i++) {
