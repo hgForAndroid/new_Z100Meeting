@@ -75,15 +75,16 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meeting, null);
         mMeetingRoomView = (MeetingRoomView) view.findViewById(R.id.id_meeting_view);
+        mOthers = (TextView) view.findViewById(R.id.id_tv_meeting_fragment_others);
+
         mTopLayout = (RelativeLayout) view.findViewById(R.id.id_rl_meeting_fragment_top);
         mBottomLayout = (FrameLayout) view.findViewById(R.id.id_fl_meeting_fragment_bottom);
+        //会议结束界面部分控件
         mEndBegin = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_begin);
         mEndEnding = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_ending);
         mEndDuration = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_duration);
         mEndRecord = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_record);
 
-
-        mOthers = (TextView) view.findViewById(R.id.id_tv_meeting_fragment_others);
         ButterKnife.bind(this,view);
         return view;
     }
