@@ -54,6 +54,33 @@ public interface MeetingContract {
          * @param isShowDelegate  是否显示人员界面
          */
         void showDelegate(Boolean isShowDelegate);
+
+        /**
+         * 设置会议结束后的   会议开始于
+         * @param beginTime  开始时间
+         */
+        void setEndBegin(String beginTime);
+        /**
+         * 设置会议结束后的   会议结束于
+         * @param endingTime  结束时间
+         */
+        void setEndEnding(String endingTime);
+        /**
+         * 设置会议结束后的   会议时长
+         * @param duration  会议时长
+         */
+        void setEndDuration(String duration);
+        /**
+         * 设置会议结束后的   会议纪要
+         * @param record  会议纪要
+         */
+        void setEndRecord(String record);
+
+        /**
+         * 设置会议结束的布局显示
+         */
+        void setEndingLayoutShow();
+
     }
 
     interface Presenter extends BasePresenter{
