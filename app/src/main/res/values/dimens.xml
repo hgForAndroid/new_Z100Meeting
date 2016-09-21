@@ -42,6 +42,8 @@
     <dimen name="delegate_detail_text_size">25sp</dimen>
     <!--人员界面  内容靠左的距离   ,个人详情界面-->
     <dimen name="distance_sixteen">16dp</dimen>
+    <!--会议结束界面的全部显示文字的字体大小-->
+    <dimen name="end_meeting_text_size">25sp</dimen>
 
 
 </resources>
