@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
@@ -131,7 +132,6 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
         dialog = null;
     }
 
-
     @Override
     public void showUserInfo(DelegateBean delegateBean) {
         DelegateDetailActivity.showDelegateDetailActivity(getActivity(),delegateBean,mainActivity.getCurrentTitle());
@@ -143,6 +143,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     @Override
     public void showNoUser() {
         //查询用户个人详情，没有该用户
+        Toast.makeText(getActivity(), "无该用户", Toast.LENGTH_SHORT).show();
     }
 
     @Override
