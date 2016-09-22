@@ -3,6 +3,7 @@ package com.gzz100.Z100_HuiYi.fakeData;
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.Vote;
@@ -433,5 +434,14 @@ public class FakeDataProvider {
     public static MeetingInfo getMeetingInfo(){
         MeetingInfo meetingInfo = new MeetingInfo("这是会议名称","2016.09.08   10:00","120",15,10,5);
         return meetingInfo;
+    }
+
+    public static List<MeetingBean> getMeetings(){
+        List<MeetingBean> meetings = new ArrayList<>();
+        for (int i = 1; i < 6; i++) {
+            MeetingBean meetingBean = new MeetingBean(""+i,"会议"+i,1+i+":00",0);
+            meetings.add(meetingBean);
+        }
+        return meetings;
     }
 }
