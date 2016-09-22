@@ -439,7 +439,7 @@ public class FakeDataProvider {
     public static List<MeetingBean> getMeetings(){
         List<MeetingBean> meetings = new ArrayList<>();
         for (int i = 1; i < 6; i++) {
-            MeetingBean meetingBean = new MeetingBean(""+i,"会议"+i,1+i+":00",0);
+            MeetingBean meetingBean = new MeetingBean(""+i,"会议"+i,"1"+i+":00",0);
             meetings.add(meetingBean);
         }
         return meetings;
