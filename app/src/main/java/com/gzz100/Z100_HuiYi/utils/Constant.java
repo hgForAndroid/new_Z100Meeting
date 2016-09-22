@@ -26,4 +26,10 @@ public class Constant {
     public static final int COLUMNS_USER = 5;
     //会议概况存储数据库的对应字段值，用于查询数据库中是否有会议概况
     public static final int COLUMNS_MEETING_INFO = 6;
+    //存储输入的IP地址  对应的  key
+    public static final String IP_HISTORY = "ipHistory";
+    //存储确认的IP地址  对应的  key
+    public static final String CURRENT_IP = "currentIP";
+    //存储设备标识码  对应的  key
+    public static final String DEVICE_IMEI = "deviceIMEI";
 }
