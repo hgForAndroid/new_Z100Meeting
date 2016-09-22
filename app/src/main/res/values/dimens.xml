@@ -45,5 +45,7 @@
     <!--会议结束界面的全部显示文字的字体大小-->
     <dimen name="end_meeting_text_size">25sp</dimen>
 
+    <dimen name="forty_eight">48dp</dimen>
+
 
 </resources>
