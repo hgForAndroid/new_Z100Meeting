@@ -33,7 +33,8 @@
             android:layout_marginTop="@dimen/distance_ten_dp"
             android:id="@+id/id_rev_fgm_tab"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent">
+            android:layout_width="match_parent"
+            android:overScrollMode="never">
 
         </android.support.v7.widget.RecyclerView>
         <RelativeLayout
