@@ -1,13 +1,16 @@
 package com.gzz100.Z100_HuiYi.meeting;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -27,6 +30,7 @@ import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
 import com.gzz100.Z100_HuiYi.multicast.MulticastService;
+import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -85,6 +89,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ActivityStackManager.clearExceptOne(this);
         ButterKnife.bind(this);
         init();
     }
@@ -265,5 +270,24 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            Dialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("提示")
+                    .setMessage("退出系统？")
+                    .setPositiveButton("是",null)
+                    .setNegativeButton("否",null)
+                    .create();
+            dialog.show();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
