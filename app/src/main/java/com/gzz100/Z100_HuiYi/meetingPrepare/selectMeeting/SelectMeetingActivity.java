@@ -12,6 +12,7 @@ import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
+import com.gzz100.Z100_HuiYi.meetingPrepare.ItemSpaceDecoration;
 import com.gzz100.Z100_HuiYi.meetingPrepare.signIn.SignInActivity;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 
@@ -66,6 +67,8 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
         mAdapter = new MeetingAdapter(this,meetings);
         mRcvSelectMeeting.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         mRcvSelectMeeting.setAdapter(mAdapter);
+        mRcvSelectMeeting.addItemDecoration(new ItemSpaceDecoration(ItemSpaceDecoration.VERTICAL,
+                (int) getResources().getDimension(R.dimen.distance_twenty_dp)));
         mAdapter.setOnMeetingClickListener(this);
 
     }
