@@ -80,9 +80,8 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
     }
 
     @Override
-    public void showSignIn() {
-        SignInActivity.toSignInActivity(this);
-
+    public void showSignIn(String IMEI, String meetingID) {
+        SignInActivity.toSignInActivity(this,IMEI,meetingID);
     }
 
     @Override
