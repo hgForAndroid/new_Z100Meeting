@@ -63,7 +63,8 @@
             android:layout_below="@id/id_ll_fgm_file"
             android:id="@+id/id_rev_fgm_file_list"
             android:layout_height="match_parent"
-            android:layout_width="match_parent">
+            android:layout_width="match_parent"
+            android:overScrollMode="never">
 
         </android.support.v7.widget.RecyclerView>
     </RelativeLayout>
