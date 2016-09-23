@@ -43,8 +43,7 @@ public class SelectMeetingPresenter implements SelectMeetingContract.Presenter {
 
     @Override
     public void selectMeeting(String IMEI, String meetingID) {
-
-        mView.showSignIn();
+        mView.showSignIn(IMEI,meetingID);
     }
 
     @Override
