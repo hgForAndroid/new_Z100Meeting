@@ -1,5 +1,6 @@
 package com.gzz100.Z100_HuiYi.meeting;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +47,12 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, ViewPager.OnPageChangeListener,ICommunicate {
+    public static void toMainActivity(Context context){
+        Intent intent = new Intent(context,MainActivity.class);
+        context.startActivity(intent);
+    }
+
+
     @BindView(R.id.id_main_tbv) NavBarView mNavBarView;
     @BindView(R.id.id_main_ViewPager) ViewPager mViewPager;
 
