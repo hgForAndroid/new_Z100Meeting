@@ -62,6 +62,8 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
         mIPs = ips;
         mAdapter = new IPAdapter(this,ips);
         mRcvRecord.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        mRcvRecord.addItemDecoration(new ItemSpaceDecoration(ItemSpaceDecoration.VERTICAL,
+                (int) getResources().getDimension(R.dimen.distance_twenty_dp)));
         mRcvRecord.setAdapter(mAdapter);
         mAdapter.setOnIPClickListener(this);
     }
