@@ -25,8 +25,10 @@ public interface SelectMeetingContract {
         void showNoMeetingList();
         /**
          * 跳转到签到界面
+         * @param IMEI    设备id
+         * @param meetingID   会议id
          */
-        void showSignIn();
+        void showSignIn(String IMEI, String meetingID);
 
     }
 
