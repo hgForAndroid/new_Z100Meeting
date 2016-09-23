@@ -13,30 +13,8 @@
         android:layout_width="@dimen/file_detail_slide_width"
         android:layout_height="match_parent"
         android:background="@drawable/shape_file_detail_slide"
+        android:paddingTop="@dimen/distance_five_dp"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:paddingLeft="@dimen/distance_ten_dp"
-            android:paddingTop="@dimen/distance_five_dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/id_etv_file_detail_search"
-                android:layout_width="@dimen/file_detail_slide_search_width"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edt_selector"
-                android:padding="@dimen/distance_ten_dp"
-                android:hint="文件搜索"/>
-
-            <Button
-                android:id="@+id/id_btn_file_detail_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/string_search"/>
-        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/id_slide_rev"
