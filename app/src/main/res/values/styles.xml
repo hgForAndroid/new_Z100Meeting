@@ -64,6 +64,7 @@
         <item name="android:padding">@dimen/distance_five_dp</item>
         <item name="android:textSize">@dimen/end_meeting_text_size</item>
     </style>
+    <!--选择会议界面布局中引用-->
     <style name="selectMeeting_text_view_attr">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
