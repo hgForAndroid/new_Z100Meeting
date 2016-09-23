@@ -160,7 +160,8 @@
                     android:id="@+id/id_delegate_detail_part2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:overScrollMode="never">
 
                 </android.support.v7.widget.RecyclerView>
             </LinearLayout>
