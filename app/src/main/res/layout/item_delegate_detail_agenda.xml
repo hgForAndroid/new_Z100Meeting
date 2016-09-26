@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="议程"
-        android:textSize="20sp"
-        android:padding="10dp"/>
+        android:textSize="@dimen/delegate_detail_text_size"
+        android:padding="@dimen/distance_five_dp"/>
 
 </LinearLayout>
