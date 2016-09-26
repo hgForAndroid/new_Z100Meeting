@@ -17,11 +17,11 @@ import butterknife.ButterKnife;
 /**
  * Created by XieQXiong on 2016/9/13.
  */
-public class SpeakeAgendaAdapter extends RecyclerView.Adapter<SpeakeAgendaAdapter.AgendaHolder> {
+public class SpeakerAgendaAdapter extends RecyclerView.Adapter<SpeakerAgendaAdapter.AgendaHolder> {
     private Context mContext;
     private List<Integer> agendaList;
     private LayoutInflater mInflater;
-    public SpeakeAgendaAdapter(Context context, List<Integer> agendaList) {
+    public SpeakerAgendaAdapter(Context context, List<Integer> agendaList) {
         mContext = context;
         this.agendaList = agendaList;
         mInflater = LayoutInflater.from(context);
