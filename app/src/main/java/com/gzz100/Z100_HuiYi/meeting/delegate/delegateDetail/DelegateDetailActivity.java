@@ -77,7 +77,7 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
     @BindView(R.id.id_delegate_detail_role_image)
     ImageView mIvRole;
 
-    private SpeakeAgendaAdapter mSpeakeAgendaAdapter;
+    private SpeakerAgendaAdapter mSpeakerAgendaAdapter;
 
     private Bundle mBundle;
     private ArrayList<Integer> delegateAgendaIndexList;
@@ -115,9 +115,9 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
                 //有主讲议程则显示，隐藏无主讲议程的提示
                 mTvNoAgenda.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
-                mSpeakeAgendaAdapter = new SpeakeAgendaAdapter(DelegateDetailActivity.this,delegateAgendaIndexList);
+                mSpeakerAgendaAdapter = new SpeakerAgendaAdapter(DelegateDetailActivity.this,delegateAgendaIndexList);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-                mRecyclerView.setAdapter(mSpeakeAgendaAdapter);
+                mRecyclerView.setAdapter(mSpeakerAgendaAdapter);
 
             }else {//显示无主讲议程的提示
                 mTvNoAgenda.setVisibility(View.VISIBLE);
