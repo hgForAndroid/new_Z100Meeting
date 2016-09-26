@@ -59,11 +59,13 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
 
     @Override
     public void showHistory(List<String> ips) {
+        mTvRecord.setVisibility(View.VISIBLE);
+        mRcvRecord.setVisibility(View.VISIBLE);
         mIPs = ips;
-        mAdapter = new IPAdapter(this,ips);
+        mAdapter = new IPAdapter(this,mIPs);
         mRcvRecord.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         mRcvRecord.addItemDecoration(new ItemSpaceDecoration(ItemSpaceDecoration.VERTICAL,
-                (int) getResources().getDimension(R.dimen.distance_twenty_dp)));
+                (int) getResources().getDimension(R.dimen.distance_five_dp)));
         mRcvRecord.setAdapter(mAdapter);
         mAdapter.setOnIPClickListener(this);
     }
