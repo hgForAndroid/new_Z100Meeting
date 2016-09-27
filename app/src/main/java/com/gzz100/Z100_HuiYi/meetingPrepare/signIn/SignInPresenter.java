@@ -15,19 +15,22 @@ public class SignInPresenter implements SignInContract.Presenter {
         mView.setPresenter(this);
     }
 
+    private boolean isFirst = true;
     @Override
-    public void fetchCurrentDelegate(String IMEI, String meetingID) {
-        SignInRemoteDataSource.getInstance().fetchDelegate(IMEI, meetingID, new SignInDataSource.LoadDelegateCallback() {
-            @Override
-            public void onDelegateLoaded(DelegateBean delegate) {
-                mView.showDelegate(delegate);
-            }
+    public void fetchCurrentDelegate(boolean fourUpdate,String IMEI, String meetingID) {
+        if (isFirst || fourUpdate){
+            SignInRemoteDataSource.getInstance().fetchDelegate(IMEI, meetingID, new SignInDataSource.LoadDelegateCallback() {
+                @Override
+                public void onDelegateLoaded(DelegateBean delegate) {
+                    mView.showDelegate(delegate);
+                }
 
-            @Override
-            public void onDataNotAvailable() {
-                mView.showNoDelegate();
-            }
-        });
+                @Override
+                public void onDataNotAvailable() {
+                    mView.showNoDelegate();
+                }
+            });
+        }
 
     }
 
