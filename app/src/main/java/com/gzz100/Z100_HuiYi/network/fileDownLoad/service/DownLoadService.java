@@ -12,6 +12,7 @@ import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Download;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.DownloadAPI;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.downLoad.DownloadProgressListener;
+import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,8 +76,9 @@ public class DownLoadService extends IntentService {
                 }
             }
         };
-        File outputFile = new File(Environment.getExternalStoragePublicDirectory
-                (Environment.DIRECTORY_DOWNLOADS), name+".apk");
+//        File outputFile = new File(Environment.getExternalStoragePublicDirectory
+//                (Environment.DIRECTORY_DOWNLOADS), name+".apk");
+        File outputFile = new File(AppUtil.getCacheDir(this.getApplicationContext()), name+".pdf");
         String baseUrl = StringUtils.getHostName(apkUrl);
 
         new DownloadAPI(baseUrl, listener).downloadFile(apkUrl, outputFile, new Subscriber() {
