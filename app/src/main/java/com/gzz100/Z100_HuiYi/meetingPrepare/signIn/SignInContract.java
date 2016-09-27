@@ -25,10 +25,11 @@ public interface SignInContract {
     interface Presenter extends BasePresenter{
         /**
          * 获取当前设备对应的当前参会人员
+         * @param forceUpdate   主动获取
          * @param IMEI        设备id
          * @param meetingID   会议id
          */
-        void fetchCurrentDelegate(String IMEI, String meetingID);
+        void fetchCurrentDelegate(boolean forceUpdate,String IMEI, String meetingID);
 
         /**
          * 调用   SignInContract.View  的  showMainActivity
