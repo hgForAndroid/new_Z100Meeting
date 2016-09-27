@@ -4,11 +4,12 @@ import java.io.IOException;
 
 import okhttp3.Interceptor;
 import okhttp3.Response;
-
 /**
- * Interceptor for download
- * Created by JokAr on 16/5/11.
- */
+* 文件下载进度拦截器
+* @author XieQXiong
+* create at 2016/9/27 16:14
+*/
+
 public class DownloadProgressInterceptor implements Interceptor {
 
     private DownloadProgressListener listener;
