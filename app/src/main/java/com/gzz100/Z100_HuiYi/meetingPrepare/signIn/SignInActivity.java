@@ -14,6 +14,10 @@ import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -61,7 +65,32 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     @Override
     protected void onStart() {
         super.onStart();
-        mPresenter.fetchCurrentDelegate(mDeviceIMEI,mMeetingID);
+        mPresenter.fetchCurrentDelegate(false,mDeviceIMEI,mMeetingID);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 继续下载下一个文件，需下载的文件列表从选择会议获取，在本类中应该保存
+     * @param position    下个文件的序号
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void continueDownLoad(Integer position){
+//        if (position < urls.size()){
+//            String url = urls.get(position);
+//
+//            Intent intent = new Intent(SignInActivity.this,DownLoadService.class);
+//            intent.putExtra("url",url);
+//            intent.putExtra("id",position);
+//            intent.putExtra("name","file"+position);
+//            startService(intent);
+//        }
+
     }
 
     @OnClick(R.id.id_btn_sign_in)
@@ -83,7 +112,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
                 .setPositiveButton("是", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mPresenter.fetchCurrentDelegate(mDeviceIMEI,mMeetingID);
+                        mPresenter.fetchCurrentDelegate(true,mDeviceIMEI,mMeetingID);
                     }
                 })
                 .create();
@@ -109,4 +138,5 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         if (mDialog != null)
             mDialog = null;
     }
+
 }
