@@ -261,8 +261,8 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public void onSearchClick(int position) {
         if (mResultDocumentBeen != null && mResultDocumentBeen.size() > 0){
-            mSearchFileIndex1 = Integer.valueOf(mResultDocumentBeen.get(position).getFileIndex());
-            mSearchAgendaIndex = Integer.valueOf(mResultDocumentBeen.get(position).getAgendaIndex());
+            mSearchFileIndex1 = Integer.valueOf(mResultDocumentBeen.get(position).getDocumentIndex());
+            mSearchAgendaIndex = Integer.valueOf(mResultDocumentBeen.get(position).getDocumentAgendaIndex());
             mPresenter.showSearchFileDetail(mSearchFileIndex1,mSearchAgendaIndex);
         }
 

@@ -41,7 +41,7 @@ public class FileDetailAdapter extends RecyclerView.Adapter<ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.mTvFileName.setText(documents.get(position).getFileName());
+        holder.mTvFileName.setText(documents.get(position).getDocumentName());
         holder.mTvFileName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

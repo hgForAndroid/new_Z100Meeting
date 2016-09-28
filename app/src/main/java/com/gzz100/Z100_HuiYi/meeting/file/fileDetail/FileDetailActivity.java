@@ -106,7 +106,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mFileList = (List<Document>) mBundle.getSerializable(FILE_LIST);
             mAgendaDuration = mBundle.getString(AGENDA_TIME);
             mUpLevelText = mBundle.getString(UP_LEVEL_TITLE);
-            mFileName = mFileList.get(mFileIndex).getFileName();
+            mFileName = mFileList.get(mFileIndex).getDocumentName();
 
         }
     }
@@ -145,7 +145,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mFileNameRcv.setAdapter(mFileDetailAdapter);
         mFileDetailAdapter.setOnFileClivk(this);
         mFileNameRcv.scrollToPosition(mFileIndex);
-        mPresenter.loadFile(mFileList.get(mFileIndex).getFileName());
+        mPresenter.loadFile(mFileList.get(mFileIndex).getDocumentName());
 
 
     }
@@ -255,9 +255,9 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     //点击文件
     @Override
     public void onFileClick(int position) {
-        mPresenter.loadFile(mFileList.get(position).getFileName());
+        mPresenter.loadFile(mFileList.get(position).getDocumentName());
         setBackgroundColor(mChildCount,position);
-        mNavBarView.setTitle(mFileList.get(position).getFileName());
+        mNavBarView.setTitle(mFileList.get(position).getDocumentName());
     }
 
     @Override

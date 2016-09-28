@@ -46,17 +46,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<ResultHolder>{
     @Override
     public void onBindViewHolder(ResultHolder holder, final int position) {
 //        holder.mFileImage.setImageResource(mContext.getResources(),R.);
-        holder.mFileName.setText(mDocuments.get(position).getFileName());
+        holder.mFileName.setText(mDocuments.get(position).getDocumentName());
         holder.mLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnItemClickListener.onSearchClick(position);
             }
         });
-        holder.mFileSize.setText(mDocuments.get(position).getFileSize());
-        holder.mKeynoteSpeaker.setText(mDocuments.get(position).getFileSpeaker());
+        holder.mFileSize.setText(mDocuments.get(position).getDocumentSize()+"kb");
+        holder.mKeynoteSpeaker.setText(mDocuments.get(position).getDocumentSpeaker());
         mDocuments.get(position).setImageForFile(mContext,holder.mFileImage);
-        holder.mAgenda.setText("议程"+mDocuments.get(position).getAgendaIndex());
+        holder.mAgenda.setText("议程"+mDocuments.get(position).getDocumentAgendaIndex());
 
     }
 
