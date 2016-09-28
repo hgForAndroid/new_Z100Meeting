@@ -1,6 +1,10 @@
 package com.gzz100.Z100_HuiYi.network;
 
+import android.content.Context;
+
 import com.gzz100.Z100_HuiYi.network.entity.BaseEntity;
+import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,8 +28,11 @@ public class HttpManager {
     private ApiService mApiService;
     private volatile static HttpManager INSTANCE;
 
+    private Context mContext;
+
     //构造方法私有
-    private HttpManager() {
+    private HttpManager(Context context) {
+        mContext = context;
         //手动创建一个OkHttpClient并设置超时时间
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
@@ -33,21 +40,25 @@ public class HttpManager {
                 .client(builder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(BASE_URL)
+                .baseUrl(getServerIP())
                 .build();
         mApiService = retrofit.create(ApiService.class);
     }
 
     //获取单例
-    public static HttpManager getInstance() {
+    public static HttpManager getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (HttpManager.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new HttpManager();
+                    INSTANCE = new HttpManager(context);
                 }
             }
         }
         return INSTANCE;
+    }
+
+    public ApiService getApiService(){
+        return mApiService;
     }
 
     /**
@@ -62,6 +73,11 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(basePar);
         observable.subscribe(basePar.getSubscriber());
+    }
+
+
+    private String getServerIP(){
+        return SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP,"");
     }
 
 }
