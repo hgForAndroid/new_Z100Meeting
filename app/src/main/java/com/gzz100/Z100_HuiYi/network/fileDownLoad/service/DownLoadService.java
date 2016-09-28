@@ -91,7 +91,6 @@ public class DownLoadService extends IntentService {
             public void onError(Throwable e) {
                 e.printStackTrace();
                 downloadCompleted();
-                Log.e("DownLoadService", "onError: " + e.getMessage());
             }
 
             @Override

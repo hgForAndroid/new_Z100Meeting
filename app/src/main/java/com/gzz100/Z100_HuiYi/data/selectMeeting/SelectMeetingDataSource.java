@@ -14,12 +14,16 @@ public interface SelectMeetingDataSource {
         void onMeetingListLoaded(List<MeetingBean> meetings);
         void onDataNotAvailable();
     }
+    interface StartMeetingCallback{
+        void onStartMeetingSuccess();
+        void onFail();
+    }
 
     /**
      * 获取会议列表，目前需传什么参数未知
      * @param callback    返回结果的回调
      */
-    void fetchMeetingList( @NonNull LoadMeetingListCallback callback);
+    void fetchMeetingList( @NonNull LoadMeetingListCallback callback,String IMEI);
 
-//    void selectMeeting();
+    void startMeeting(@NonNull StartMeetingCallback callback, String IMEI,String meetingID);
 }

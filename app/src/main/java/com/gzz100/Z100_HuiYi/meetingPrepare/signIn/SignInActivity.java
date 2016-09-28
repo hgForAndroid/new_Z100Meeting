@@ -10,13 +10,18 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
+import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
+import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +34,8 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     private String mDeviceIMEI;
     private String mMeetingID;
     private Dialog mDialog;
+    private Intent mIntent;
+    private String mUrlPrefix;
 
     public static void toSignInActivity(Context context,String IMEI,String meetingID){
         Intent intent = new Intent(context,SignInActivity.class);
@@ -46,13 +53,15 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
 
     private SignInContract.Presenter mPresenter;
 
+    private List<String> mFileIDs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
         initGetIntent();
-        mPresenter = new SignInPresenter(this);
+        mPresenter = new SignInPresenter(this,this);
     }
 
     private void initGetIntent() {
@@ -65,7 +74,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     @Override
     protected void onStart() {
         super.onStart();
-        mPresenter.fetchCurrentDelegate(false,mDeviceIMEI,mMeetingID);
+        mPresenter.fetchCurrentUserBean(false,mDeviceIMEI,mMeetingID);
         EventBus.getDefault().register(this);
     }
 
@@ -81,27 +90,26 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void continueDownLoad(Integer position){
-//        if (position < urls.size()){
-//            String url = urls.get(position);
-//
-//            Intent intent = new Intent(SignInActivity.this,DownLoadService.class);
-//            intent.putExtra("url",url);
-//            intent.putExtra("id",position);
-//            intent.putExtra("name","file"+position);
-//            startService(intent);
-//        }
-
+        if (mFileIDs != null && mFileIDs.size() > 0){
+            if (position < mFileIDs.size()){
+                mIntent = new Intent(SignInActivity.this, DownLoadService.class);
+                mIntent.putExtra("url",mUrlPrefix+mFileIDs.get(position));
+                mIntent.putExtra("id",position);
+                mIntent.putExtra("name",mFileIDs.get(position));
+                startService(mIntent);
+            }
+        }
     }
 
     @OnClick(R.id.id_btn_sign_in)
     void signIn(){
-        mPresenter.showMainActivity();
+        mPresenter.signIn(mDeviceIMEI,mMeetingID);
     }
 
     @Override
-    public void showDelegate(DelegateBean delegate) {
-        mTvPosition.setText(delegate.getDelegateJob());
-        mTvName.setText(delegate.getDelegateName());
+    public void showDelegate(UserBean userBean) {
+        mTvPosition.setText(userBean.getUserJob());
+        mTvName.setText(userBean.getUserName());
     }
 
     @Override
@@ -112,7 +120,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
                 .setPositiveButton("是", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mPresenter.fetchCurrentDelegate(true,mDeviceIMEI,mMeetingID);
+                        mPresenter.fetchCurrentUserBean(true,mDeviceIMEI,mMeetingID);
                     }
                 })
                 .create();
@@ -125,6 +133,20 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     public void showMainActivity() {
         MainActivity.toMainActivity(this);
         ActivityStackManager.pop();
+    }
+
+    @Override
+    public void startDownLoad(List<String> fileIDs) {
+        if (fileIDs != null && fileIDs.size() > 0){
+            mFileIDs = fileIDs;
+            mIntent = new Intent(SignInActivity.this, DownLoadService.class);
+            mUrlPrefix = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                    .getString(Constant.CURRENT_IP, "") + "/DownloadDocument?fileID=";
+            mIntent.putExtra("url",mUrlPrefix+mFileIDs.get(0));
+            mIntent.putExtra("id",0);
+            mIntent.putExtra("name",mFileIDs.get(0));
+            startService(mIntent);
+        }
     }
 
     @Override

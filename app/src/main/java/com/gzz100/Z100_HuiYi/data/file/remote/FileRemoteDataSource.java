@@ -54,7 +54,7 @@ public class FileRemoteDataSource implements FileDataSource {
 //                        mDbHelper.insertFileList(agendaPos,documents);
 //                    }
 //                }, mContext), agendaPos);
-//        HttpManager.getInstance().doHttpDeal(documentPost);
+//        HttpManager.getInstance(mContext).doHttpDeal(documentPost);
 
         //测试
 //        OnePost onePost = new OnePost(new ProgressSubscriber(new HttpRxCallbackListener<List<OneTitle>>() {

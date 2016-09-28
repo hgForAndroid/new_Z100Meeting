@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.gzz100.Z100_HuiYi.BaseActivity;
@@ -161,11 +162,12 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         @Override
         public void run() {
             if (getMin().equals("00") && getSec().equals("00")){
-                Dialog dialog = new AlertDialog.Builder(FileDetailActivity.this)
-                        .setTitle("提示")
-                        .setMessage("议程时间已到")
-                        .create();
-                dialog.show();
+//                Dialog dialog = new AlertDialog.Builder(FileDetailActivity.this)
+//                        .setTitle("提示")
+//                        .setMessage("议程时间已到")
+//                        .create();
+//                dialog.show();
+                Toast.makeText(FileDetailActivity.this, "议程时间到！！！！！！", Toast.LENGTH_LONG).show();
             }else {
                 mHandler.postDelayed(this,1000);
                 mNavBarView.setTimeHour(getMin());

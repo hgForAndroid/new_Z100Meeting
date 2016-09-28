@@ -36,8 +36,9 @@ public interface SelectMeetingContract {
         /**
          * 获取会议列表
          * @param forceLoad   是否主动获取
+         * @param IMEI        设备id
          */
-        void fetchMeetingList(boolean forceLoad);
+        void fetchMeetingList(boolean forceLoad,String IMEI);
         /**
          * 选择的会议
          * @param IMEI     设备标识码

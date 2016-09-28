@@ -3,13 +3,19 @@ package com.gzz100.Z100_HuiYi.data.signIn;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.MeetingSummary;
+import com.gzz100.Z100_HuiYi.data.UserBean;
 
 /**
  * Created by XieQXiong on 2016/9/23.
  */
 public interface SignInDataSource {
-    interface LoadDelegateCallback{
-        void onDelegateLoaded(DelegateBean delegate);
+    interface LoadUserBeanCallback{
+        void onUserBeanLoaded(UserBean userBean);
+        void onDataNotAvailable();
+    }
+    interface LoadMeetingSummaryCallback{
+        void onMeetingSummaryLoaded(MeetingSummary meetingSummary);
         void onDataNotAvailable();
     }
 
@@ -19,5 +25,13 @@ public interface SignInDataSource {
      * @param meetingID   会议id
      * @param callback    获取结果回调函数
      */
-    void fetchDelegate(String IMEI, String meetingID, @NonNull LoadDelegateCallback callback);
+    void fetchUserBean(String IMEI, String meetingID, @NonNull LoadUserBeanCallback callback);
+
+    /**
+     * 签到
+     * @param IMEI        设备id
+     * @param meetingID   会议id
+     * @param callback    结果回调
+     */
+    void signIn(String IMEI, String meetingID, @NonNull LoadMeetingSummaryCallback callback);
 }

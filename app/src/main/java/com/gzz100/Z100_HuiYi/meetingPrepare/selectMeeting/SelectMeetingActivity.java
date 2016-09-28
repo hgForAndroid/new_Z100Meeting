@@ -14,7 +14,9 @@ import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.meetingPrepare.ItemSpaceDecoration;
 import com.gzz100.Z100_HuiYi.meetingPrepare.signIn.SignInActivity;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import org.w3c.dom.Text;
 
@@ -23,6 +25,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil.getInstance;
 
 public class SelectMeetingActivity extends BaseActivity implements SelectMeetingContract.View, OnMeetingClickListener {
     public static void toSelectMeetingActivity(Context context){
@@ -44,7 +48,13 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_meeting);
         ButterKnife.bind(this);
-        mPresenter = new SelectMeetingPresenter(this);
+        mPresenter = new SelectMeetingPresenter(this,this);
+        saveIMEI();
+    }
+
+    private void saveIMEI() {
+        String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
+        mPresenter.saveIMEI(this.getApplicationContext(),deviceIMEI);
     }
 
     @Override
@@ -58,7 +68,8 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
      */
     @OnClick(R.id.id_btn_select_meeting)
     void getMeetingList(){
-        mPresenter.fetchMeetingList(true);
+        String deviceIMEI = SharedPreferencesUtil.getInstance(this.getApplicationContext()).getString(Constant.DEVICE_IMEI, "");
+        mPresenter.fetchMeetingList(true,deviceIMEI);
     }
 
     @Override
@@ -91,9 +102,8 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
 
     @Override
     public void onMeetingClick(int position) {
-        String meetingID = mMeetings.get(position).getMeetingID();
+        int meetingID = mMeetings.get(position).getMeetingID();
         String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
-        mPresenter.selectMeeting(deviceIMEI,meetingID);
-        mPresenter.saveIMEI(this.getApplicationContext(),deviceIMEI);
+        mPresenter.selectMeeting(deviceIMEI,meetingID+"");
     }
 }

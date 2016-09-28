@@ -2,7 +2,6 @@ package com.gzz100.Z100_HuiYi.data.meeting;
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
-import com.gzz100.Z100_HuiYi.data.UserBean;
 
 import java.util.List;
 

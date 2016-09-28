@@ -21,17 +21,17 @@ public class FakeDataProvider {
     public static List<Agenda> getAgendas() {
         List<Agenda> agendas = new ArrayList<>();
         Agenda agenda1 = new Agenda();
-        agenda1.setAgendaIndex(1 + "");
+        agenda1.setAgendaIndex(1);
         agenda1.setAgendaName("这是关于议程1的一切标题");
         agenda1.setAgendaDuration("30:00");
         agenda1.setAgendaSpeaker("老大");
         Agenda agenda2 = new Agenda();
-        agenda2.setAgendaIndex(2 + "");
+        agenda2.setAgendaIndex(2);
         agenda2.setAgendaName("关于这个议程2的事有什么");
         agenda2.setAgendaDuration("29:00");
         agenda2.setAgendaSpeaker("老二");
         Agenda agenda3 = new Agenda();
-        agenda3.setAgendaIndex(3 + "");
+        agenda3.setAgendaIndex(3);
         agenda3.setAgendaName("马上就到议程3，还有什么事要处理");
         agenda3.setAgendaDuration("33:00");
         agenda3.setAgendaSpeaker("老三");
@@ -48,12 +48,11 @@ public class FakeDataProvider {
             case 1:
                 for (int i = 1; i < 4; i++) {
                     Document document = new Document();
-                    document.setAgendaIndex(1 + "");
-                    document.setFileURL("agenda_one_address" + i);
-                    document.setFileIndex(i + "");
-                    document.setFileName("agenda_one_fileName.txt" + i);
-                    document.setFileSize((12 + i) + "kb");
-                    document.setFileSpeaker("张三");
+                    document.setDocumentAgendaIndex(1);
+                    document.setDocumentIndex(i);
+                    document.setDocumentName("agenda_one_fileName.txt" + i);
+                    document.setDocumentSize(12 + i);
+                    document.setDocumentSpeaker("张三");
                     documents.add(document);
                 }
 
@@ -61,12 +60,11 @@ public class FakeDataProvider {
             case 2:
                 for (int i = 1; i < 5; i++) {
                     Document document = new Document();
-                    document.setAgendaIndex(2 + "");
-                    document.setFileURL("agenda_two_address" + i);
-                    document.setFileIndex(i + "");
-                    document.setFileName("agenda_two_fileName.doc" + i);
-                    document.setFileSize((16 + i) + "kb");
-                    document.setFileSpeaker("李四");
+                    document.setDocumentAgendaIndex(2);
+                    document.setDocumentIndex(i);
+                    document.setDocumentName("agenda_one_fileName.txt" + i);
+                    document.setDocumentSize(16 + i);
+                    document.setDocumentSpeaker("李四");
                     documents.add(document);
                 }
                 break;
@@ -74,12 +72,11 @@ public class FakeDataProvider {
             case 3:
                 for (int i = 1; i < 5; i++) {
                     Document document = new Document();
-                    document.setAgendaIndex(3 + "");
-                    document.setFileURL("agenda_three_address" + i);
-                    document.setFileIndex(i + "");
-                    document.setFileName("agenda_three_fileName.xlsx" + i);
-                    document.setFileSize((14 + i) + "kb");
-                    document.setFileSpeaker("王五");
+                    document.setDocumentAgendaIndex(3);
+                    document.setDocumentIndex(i);
+                    document.setDocumentName("agenda_one_fileName.txt" + i);
+                    document.setDocumentSize(4 + i);
+                    document.setDocumentSpeaker("王五");
                     documents.add(document);
                 }
                 break;
@@ -286,31 +283,6 @@ public class FakeDataProvider {
         return vote;
     }
 
-    public static List<UserBean> getUsers(){
-        List<UserBean> mUsers = new ArrayList<>();
-        UserBean user1 = new UserBean(1,"张三张三","android开发",2);
-        UserBean user2 = new UserBean(2,"王麻子","Java开发",2);
-        UserBean user3 = new UserBean(3,"临到","iOS开发",2);
-        UserBean user4 = new UserBean(4,"李四","c++开发",2);
-        UserBean user5 = new UserBean(5,"王五","c开发",2);
-        UserBean user6 = new UserBean(6,"王小二","c#开发",2);
-        UserBean user7 = new UserBean(7,"赵烈","技术支持",2);
-        UserBean user8 = new UserBean(8,"饼子","客服",2);
-        UserBean user9 = new UserBean(9,"胡子","经理",1);
-        UserBean user10 = new UserBean(10,"阿毛","助理",3);
-        mUsers.add(user1);
-        mUsers.add(user2);
-        mUsers.add(user3);
-        mUsers.add(user4);
-        mUsers.add(user5);
-        mUsers.add(user6);
-        mUsers.add(user7);
-        mUsers.add(user8);
-        mUsers.add(user9);
-        mUsers.add(user10);
-        return mUsers;
-    }
-
     public static List<DelegateBean> getDelegates(){
         List<DelegateBean> mUsers = new ArrayList<>();
         DelegateBean d1 = new DelegateBean();
@@ -439,7 +411,7 @@ public class FakeDataProvider {
     public static List<MeetingBean> getMeetings(){
         List<MeetingBean> meetings = new ArrayList<>();
         for (int i = 1; i < 6; i++) {
-            MeetingBean meetingBean = new MeetingBean(""+i,"会议"+i,"1"+i+":00",0);
+            MeetingBean meetingBean = new MeetingBean(i,"会议"+i,"1"+i+":00",0);
             meetings.add(meetingBean);
         }
         return meetings;

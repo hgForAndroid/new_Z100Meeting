@@ -4,16 +4,16 @@ package com.gzz100.Z100_HuiYi.data;
  * Created by XieQXiong on 2016/8/24.
  */
 public class Agenda extends BaseBean{
-    private String agendaIndex;
+    private int agendaIndex;
     private String agendaDuration;
     private String agendaName;
     private String agendaSpeaker;
 
-    public String getAgendaIndex() {
+    public int getAgendaIndex() {
         return agendaIndex;
     }
 
-    public void setAgendaIndex(String agendaIndex) {
+    public void setAgendaIndex(int agendaIndex) {
         this.agendaIndex = agendaIndex;
     }
 

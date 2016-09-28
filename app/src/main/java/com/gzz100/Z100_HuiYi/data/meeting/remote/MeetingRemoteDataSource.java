@@ -5,13 +5,9 @@ import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
-import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
 import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
-import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
-import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
-import com.gzz100.Z100_HuiYi.network.entity.MeetingInfoPost;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;

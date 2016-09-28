@@ -8,29 +8,25 @@ import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by XieQXiong on 2016/9/2.
  */
 public class UserBean extends BaseBean{
-    private int userId;
+    private int userID;
     private String userName;
-    private String userTitle;
-    private int type;
+    private String userDepartment;
+    private String userJob;
+    private int userRole;
+    private List<String> documentURLList;
 
-    public UserBean(int userId, String userName, String userTitle, int type) {
-        this.userId = userId;
-        this.userName = userName;
-        this.userTitle = userTitle;
-        this.type = type;
+    public int getUserID() {
+        return userID;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getUserName() {
@@ -41,65 +37,35 @@ public class UserBean extends BaseBean{
         this.userName = userName;
     }
 
-    public String getUserTitle() {
-        return userTitle;
+    public String getUserDepartment() {
+        return userDepartment;
     }
 
-    public void setUserTitle(String userTitle) {
-        this.userTitle = userTitle;
+    public void setUserDepartment(String userDepartment) {
+        this.userDepartment = userDepartment;
     }
 
-    public int getType() {
-        return type;
+    public String getUserJob() {
+        return userJob;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setUserJob(String userJob) {
+        this.userJob = userJob;
     }
 
-    /**
-     * 为不同类型的用户设置不同的图片
-     * @param context  上下文，用于加载Drawable
-     * @param textView  显示当前人员的TextView
-     */
-    public void setPicForUser(Context context, TextView textView){
-        Drawable drawable = null;
-        if (getType() == Constant.HOST){//主持人
-            drawable = context.getResources().getDrawable(R.drawable.ic_host);
-
-        }else if(getType() == Constant.KEYNOTE_SPEAKER){//主讲人
-            drawable = context.getResources().getDrawable(R.drawable.ic_keynote_speaker);
-
-        }else {//普通参会人员
-            drawable = context.getResources().getDrawable(R.drawable.ic_normal_delegate);
-
-        }
-
-        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
-        textView.setCompoundDrawables(null,drawable,null,null);
-
+    public int getUserRole() {
+        return userRole;
     }
 
-    /**
-     * 为当前参会人员设置选中的图片
-     * @param context  上下文，用于加载Drawable
-     * @param textView 显示当前人员的TextView
-     */
-    public void setCurrentDelegate(Context context, TextView textView){
-        Drawable drawable = null;
-        if (getType() == Constant.HOST){//主持人
-            drawable = context.getResources().getDrawable(R.drawable.ic_host_selected);
+    public void setUserRole(int userRole) {
+        this.userRole = userRole;
+    }
 
-        }else if(getType() == Constant.KEYNOTE_SPEAKER){//主讲人
-            drawable = context.getResources().getDrawable(R.drawable.ic_keynote_speaker_selected);
+    public List<String> getDocumentURLList() {
+        return documentURLList;
+    }
 
-        }else {//普通参会人员
-            drawable = context.getResources().getDrawable(R.drawable.ic_normal_delegate_selected);
-
-        }
-
-        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
-        textView.setCompoundDrawables(null,drawable,null,null);
-
+    public void setDocumentURLList(List<String> documentURLList) {
+        this.documentURLList = documentURLList;
     }
 }

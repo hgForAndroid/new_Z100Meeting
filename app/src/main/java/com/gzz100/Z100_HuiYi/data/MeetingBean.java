@@ -8,23 +8,23 @@ import android.widget.TextView;
 * create at 2016/9/22 14:48
 */
 public class MeetingBean {
-    private String meetingID;
+    private int meetingID;
     private String meetingName;
     private String MeetingTime;
     private int meetingState;
 
-    public MeetingBean(String meetingID, String meetingName, String meetingTime, int meetingState) {
+    public MeetingBean(int meetingID, String meetingName, String meetingTime, int meetingState) {
         this.meetingID = meetingID;
         this.meetingName = meetingName;
         MeetingTime = meetingTime;
         this.meetingState = meetingState;
     }
 
-    public String getMeetingID() {
+    public int getMeetingID() {
         return meetingID;
     }
 
-    public void setMeetingID(String meetingID) {
+    public void setMeetingID(int meetingID) {
         this.meetingID = meetingID;
     }
 

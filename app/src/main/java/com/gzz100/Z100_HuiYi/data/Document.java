@@ -12,70 +12,70 @@ import java.io.Serializable;
  * Created by XieQXiong on 2016/8/24.
  */
 public class Document  extends BaseBean {
-    private String agendaIndex;
-    private String fileIndex;
-    private String fileName;
-    private String fileSize;
-    private String fileURL;
-    private String fileSpeaker;
+    private int documentID;
+    private int documentAgendaIndex;
+    private int documentIndex;
+    private String documentName;
+    private int documentSize;
+    private String documentSpeaker;
 
-    public String getAgendaIndex() {
-        return agendaIndex;
+    public int getDocumentID() {
+        return documentID;
     }
 
-    public void setAgendaIndex(String agendaIndex) {
-        this.agendaIndex = agendaIndex;
+    public void setDocumentID(int documentID) {
+        this.documentID = documentID;
     }
 
-    public String getFileIndex() {
-        return fileIndex;
+    public int getDocumentAgendaIndex() {
+        return documentAgendaIndex;
     }
 
-    public void setFileIndex(String fileIndex) {
-        this.fileIndex = fileIndex;
+    public void setDocumentAgendaIndex(int documentAgendaIndex) {
+        this.documentAgendaIndex = documentAgendaIndex;
     }
 
-    public String getFileName() {
-        return fileName;
+    public int getDocumentIndex() {
+        return documentIndex;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setDocumentIndex(int documentIndex) {
+        this.documentIndex = documentIndex;
     }
 
-    public String getFileSize() {
-        return fileSize;
+    public String getDocumentName() {
+        return documentName;
     }
 
-    public void setFileSize(String fileSize) {
-        this.fileSize = fileSize;
+    public void setDocumentName(String documentName) {
+        this.documentName = documentName;
     }
 
-    public String getFileURL() {
-        return fileURL;
+    public int getDocumentSize() {
+        return documentSize;
     }
 
-    public void setFileURL(String fileURL) {
-        this.fileURL = fileURL;
+    public void setDocumentSize(int documentSize) {
+        this.documentSize = documentSize;
     }
 
-    public String getFileSpeaker() {
-        return fileSpeaker;
+    public String getDocumentSpeaker() {
+        return documentSpeaker;
     }
 
-    public void setFileSpeaker(String fileSpeaker) {
-        this.fileSpeaker = fileSpeaker;
+    public void setDocumentSpeaker(String documentSpeaker) {
+        this.documentSpeaker = documentSpeaker;
     }
 
-    public void setImageForFile(Context context,ImageView imageView){
-        if (!this.fileName.isEmpty() && this.fileName.contains(".txt")){
+    public void setImageForFile(Context context, ImageView imageView){
+        if (!this.documentName.isEmpty() && this.documentName.contains(".txt")){
             //"http://p3.so.qhmsg.com/bdr/_240_/t0146723952b5d73a1d.png"
             Picasso.with(context).load(R.mipmap.txt).into(imageView);
-        }else if (!this.fileName.isEmpty() &&
-                (this.fileName.contains(".doc") || this.fileName.contains(".docx"))){
+        }else if (!this.documentName.isEmpty() &&
+                (this.documentName.contains(".doc") || this.documentName.contains(".docx"))){
             //"http://p1.so.qhmsg.com/bdr/_240_/t01b16d40e4a51d6241.png"
             Picasso.with(context).load(R.mipmap.doc).into(imageView);
-        }else if (!this.fileName.isEmpty() && this.fileName.contains(".xlsx")){
+        }else if (!this.documentName.isEmpty() && this.documentName.contains(".xlsx")){
             //"http://p0.so.qhmsg.com/bdr/_240_/t01d509fc4c1cb60a9a.png"
             Picasso.with(context).load(R.mipmap.xlsx).into(imageView);
         }
