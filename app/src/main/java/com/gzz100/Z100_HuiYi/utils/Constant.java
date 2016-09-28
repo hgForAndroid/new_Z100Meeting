@@ -32,4 +32,6 @@ public class Constant {
     public static final String CURRENT_IP = "currentIP";
     //存储设备标识码  对应的  key
     public static final String DEVICE_IMEI = "deviceIMEI";
+    //存储会议id  对应的  key
+    public static final String MEETING_ID = "meetingID";
 }
