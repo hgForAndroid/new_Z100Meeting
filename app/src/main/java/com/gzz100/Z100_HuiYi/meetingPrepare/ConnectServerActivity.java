@@ -1,5 +1,6 @@
 package com.gzz100.Z100_HuiYi.meetingPrepare;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,13 +9,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.meetingPrepare.selectMeeting.SelectMeetingActivity;
+import com.gzz100.Z100_HuiYi.multicast.MulticastService;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -42,13 +49,14 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
         setContentView(R.layout.activity_connect_server);
         ButterKnife.bind(this);
         mPresenter = new ConnectServerPresenter(this.getApplicationContext(),this);
+
+        startService(new Intent(this, MulticastService.class));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mPresenter.start();
-
     }
 
     @OnClick(R.id.id_btn_connect_server)

@@ -81,7 +81,7 @@ public class MulticastService extends Service {
             socket.receive(packet);
             String receiver = new String(packet.getData()).trim();  //不加trim，则会打印出512个byte，后面是乱码
             Toast.makeText(this.getApplicationContext(), receiver, Toast.LENGTH_LONG).show();
-            //根据收到的不同信息进行相应的处理
+            //根据收到的不同信息进行相应的处理\
         }
     }
 

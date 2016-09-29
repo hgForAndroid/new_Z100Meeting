@@ -18,6 +18,7 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.multicast.MulticastController;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.meeting.NavBarView;
 
