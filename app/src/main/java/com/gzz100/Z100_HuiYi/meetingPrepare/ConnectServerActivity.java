@@ -49,8 +49,6 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
         setContentView(R.layout.activity_connect_server);
         ButterKnife.bind(this);
         mPresenter = new ConnectServerPresenter(this.getApplicationContext(),this);
-
-        startService(new Intent(this, MulticastService.class));
     }
 
     @Override
