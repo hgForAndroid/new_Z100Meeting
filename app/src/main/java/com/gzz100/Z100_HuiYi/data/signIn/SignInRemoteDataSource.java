@@ -37,18 +37,18 @@ public class SignInRemoteDataSource implements SignInDataSource {
         checkNotNull(callback);
 
         //加载服务器数据
-        UserBeanPost userBeanPost = new UserBeanPost(
-                new ProgressSubscriber(new HttpRxCallbackListener<UserBean>(){
-                    @Override
-                    public void onNext(UserBean userBean) {
-                        if (userBean != null){
-                            callback.onUserBeanLoaded(userBean);
-                        }else {
-                            callback.onDataNotAvailable();
-                        }
-                    }
-                }, mContext), IMEI,meetingID);
-        HttpManager.getInstance(mContext).doHttpDeal(userBeanPost);
+//        UserBeanPost userBeanPost = new UserBeanPost(
+//                new ProgressSubscriber(new HttpRxCallbackListener<UserBean>(){
+//                    @Override
+//                    public void onNext(UserBean userBean) {
+//                        if (userBean != null){
+//                            callback.onUserBeanLoaded(userBean);
+//                        }else {
+//                            callback.onDataNotAvailable();
+//                        }
+//                    }
+//                }, mContext), IMEI,meetingID);
+//        HttpManager.getInstance(mContext).doHttpDeal(userBeanPost);
         
     }
 
@@ -56,18 +56,18 @@ public class SignInRemoteDataSource implements SignInDataSource {
     public void signIn(String IMEI, String meetingID, @NonNull final LoadMeetingSummaryCallback callback) {
 
         //加载服务器数据
-        MeetingSummaryPost meetingSummaryPost1 = new MeetingSummaryPost(
-                new ProgressSubscriber(new HttpRxCallbackListener<MeetingSummary>(){
-                    @Override
-                    public void onNext(MeetingSummary meetingSummary) {
-                        if (meetingSummary != null){
-                            callback.onMeetingSummaryLoaded(meetingSummary);
-                        }else {
-                            callback.onDataNotAvailable();
-                        }
-                    }
-                }, mContext), IMEI,meetingID);
-        HttpManager.getInstance(mContext).doHttpDeal(meetingSummaryPost1);
+//        MeetingSummaryPost meetingSummaryPost1 = new MeetingSummaryPost(
+//                new ProgressSubscriber(new HttpRxCallbackListener<MeetingSummary>(){
+//                    @Override
+//                    public void onNext(MeetingSummary meetingSummary) {
+//                        if (meetingSummary != null){
+//                            callback.onMeetingSummaryLoaded(meetingSummary);
+//                        }else {
+//                            callback.onDataNotAvailable();
+//                        }
+//                    }
+//                }, mContext), IMEI,meetingID);
+//        HttpManager.getInstance(mContext).doHttpDeal(meetingSummaryPost1);
 
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.meeting.NavBarView;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.io.File;
 
@@ -44,7 +46,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     private String mUpLevelText;
     private String mFileName;
     private int mChildCount;
-
 
     /**
      * 跳转到文件详情界面
@@ -71,7 +72,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         intent.putExtra(BUNDLE,bundle);
         activity.startActivity(intent);
     }
-
     @BindView(R.id.id_file_detail_tbv) NavBarView mNavBarView;
     @BindView(R.id.id_slide_layout) View mSlideLayout;
     @BindView(R.id.id_slide_rev)
@@ -268,5 +268,12 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 .enableDoubletap(true)
                 .defaultPage(1)
                 .load();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacks(mRunnable);
+        mHandler = null;
     }
 }

@@ -58,6 +58,8 @@ public class SelectMeetingPresenter implements SelectMeetingContract.Presenter {
 
             }
         },IMEI,meetingID);
+        //TODO  有接口后载去掉
+        mView.showSignIn(IMEI,meetingID);
 
     }
 

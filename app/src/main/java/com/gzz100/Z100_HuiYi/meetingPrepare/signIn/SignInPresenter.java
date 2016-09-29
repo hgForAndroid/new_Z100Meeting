@@ -67,6 +67,8 @@ public class SignInPresenter implements SignInContract.Presenter {
 
             }
         });
+        //TODO 有接口后去掉
+        mView.showMainActivity();
 
     }
 

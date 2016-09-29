@@ -43,13 +43,13 @@ public class FileListAdapter extends RecyclerView.Adapter<FileBeanHolder>{
     }
 
     @Override
-    public void onBindViewHolder(FileBeanHolder holder, final int position) {
+    public void onBindViewHolder(final FileBeanHolder holder, int position) {
 //        holder.mFileImage.setImageResource(mContext.getResources(),R.);
         holder.mFileName.setText(mDocuments.get(position).getDocumentName());
         holder.mLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnItemClickListener.onFileItemClick(position);
+                mOnItemClickListener.onFileItemClick(holder.getAdapterPosition());
             }
         });
         holder.mFileSize.setText(mDocuments.get(position).getDocumentSize()+"kb");

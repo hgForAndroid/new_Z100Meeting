@@ -66,24 +66,24 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
 
     @Override
     public void startMeeting(@NonNull final StartMeetingCallback callback, String IMEI, String meetingID) {
-        HttpManager.getInstance(mContext).getApiService().startMeeting(IMEI,meetingID)
-                .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Subscriber() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                callback.onFail();
-            }
-
-            @Override
-            public void onNext(Object o) {
-                callback.onStartMeetingSuccess();
-            }
-        });
+//        HttpManager.getInstance(mContext).getApiService().startMeeting(IMEI,meetingID)
+//                .subscribeOn(Schedulers.io())
+//        .observeOn(AndroidSchedulers.mainThread())
+//        .subscribe(new Subscriber() {
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                callback.onFail();
+//            }
+//
+//            @Override
+//            public void onNext(Object o) {
+//                callback.onStartMeetingSuccess();
+//            }
+//        });
     }
 }
