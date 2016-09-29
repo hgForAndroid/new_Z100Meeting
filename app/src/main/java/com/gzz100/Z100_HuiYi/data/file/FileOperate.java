@@ -76,7 +76,7 @@ public class FileOperate {
 
     /**
      * 箱数据库中插入 议程序号对应的文件列表
-     * @param agendas      数据库中唯一标识议程列表的字段对应的值
+     * @param agendas      数据库中唯一标识议程列表的字段对应的值,Constant.COLUMNS_AGENDAS
      * @param agendaList  议程列表
      */
     public void insertAgendaList(int agendas, List<Agenda> agendaList){

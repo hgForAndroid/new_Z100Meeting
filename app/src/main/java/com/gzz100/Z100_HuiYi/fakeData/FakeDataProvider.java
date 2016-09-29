@@ -404,7 +404,12 @@ public class FakeDataProvider {
     }
 
     public static MeetingInfo getMeetingInfo(){
-        MeetingInfo meetingInfo = new MeetingInfo("这是会议名称","2016.09.08   10:00","120",15,10,5);
+        MeetingInfo meetingInfo = new MeetingInfo();
+        meetingInfo.setMeetingName("这是会议名称");
+        meetingInfo.setMeetingBeginTime("2016.09.08   10:00");
+        meetingInfo.setMeetingDuration("120");
+        meetingInfo.setDelegateNum(15);
+        meetingInfo.setAgendaNum(5);
         return meetingInfo;
     }
 

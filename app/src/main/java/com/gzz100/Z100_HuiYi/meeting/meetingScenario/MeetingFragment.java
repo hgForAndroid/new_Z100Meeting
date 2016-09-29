@@ -117,9 +117,9 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
         ((TextView)contentView.findViewById(R.id.id_tv_dialog_begin_time)).setText(
                 meetingInfo.getMeetingBeginTime());
         ((TextView)contentView.findViewById(R.id.id_tv_dialog_time)).setText(
-                meetingInfo.getMeetingTime() + "分钟");
+                meetingInfo.getMeetingDuration() + "分钟");
         ((TextView)contentView.findViewById(R.id.id_tv_dialog_delegate)).setText("计划参会"
-                + meetingInfo.getAllDelegate() + "人，实际参会"
+                + meetingInfo.getDelegateNum() + "人，实际参会"
                 + meetingInfo.getSignDelegate() + "人");
         ((TextView)contentView.findViewById(R.id.id_tv_dialog_agenda)).setText(
                 meetingInfo.getAgendaNum() + "个");

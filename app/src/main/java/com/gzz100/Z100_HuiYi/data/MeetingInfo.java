@@ -7,29 +7,12 @@ package com.gzz100.Z100_HuiYi.data;
 
 public class MeetingInfo extends BaseBean{
     private String meetingName;       //会议名称
-    private String meetingBeginTime;  //会议名称
-    private String meetingTime;       //开会时长
-    private int allDelegate;          //参会人员总人数
+    private String meetingBeginTime;  //会议开始时间
+    private String meetingDuration;       //开会时长
+    private int delegateNum;          //参会人员总人数
     private int signDelegate;         //已签到参会人员
     private int agendaNum;            //议程个数
 
-    /**
-     *
-     * @param meetingName       会议名称
-     * @param meetingBeginTime  会议名称
-     * @param meetingTime       开会时长
-     * @param allDelegate       参会人员总人数
-     * @param signDelegate      已签到参会人员
-     * @param agendaNum``       议程个数
-     */
-    public MeetingInfo(String meetingName, String meetingBeginTime, String meetingTime, int allDelegate, int signDelegate, int agendaNum) {
-        this.meetingName = meetingName;
-        this.meetingBeginTime = meetingBeginTime;
-        this.meetingTime = meetingTime;
-        this.allDelegate = allDelegate;
-        this.signDelegate = signDelegate;
-        this.agendaNum = agendaNum;
-    }
 
     public String getMeetingName() {
         return meetingName;
@@ -47,20 +30,20 @@ public class MeetingInfo extends BaseBean{
         this.meetingBeginTime = meetingBeginTime;
     }
 
-    public String getMeetingTime() {
-        return meetingTime;
+    public String getMeetingDuration() {
+        return meetingDuration;
     }
 
-    public void setMeetingTime(String meetingTime) {
-        this.meetingTime = meetingTime;
+    public void setMeetingDuration(String meetingDuration) {
+        this.meetingDuration = meetingDuration;
     }
 
-    public int getAllDelegate() {
-        return allDelegate;
+    public int getDelegateNum() {
+        return delegateNum;
     }
 
-    public void setAllDelegate(int allDelegate) {
-        this.allDelegate = allDelegate;
+    public void setDelegateNum(int delegateNum) {
+        this.delegateNum = delegateNum;
     }
 
     public int getSignDelegate() {

@@ -40,8 +40,8 @@ public class MeetingOperate {
 
     /**
      * 向数据库中插入， 全部参会人员列表
-     * @param userColumn  议程序号
-     * @param userList 文件列表
+     * @param userColumn  查询取参会人员列表需用到的 那一列对应的 值  Constant.COLUMNS_USER
+     * @param userList    参会人员列表
      */
     public void insertUserList(int userColumn,List<DelegateBean> userList){
         byte[] data = ObjectTransverter.ListToByteArr(userList);
@@ -83,7 +83,7 @@ public class MeetingOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO,infoColumn);
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO_DATA,data);
         mDatabase = mDBHelper.getReadableDatabase();
-        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_SUMMARY,null,values);
+        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_MEETING_INFO,null,values);
     }
 
     /**
@@ -94,7 +94,7 @@ public class MeetingOperate {
     public MeetingInfo queryMeetingInfo(int infoColumn){
         MeetingInfo meetingInfo = null;
         mDatabase = mDBHelper.getReadableDatabase();
-        String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_SUMMARY + " where " +
+        String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_MEETING_INFO + " where " +
                 PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO + " = ?";
         Cursor cursor = mDatabase.rawQuery(sql, new String[]{infoColumn + ""});
         if ( cursor.moveToFirst()){
