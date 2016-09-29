@@ -176,7 +176,6 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
         mAgendaRecyclerView.setAdapter(mAgendaListAdapter);
         mAgendaListAdapter.setOnItemClickListener(this);
         mPresenter.showAgendaDetail(agendas.get(0));
-
         mAgendaDetailAdapter = new AgendaDetailListAdapter(getContext(), mAgendasList);
         mAgendaDetailAdapter.setOnFileDetailClickListener(this);
         mAgendaDetailRecyclerView.setLayoutManager(
@@ -189,11 +188,11 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
                     mX = event.getX();
                     mY = event.getY();
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getY() - mY > 50) {
+                    if (event.getY() - mY > 25) {
                         Log.d("test", "Scroll to" + currentAgendaPositon);
                         onAgendaItemClick(currentAgendaPositon - 1 >= 0 ? --currentAgendaPositon
                         : 0);
-                    } else if (mY - event.getY() > 50) {
+                    } else if (mY - event.getY() > 25) {
                         onAgendaItemClick(currentAgendaPositon + 1  < mAgendasList.size() ? ++currentAgendaPositon
                                 : currentAgendaPositon);
                         Log.d("test", "Scroll to" + currentAgendaPositon);
