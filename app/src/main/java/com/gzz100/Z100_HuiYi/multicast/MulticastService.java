@@ -36,9 +36,6 @@ public class MulticastService extends Service {
 
     };
 
-    public MulticastService() {
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -62,6 +59,7 @@ public class MulticastService extends Service {
         } catch (Exception e){
             e.printStackTrace();
         }
+        this.stopSelf();
     }
 
     private void initSocket(int portNumber, String ipAddress) throws IOException{
@@ -79,9 +77,21 @@ public class MulticastService extends Service {
 
         while (true){
             socket.receive(packet);
-            String receiver = new String(packet.getData()).trim();  //不加trim，则会打印出512个byte，后面是乱码
-            Toast.makeText(this.getApplicationContext(), receiver, Toast.LENGTH_LONG).show();
-            //根据收到的不同信息进行相应的处理\
+            try {
+                MulticaseBean multicaseBean = (MulticaseBean) ParseObject.bytesToObject(packet.getData());
+                Log.e("接收到   ","multicaseBean  =="+multicaseBean.getAgendaIndex());
+                EventBus.getDefault().post(multicaseBean);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+//            String receiver = new String(packet.getData()).trim();  //不加trim，则会打印出512个byte，后面是乱码
+//            //根据收到的不同信息进行相应的处理
+//             Log.e("组播接收  ===    ",receiver);
+//            Integer valueOf = Integer.valueOf(receiver);
+//            EventBus.getDefault().post(valueOf);
+
         }
     }
 

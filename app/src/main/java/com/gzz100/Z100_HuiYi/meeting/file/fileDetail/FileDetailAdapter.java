@@ -2,9 +2,11 @@ package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
@@ -18,7 +20,7 @@ import butterknife.ButterKnife;
 /**
  * Created by XieQXiong on 2016/8/30.
  */
-public class FileDetailAdapter extends RecyclerView.Adapter<ViewHolder>{
+public class FileDetailAdapter extends RecyclerView.Adapter<ViewHolder> {
     private List<Document> documents;
     private Context mContext;
     private LayoutInflater mInflater;
@@ -28,9 +30,11 @@ public class FileDetailAdapter extends RecyclerView.Adapter<ViewHolder>{
         mContext = context;
         mInflater = LayoutInflater.from(context);
     }
+
     private OnFileClick mOnFileClick;
-    public void setOnFileClivk(OnFileClick onFileClivk){
-        this.mOnFileClick = onFileClivk;
+
+    public void setOnFileClick(OnFileClick onFileClick) {
+        this.mOnFileClick = onFileClick;
     }
 
     @Override
@@ -40,14 +44,20 @@ public class FileDetailAdapter extends RecyclerView.Adapter<ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        Log.e("点击了单个  ===","position =="+position);
         holder.mTvFileName.setText(documents.get(position).getDocumentName());
         holder.mTvFileName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnFileClick.onFileClick(position);
+                mOnFileClick.onFileClick(holder.getAdapterPosition());
             }
         });
+
+        if (position == 0) {
+            holder.mAll.setBackgroundColor(mContext.getResources().getColor(R.color.color_tab_selected));
+            holder.mTvFileName .setTextColor(mContext.getResources().getColor(R.color.color_white));
+        }
 
     }
 
@@ -55,13 +65,18 @@ public class FileDetailAdapter extends RecyclerView.Adapter<ViewHolder>{
     public int getItemCount() {
         return documents.size();
     }
+
+
 }
-class ViewHolder extends RecyclerView.ViewHolder{
-@BindView(R.id.id_tv_item_file_name)
+class ViewHolder extends RecyclerView.ViewHolder {
+    @BindView(R.id.id_ll_file_name_backgroud)
+    LinearLayout mAll;
+    @BindView(R.id.id_tv_item_file_name)
     TextView mTvFileName;
 
     public ViewHolder(View itemView) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
     }
 }
+

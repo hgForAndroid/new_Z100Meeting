@@ -88,10 +88,10 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void onResume() {
-        if (Constant.DEBUG)
-        Log.e("FileFragment -->", "onResume");
-        mPresenter.start();
         super.onResume();
+        if (Constant.DEBUG)
+            Log.e("FileFragment -->", "onResume");
+        mPresenter.start();
     }
 
     @Nullable
@@ -140,7 +140,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void showFilesList(List<Document> documentBeen) {
-//        mDocumentBeen = documentBeen;
+        mDocumentBeen = documentBeen;
         mFileListAdapter = new FileListAdapter(getContext(), documentBeen);
         //纵向展示
         mFileListRecView.setLayoutManager(
@@ -275,4 +275,5 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         if (TextUtils.isEmpty(content))
             Toast.makeText(getActivity(), "请输入搜索关键字", Toast.LENGTH_SHORT).show();
     }
+
 }

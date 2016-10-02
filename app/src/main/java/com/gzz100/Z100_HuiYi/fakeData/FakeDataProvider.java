@@ -58,11 +58,11 @@ public class FakeDataProvider {
 
                 break;
             case 2:
-                for (int i = 1; i < 5; i++) {
+                for (int i = 1; i < 19; i++) {
                     Document document = new Document();
                     document.setDocumentAgendaIndex(2);
                     document.setDocumentIndex(i);
-                    document.setDocumentName("agenda_one_fileName"+i+".doc");
+                    document.setDocumentName("agenda_two_fileName"+i+".doc");
                     document.setDocumentSize(16 + i);
                     document.setDocumentSpeaker("李四");
                     documents.add(document);
@@ -74,7 +74,7 @@ public class FakeDataProvider {
                     Document document = new Document();
                     document.setDocumentAgendaIndex(3);
                     document.setDocumentIndex(i);
-                    document.setDocumentName("agenda_one_fileName"+i+".xlsx");
+                    document.setDocumentName("agenda_three_fileName"+i+".xlsx");
                     document.setDocumentSize(4 + i);
                     document.setDocumentSpeaker("王五");
                     documents.add(document);

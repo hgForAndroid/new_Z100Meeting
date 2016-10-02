@@ -80,6 +80,24 @@ public class MulticastController {
             // 设定UDP报文（内容，内容长度，多播组，端口）
             DatagramPacket packet = new DatagramPacket(buff,buff.length,address,30001);
             socket.send(packet);//发送报文
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 发送组播信息
+     * @param msg 信息内容
+     */
+    public void sendMulticaseBean(MulticaseBean msg){
+        try {
+            byte[] bytes = ParseObject.objectToBytes(msg);
+//            byte[] buff = msg.getBytes("utf-8");//设定多播报文的数据
+
+            // 设定UDP报文（内容，内容长度，多播组，端口）
+            DatagramPacket packet = new DatagramPacket(bytes,bytes.length,address,30001);
+            socket.send(packet);//发送报文
+
         } catch (Exception e){
             e.printStackTrace();
         }

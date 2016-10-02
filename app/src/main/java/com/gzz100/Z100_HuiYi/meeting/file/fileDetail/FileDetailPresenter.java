@@ -43,16 +43,16 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 
     @Override
     public void loadFile(String fileName) {
-        java.io.File file = new java.io.File(Environment.getExternalStorageDirectory().getPath()
-                + "/" +  fileName + ".pdf");
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }
-        mView.loadFile(file);
+//        java.io.File file = new java.io.File(Environment.getExternalStorageDirectory().getPath()
+//                + "/" +  fileName + ".pdf");
+//        if (!file.exists()) {
+//            try {
+//                file.createNewFile();
+//            } catch (Exception e){
+//                e.printStackTrace();
+//            }
+//
+//        }
+//        mView.loadFile(file);
     }
 }

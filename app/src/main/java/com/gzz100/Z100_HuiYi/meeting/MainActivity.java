@@ -2,6 +2,7 @@ package com.gzz100.Z100_HuiYi.meeting;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,7 +39,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -278,7 +278,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             Dialog dialog = new AlertDialog.Builder(this)
                     .setTitle("提示")
                     .setMessage("退出系统？")
-                    .setPositiveButton("是",null)
+                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            stopService(new Intent(MainActivity.this,MulticastService.class));
+                            ActivityStackManager.exit();
+                        }
+                    })
                     .setNegativeButton("否",null)
                     .create();
             dialog.show();

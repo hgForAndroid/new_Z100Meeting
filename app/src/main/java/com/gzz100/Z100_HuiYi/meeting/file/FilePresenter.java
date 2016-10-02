@@ -90,7 +90,7 @@ public class FilePresenter implements FileContract.Presenter {
                         return;
                     }
                     mFileView.showFilesList(documents);
-                    mFileView.setFileList(documents);
+//                    mFileView.setFileList(documents);
                     mFileView.setAgendaIndex(agendaPos);
 
                 }

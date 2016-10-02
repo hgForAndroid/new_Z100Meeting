@@ -26,8 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil.getInstance;
-
 public class SelectMeetingActivity extends BaseActivity implements SelectMeetingContract.View, OnMeetingClickListener {
     public static void toSelectMeetingActivity(Context context){
         Intent intent = new Intent(context,SelectMeetingActivity.class);

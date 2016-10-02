@@ -34,4 +34,6 @@ public class Constant {
     public static final String DEVICE_IMEI = "deviceIMEI";
     //存储会议id  对应的  key
     public static final String MEETING_ID = "meetingID";
+    //存储用户角色  对应的  key
+    public static final String USER_ROLE = "userRole";
 }

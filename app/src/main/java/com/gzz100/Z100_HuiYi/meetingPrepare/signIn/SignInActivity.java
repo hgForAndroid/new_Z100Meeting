@@ -6,14 +6,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
+import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
+import com.gzz100.Z100_HuiYi.multicast.MulticastService;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
+import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
@@ -132,6 +136,12 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     @Override
     public void showMainActivity() {
         MainActivity.toMainActivity(this);
+        if (MyAPP.getInstance().getUserRole() == 1){
+            if (AppUtil.isServiceRun(this.getApplicationContext(),"com.gzz100.Z100_HuiYi.multicast.MulticastService")){
+                Log.e("服务在运行","=============================================================================");
+            }
+            stopService(new Intent(this, MulticastService.class));
+        }
         ActivityStackManager.pop();
     }
 

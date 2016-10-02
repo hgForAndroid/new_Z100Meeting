@@ -13,6 +13,7 @@ import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
 import com.gzz100.Z100_HuiYi.data.signIn.SignInDataSource;
 import com.gzz100.Z100_HuiYi.data.signIn.SignInRemoteDataSource;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +41,10 @@ public class SignInPresenter implements SignInContract.Presenter {
                 @Override
                 public void onUserBeanLoaded(UserBean userBean) {
                     mView.showDelegate(userBean);
-                    userBean.getDocumentURLList();
+                    //保存当前用户角色
+                    saveUserRole(userBean.getUserRole());
+                    //开启下载
+                    mView.startDownLoad(userBean.getDocumentURLList());
                 }
 
                 @Override
@@ -50,6 +54,15 @@ public class SignInPresenter implements SignInContract.Presenter {
             });
         }
 
+        saveUserRole(2);
+    }
+
+    /**
+     * 保存用户角色，之后根据此值作为控制操作的判断基准
+     * @param role    角色类型 ，1代表主持人，2，代表听众
+     */
+    private void saveUserRole(int role){
+        SharedPreferencesUtil.getInstance(mContext.getApplicationContext()).putInt(Constant.USER_ROLE,role);
     }
 
     @Override
