@@ -24,12 +24,13 @@ public interface DelegateDataSource {
 
         void onDataNotAvailable();
     }
-    interface LoadDelegateDetailCallback{
-        void onDelegateDetailLoaded(DelegateBean delegateBeans);
+    interface LoadDelegateNameHintCallback {
+        void onDelegateNameHintLoaded(List<DelegateBean> delegataBeanList);
 
         void onDataNotAvailable();
     }
-    void getRoleList(DelegateDataSource.LoadRoleListCallback callback);
+
     void getDelegateList(int rolePos, DelegateDataSource.LoadDelegateListCallback callback);
-    void getDelegateBean(int delegateNamePos, DelegateDataSource.LoadDelegateDetailCallback callback);
+
+    void getDelegateNameHint(LoadDelegateNameHintCallback callback);
 }

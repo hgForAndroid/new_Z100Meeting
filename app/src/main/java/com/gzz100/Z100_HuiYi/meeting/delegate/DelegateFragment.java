@@ -11,9 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
@@ -24,6 +27,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,8 +35,8 @@ import java.util.List;
  * @author DELL
  * create at 2016/9/2
  */
-public class DelegateFragment extends Fragment implements DelegateContract.View,OnRoleItemClickListener,OnDelegateNameItemClickListener {
-    EditText mEdtSearchContent;
+public class DelegateFragment extends Fragment implements  DelegateContract.View,OnRoleItemClickListener,OnDelegateNameItemClickListener {
+    AutoCompleteTextView mEdtSearchContent;
     Button mBntSearch;
     RecyclerView mRoleListRecView;
     RecyclerView mDelegateListRecView;
@@ -60,12 +64,13 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delegate, container,false);
 //        Log.e("DelegateFragment -->","onCreateView");
-        mEdtSearchContent=(EditText) view.findViewById(R.id.id_edt_fgm_delegate);
+        mEdtSearchContent=(AutoCompleteTextView) view.findViewById(R.id.id_edt_fgm_delegate);
         mBntSearch=(Button)view.findViewById(R.id.id_btn_fgm_delegate);
         mRoleListRecView=(RecyclerView)view.findViewById(R.id.id_rev_fgm_tab);
         mDelegateListRecView=(RecyclerView)view.findViewById(R.id.id_rev_fgm_delegate_list);
         mPresenter.start();
         mPresenter.setFirstLoad(false);
+        setSearchButton();
         return view;
     }
     @Override
@@ -131,8 +136,6 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
     }
 
 
-
-
     @Override
     public void showRoleList(List<String> roleList) {
         RoleListAdapter mRoleListAdapter;
@@ -159,6 +162,52 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
         mDelegateListRecView.addItemDecoration(new DelegateItemSpaceDecoration(space));
     }
 
+    @Override
+    public void setAutoCompleteTextView(final List<DelegateBean> delegateBeans) {
+
+        final List<String> delegateNames=new ArrayList<>();
+        for(DelegateBean delegateBean: delegateBeans){
+            delegateNames.add(delegateBean.getDelegateName());
+        }
+        ArrayAdapter<DelegateBean> arrayAdapter=new ArrayAdapter(getContext(),R.layout.item_delegate_search_list,delegateNames);
+        mEdtSearchContent.setAdapter(arrayAdapter);
+        mEdtSearchContent.setThreshold(1);
+        mEdtSearchContent.setDropDownHeight(100);
+        mEdtSearchContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+/*
+               position与indexOf(Object)是不同的
+                Log.e("position", " "+position,null );
+                Log.e("index of position", " "+delegateNames.indexOf(parent.getItemAtPosition(position)),null );
+*/
+               showDelegateDetail(delegateBeans.get(delegateNames.indexOf(parent.getItemAtPosition(position))));
+            }
+        });
+     mEdtSearchContent.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+         @Override
+         public void onFocusChange(View v, boolean hasFocus) {
+             if (hasFocus) {
+                 mEdtSearchContent.showDropDown();
+             }
+             else{
+                 mEdtSearchContent.dismissDropDown();
+             }
+         }
+     });
+
+    }
+
+    public void setSearchButton(){
+        mBntSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.searchByName((mEdtSearchContent.getText()).toString());
+            }
+        });
+
+    }
+
 
     @Override
     public void showDelegateList(List<DelegateBean> delegateBean) {
@@ -176,7 +225,7 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
 
 
     @Override
-    public void showDelegateDetail(DelegateBean delegateBean,int delegateDetailPos) {
+    public void showDelegateDetail(DelegateBean delegateBean) {
         DelegateDetailActivity.showDelegateDetailActivity(getActivity(),delegateBean ,"人员");
 
         }
@@ -184,7 +233,8 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
 
     @Override
     public void showNoDelegateDetail() {
-
+        Toast hintToast=Toast.makeText(getContext(),"不存在该人员",Toast.LENGTH_SHORT);
+        hintToast.show();
     }
 
 
@@ -203,13 +253,16 @@ public class DelegateFragment extends Fragment implements DelegateContract.View,
 
     public void setRoleItemBackgroundColor( int lastClickedRoleItemPositon,int currPosition){
 
+        //mRoleListRecView.getChildAt多的时候会返回空指针，因为已经被Recycle了
+
         mRoleListRecView.getChildAt(lastClickedRoleItemPositon).findViewById(R.id.id_item_role_layout).setBackgroundColor(getResources().getColor(R.color.color_tab_normal));
-        ( (TextView)mRoleListRecView.getChildAt(lastClickedRoleItemPositon).findViewById(R.id.id_item_role_name)).setTextColor(getResources().getColor(R.color.color_black));
+        ((TextView) mRoleListRecView.getChildAt(lastClickedRoleItemPositon).findViewById(R.id.id_item_role_name)).setTextColor(getResources().getColor(R.color.color_black));
+
 
         mRoleListRecView.getChildAt(currPosition).findViewById(R.id.id_item_role_layout).setBackgroundColor(getResources().getColor(R.color.color_tab_selected));
-        ( (TextView)mRoleListRecView.getChildAt(currPosition).findViewById(R.id.id_item_role_name)).setTextColor(getResources().getColor(R.color.color_white));
+        ((TextView) mRoleListRecView.getChildAt(currPosition).findViewById(R.id.id_item_role_name)).setTextColor(getResources().getColor(R.color.color_white));
 
-        mLastClickedRoleItemPositon=currPosition;
+        mLastClickedRoleItemPositon = currPosition;
     }
     @Subscribe (threadMode = ThreadMode.MAIN)
     public void setTabToOtherDelegate(Boolean showOtherDelegate){

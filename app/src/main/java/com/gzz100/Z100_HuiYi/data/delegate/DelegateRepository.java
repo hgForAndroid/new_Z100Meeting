@@ -3,8 +3,11 @@ package com.gzz100.Z100_HuiYi.data.delegate;
 import android.support.annotation.NonNull;
 
 
+import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.delegate.local.DelegateLocalDataSource;
 import com.gzz100.Z100_HuiYi.data.delegate.remote.DelegateRemoteDataSource;
+
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -31,21 +34,29 @@ public class DelegateRepository implements DelegateDataSource {
        return INSTANCE;
    }
 
-    @Override
     public void getRoleList(final LoadRoleListCallback callback) {
              mDelegateLocalDataSource.getRoleList(callback);
     }
 
     @Override
-    public void getDelegateList(int rolePos,@NonNull LoadDelegateListCallback callback) {
+    public void getDelegateList(final int rolePos, @NonNull final LoadDelegateListCallback callback) {
         checkNotNull(callback);
-            mDelegateLocalDataSource.getDelegateList(rolePos,callback);
+            mDelegateLocalDataSource.getDelegateList(rolePos, new LoadDelegateListCallback() {
+                @Override
+                public void onDelegateListLoaded(List<DelegateBean> delegateBeans) {
+                    callback.onDelegateListLoaded(delegateBeans);
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    mDelegateRemoteDataSource.getDelegateList(rolePos,callback);
+                }
+            });
     }
 
     @Override
-    public void getDelegateBean(int delegateDetailPos, LoadDelegateDetailCallback callback) {
-
-          mDelegateLocalDataSource.getDelegateBean(delegateDetailPos,callback);
+    public void getDelegateNameHint(LoadDelegateNameHintCallback callback) {
+        mDelegateLocalDataSource.getDelegateNameHint(callback);
 
     }
 

@@ -45,6 +45,7 @@ public class FileRepository implements FileDataSource {
     @Override
     public void getFileList(int agendaPos, @NonNull LoadFileListCallback callback) {
         checkNotNull(callback);
+        //TODO  此处查询了两次数据库，可进一步优化
         List<Document> documents = FileOperate.getInstance(mContext).queryFileList(agendaPos);
         //查询数据库中是否有该议程序号对应的文件列表
         if (documents != null && documents.size() > 0){

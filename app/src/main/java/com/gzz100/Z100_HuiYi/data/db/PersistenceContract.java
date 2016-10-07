@@ -17,10 +17,14 @@ public class PersistenceContract {
         public static final String TABLE_NAME_AGENDA = "agenda";
         public static final String COLUMN_NAME_AGENDAS = "agendas";
         public static final String COLUMN_NAME_AGENDA_LIST = "agenda_list";
-        //人员表，放参会人员列表
+/*        //人员表，放参会人员列表
         public static final String TABLE_NAME_DELEGATE = "delegate";
         public static final String COLUMN_NAME_USERS = "users";
-        public static final String COLUMN_NAME_USERS_LIST = "user_list";
+        public static final String COLUMN_NAME_USERS_LIST = "user_list";*/
+        //人员表，放参会人员列表
+        public static final String TABLE_NAME_DELEGATE = "delegate";
+        public static final String COLUMN_NAME_ROLE = "role";
+        public static final String COLUMN_NAME_DELEGATE = "delegate";
         //会议概况表，放会议概况
         public static final String TABLE_NAME_MEETING_INFO = "meetingInfo";
         public static final String COLUMN_NAME_MEETING_INFO = "info";
