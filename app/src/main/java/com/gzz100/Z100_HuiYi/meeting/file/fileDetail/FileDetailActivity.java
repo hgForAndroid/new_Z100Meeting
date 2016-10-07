@@ -8,9 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FileDetailActivity extends BaseActivity implements FileDetailContract.DetailView, View.OnClickListener, OnFileClick {
+public class FileDetailActivity extends BaseActivity implements FileDetailContract.DetailView, View.OnClickListener, AdapterView.OnItemClickListener {
     public static final String BUNDLE = "bundle";
     public static final String AGENDAS_SUM = "agendasSum";
     public static final String AGENDA_INDEX = "agendaIndex";
@@ -92,7 +94,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     View mSlideLayout;
 
     @BindView(R.id.id_slide_rev)
-    RecyclerView mFileNameRcv;
+    ListView mFileNameRcv;
     @BindView(R.id.id_file_pdf_view)
     PDFView mPDFView;
 
@@ -153,7 +155,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mAgendaDuration = mBundle.getString(AGENDA_TIME);
             mUpLevelText = mBundle.getString(UP_LEVEL_TITLE);
             mFileName = mFileList.get(mFileIndex).getDocumentName();
-            initData();
+//            initData();
 
         }
     }
@@ -162,8 +164,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-//        if (mBundle != null)
-//            initData();
+        if (mBundle != null)
+            initData();
     }
 
     @Override
@@ -189,10 +191,13 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         countingTime();
 
         mFileDetailAdapter = new FileDetailAdapter(mFileList, this);
-        mFileNameRcv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mFileNameRcv.setAdapter(mFileDetailAdapter);
-        mFileDetailAdapter.setOnFileClick(this);
-        mFileNameRcv.scrollToPosition(mFileIndex);
+        mFileNameRcv.setOnItemClickListener(this);
+//        mFileNameRcv.smoothScrollToPosition(mFileIndex);
+        mFileNameRcv.setSelection(mFileIndex);
+        mFileDetailAdapter.setSelectedItem(mFileIndex);
+        mFileDetailAdapter.notifyDataSetInvalidated();
+
         mPresenter.loadFile(mFileList.get(mFileIndex).getDocumentName());
 
 
@@ -242,28 +247,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             return "00";
         }
         return newSex;
-    }
-
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-//            setBackgroundColor(mFileList.size(), mFileIndex);
-        }
-    }
-
-    private void setBackgroundColor(int childCount, int fileIndex) {
-        for (int i = 0; i < childCount; i++) {
-            ((LinearLayout) mFileNameRcv.getChildAt(i).findViewById(R.id.id_ll_file_name_backgroud)).
-                    setBackgroundColor(getResources().getColor(R.color.color_tab_normal));
-            ((TextView) mFileNameRcv.getChildAt(i).findViewById(R.id.id_tv_item_file_name)).setTextColor(
-                    getResources().getColor(R.color.color_black));
-        }
-        ((LinearLayout) mFileNameRcv.getChildAt(fileIndex).findViewById(R.id.id_ll_file_name_backgroud)).
-                setBackgroundColor(getResources().getColor(R.color.color_tab_selected));
-        ((TextView) mFileNameRcv.getChildAt(fileIndex).findViewById(R.id.id_tv_item_file_name)).setTextColor(
-                getResources().getColor(R.color.color_white));
     }
 
     @OnClick(R.id.id_iv_slide_to_left)
@@ -403,7 +386,9 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 Log.e("getDocumentIndex ==",data.getDocumentIndex()+"");
                 mPresenter.loadFile(mDocuments.get(data.getDocumentIndex()).getDocumentName());
                 mNavBarView.setTitle(mDocuments.get(data.getDocumentIndex()).getDocumentName());
-                setBackgroundColor(mDocuments.size(), data.getDocumentIndex());
+//                mFileNameRcv.setSelection(data.getDocumentIndex());
+                mFileDetailAdapter.setSelectedItem(data.getDocumentIndex());
+                mFileDetailAdapter.notifyDataSetInvalidated();
             }
         }
     }
@@ -444,12 +429,13 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mNavBarView.setMeetingStateOrAgendaState("议程" + mAgendaIndex + "/" + mAgendaSum);
         mDocuments = FileOperate.getInstance(FileDetailActivity.this).queryFileList(mAgendaIndex);
         if (mDocuments != null && mDocuments.size() > 0) {
+            mFileList = mDocuments;
             mNavBarView.setTitle(mDocuments.get(0).getDocumentName());
             mFileDetailAdapter = new FileDetailAdapter(mDocuments, this);
-            mFileNameRcv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
             mFileNameRcv.setAdapter(mFileDetailAdapter);
-            mFileDetailAdapter.setOnFileClick(this);
-            mFileDetailAdapter.notifyDataSetChanged();
+            mFileNameRcv.setOnItemClickListener(this);
+            mFileDetailAdapter.setSelectedItem(0);
+            mFileDetailAdapter.notifyDataSetInvalidated();
         }
     }
     //返回
@@ -479,28 +465,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mPresenter.fallback();
     }
 
-    //点击文件
-    @Override
-    public void onFileClick(final int position) {
-        mPresenter.loadFile(mFileList.get(position).getDocumentName());
-        mNavBarView.setTitle(mFileList.get(position).getDocumentName());
-        setBackgroundColor(mFileList.size(), position);
-        if (MyAPP.getInstance().getUserRole() == 1) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        MulticaseBean multicaseBean = mMulticaseBean.clone();
-                        multicaseBean.setDocumentIndex(position);
-                        MulticastController.getDefault().sendMulticaseBean(multicaseBean);
-                    } catch (CloneNotSupportedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        }
-    }
-
     @Override
     public void loadFile(File file) {
 //        mPDFView.fromFile(file)
@@ -516,5 +480,28 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         super.onDestroy();
         mHandler.removeCallbacks(mRunnable);
         mHandler = null;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+        mFileDetailAdapter.setSelectedItem(position);
+        mFileDetailAdapter.notifyDataSetInvalidated();
+//        mFileNameRcv.setSelection(position);
+        mPresenter.loadFile(mFileList.get(position).getDocumentName());
+        mNavBarView.setTitle(mFileList.get(position).getDocumentName());
+        if (MyAPP.getInstance().getUserRole() == 1) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        MulticaseBean multicaseBean = mMulticaseBean.clone();
+                        multicaseBean.setDocumentIndex(position);
+                        MulticastController.getDefault().sendMulticaseBean(multicaseBean);
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
     }
 }

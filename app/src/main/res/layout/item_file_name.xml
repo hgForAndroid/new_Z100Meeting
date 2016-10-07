@@ -1,22 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-    <LinearLayout
-        android:id="@+id/id_ll_file_name_backgroud"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/distance_ten_dp"
-        android:background="@color/color_tab_normal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:id="@+id/id_tv_item_file_name"
-            android:text="aaaa"
-            android:textSize="@dimen/item_file_text_size"
-            android:gravity="center"/>
-    </LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/id_all"
+              android:orientation="horizontal"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="64dp"
+    android:id="@+id/id_tv_item_file_name"
+    android:gravity="center"
+    android:textSize="@dimen/item_file_text_size"
+    android:text="test"
+    android:duplicateParentState="true"/>
 
 </LinearLayout>
+
+
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/id_all"
+              android:orientation="horizontal"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@drawable/item_single_choice_selector">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="64dp"
+    android:id="@+id/id_tv_item_file_name"
+    android:gravity="center"
+    android:textSize="@dimen/item_file_text_size"
+    android:text="test"
+    android:duplicateParentState="true"
+    android:textColor="@drawable/item_text_choice_selector"/>
+
+</LinearLayout>-->

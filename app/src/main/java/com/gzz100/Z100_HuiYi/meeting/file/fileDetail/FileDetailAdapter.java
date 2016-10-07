@@ -1,11 +1,13 @@
 package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * Created by XieQXiong on 2016/8/30.
  */
-public class FileDetailAdapter extends RecyclerView.Adapter<ViewHolder> {
+public class FileDetailAdapter extends BaseAdapter {
     private List<Document> documents;
     private Context mContext;
     private LayoutInflater mInflater;
@@ -31,52 +33,59 @@ public class FileDetailAdapter extends RecyclerView.Adapter<ViewHolder> {
         mInflater = LayoutInflater.from(context);
     }
 
-    private OnFileClick mOnFileClick;
-
-    public void setOnFileClick(OnFileClick onFileClick) {
-        this.mOnFileClick = onFileClick;
-    }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_file_name, null);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        Log.e("点击了单个  ===","position =="+position);
-        holder.mTvFileName.setText(documents.get(position).getDocumentName());
-        holder.mTvFileName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnFileClick.onFileClick(holder.getAdapterPosition());
-            }
-        });
-
-        if (position == 0) {
-            holder.mAll.setBackgroundColor(mContext.getResources().getColor(R.color.color_tab_selected));
-            holder.mTvFileName .setTextColor(mContext.getResources().getColor(R.color.color_white));
-        }
-
-    }
-
-    @Override
-    public int getItemCount() {
+    public int getCount() {
         return documents.size();
     }
 
+    @Override
+    public Document getItem(int position) {
+        return documents.get(position);
+    }
 
-}
-class ViewHolder extends RecyclerView.ViewHolder {
-    @BindView(R.id.id_ll_file_name_backgroud)
-    LinearLayout mAll;
-    @BindView(R.id.id_tv_item_file_name)
-    TextView mTvFileName;
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-    public ViewHolder(View itemView) {
-        super(itemView);
-        ButterKnife.bind(this, itemView);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder = null;
+        if (convertView == null){
+            viewHolder = new ViewHolder();
+            convertView = mInflater.inflate(R.layout.item_file_name,null);
+
+            viewHolder.mAll = (LinearLayout) convertView.findViewById(R.id.id_all);
+            viewHolder.mTvName = (TextView) convertView.findViewById(R.id.id_tv_item_file_name);
+            convertView.setTag(viewHolder);
+
+        }else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+        viewHolder.mTvName.setText(documents.get(position).getDocumentName());
+//        if (position == 0){
+//            viewHolder.mAll.setSelected(true);
+//            viewHolder.mAll.setActivated(true);
+//        }
+
+        if (position == selectedItem){
+            convertView.setBackgroundColor(mContext.getResources().getColor(R.color.color_tab_selected));
+            viewHolder.mTvName.setTextColor(Color.WHITE);
+        }else {
+            convertView.setBackgroundColor(mContext.getResources().getColor(R.color.color_white));
+            viewHolder.mTvName.setTextColor(Color.BLACK);
+        }
+
+        return convertView;
+    }
+
+    public void setSelectedItem(int position){
+        selectedItem = position;
+    }
+    private int selectedItem = 0;
+    class ViewHolder{
+        public LinearLayout mAll;
+        public TextView mTvName;
     }
 }
-

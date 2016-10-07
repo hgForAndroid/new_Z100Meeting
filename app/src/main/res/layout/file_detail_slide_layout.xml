@@ -16,14 +16,20 @@
         android:paddingTop="@dimen/distance_five_dp"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
+        <ListView
             android:id="@+id/id_slide_rev"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:paddingLeft="@dimen/distance_five_dp"
+            android:paddingRight="@dimen/distance_five_dp"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:overScrollMode="never">
+            android:overScrollMode="never"
+            android:divider="@null"
+            android:dividerHeight="10dp"
+            android:scrollbars="none"
+            android:choiceMode="singleChoice">
 
-        </android.support.v7.widget.RecyclerView>
+        </ListView>
 
         <LinearLayout
             android:layout_width="match_parent"
