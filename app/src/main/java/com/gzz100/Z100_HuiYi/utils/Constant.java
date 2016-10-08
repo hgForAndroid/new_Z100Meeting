@@ -36,4 +36,9 @@ public class Constant {
     public static final String MEETING_ID = "meetingID";
     //存储用户角色  对应的  key
     public static final String USER_ROLE = "userRole";
+
+    public static final int MEETING_STATE_NOT_BEGIN = 1;
+    public static final int MEETING_STATE_BEGIN = 2;
+    public static final int MEETING_STATE_PAUSE = 4;
+    public static final int MEETING_STATE_ENDING = 8;
 }

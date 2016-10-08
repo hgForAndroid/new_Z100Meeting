@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/distance_five_dp"
             android:text="192.168.1.110"
-            android:textSize="25sp"/>
+            android:textSize="@dimen/connect_server_text_size"/>
 
         <ImageView
             android:layout_alignParentRight="true"

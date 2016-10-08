@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
+import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.meeting.about.AboutFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaFragment;
@@ -25,13 +27,16 @@ import com.gzz100.Z100_HuiYi.meeting.delegate.DelegateFragment;
 import com.gzz100.Z100_HuiYi.meeting.delegate.DelegatePresenter;
 import com.gzz100.Z100_HuiYi.meeting.file.FileFragment;
 import com.gzz100.Z100_HuiYi.meeting.file.FilePresenter;
+import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingFragment;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingPresenter;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
+import com.gzz100.Z100_HuiYi.multicast.MulticastBean;
 import com.gzz100.Z100_HuiYi.multicast.MulticastService;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,23 +55,32 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, ViewPager.OnPageChangeListener,ICommunicate {
-    public static void toMainActivity(Context context){
-        Intent intent = new Intent(context,MainActivity.class);
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, ViewPager.OnPageChangeListener, ICommunicate {
+    public static void toMainActivity(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
     }
 
 
-    @BindView(R.id.id_main_tbv) NavBarView mNavBarView;
-    @BindView(R.id.id_main_ViewPager) ViewPager mViewPager;
+    @BindView(R.id.id_main_tbv)
+    NavBarView mNavBarView;
+    @BindView(R.id.id_main_ViewPager)
+    ViewPager mViewPager;
 
-    @BindView(R.id.id_main_rdg) RadioGroup mTabGroup;
-    @BindView(R.id.id_main_meetingTab) RadioButton mMeetingTab;
-    @BindView(R.id.id_main_delegateTab) RadioButton mDelegateTab;
-    @BindView(R.id.id_main_agendaTab) RadioButton mAgendaTab;
-    @BindView(R.id.id_main_fileTab) RadioButton mFileTab;
-    @BindView(R.id.id_main_aboutTab) RadioButton mAboutTab;
-    @BindView(R.id.id_main_voteTab) RadioButton mVoteTab;
+    @BindView(R.id.id_main_rdg)
+    RadioGroup mTabGroup;
+    @BindView(R.id.id_main_meetingTab)
+    RadioButton mMeetingTab;
+    @BindView(R.id.id_main_delegateTab)
+    RadioButton mDelegateTab;
+    @BindView(R.id.id_main_agendaTab)
+    RadioButton mAgendaTab;
+    @BindView(R.id.id_main_fileTab)
+    RadioButton mFileTab;
+    @BindView(R.id.id_main_aboutTab)
+    RadioButton mAboutTab;
+    @BindView(R.id.id_main_voteTab)
+    RadioButton mVoteTab;
 
     private MainFragmentAdapter mMainFragmentAdapter;
     private List<Fragment> mFragments = new ArrayList<>();
@@ -92,9 +106,15 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         ActivityStackManager.clearExceptOne(this);
         ButterKnife.bind(this);
         init();
+
+//        Configuration config = getResources().getConfiguration();
+//        int  smallestScreenWidth = config.smallestScreenWidthDp;
+//        int screenHeightDp = config.screenHeightDp;
+//        int screenWidthDp = config.screenWidthDp;
+//        Log.e("screenHeightDp=","====       "+screenHeightDp+"\n    screenWidthDp=====     "+screenWidthDp);
     }
 
-    private void initMulticastService(){
+    private void initMulticastService() {
         Intent intent = new Intent(MainActivity.this, MulticastService.class);
         startService(intent);
     }
@@ -102,7 +122,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private void init() {
         mMeetingFragment = MeetingFragment.newInstance();
         mDelegateFragment = DelegateFragment.newInstance();
-        mAgendaFragment =  AgendaFragment.newInstance();
+        mAgendaFragment = AgendaFragment.newInstance();
         mFileFragment = FileFragment.newInstance();
         mAboutFragment = AboutFragment.newInstance();
         mVoteFragment = VoteFragment.newInstance();
@@ -114,7 +134,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         //测试
         mFragments.add(mVoteFragment);
 
-        mMainFragmentAdapter = new MainFragmentAdapter(getSupportFragmentManager(),mFragments);
+        mMainFragmentAdapter = new MainFragmentAdapter(getSupportFragmentManager(), mFragments);
         mViewPager.setAdapter(mMainFragmentAdapter);
         mViewPager.setCurrentItem(PAGE_ONE);
         mNavBarView.mTvTitle.setText(mMeetingTab.getText());
@@ -138,22 +158,23 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            mHandler.postDelayed(this,60000);
+            mHandler.postDelayed(this, 60000);
             mNavBarView.setTimeMin(getMin());
             min++;
             mNavBarView.setTimeHour(getHour());
         }
     };
 
-    public String getHour(){
-        String newHour = hour >=10 ? "" + hour : "0"+hour;
+    public String getHour() {
+        String newHour = hour >= 10 ? "" + hour : "0" + hour;
         return newHour;
     }
-    public String getMin(){
-        String newMin = min >= 10 ? "" + min : "0"+min;
-        if (newMin.equals("60")){
+
+    public String getMin() {
+        String newMin = min >= 10 ? "" + min : "0" + min;
+        if (newMin.equals("60")) {
             hour++;
-            min = 0 ;
+            min = 0;
             return "00";
         }
         return newMin;
@@ -179,7 +200,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId){
+        switch (checkedId) {
             case R.id.id_main_meetingTab:
                 mViewPager.setCurrentItem(PAGE_ONE);
                 mNavBarView.mTvTitle.setText(mMeetingTab.getText());
@@ -220,8 +241,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        if (state == 2){
-            switch (mViewPager.getCurrentItem()){
+        if (state == 2) {
+            switch (mViewPager.getCurrentItem()) {
                 case PAGE_ONE:
                     mMeetingTab.setChecked(true);
                     break;
@@ -255,9 +276,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      * 跳转到人员界面的  其他参会人员
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void showDelegate(Boolean showDelegate){
+    public void showDelegate(Boolean showDelegate) {
         if (showDelegate)
-        mDelegateTab.setChecked(showDelegate);
+            mDelegateTab.setChecked(showDelegate);
     }
 
     @Override
@@ -272,20 +293,34 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         super.onStop();
     }
 
+
+    //接收组播
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getMulticase(MulticastBean data) {
+        if (MyAPP.getInstance().getUserRole() != 1) {
+            if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN) {
+                int agendaIndex = data.getAgendaIndex();
+                int documentIndex = data.getDocumentIndex();
+                String upLevelTitle = data.getUpLevelTitle();
+                FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle,true);
+            }
+        }
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             Dialog dialog = new AlertDialog.Builder(this)
                     .setTitle("提示")
                     .setMessage("退出系统？")
                     .setPositiveButton("是", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            stopService(new Intent(MainActivity.this,MulticastService.class));
+                            stopService(new Intent(MainActivity.this, MulticastService.class));
                             ActivityStackManager.exit();
                         }
                     })
-                    .setNegativeButton("否",null)
+                    .setNegativeButton("否", null)
                     .create();
             dialog.show();
         }

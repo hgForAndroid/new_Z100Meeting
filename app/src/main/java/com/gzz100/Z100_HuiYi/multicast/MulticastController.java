@@ -1,7 +1,5 @@
 package com.gzz100.Z100_HuiYi.multicast;
 
-import android.util.Log;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -89,7 +87,7 @@ public class MulticastController {
      * 发送组播信息
      * @param msg 信息内容
      */
-    public void sendMulticaseBean(MulticaseBean msg){
+    public void sendMulticaseBean(MulticastBean msg){
         try {
             byte[] bytes = ParseObject.objectToBytes(msg);
 //            byte[] buff = msg.getBytes("utf-8");//设定多播报文的数据

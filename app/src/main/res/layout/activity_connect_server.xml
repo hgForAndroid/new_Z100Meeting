@@ -24,7 +24,7 @@
         android:gravity="center"
         android:padding="@dimen/distance_five_dp"
         android:text="请输入IP地址:"
-        android:textSize="25sp"/>
+        android:textSize="@dimen/connect_server_text_size"/>
 
     <Button
         android:id="@+id/id_btn_connect_server"
@@ -32,7 +32,7 @@
         android:layout_height="50dp"
         android:layout_toRightOf="@id/id_edt_connect_server"
         android:text="确认"
-        android:textSize="25sp"/>
+        android:textSize="@dimen/connect_server_text_size"/>
 
     <TextView
         android:layout_marginTop="20dp"
@@ -43,7 +43,7 @@
         android:layout_toRightOf="@id/text_ip"
         android:padding="@dimen/distance_five_dp"
         android:text="历史记录："
-        android:textSize="25sp"/>
+        android:textSize="@dimen/connect_server_text_size"/>
     <android.support.v7.widget.RecyclerView
         android:overScrollMode="never"
         android:id="@+id/id_rcv_connect_server"

@@ -53,7 +53,7 @@ public class SignInPresenter implements SignInContract.Presenter {
                 }
             });
         }
-
+        //TODO  有服务器后去掉，这里测试用，1主持人，2其他
         saveUserRole(2);
     }
 

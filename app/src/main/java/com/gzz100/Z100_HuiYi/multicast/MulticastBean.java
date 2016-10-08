@@ -1,19 +1,25 @@
 package com.gzz100.Z100_HuiYi.multicast;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.io.Closeable;
 import java.io.Serializable;
 
 /**
  * Created by XieQXiong on 2016/10/1.
  */
-public class MulticaseBean implements Serializable,Cloneable{
+public class MulticastBean implements Serializable,Cloneable{
     private String serverIP;            //服务器IP
     private String meetingID;            //会议ID
     private int meetingState;            //会议状态 未开始1；已开始 2；已暂停 4；已结束 8；
     private int agendaIndex;               //议程序号
+
+    public String getUpLevelTitle() {
+        return upLevelTitle;
+    }
+
+    public void setUpLevelTitle(String upLevelTitle) {
+        this.upLevelTitle = upLevelTitle;
+    }
+
+    private String upLevelTitle;           //上级界面名称
     private int contentType;             //会议当前内容类型  ,文件还投票是
     private int documentIndex;           //文件序号
     private int voteIndex;               //投票表决序号
@@ -21,19 +27,19 @@ public class MulticaseBean implements Serializable,Cloneable{
     private int IsUpdate;                //是否更新 未更新0；待更新 1
     private int IsReturnVoteResult;      //是否返回表决结果 不返回0；要返回 1；
 
-    public MulticaseBean() {
+    public MulticastBean() {
     }
 
     @Override
-    public MulticaseBean clone() throws CloneNotSupportedException {
-        MulticaseBean multicaseBean = null;
+    public MulticastBean clone() throws CloneNotSupportedException {
+        MulticastBean multicastBean = null;
         try {
-            multicaseBean = (MulticaseBean) super.clone();
+            multicastBean = (MulticastBean) super.clone();
         }catch (CloneNotSupportedException e){
             e.printStackTrace();
         }
 
-        return multicaseBean;
+        return multicastBean;
     }
 
     public String getServerIP() {

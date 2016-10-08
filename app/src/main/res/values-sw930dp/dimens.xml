@@ -46,6 +46,10 @@
     <dimen name="end_meeting_text_size">25sp</dimen>
 
     <dimen name="forty_eight">48dp</dimen>
+    <!--连接服务器界面  -->
+    <dimen name="connect_server_text_size">25sp</dimen>
+    <!--选择会议界面  -->
+    <dimen name="select_meeting_text_size">25sp</dimen>
 
 
 </resources>

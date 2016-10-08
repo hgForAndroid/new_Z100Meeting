@@ -4,25 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
-import com.gzz100.Z100_HuiYi.multicast.MulticaseBean;
+import com.gzz100.Z100_HuiYi.multicast.MulticastBean;
 import com.gzz100.Z100_HuiYi.multicast.MulticastController;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.meeting.NavBarView;
@@ -42,50 +38,39 @@ import butterknife.OnClick;
 
 public class FileDetailActivity extends BaseActivity implements FileDetailContract.DetailView, View.OnClickListener, AdapterView.OnItemClickListener {
     public static final String BUNDLE = "bundle";
-    public static final String AGENDAS_SUM = "agendasSum";
     public static final String AGENDA_INDEX = "agendaIndex";
-    public static final String FILE_LIST = "fileList";
     public static final String FILE_INDEX = "fileIndex";
-    public static final String AGENDA_TIME = "agendaTime";
     public static final String UP_LEVEL_TITLE = "upLevelTitle";
+    public static final String PASSIVE = "passive";
     private int mAgendaSum;
     private int mAgendaIndex;
     private int mFileIndex;
     private List<Document> mFileList;
     private String mAgendaDuration;
     private String mUpLevelText;
+    private boolean mPassive;
     private String mFileName;
-    private int mChildCount;
-    private MulticaseBean mMulticaseBean = new MulticaseBean();
+    private MulticastBean mMulticastBean = new MulticastBean();
     private List<Document> mDocuments;
-    //    private Button mBtnPrevious;
-//    private Button mBtnNext;
 
     /**
      * 跳转到文件详情界面
      *
-     * @param activity     context
-     * @param agendasSum   议程总数
+     * @param context      context
      * @param agendaIndex  当前议程序号
-     * @param fileList     文件列表
      * @param fileIndex    选择的文件序号
-     * @param agendaTime   议程时间
      * @param upLevelTitle 当前界面的标题
+     * @param passive      是否被动跳转
      */
-    public static void showFileDetailActivity(Context activity, int agendasSum,
-                                              int agendaIndex, List<Document> fileList,
-                                              int fileIndex, String agendaTime,
-                                              String upLevelTitle) {
-        Intent intent = new Intent(activity, FileDetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt(AGENDAS_SUM, agendasSum);
-        bundle.putInt(AGENDA_INDEX, agendaIndex);
-        bundle.putInt(FILE_INDEX, fileIndex);
-        bundle.putSerializable(FILE_LIST, (Serializable) fileList);
-        bundle.putString(AGENDA_TIME, agendaTime);
-        bundle.putString(UP_LEVEL_TITLE, upLevelTitle);
-        intent.putExtra(BUNDLE, bundle);
-        activity.startActivity(intent);
+    public static void start(Context context, int agendaIndex, int fileIndex, String upLevelTitle,boolean passive) {
+        Intent starter = new Intent(context, FileDetailActivity.class);
+        Bundle extraBundle = new Bundle();
+        extraBundle.putInt(AGENDA_INDEX, agendaIndex);
+        extraBundle.putInt(FILE_INDEX, fileIndex);
+        extraBundle.putString(UP_LEVEL_TITLE, upLevelTitle);
+        extraBundle.putBoolean(PASSIVE, passive);
+        starter.putExtra(BUNDLE, extraBundle);
+        context.startActivity(starter);
     }
 
     @BindView(R.id.id_file_detail_tbv)
@@ -105,6 +90,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     Button mBtnPrevious;
     @BindView(R.id.id_btn_next)
     Button mBtnNext;
+    @BindView(R.id.id_btn_pause_meeting)
+    Button mBtnPause;
+    @BindView(R.id.id_btn_start_meeting)
+    Button mBtnStart;
 
     @BindView(R.id.id_iv_control_bar_slide_to_right)
     ImageView mIvControlSlideToRight;
@@ -114,6 +103,9 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     private FileDetailAdapter mFileDetailAdapter;
 
     private int mMin, mSec;
+
+    //会议状态的标识
+    private int meetingState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,14 +140,15 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     private void dataFormUpLevel() {
         mBundle = getIntent().getExtras().getBundle(BUNDLE);
         if (mBundle != null) {
-            mAgendaSum = mBundle.getInt(AGENDAS_SUM);
             mAgendaIndex = mBundle.getInt(AGENDA_INDEX);
             mFileIndex = mBundle.getInt(FILE_INDEX);
-            mFileList = (List<Document>) mBundle.getSerializable(FILE_LIST);
-            mAgendaDuration = mBundle.getString(AGENDA_TIME);
             mUpLevelText = mBundle.getString(UP_LEVEL_TITLE);
+            mPassive = mBundle.getBoolean(PASSIVE,false);
+            List<Agenda> agendas = FileOperate.getInstance(this).queryAgendaList(Constant.COLUMNS_AGENDAS);
+            mAgendaSum = agendas.size();
+            mAgendaDuration = agendas.get(mAgendaIndex - 1).getAgendaDuration();
+            mFileList = FileOperate.getInstance(this).queryFileList(mAgendaIndex);
             mFileName = mFileList.get(mFileIndex).getDocumentName();
-//            initData();
 
         }
     }
@@ -180,7 +173,12 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mNavBarView.setUpLevelText(mUpLevelText);
         mNavBarView.setMeetingStateOrAgendaState("议程" + mAgendaIndex + "/" + mAgendaSum);
 //        mNavBarView.setTime(mAgendaDuration);
-        mNavBarView.setCurrentMeetingState("（开会中）");
+        if (mPassive){
+            mNavBarView.setCurrentMeetingState("（已开始）");
+        }else {
+            mNavBarView.setCurrentMeetingState("（未开始）");
+        }
+
         mNavBarView.setFallBackListener(this);
         //时间
         String[] split = mAgendaDuration.split(":");
@@ -193,7 +191,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mFileDetailAdapter = new FileDetailAdapter(mFileList, this);
         mFileNameRcv.setAdapter(mFileDetailAdapter);
         mFileNameRcv.setOnItemClickListener(this);
-//        mFileNameRcv.smoothScrollToPosition(mFileIndex);
         mFileNameRcv.setSelection(mFileIndex);
         mFileDetailAdapter.setSelectedItem(mFileIndex);
         mFileDetailAdapter.notifyDataSetInvalidated();
@@ -218,11 +215,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         @Override
         public void run() {
             if (getMin().equals("00") && getSec().equals("00")) {
-//                Dialog dialog = new AlertDialog.Builder(FileDetailActivity.this)
-//                        .setTitle("提示")
-//                        .setMessage("议程时间已到")
-//                        .create();
-//                dialog.show();
                 Toast.makeText(FileDetailActivity.this, "议程时间到！！！！！！", Toast.LENGTH_LONG).show();
             } else {
                 mHandler.postDelayed(this, 1000);
@@ -230,7 +222,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 mNavBarView.setTimeMin(getSec());
                 mSec--;
             }
-
         }
     };
 
@@ -265,105 +256,63 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     void onControlClick(View v) {
         switch (v.getId()) {
             case R.id.id_btn_start_meeting://开始
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            MulticaseBean multicaseBean = mMulticaseBean.clone();
-                            multicaseBean.setMeetingID("192.168.1.110");
-                            MulticastController.getDefault().sendMulticaseBean(multicaseBean);
-                        } catch (CloneNotSupportedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-
+                if ("开始".equals(mBtnStart.getText().toString())) {
+                    meetingState = Constant.MEETING_STATE_BEGIN;
+                    mPresenter.begin(mMulticastBean, meetingState, mAgendaIndex, mFileIndex, mUpLevelText);
+                    mBtnStart.setText("结束");
+                } else {//结束
+                    meetingState = Constant.MEETING_STATE_ENDING;
+                    mPresenter.ending(mMulticastBean, meetingState);
+                }
                 break;
             case R.id.id_btn_pause_meeting://暂停
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            MulticaseBean multicaseBean = mMulticaseBean.clone();
-                            multicaseBean.setMeetingID("192.168.1.110");
-                            MulticastController.getDefault().sendMulticaseBean(multicaseBean);
-                        } catch (CloneNotSupportedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-
+                if ("暂停".equals(mBtnPause.getText().toString())) {
+                    meetingState = Constant.MEETING_STATE_PAUSE;
+                    mPresenter.pause(mMulticastBean, meetingState);
+                    mBtnPause.setText("继续");
+                } else {//继续
+                    meetingState = Constant.MEETING_STATE_BEGIN;
+                    mPresenter.meetingContinue(mMulticastBean, meetingState, mAgendaIndex, mFileIndex, mUpLevelText);
+                    mBtnPause.setText("暂停");
+                }
                 break;
             case R.id.id_btn_start_vote://投票
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            MulticaseBean multicaseBean = mMulticaseBean.clone();
-                            multicaseBean.setMeetingID("192.168.1.110");
-                            MulticastController.getDefault().sendMulticaseBean(multicaseBean);
+                            MulticastBean multicastBean = mMulticastBean.clone();
+//                            multicastBean.setVoteIndex();
+                            MulticastController.getDefault().sendMulticaseBean(multicastBean);
                         } catch (CloneNotSupportedException e) {
                             e.printStackTrace();
                         }
                     }
                 }).start();
-
                 break;
             case R.id.id_btn_vote_result://投票结果
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            MulticaseBean multicaseBean = mMulticaseBean.clone();
-                            multicaseBean.setMeetingID("192.168.1.110");
-                            MulticastController.getDefault().sendMulticaseBean(multicaseBean);
+                            MulticastBean multicastBean = mMulticastBean.clone();
+                            multicastBean.setMeetingID("192.168.1.110");
+                            MulticastController.getDefault().sendMulticaseBean(multicastBean);
                         } catch (CloneNotSupportedException e) {
                             e.printStackTrace();
                         }
                     }
                 }).start();
-
-
                 break;
             case R.id.id_btn_previous://上一个
                 if (mAgendaIndex > 1) {
-                    mAgendaIndex -= 1;
-                    resetAgendaTimeCounting(mAgendaIndex);
-                    resetAgendaContent(mAgendaIndex);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                MulticaseBean multicaseBean = mMulticaseBean.clone();
-                                multicaseBean.setAgendaIndex(mAgendaIndex);
-                                MulticastController.getDefault().sendMulticaseBean(multicaseBean);
-                            } catch (CloneNotSupportedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
+                    mPresenter.previousAgenda(mMulticastBean, meetingState, mAgendaIndex);
                 }
                 break;
             case R.id.id_btn_next://下一个
                 if (mAgendaIndex > 0 && mAgendaIndex < mAgendaSum) {
-                    mAgendaIndex += 1;
-                    resetAgendaTimeCounting(mAgendaIndex);
-                    resetAgendaContent(mAgendaIndex);
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                MulticaseBean multicaseBean = mMulticaseBean.clone();
-                                multicaseBean.setAgendaIndex(mAgendaIndex);
-                                MulticastController.getDefault().sendMulticaseBean(multicaseBean);
-                            } catch (CloneNotSupportedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
+                    mPresenter.nextAgenda(mMulticastBean, meetingState, mAgendaIndex);
                 }
-
                 break;
         }
     }
@@ -374,24 +323,33 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         EventBus.getDefault().unregister(this);
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMulticase(MulticaseBean data) {
-        if (MyAPP.getInstance().getUserRole() != 1){
-            if (data.getAgendaIndex() > 0) {
-                resetAgendaTimeCounting(data.getAgendaIndex());
-                resetAgendaContent(data.getAgendaIndex());
-            }
-            if (data.getDocumentIndex() >= 0) {
-                Log.e("getDocumentIndex ==",data.getDocumentIndex()+"");
-                mPresenter.loadFile(mDocuments.get(data.getDocumentIndex()).getDocumentName());
-                mNavBarView.setTitle(mDocuments.get(data.getDocumentIndex()).getDocumentName());
+    public void getMulticase(MulticastBean data) {
+        if (MyAPP.getInstance().getUserRole() != 1) {
+            //会议开始状态才响应
+            if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN) {
+                if (data.getAgendaIndex() > 0) {
+                    mAgendaIndex = data.getAgendaIndex();
+                    resetAgendaTimeCounting(data.getAgendaIndex());
+                    resetAgendaContent(data.getAgendaIndex());
+                }
+                if (data.getDocumentIndex() >= 0) {
+                    mFileIndex = data.getDocumentIndex();
+                    mPresenter.loadFile(mFileList.get(data.getDocumentIndex()).getDocumentName());
+                    mNavBarView.setTitle(mFileList.get(data.getDocumentIndex()).getDocumentName());
 //                mFileNameRcv.setSelection(data.getDocumentIndex());
-                mFileDetailAdapter.setSelectedItem(data.getDocumentIndex());
-                mFileDetailAdapter.notifyDataSetInvalidated();
+                    mFileDetailAdapter.setSelectedItem(data.getDocumentIndex());
+                    mFileDetailAdapter.notifyDataSetInvalidated();
+                }
+                mNavBarView.setCurrentMeetingState("(开会中)");
+            } else if (data.getMeetingState() == Constant.MEETING_STATE_PAUSE) {
+                mNavBarView.setCurrentMeetingState("(暂停中)");
+            } else if (data.getMeetingState() == Constant.MEETING_STATE_ENDING) {
+                mNavBarView.setCurrentMeetingState("(已结束)");
             }
         }
     }
+
     /**
      * 根据 符号   ：    将时间分割成分秒
      *
@@ -411,7 +369,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
      *
      * @param mAgendaIndex 议程序号
      */
-    private void resetAgendaTimeCounting(int mAgendaIndex) {
+    @Override
+    public void resetAgendaTimeCounting(int mAgendaIndex) {
         //取议程时传入的是mAgendaIndex-1，因为存储议程时，是从0开始的
         String agendaDuration = FileOperate.getInstance(FileDetailActivity.this)
                 .queryAgendaList(Constant.COLUMNS_AGENDAS).get(mAgendaIndex - 1).getAgendaDuration();
@@ -420,14 +379,17 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mHandler.removeCallbacks(mRunnable);
         mHandler.post(mRunnable);
     }
+
     /**
      * 切换议程后，重设议程的各部分内容
      *
-     * @param mAgendaIndex 议程序号
+     * @param agendaIndex 议程序号
      */
-    private void resetAgendaContent(int mAgendaIndex) {
-        mNavBarView.setMeetingStateOrAgendaState("议程" + mAgendaIndex + "/" + mAgendaSum);
-        mDocuments = FileOperate.getInstance(FileDetailActivity.this).queryFileList(mAgendaIndex);
+    @Override
+    public void resetAgendaContent(int agendaIndex) {
+        mAgendaIndex = agendaIndex;
+        mNavBarView.setMeetingStateOrAgendaState("议程" + agendaIndex + "/" + mAgendaSum);
+        mDocuments = FileOperate.getInstance(FileDetailActivity.this).queryFileList(agendaIndex);
         if (mDocuments != null && mDocuments.size() > 0) {
             mFileList = mDocuments;
             mNavBarView.setTitle(mDocuments.get(0).getDocumentName());
@@ -438,10 +400,16 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mFileDetailAdapter.notifyDataSetInvalidated();
         }
     }
+
     //返回
     @Override
     public void fallback() {
-        ActivityStackManager.pop();
+        //不是主持人，并且在开会状态下，不可返回
+        if (MyAPP.getInstance().getUserRole() != 1 && meetingState == Constant.MEETING_STATE_BEGIN){
+            //不可返回，无操作
+        }else {
+            ActivityStackManager.pop();
+        }
     }
 
     @Override
@@ -476,6 +444,26 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     }
 
     @Override
+    public void meetingBegin() {
+        mNavBarView.setCurrentMeetingState("（开会中）");
+    }
+
+    @Override
+    public void meetingEnding() {
+        mNavBarView.setCurrentMeetingState("（已结束）");
+    }
+
+    @Override
+    public void meetingPause() {
+        mNavBarView.setCurrentMeetingState("（暂停中）");
+    }
+
+    @Override
+    public void meetingContinue() {
+        mNavBarView.setCurrentMeetingState("（开会中）");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacks(mRunnable);
@@ -484,19 +472,30 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-        mFileDetailAdapter.setSelectedItem(position);
-        mFileDetailAdapter.notifyDataSetInvalidated();
+        //非主持人，并处于开会状态
+        if (MyAPP.getInstance().getUserRole() != 1 && meetingState == Constant.MEETING_STATE_BEGIN) {
+            //无操作
+        } else {
+            mFileDetailAdapter.setSelectedItem(position);
+            mFileDetailAdapter.notifyDataSetInvalidated();
 //        mFileNameRcv.setSelection(position);
-        mPresenter.loadFile(mFileList.get(position).getDocumentName());
-        mNavBarView.setTitle(mFileList.get(position).getDocumentName());
+
+            mFileIndex = position;
+            mPresenter.loadFile(mFileList.get(position).getDocumentName());
+            mNavBarView.setTitle(mFileList.get(position).getDocumentName());
+        }
         if (MyAPP.getInstance().getUserRole() == 1) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        MulticaseBean multicaseBean = mMulticaseBean.clone();
-                        multicaseBean.setDocumentIndex(position);
-                        MulticastController.getDefault().sendMulticaseBean(multicaseBean);
+                        MulticastBean multicastBean = mMulticastBean.clone();
+                        //点击开始，发送下面这句
+                        multicastBean.setMeetingState(meetingState);
+                        //这里设置议程序号为0.切换文件时，忽略切换议程
+                        multicastBean.setAgendaIndex(0);
+                        multicastBean.setDocumentIndex(position);
+                        MulticastController.getDefault().sendMulticaseBean(multicastBean);
                     } catch (CloneNotSupportedException e) {
                         e.printStackTrace();
                     }

@@ -46,28 +46,35 @@ public class MeetingRepository implements MeetingDataSource {
     }
 
     @Override
-    public void getDelegateList(LoadDelegateCallback callback) {
-        List<DelegateBean> users = MeetingOperate.getInstance(mContext).queryUserList(Constant.COLUMNS_USER);
-        if (users != null && users.size() > 0){
-//            mMeetingLocalDataSource.getDelegateList(callback);
-            //数据库中已经保存，不必再去取，直接返回，避免在MeetingLocalDataSource写重复代码
-            callback.onDelegateLoaded(users);
-        }else {
-            mMeetingRemoteDataSource.getDelegateList(callback);
-        }
+    public void getDelegateList(final LoadDelegateCallback callback) {
+        mMeetingLocalDataSource.getDelegateList(new LoadDelegateCallback() {
+            @Override
+            public void onDelegateLoaded(List<DelegateBean> users) {
+                //数据库中已经保存，不必再去取，直接返回，避免在MeetingLocalDataSource写重复代码
+                callback.onDelegateLoaded(users);
+            }
 
+            @Override
+            public void onDataNotAvailable() {
+                mMeetingRemoteDataSource.getDelegateList(callback);
+            }
+        });
     }
 
     @Override
-    public void getMetingInfo(LoadMeetingInfoCallback callback) {
-        MeetingInfo meetingInfo = MeetingOperate.getInstance(mContext).queryMeetingInfo(Constant.COLUMNS_MEETING_INFO);
-        if (meetingInfo != null){
-//            mMeetingLocalDataSource.getMetingInfo(callback);
-            //数据库中已经保存，不必再去取，直接返回，避免在MeetingLocalDataSource写重复代码
-            callback.onMeetingInfoLoaded(meetingInfo);
-        }else {
-            mMeetingRemoteDataSource.getMetingInfo(callback);
-        }
+    public void getMetingInfo(final LoadMeetingInfoCallback callback) {
+        mMeetingLocalDataSource.getMetingInfo(new LoadMeetingInfoCallback() {
+            @Override
+            public void onMeetingInfoLoaded(MeetingInfo meetingInfo) {
+                //数据库中已经保存，不必再去取，直接返回，避免在MeetingLocalDataSource写重复代码
+                callback.onMeetingInfoLoaded(meetingInfo);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                mMeetingRemoteDataSource.getMetingInfo(callback);
+            }
+        });
 
     }
 }

@@ -66,7 +66,7 @@ public class SelectMeetingPresenter implements SelectMeetingContract.Presenter {
     @Override
     public void saveIMEI(Context context, String deviceIMEI) {
         if (Constant.DEBUG)
-            Log.e("设备标识码 == ",deviceIMEI);
+//            Log.e("设备标识码 == ",deviceIMEI);
         mDeviceIMEI = deviceIMEI;
         SharedPreferencesUtil.getInstance(context).putString(Constant.DEVICE_IMEI,deviceIMEI);
     }

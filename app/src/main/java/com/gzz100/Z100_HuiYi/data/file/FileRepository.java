@@ -43,15 +43,19 @@ public class FileRepository implements FileDataSource {
         return INSTANCE;
     }
     @Override
-    public void getFileList(int agendaPos, @NonNull LoadFileListCallback callback) {
+    public void getFileList(final int agendaPos, @NonNull final LoadFileListCallback callback) {
         checkNotNull(callback);
-        List<Document> documents = FileOperate.getInstance(mContext).queryFileList(agendaPos);
-        //查询数据库中是否有该议程序号对应的文件列表
-        if (documents != null && documents.size() > 0){
-            mFileLocalDataSource.getFileList(agendaPos,callback);
-        }else{
-            mFileRemoteDataSource.getFileList(agendaPos,callback);
-        }
+        mFileLocalDataSource.getFileList(agendaPos, new LoadFileListCallback() {
+            @Override
+            public void onFileListLoaded(List<Document> documents) {
+                callback.onFileListLoaded(documents);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                mFileRemoteDataSource.getFileList(agendaPos,callback);
+            }
+        });
     }
 
     @Override

@@ -18,12 +18,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
+import com.gzz100.Z100_HuiYi.multicast.MulticastBean;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -164,16 +170,16 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public void showFileDetail() {
         String currentTitle = mMainActivity.getCurrentTitle();
-        FileDetailActivity.showFileDetailActivity(getActivity(), mAgendasSum, mAgendaIndex,
-                mDocumentBeen, mFileIndex, mAgendaTime, currentTitle);
+        FileDetailActivity.start(getActivity(),mAgendaIndex,mFileIndex,currentTitle,false);
 
     }
 
     @Override
     public void showSearchFileDetail() {
         String currentTitle = mMainActivity.getCurrentTitle();
-        FileDetailActivity.showFileDetailActivity(getActivity(), mAgendasSum, mSearchAgendaIndex,
-                mResultDocumentBeen, mSearchFileIndex1, mAgendas.get(mSearchAgendaIndex).getAgendaDuration(), currentTitle);
+//        FileDetailActivity.showFileDetailActivity(getActivity(), mAgendasSum, mSearchAgendaIndex,
+//                mResultDocumentBeen, mSearchFileIndex1, mAgendas.get(mSearchAgendaIndex).getAgendaDuration(), currentTitle);
+        FileDetailActivity.start(getActivity(),mSearchAgendaIndex,mSearchFileIndex1,currentTitle,false);
     }
 
     @Override

@@ -18,7 +18,7 @@
 
         <ListView
             android:id="@+id/id_slide_rev"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:paddingLeft="@dimen/distance_five_dp"
             android:paddingRight="@dimen/distance_five_dp"
             android:layout_height="0dp"
@@ -26,8 +26,7 @@
             android:overScrollMode="never"
             android:divider="@null"
             android:dividerHeight="10dp"
-            android:scrollbars="none"
-            android:choiceMode="singleChoice">
+            android:scrollbars="none">
 
         </ListView>
 

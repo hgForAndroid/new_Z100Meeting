@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -78,9 +77,9 @@ public class MulticastService extends Service {
         while (true){
             socket.receive(packet);
             try {
-                MulticaseBean multicaseBean = (MulticaseBean) ParseObject.bytesToObject(packet.getData());
-                Log.e("接收到   ","multicaseBean  =="+multicaseBean.getAgendaIndex());
-                EventBus.getDefault().post(multicaseBean);
+                MulticastBean multicastBean = (MulticastBean) ParseObject.bytesToObject(packet.getData());
+                Log.e("接收到   ","会议状态  =="+ multicastBean.getMeetingState());
+                EventBus.getDefault().post(multicastBean);
 
             } catch (Exception e) {
                 e.printStackTrace();
