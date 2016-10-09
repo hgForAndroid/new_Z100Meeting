@@ -1,5 +1,7 @@
 package com.gzz100.Z100_HuiYi.multicast;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -91,10 +93,11 @@ public class MulticastController {
         try {
             byte[] bytes = ParseObject.objectToBytes(msg);
 //            byte[] buff = msg.getBytes("utf-8");//设定多播报文的数据
-
+            Log.e("", "主持人  组播发送   ");
             // 设定UDP报文（内容，内容长度，多播组，端口）
             DatagramPacket packet = new DatagramPacket(bytes,bytes.length,address,30001);
             socket.send(packet);//发送报文
+
 
         } catch (Exception e){
             e.printStackTrace();

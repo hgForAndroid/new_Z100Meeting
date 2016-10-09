@@ -35,9 +35,39 @@ public class FakeDataProvider {
         agenda3.setAgendaName("马上就到议程3，还有什么事要处理");
         agenda3.setAgendaDuration("33:00");
         agenda3.setAgendaSpeaker("老三");
+        Agenda agenda4 = new Agenda();
+        agenda4.setAgendaIndex(4);
+        agenda4.setAgendaName("到议程4");
+        agenda4.setAgendaDuration("13:00");
+        agenda4.setAgendaSpeaker("老四");
+        Agenda agenda5 = new Agenda();
+        agenda5.setAgendaIndex(5);
+        agenda5.setAgendaName("5议程5");
+        agenda5.setAgendaDuration("15:00");
+        agenda5.setAgendaSpeaker("老五");
+        Agenda agenda6 = new Agenda();
+        agenda6.setAgendaIndex(6);
+        agenda6.setAgendaName("议程66");
+        agenda6.setAgendaDuration("16:00");
+        agenda6.setAgendaSpeaker("老六");
+        Agenda agenda7 = new Agenda();
+        agenda7.setAgendaIndex(7);
+        agenda7.setAgendaName("马上就到议程7");
+        agenda7.setAgendaDuration("17:00");
+        agenda7.setAgendaSpeaker("老七");
+        Agenda agenda8 = new Agenda();
+        agenda8.setAgendaIndex(8);
+        agenda8.setAgendaName("马上就到议程8");
+        agenda8.setAgendaDuration("18:00");
+        agenda8.setAgendaSpeaker("老八");
         agendas.add(agenda1);
         agendas.add(agenda2);
         agendas.add(agenda3);
+        agendas.add(agenda4);
+        agendas.add(agenda5);
+        agendas.add(agenda6);
+        agendas.add(agenda7);
+        agendas.add(agenda8);
 
         return agendas;
     }
@@ -52,7 +82,7 @@ public class FakeDataProvider {
                     document.setDocumentIndex(i);
                     document.setDocumentName("agenda_one_fileName"+ i+".txt" );
                     document.setDocumentSize(12 + i);
-                    document.setDocumentSpeaker("张三");
+                    document.setDocumentSpeaker("老大");
                     documents.add(document);
                 }
 
@@ -64,7 +94,7 @@ public class FakeDataProvider {
                     document.setDocumentIndex(i);
                     document.setDocumentName("agenda_two_fileName"+i+".doc");
                     document.setDocumentSize(16 + i);
-                    document.setDocumentSpeaker("李四");
+                    document.setDocumentSpeaker("老二");
                     documents.add(document);
                 }
                 break;
@@ -76,7 +106,62 @@ public class FakeDataProvider {
                     document.setDocumentIndex(i);
                     document.setDocumentName("agenda_three_fileName"+i+".xlsx");
                     document.setDocumentSize(4 + i);
-                    document.setDocumentSpeaker("王五");
+                    document.setDocumentSpeaker("老三");
+                    documents.add(document);
+                }
+                break;
+            case 4:
+                for (int i = 1; i < 6; i++) {
+                    Document document = new Document();
+                    document.setDocumentAgendaIndex(4);
+                    document.setDocumentIndex(i);
+                    document.setDocumentName("agenda_four_fileName"+i+".txt");
+                    document.setDocumentSize(10 + i);
+                    document.setDocumentSpeaker("老四");
+                    documents.add(document);
+                }
+                break;
+            case 5:
+                for (int i = 1; i < 7; i++) {
+                    Document document = new Document();
+                    document.setDocumentAgendaIndex(5);
+                    document.setDocumentIndex(i);
+                    document.setDocumentName("agenda_five_fileName"+i+".doc");
+                    document.setDocumentSize(9 + i);
+                    document.setDocumentSpeaker("老五");
+                    documents.add(document);
+                }
+                break;
+            case 6:
+                for (int i = 1; i < 5; i++) {
+                    Document document = new Document();
+                    document.setDocumentAgendaIndex(6);
+                    document.setDocumentIndex(i);
+                    document.setDocumentName("agenda_six_fileName"+i+".xlsx");
+                    document.setDocumentSize(10 + i);
+                    document.setDocumentSpeaker("老刘");
+                    documents.add(document);
+                }
+                break;
+            case 7:
+                for (int i = 1; i < 5; i++) {
+                    Document document = new Document();
+                    document.setDocumentAgendaIndex(7);
+                    document.setDocumentIndex(i);
+                    document.setDocumentName("agenda_seven_fileName"+i+".doc");
+                    document.setDocumentSize(7 + i);
+                    document.setDocumentSpeaker("老七");
+                    documents.add(document);
+                }
+                break;
+            case 8:
+                for (int i = 1; i < 5; i++) {
+                    Document document = new Document();
+                    document.setDocumentAgendaIndex(8);
+                    document.setDocumentIndex(i);
+                    document.setDocumentName("agenda_eight_fileName"+i+".xlsx");
+                    document.setDocumentSize(14 + i);
+                    document.setDocumentSpeaker("老八");
                     documents.add(document);
                 }
                 break;

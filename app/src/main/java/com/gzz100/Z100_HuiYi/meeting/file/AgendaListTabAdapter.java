@@ -59,12 +59,28 @@ public class AgendaListTabAdapter extends RecyclerView.Adapter<AgendaHolder>{
             holder.mLayout.setBackgroundColor(mContext.
                     getResources().getColor(R.color.color_tab_selected));
         }
+        if (selectedPosition == position){
+            holder.mAgendaIndex.setTextColor(mContext.getResources().getColor(R.color.color_white));
+            holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_white));
+            holder.mLayout.setBackgroundColor(mContext.
+                    getResources().getColor(R.color.color_tab_selected));
+        }else {
+            holder.mAgendaIndex.setTextColor(mContext.getResources().getColor(R.color.color_black));
+            holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_black));
+            holder.mLayout.setBackgroundColor(mContext.
+                    getResources().getColor(R.color.color_tab_normal));
+        }
 
     }
 
     @Override
     public int getItemCount() {
         return mAgendas.size();
+    }
+
+    private int selectedPosition;
+    public void setSelectedItem(int position){
+        selectedPosition = position;
     }
 
 }

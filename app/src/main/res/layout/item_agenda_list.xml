@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="middle"
             android:text="标题"
+            android:gravity="center"
             android:singleLine="true"
             android:textColor="@android:color/black"/>
     </LinearLayout>

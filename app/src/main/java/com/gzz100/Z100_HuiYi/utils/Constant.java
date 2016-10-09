@@ -41,4 +41,5 @@ public class Constant {
     public static final int MEETING_STATE_BEGIN = 2;
     public static final int MEETING_STATE_PAUSE = 4;
     public static final int MEETING_STATE_ENDING = 8;
+    public static final int MEETING_STATE_CONTINUE = 9;
 }

@@ -106,9 +106,19 @@ public class NavBarView extends RelativeLayout {
     public void setTimeHour(String time){
         mTvTimeHour.setText(time);
     }
+
+    public String getTimeHour() {
+        return mTvTimeHour.getText().toString();
+    }
+
+
     public void setTimeMin(String time){
         mTvTimeMin.setText(time);
     }
+    public String getTimeMin() {
+        return mTvTimeMin.getText().toString();
+    }
+
     public void setCurrentMeetingState(String currentState){
         mTvState.setText(currentState);
         mTvState.setVisibility(View.VISIBLE);

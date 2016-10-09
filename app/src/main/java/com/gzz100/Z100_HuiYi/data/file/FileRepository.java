@@ -59,15 +59,19 @@ public class FileRepository implements FileDataSource {
     }
 
     @Override
-    public void getAgendaList(String IMEI, String userId, @NonNull LoadAgendaListCallback callback) {
+    public void getAgendaList(final String IMEI, final String userId, @NonNull final LoadAgendaListCallback callback) {
         checkNotNull(callback);
-        List<Agenda> agendas = FileOperate.getInstance(mContext).queryAgendaList(Constant.COLUMNS_AGENDAS);
-        //查询数据库中是否有议程列表
-        if (agendas != null && agendas.size() > 0){
-            mFileLocalDataSource.getAgendaList(IMEI,userId,callback);
-        }else {
-            mFileRemoteDataSource.getAgendaList(IMEI,userId,callback);
-        }
+        mFileLocalDataSource.getAgendaList(IMEI, userId, new LoadAgendaListCallback() {
+            @Override
+            public void onAgendaListLoaded(List<Agenda> agendas) {
+                callback.onAgendaListLoaded(agendas);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                mFileRemoteDataSource.getAgendaList(IMEI,userId,callback);
+            }
+        });
     }
 
     @Override

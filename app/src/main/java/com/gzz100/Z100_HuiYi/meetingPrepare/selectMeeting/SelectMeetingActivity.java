@@ -27,8 +27,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SelectMeetingActivity extends BaseActivity implements SelectMeetingContract.View, OnMeetingClickListener {
-    public static void toSelectMeetingActivity(Context context){
-        Intent intent = new Intent(context,SelectMeetingActivity.class);
+    public static void toSelectMeetingActivity(Context context) {
+        Intent intent = new Intent(context, SelectMeetingActivity.class);
         context.startActivity(intent);
 
     }
@@ -41,18 +41,19 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
     private List<MeetingBean> mMeetings;
 
     private SelectMeetingContract.Presenter mPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_meeting);
         ButterKnife.bind(this);
-        mPresenter = new SelectMeetingPresenter(this,this);
+        mPresenter = new SelectMeetingPresenter(this, this);
         saveIMEI();
     }
 
     private void saveIMEI() {
         String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
-        mPresenter.saveIMEI(this.getApplicationContext(),deviceIMEI);
+        mPresenter.saveIMEI(this.getApplicationContext(), deviceIMEI);
     }
 
     @Override
@@ -65,19 +66,21 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
      * 重新获取会议列表
      */
     @OnClick(R.id.id_btn_select_meeting)
-    void getMeetingList(){
+    void getMeetingList() {
         String deviceIMEI = SharedPreferencesUtil.getInstance(this.getApplicationContext()).getString(Constant.DEVICE_IMEI, "");
-        mPresenter.fetchMeetingList(true,deviceIMEI);
+        mPresenter.fetchMeetingList(true, deviceIMEI);
     }
 
     @Override
     public void showMeetingList(List<MeetingBean> meetings) {
+        if (mMeetings != null)
+            mMeetings.clear();
         mMeetings = meetings;
-        mAdapter = new MeetingAdapter(this,meetings);
-        mRcvSelectMeeting.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        mAdapter = new MeetingAdapter(this, meetings);
+        mRcvSelectMeeting.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRcvSelectMeeting.setAdapter(mAdapter);
-        mRcvSelectMeeting.addItemDecoration(new ItemSpaceDecoration(ItemSpaceDecoration.VERTICAL,
-                (int) getResources().getDimension(R.dimen.distance_twenty_dp)));
+//        mRcvSelectMeeting.addItemDecoration(new ItemSpaceDecoration(ItemSpaceDecoration.VERTICAL,
+//                (int) getResources().getDimension(R.dimen.distance_twenty_dp)));
         mAdapter.setOnMeetingClickListener(this);
 
     }
@@ -90,7 +93,7 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
 
     @Override
     public void showSignIn(String IMEI, String meetingID) {
-        SignInActivity.toSignInActivity(this,IMEI,meetingID);
+        SignInActivity.toSignInActivity(this, IMEI, meetingID);
     }
 
     @Override
@@ -102,6 +105,6 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
     public void onMeetingClick(int position) {
         int meetingID = mMeetings.get(position).getMeetingID();
         String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
-        mPresenter.selectMeeting(deviceIMEI,meetingID+"");
+        mPresenter.selectMeeting(deviceIMEI, meetingID + "");
     }
 }

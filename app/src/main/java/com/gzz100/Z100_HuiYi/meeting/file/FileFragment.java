@@ -141,7 +141,8 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mAgendaListRecView.setAdapter(mAgendaAdapter);
         mAgendaAdapter.setOnItemClickListener(this);
-
+        mAgendaAdapter.setSelectedItem(0);
+        mAgendaAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -153,7 +154,6 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mFileListRecView.setAdapter(mFileListAdapter);
         mFileListAdapter.setOnItemClickListener(this);
-
     }
 
     @Override
@@ -164,14 +164,12 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         mSearchResultRecView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         mSearchResultRecView.setAdapter(mSearchResultAdapter);
         mSearchResultAdapter.setOnSearchItemClickListener(this);
-
     }
 
     @Override
     public void showFileDetail() {
         String currentTitle = mMainActivity.getCurrentTitle();
         FileDetailActivity.start(getActivity(),mAgendaIndex,mFileIndex,currentTitle,false);
-
     }
 
     @Override
@@ -232,38 +230,13 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     public void onAgendaItemClick(View v, int position) {
         mPresenter.setAgendaTime(mAgendas.get(position).getAgendaDuration());
         mPresenter.fetchFileList(true, position + 1);
-        int childCount = mAgendaListRecView.getChildCount();
-        setBackgroundColor(childCount, position);
-
+        mAgendaAdapter.setSelectedItem(position);
+        mAgendaAdapter.notifyDataSetChanged();
     }
-
-    private void setBackgroundColor(int childCount, int position) {
-        for (int i = 0; i < childCount; i++) {
-            ((LinearLayout) mAgendaListRecView.getChildAt(i)
-                    .findViewById(R.id.id_item_agenda_layout)).setBackgroundColor(
-                    getResources().getColor(R.color.color_tab_normal));
-            ((TextView) mAgendaListRecView.getChildAt(i).findViewById(R.id.id_item_agenda_index)).
-                    setTextColor(getResources().getColor(R.color.color_black));
-            ((TextView) mAgendaListRecView.getChildAt(i).findViewById(R.id.id_item_agenda_title)).
-                    setTextColor(getResources().getColor(R.color.color_black));
-
-        }
-        ((LinearLayout) mAgendaListRecView.getChildAt(position)
-                .findViewById(R.id.id_item_agenda_layout)).setBackgroundColor(
-                getResources().getColor(R.color.color_tab_selected));
-        ((TextView) mAgendaListRecView.getChildAt(position).findViewById(R.id.id_item_agenda_index)).
-                setTextColor(getResources().getColor(R.color.color_white));
-        ((TextView) mAgendaListRecView.getChildAt(position).findViewById(R.id.id_item_agenda_title)).
-                setTextColor(getResources().getColor(R.color.color_white));
-
-    }
-
-
     @Override
     public void onFileItemClick(int position) {
         mPresenter.showFileDetail(position);
     }
-
     @Override
     public void onSearchClick(int position) {
         if (mResultDocumentBeen != null && mResultDocumentBeen.size() > 0){
@@ -271,9 +244,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
             mSearchAgendaIndex = Integer.valueOf(mResultDocumentBeen.get(position).getDocumentAgendaIndex());
             mPresenter.showSearchFileDetail(mSearchFileIndex1,mSearchAgendaIndex);
         }
-
     }
-
     //搜索
     @Override
     public void onClick(View v) {
@@ -281,5 +252,4 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         if (TextUtils.isEmpty(content))
             Toast.makeText(getActivity(), "请输入搜索关键字", Toast.LENGTH_SHORT).show();
     }
-
 }

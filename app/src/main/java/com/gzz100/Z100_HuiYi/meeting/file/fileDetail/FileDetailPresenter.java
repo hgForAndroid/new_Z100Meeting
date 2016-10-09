@@ -110,6 +110,14 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
                 }
             }
         }).start();
+
+//        try {
+//            MulticastBean mMulticastBean = multicastBean.clone();
+//            mMulticastBean.setMeetingState(meetingState);
+//            MulticastController.getDefault().sendMulticaseBean(mMulticastBean);
+//        } catch (CloneNotSupportedException e) {
+//            e.printStackTrace();
+//        }
         mView.meetingPause();
     }
 
@@ -130,6 +138,16 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
                 }
             }
         }).start();
+//        try {
+//            MulticastBean mMulticastBean = multicastBean.clone();
+//            mMulticastBean.setMeetingState(meetingState);
+//            mMulticastBean.setAgendaIndex(agendaIndex);
+//            mMulticastBean.setDocumentIndex(DocumentIndex);
+//            mMulticastBean.setUpLevelTitle(upLevelText);
+//            MulticastController.getDefault().sendMulticaseBean(mMulticastBean);
+//        } catch (CloneNotSupportedException e) {
+//            e.printStackTrace();
+//        }
         mView.meetingContinue();
     }
 

@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+    android:paddingBottom="@dimen/distance_twenty_dp">
     <LinearLayout
         android:id="@+id/id_ll_meeting_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
         <TextView
             android:id="@+id/id_tv_name_item_select_meeting"
             style="@style/selectMeeting_text_view_attr"
