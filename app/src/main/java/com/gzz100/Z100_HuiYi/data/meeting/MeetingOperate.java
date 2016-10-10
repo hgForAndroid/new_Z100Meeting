@@ -46,8 +46,8 @@ public class MeetingOperate {
     public void insertUserList(int userColumn,List<DelegateBean> userList){
         byte[] data = ObjectTransverter.ListToByteArr(userList);
         ContentValues values =new ContentValues();
-        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_USERS,userColumn);
-        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_USERS_LIST,data);
+        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_ROLE,userColumn);
+        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE,data);
         mDatabase = mDBHelper.getReadableDatabase();
         mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE,null,values);
     }
@@ -61,11 +61,11 @@ public class MeetingOperate {
         List<DelegateBean> userList = null;
         mDatabase = mDBHelper.getReadableDatabase();
         String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE + " where " +
-                PersistenceContract.ColumnsName.COLUMN_NAME_USERS + " = ?";
+                PersistenceContract.ColumnsName.COLUMN_NAME_ROLE + " = ?";
         Cursor cursor = mDatabase.rawQuery(sql, new String[]{userColumn + ""});
         if ( cursor.moveToFirst()){
             byte[] data = cursor.getBlob(cursor.getColumnIndex(
-                    PersistenceContract.ColumnsName.COLUMN_NAME_USERS_LIST));
+                    PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE));
             userList = (List<DelegateBean>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();

@@ -12,10 +12,9 @@ import java.util.List;
 public interface DelegateContract {
     interface View extends BaseView {
 
-
         void showRoleList(List<String> roleList);
 
-        void showDelegateDetail(DelegateBean delegateBean, int delegateDetailPos);
+        void showDelegateDetail(DelegateBean delegateBean);
 
         void showDelegateList(List<DelegateBean> delegateBean);
 
@@ -29,6 +28,7 @@ public interface DelegateContract {
 
         void showDelegateNameGridItemDecoration();
 
+        void setAutoCompleteTextView(List<DelegateBean> delegateBeans);
 
     }
     interface Presenter extends BasePresenter {
@@ -39,9 +39,11 @@ public interface DelegateContract {
 
         void showDelegateDetail( int position);
 
-        void searchByName();
+        void setDelegateSearchAutoCompleteTextViewHint();
 
         void setFirstLoad(boolean reLoad);
+
+        void searchByName(String nameInput);
 
     }
 }

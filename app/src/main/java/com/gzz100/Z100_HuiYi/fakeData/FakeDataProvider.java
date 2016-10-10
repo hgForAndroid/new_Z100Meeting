@@ -173,9 +173,9 @@ public class FakeDataProvider {
         List<DelegateBean> delegateBeans=new ArrayList<>();
 
         ArrayList<String> speakerNames=new ArrayList<>();
-        speakerNames.add("张三");
-        speakerNames.add("李四");
-        speakerNames.add("王五");
+        speakerNames.add("one");
+        speakerNames.add("two");
+        speakerNames.add("three");
 
         ArrayList<String> departmentNames=new ArrayList<>();
         departmentNames.add("技术部");
@@ -184,15 +184,15 @@ public class FakeDataProvider {
         departmentNames.add("后勤部");
 
         ArrayList<String> hostNames=new ArrayList<>();
-        hostNames.add("王五");
+        hostNames.add("four");
 
         ArrayList<String> otherDelegateNames=new ArrayList<>();
-        otherDelegateNames.add("张一");
-        otherDelegateNames.add("李二");
-        otherDelegateNames.add("王三");
-        otherDelegateNames.add("张四");
-        otherDelegateNames.add("李五");
-        otherDelegateNames.add("王六");
+        otherDelegateNames.add("five");
+        otherDelegateNames.add("six");
+        otherDelegateNames.add("eight");
+        otherDelegateNames.add("nine");
+        otherDelegateNames.add("ten");
+        otherDelegateNames.add("eleven");
 
 
 
@@ -245,9 +245,9 @@ public class FakeDataProvider {
         List<DelegateBean> delegateBeans=new ArrayList<>();
 
         ArrayList<String> speakerNames=new ArrayList<>();
-        speakerNames.add("张三");
-        speakerNames.add("李四");
-        speakerNames.add("王五");
+        speakerNames.add("one");
+        speakerNames.add("two");
+        speakerNames.add("three");
 
         ArrayList<String> departmentNames=new ArrayList<>();
         departmentNames.add("技术部");
@@ -261,15 +261,16 @@ public class FakeDataProvider {
         jobName.add("后勤人员");
 
         ArrayList<String> hostNames=new ArrayList<>();
-        hostNames.add("王五");
+        hostNames.add("four");
 
         ArrayList<String> otherDelegateNames=new ArrayList<>();
-        otherDelegateNames.add("张一");
-        otherDelegateNames.add("李二");
-        otherDelegateNames.add("王三");
-        otherDelegateNames.add("张四");
-        otherDelegateNames.add("李五");
-        otherDelegateNames.add("王六");
+        otherDelegateNames.add("five");
+        otherDelegateNames.add("six");
+        otherDelegateNames.add("seven");
+        otherDelegateNames.add("eight");
+        otherDelegateNames.add("ten");
+        otherDelegateNames.add("eleven");
+
 
         DelegateBean delegateBean=new DelegateBean();
 
