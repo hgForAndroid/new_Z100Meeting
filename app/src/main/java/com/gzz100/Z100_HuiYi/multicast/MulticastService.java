@@ -67,6 +67,7 @@ public class MulticastService extends Service {
         socket.joinGroup(address);
     }
 
+    private int num = 0;
     private void startReceivingMulticast() throws IOException{
         DatagramPacket packet;
 
@@ -79,6 +80,11 @@ public class MulticastService extends Service {
             try {
                 MulticastBean multicastBean = (MulticastBean) ParseObject.bytesToObject(packet.getData());
                 Log.e("接收到   ","会议状态  =="+ multicastBean.getMeetingState());
+                Log.e("接收到   ","次数"+ num);
+                Log.e("接收到   ","包大小"+ ParseObject.bytesToObject(packet.getData()));
+
+                num++;
+
                 EventBus.getDefault().post(multicastBean);
 
             } catch (Exception e) {

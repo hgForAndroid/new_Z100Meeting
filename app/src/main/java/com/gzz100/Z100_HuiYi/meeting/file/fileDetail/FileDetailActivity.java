@@ -159,7 +159,11 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mPassive = mBundle.getBoolean(PASSIVE, false);
             List<Agenda> agendas = FileOperate.getInstance(this).queryAgendaList(Constant.COLUMNS_AGENDAS);
             mAgendaSum = agendas.size();
-            mAgendaDuration = agendas.get(mAgendaIndex - 1).getAgendaDuration();
+            if (mPassive){
+                mAgendaDuration = agendas.get(mAgendaIndex).getAgendaDuration();
+            }else {
+                mAgendaDuration = agendas.get(mAgendaIndex - 1).getAgendaDuration();
+            }
             mFileList = FileOperate.getInstance(this).queryFileList(mAgendaIndex);
             mFileName = mFileList.get(mFileIndex).getDocumentName();
 
@@ -369,6 +373,21 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 mNavBarView.setCurrentMeetingState("(已结束)");
                 mPassive = false;
             }else if (data.getMeetingState() == Constant.MEETING_STATE_CONTINUE){
+
+                if (data.getAgendaIndex() > 0) {
+                    mAgendaIndex = data.getAgendaIndex();
+                    resetAgendaTimeCounting(data.getAgendaIndex());
+                    resetAgendaContent(data.getAgendaIndex());
+                }
+                if (data.getDocumentIndex() >= 0) {
+                    mFileIndex = data.getDocumentIndex();
+                    mPresenter.loadFile(mFileList.get(data.getDocumentIndex()).getDocumentName());
+                    mNavBarView.setTitle(mFileList.get(data.getDocumentIndex()).getDocumentName());
+//                mFileNameRcv.setSelection(data.getDocumentIndex());
+                    mFileDetailAdapter.setSelectedItem(data.getDocumentIndex());
+                    mFileDetailAdapter.notifyDataSetInvalidated();
+                }
+
                 mNavBarView.setCurrentMeetingState("(开会中)");
                 mPassive = true;
                 countingTime();
@@ -539,13 +558,19 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 public void run() {
                     try {
                         MulticastBean multicastBean = mMulticastBean.clone();
-                        ///如果是暂停状态，将状态改为开始，为了重新开始计时不混乱
-                        if (meetingState == Constant.MEETING_STATE_CONTINUE)
+                        ///如果是继续状态，将状态改为开始，为了重新开始计时不混乱
+                        if (meetingState == Constant.MEETING_STATE_CONTINUE){
                             meetingState = Constant.MEETING_STATE_BEGIN;
-                        multicastBean.setMeetingState(meetingState);
-                        //这里设置议程序号为0.切换文件时，忽略切换议程
-                        multicastBean.setAgendaIndex(0);
-                        multicastBean.setDocumentIndex(position);
+                            multicastBean.setMeetingState(meetingState);
+                            //这里设置议程序号为0.切换文件时，忽略切换议程
+                            multicastBean.setAgendaIndex(mAgendaIndex);
+                            multicastBean.setDocumentIndex(position);
+                        }else {
+                            multicastBean.setMeetingState(meetingState);
+                            //这里设置议程序号为0.切换文件时，忽略切换议程
+                            multicastBean.setAgendaIndex(0);
+                            multicastBean.setDocumentIndex(position);
+                        }
                         MulticastController.getDefault().sendMulticaseBean(multicastBean);
                     } catch (CloneNotSupportedException e) {
                         e.printStackTrace();
