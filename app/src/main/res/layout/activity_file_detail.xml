@@ -33,7 +33,7 @@
             android:id="@+id/id_slide_layout"
             layout="@layout/file_detail_slide_layout"/>
         <ImageView
-            android:id="@+id/id_iv_control_bar_slide_to_right"
+            android:id="@+id/id_iv_control_bar_slide_to_left"
             android:layout_gravity="bottom|right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

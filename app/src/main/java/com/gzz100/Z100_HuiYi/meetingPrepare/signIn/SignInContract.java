@@ -48,5 +48,19 @@ public interface SignInContract {
          */
         void signIn(String IMEI,String meetingID);
 
+
+        /**
+         * 组播循环发送 选择的会议id和服务器IP地址,作为主持人端的平板的IP
+         * @param meetingId    会议id
+         * @param tcpServerIP  主持人端的平板的IP
+         *                      服务器IP地址已经保存在SharedPreferences中，参数为Constant.CURRENT_IP
+         */
+        void sendMeetingIdAndServerIP(String meetingId,String tcpServerIP);
+
+        /**
+         * 主持人端开启TCP服务器端的服务，等待客户端的连接请求
+         */
+        void startTCPService();
+
     }
 }

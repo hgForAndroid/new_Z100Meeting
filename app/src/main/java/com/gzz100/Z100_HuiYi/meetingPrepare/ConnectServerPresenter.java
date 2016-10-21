@@ -1,13 +1,27 @@
 package com.gzz100.Z100_HuiYi.meetingPrepare;
 
+import android.content.ComponentName;
 import android.content.Context;
-import android.nfc.FormatException;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.text.TextUtils;
-import android.view.TextureView;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.gzz100.Z100_HuiYi.MyAPP;
+import com.gzz100.Z100_HuiYi.meetingPrepare.signIn.SignInActivity;
+import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
+import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,6 +94,66 @@ public class ConnectServerPresenter implements ConnectServerContract.Presenter {
     @Override
     public void saveCurrentIP(String ip) {
         SharedPreferencesUtil.getInstance(mContext).putString(Constant.CURRENT_IP, ip);
+    }
+
+    @Override
+    public void receivedKeyInfoFromHost() {
+//        Log.e("开始接收组播  ===","");
+        new Thread(mRunnable).start();
+    }
+
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            startReceivedData();
+        }
+    };
+
+    private void startReceivedData() {
+        try {
+            MulticastSocket multicastSocket = new MulticastSocket(Constant.MULTI_PORT);
+            InetAddress inetAddress = InetAddress.getByName(Constant.MULTI_IP);
+            multicastSocket.joinGroup(inetAddress);
+            // 接收数据
+            byte[] rev = new byte[512];
+            DatagramPacket packet = new DatagramPacket(rev, rev.length);
+
+            while (true){
+                Log.e("等待组播 ====","=======================================");
+                multicastSocket.receive(packet);
+                if (MyAPP.getInstance().getUserRole() == 1){//主持人不做接收处理
+                    return;
+                }
+                try {
+                    byte[] data = packet.getData();
+                    String string = new String(data).trim();
+
+                    if (!TextUtils.isEmpty(string)){
+                        Log.e("组播接收的字符串信息  == ",string);
+                        if (string.contains("{")&&string.contains("}")){
+                            Gson gson = new Gson();
+                            KeyInfoBean keyInfoBean = gson.fromJson(string, KeyInfoBean.class);
+                            //保存服务器地址
+                            SharedPreferencesUtil.getInstance(mContext).putString(Constant.CURRENT_IP,keyInfoBean.getServerIP());
+                            SharedPreferencesUtil.getInstance(mContext).putString(Constant.TCP_SERVER_IP,keyInfoBean.getTcpServerIP());
+                            mView.showSignInActivity(keyInfoBean);
+                        }
+
+                        break;
+                    }else {
+                        Log.e("接收的组播信息是空的","======================");
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            multicastSocket.leaveGroup(inetAddress);
+            multicastSocket.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

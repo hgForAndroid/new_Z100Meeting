@@ -4,18 +4,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
@@ -34,7 +30,7 @@ import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
 import com.gzz100.Z100_HuiYi.multicast.MulticastBean;
-import com.gzz100.Z100_HuiYi.multicast.MulticastService;
+import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
@@ -47,13 +43,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Observer;
-import rx.Scheduler;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, ViewPager.OnPageChangeListener, ICommunicate {
     public static void toMainActivity(Context context) {
@@ -115,7 +104,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     private void initMulticastService() {
-        Intent intent = new Intent(MainActivity.this, MulticastService.class);
+        Intent intent = new Intent(MainActivity.this, ReceivedMulticastService.class);
         startService(intent);
     }
 
@@ -316,7 +305,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     .setPositiveButton("是", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            stopService(new Intent(MainActivity.this, MulticastService.class));
+                            stopService(new Intent(MainActivity.this, ReceivedMulticastService.class));
                             ActivityStackManager.exit();
                         }
                     })

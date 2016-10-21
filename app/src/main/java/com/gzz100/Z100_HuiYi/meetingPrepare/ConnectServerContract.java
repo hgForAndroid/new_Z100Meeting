@@ -2,6 +2,7 @@ package com.gzz100.Z100_HuiYi.meetingPrepare;
 
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
+import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
 
 import java.util.List;
 
@@ -30,6 +31,12 @@ public interface ConnectServerContract {
          * @param ip
          */
         void setIPFromHistory(String ip);
+
+        /**
+         * 跳转到签到界面
+         * @param keyInfoBean  关键信息的实体类
+         */
+        void showSignInActivity(KeyInfoBean keyInfoBean);
 
     }
 
@@ -62,5 +69,11 @@ public interface ConnectServerContract {
          * @param ip   当前确认的IP地址
          */
         void saveCurrentIP(String ip);
+
+        /**
+         * 接收主持人端发送过来的关键数据，
+         * 包括  会议id，服务器ip，主持人端的平板设备在局域网内的ip
+         */
+        void receivedKeyInfoFromHost();
     }
 }

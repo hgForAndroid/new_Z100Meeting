@@ -20,6 +20,15 @@ public class MyAPP extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+//        saveDefaultUserRole();
+    }
+
+    //默认角色为普通参会人员
+    private int userRole = 2;
+
+
+    public void setUserRole(int userRole) {
+        this.userRole = userRole;
     }
 
     /**
@@ -27,6 +36,7 @@ public class MyAPP extends Application {
      * @return   角色类型  ，  1为主持人，2为听众（普通参会人员）
      */
     public int getUserRole(){
-        return SharedPreferencesUtil.getInstance(mInstance).getInt(Constant.USER_ROLE,2);
+        return userRole;
     }
+
 }

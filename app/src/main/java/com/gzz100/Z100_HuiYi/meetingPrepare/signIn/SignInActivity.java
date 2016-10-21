@@ -7,18 +7,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
-import com.gzz100.Z100_HuiYi.multicast.MulticastService;
+import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
+import com.gzz100.Z100_HuiYi.multicast.MulticastController;
+import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
+import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
+import com.gzz100.Z100_HuiYi.tcpController.Client;
+import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
+import com.gzz100.Z100_HuiYi.tcpController.TcpClient;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,11 +84,27 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         }
     }
 
+    public void sendMulti(View view){
+
+//        MulticastController.getDefault().closeController();
+//        stopService(new Intent(this, SendMulticastService.class));
+
+
+        String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
+        KeyInfoBean keyInfoBean = new KeyInfoBean("11111","22222",localIpAddress);
+        Gson gson = new Gson();
+        String s = gson.toJson(keyInfoBean);
+        MulticastController.getDefault().sendMessage(s);
+        Log.e("发送的组播信息"," =========== "+s);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        mPresenter.fetchCurrentUserBean(false,mDeviceIMEI,mMeetingID);
         EventBus.getDefault().register(this);
+
+        mPresenter.fetchCurrentUserBean(false,mDeviceIMEI,mMeetingID);
+        sendKeyMessageToClients();
     }
 
     @Override
@@ -107,13 +132,32 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
 
     @OnClick(R.id.id_btn_sign_in)
     void signIn(){
-        mPresenter.signIn(mDeviceIMEI,mMeetingID);
+//        mPresenter.signIn(mDeviceIMEI,mMeetingID);
+        if (MyAPP.getInstance().getUserRole() == 1){
+            //发送数据给客户端
+            ControllerUtil.getInstance().sendMessage("发送数据了");
+        }
+
     }
 
     @Override
     public void showDelegate(UserBean userBean) {
         mTvPosition.setText(userBean.getUserJob());
         mTvName.setText(userBean.getUserName());
+        if (userBean.getUserRole() == 1){
+            sendKeyMessageToClients();
+        }
+    }
+    //使用组播发送信息给全部客户端，信息包括 会议id，服务器ip，当前主持人平板设备在局域网内的ip
+    private void sendKeyMessageToClients() {
+        //该角色在进入该Activity时，在onStart方法中调用mPresenter.fetchCurrentUserBean(false,mDeviceIMEI,mMeetingID);
+        //里面取完值就已经赋值
+        if (MyAPP.getInstance().getUserRole() == 1){//主持人才发送组播,启动TCP服务器端服务
+            mPresenter.startTCPService();
+            //获取当前平板在局域网内的ip地址
+            String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
+//            mPresenter.sendMeetingIdAndServerIP(mMeetingID,localIpAddress);
+        }
     }
 
     @Override
@@ -137,10 +181,10 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     public void showMainActivity() {
         MainActivity.toMainActivity(this);
         if (MyAPP.getInstance().getUserRole() == 1){
-            if (AppUtil.isServiceRun(this.getApplicationContext(),"com.gzz100.Z100_HuiYi.multicast.MulticastService")){
-                Log.e("服务在运行","=============================================================================");
-            }
-            stopService(new Intent(this, MulticastService.class));
+//            if (AppUtil.isServiceRun(this.getApplicationContext(),"com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService")){
+//                Log.e("服务在运行","=============================================================================");
+//            }
+//            stopService(new Intent(this, ReceivedMulticastService.class));
         }
         ActivityStackManager.pop();
     }

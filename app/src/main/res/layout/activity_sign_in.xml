@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".meetingPrepare.signIn.SignInActivity">
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="sendMulti"
+        android:text="发送"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

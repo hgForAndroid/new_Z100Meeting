@@ -6,7 +6,10 @@ package com.gzz100.Z100_HuiYi.utils;
 */
 
 public class Constant {
+    public static final String MULTI_IP = "239.0.0.1";
+    public static final int MULTI_PORT = 30001;
 
+    public static final int TCP_PORT = 9898;
 
     //参会代表界面中，角色标签的类型
     public static final int DEFAULT_SPEAKER=0;
@@ -42,4 +45,6 @@ public class Constant {
     public static final int MEETING_STATE_PAUSE = 4;
     public static final int MEETING_STATE_ENDING = 8;
     public static final int MEETING_STATE_CONTINUE = 9;
+    //作为TCP服务器端的平板的ip
+    public static final String TCP_SERVER_IP = "tcp_server_ip";
 }

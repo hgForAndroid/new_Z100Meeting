@@ -1,7 +1,11 @@
 package com.gzz100.Z100_HuiYi.meetingPrepare.signIn;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.Document;
@@ -12,6 +16,11 @@ import com.gzz100.Z100_HuiYi.data.file.FileOperate;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
 import com.gzz100.Z100_HuiYi.data.signIn.SignInDataSource;
 import com.gzz100.Z100_HuiYi.data.signIn.SignInRemoteDataSource;
+import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
+import com.gzz100.Z100_HuiYi.multicast.MulticastController;
+import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
+import com.gzz100.Z100_HuiYi.tcpController.Server;
+import com.gzz100.Z100_HuiYi.tcpController.TcpService;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
@@ -26,6 +35,7 @@ import java.util.Map;
 public class SignInPresenter implements SignInContract.Presenter {
     private SignInContract.View mView;
     private Context mContext;
+    private Gson mGson;
 
     public SignInPresenter(Context context,SignInContract.View view) {
         this.mContext = context;
@@ -36,23 +46,23 @@ public class SignInPresenter implements SignInContract.Presenter {
     private boolean isFirst = true;
     @Override
     public void fetchCurrentUserBean(boolean fourUpdate, String IMEI, String meetingID) {
-        if (isFirst || fourUpdate){
-            SignInRemoteDataSource.getInstance(mContext).fetchUserBean(IMEI, meetingID, new SignInDataSource.LoadUserBeanCallback() {
-                @Override
-                public void onUserBeanLoaded(UserBean userBean) {
-                    mView.showDelegate(userBean);
-                    //保存当前用户角色
-                    saveUserRole(userBean.getUserRole());
-                    //开启下载
-                    mView.startDownLoad(userBean.getDocumentURLList());
-                }
-
-                @Override
-                public void onDataNotAvailable() {
-                    mView.showNoDelegate();
-                }
-            });
-        }
+//        if (isFirst || fourUpdate){
+//            SignInRemoteDataSource.getInstance(mContext).fetchUserBean(IMEI, meetingID, new SignInDataSource.LoadUserBeanCallback() {
+//                @Override
+//                public void onUserBeanLoaded(UserBean userBean) {
+//                    mView.showDelegate(userBean);
+//                    //保存当前用户角色
+//                    saveUserRole(userBean.getUserRole());
+//                    //开启下载
+//                    mView.startDownLoad(userBean.getDocumentURLList());
+//                }
+//
+//                @Override
+//                public void onDataNotAvailable() {
+//                    mView.showNoDelegate();
+//                }
+//            });
+//        }
         //TODO  有服务器后去掉，这里测试用，1主持人，2其他
         saveUserRole(1);
     }
@@ -62,7 +72,8 @@ public class SignInPresenter implements SignInContract.Presenter {
      * @param role    角色类型 ，1代表主持人，2，代表听众
      */
     private void saveUserRole(int role){
-        SharedPreferencesUtil.getInstance(mContext.getApplicationContext()).putInt(Constant.USER_ROLE,role);
+        MyAPP.getInstance().setUserRole(role);
+//        SharedPreferencesUtil.getInstance(mContext.getApplicationContext()).putInt(Constant.USER_ROLE,role);
     }
 
     @Override
@@ -156,5 +167,34 @@ public class SignInPresenter implements SignInContract.Presenter {
     @Override
     public void start() {
         //这里开始取数据需要传递参数，所以这个方法先不采用，直接调用  fetchCurrentUserBean
+    }
+
+    @Override
+    public void sendMeetingIdAndServerIP(String meetingId,String tcpServerIP) {
+        String serverIP = SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP, "");
+        Intent intent = new Intent(mContext, SendMulticastService.class);
+        intent.putExtra(Constant.MEETING_ID,meetingId);
+        intent.putExtra(Constant.CURRENT_IP,serverIP);
+        intent.putExtra(Constant.TCP_SERVER_IP,tcpServerIP);
+        mContext.startService(intent);
+
+//        KeyInfoBean keyInfoBean = new KeyInfoBean(serverIP,meetingId,tcpServerIP);
+//        mGson = new Gson();
+//        final String keyInfoJson = mGson.toJson(keyInfoBean);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true){
+//                    //因为是udp组播发送，循环发送这些值到客户端，确保接收到
+//                    MulticastController.getDefault().sendMessage(keyInfoJson);
+//                }
+//            }
+//        }).start();
+    }
+
+    @Override
+    public void startTCPService() {
+        Intent tcpServiceIntent = new Intent(mContext, Server.class);
+        mContext.startService(tcpServiceIntent);
     }
 }

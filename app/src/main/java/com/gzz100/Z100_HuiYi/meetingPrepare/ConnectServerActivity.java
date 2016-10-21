@@ -7,20 +7,29 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.meetingPrepare.selectMeeting.SelectMeetingActivity;
-import com.gzz100.Z100_HuiYi.multicast.MulticastService;
+import com.gzz100.Z100_HuiYi.meetingPrepare.signIn.SignInActivity;
+import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
+import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
+import com.gzz100.Z100_HuiYi.tcpController.Client;
+import com.gzz100.Z100_HuiYi.tcpController.Server;
+import com.gzz100.Z100_HuiYi.tcpController.TcpClient;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
+import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.MPhone;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
+
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -48,9 +57,12 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
         setContentView(R.layout.activity_connect_server);
         ButterKnife.bind(this);
         mPresenter = new ConnectServerPresenter(this.getApplicationContext(),this);
-        Intent intent = new Intent(this,MulticastService.class);
-        this.startService(intent);
-//        startService(new Intent(this,MulticastService.class));
+
+//        startService(new Intent(this, Server.class));
+
+//        startService(new Intent(this, Client.class));
+//        SignInActivity.toSignInActivity(this,"","");
+
     }
 
     @Override
@@ -88,14 +100,28 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
     public void showSelectMeeting() {
         mPresenter.saveCurrentIP(mIp);
         SelectMeetingActivity.toSelectMeetingActivity(this);
-//        Intent intent = new Intent();
-//        intent.setAction("action.GET_MULYICAST");
-//        stopService(intent);
     }
 
     @Override
     public void setIPFromHistory(String ip) {
         mEdtIP.setText(ip);
+    }
+
+    @Override
+    public void showSignInActivity(KeyInfoBean keyInfoBean) {
+//        SharedPreferencesUtil.getInstance(this.getApplicationContext()).putString(Constant.TCP_SERVER_IP,keyInfoBean.getTcpServerIP());
+//        //开启tcp客户端服务，连接到作为tcp服务器端的主持人使用的平板，一直循环监听tcp服务器端发送的数据
+////        Intent tcpClientIntent = new Intent(this, TcpClient.class);
+////        tcpClientIntent.putExtra(Constant.TCP_SERVER_IP,keyInfoBean.getTcpServerIP());
+////        startService(tcpClientIntent);
+
+        //启动请求连接TCP的服务
+        startService(new Intent(this, Client.class));
+        //获取到后台服务器的ip，以及开启的会议id后，跳转到签到界面
+        //还需要当前设备的IMEI
+        String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
+        SignInActivity.toSignInActivity(this,deviceIMEI,keyInfoBean.getMeetingId());
+        ActivityStackManager.pop();
     }
 
     @Override
@@ -117,13 +143,13 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
     @Override
     protected void onStart() {
         super.onStart();
-//        EventBus.getDefault().register(this);
+        //等待接收主持人端发送过来的数据
+        mPresenter.receivedKeyInfoFromHost();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-//        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -135,7 +161,7 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
                     .setPositiveButton("是", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            stopService(new Intent(ConnectServerActivity.this,MulticastService.class));
+                            stopService(new Intent(ConnectServerActivity.this,ReceivedMulticastService.class));
                             ActivityStackManager.exit();
                         }
                     })

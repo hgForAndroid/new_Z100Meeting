@@ -2,6 +2,8 @@ package com.gzz100.Z100_HuiYi.multicast;
 
 import android.util.Log;
 
+import com.gzz100.Z100_HuiYi.utils.Constant;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -50,7 +52,7 @@ public class MulticastController {
      */
     public static MulticastController getDefault(){
         if(INSTANCE == null){
-            INSTANCE = new MulticastController(30001, "239.0.0.1", 15);
+            INSTANCE = new MulticastController(Constant.MULTI_PORT, Constant.MULTI_IP, 15);
         }
         return INSTANCE;
     }
@@ -78,7 +80,7 @@ public class MulticastController {
             byte[] buff = msg.getBytes("utf-8");//设定多播报文的数据
 
             // 设定UDP报文（内容，内容长度，多播组，端口）
-            DatagramPacket packet = new DatagramPacket(buff,buff.length,address,30001);
+            DatagramPacket packet = new DatagramPacket(buff,buff.length,address,Constant.MULTI_PORT);
             socket.send(packet);//发送报文
 
         } catch (Exception e){
@@ -89,13 +91,13 @@ public class MulticastController {
      * 发送组播信息
      * @param msg 信息内容
      */
-    public void sendMulticaseBean(MulticastBean msg){
+    public void sendMulticastBean(MulticastBean msg){
         try {
             byte[] bytes = ParseObject.objectToBytes(msg);
 //            byte[] buff = msg.getBytes("utf-8");//设定多播报文的数据
             Log.e("", "主持人  组播发送   ");
             // 设定UDP报文（内容，内容长度，多播组，端口）
-            DatagramPacket packet = new DatagramPacket(bytes,bytes.length,address,30001);
+            DatagramPacket packet = new DatagramPacket(bytes,bytes.length,address,Constant.MULTI_PORT);
             socket.send(packet);//发送报文
 
 

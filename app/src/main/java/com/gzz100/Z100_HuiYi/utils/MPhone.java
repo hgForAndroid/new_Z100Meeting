@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 
 /**
@@ -81,5 +83,32 @@ public class MPhone {
 		} else {
 			return "未知版本";
 		}
+	}
+
+	/***
+	 * 使用WIFI时，获取本机IP地址
+	 * @param mContext
+	 * @return
+	 */
+	public static String getWIFILocalIpAdress(Context mContext) {
+
+		//获取wifi服务
+		WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+		//判断wifi是否开启
+		if (!wifiManager.isWifiEnabled()) {
+			wifiManager.setWifiEnabled(true);
+		}
+		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+		int ipAddress = wifiInfo.getIpAddress();
+		String ip = formatIpAddress(ipAddress);
+		return ip;
+	}
+
+	private static String formatIpAddress(int ipAdress) {
+
+		return (ipAdress & 0xFF) + "." +
+				((ipAdress >> 8) & 0xFF) + "." +
+				((ipAdress >> 16) & 0xFF) + "." +
+				(ipAdress >> 24 & 0xFF);
 	}
 }
