@@ -223,23 +223,6 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
         mDocumentsList = documents;
     }
 
-    private void setBackgroundColor(int childCount, int position) {
-        for (int i = 0; i < childCount; i++) {
-            ((LinearLayout) mAgendaRecyclerView.getChildAt(i)
-                    .findViewById(R.id.id_item_agenda_name_layout)).setBackgroundColor(
-                    getResources().getColor(R.color.color_tab_normal));
-            ((TextView) mAgendaRecyclerView.getChildAt(i).findViewById(R.id.id_item_agenda_name_title)).
-                    setTextColor(getResources().getColor(R.color.color_black));
-
-        }
-        ((LinearLayout) mAgendaRecyclerView.getChildAt(position)
-                .findViewById(R.id.id_item_agenda_name_layout)).setBackgroundColor(
-                getResources().getColor(R.color.color_tab_selected));
-        ((TextView) mAgendaRecyclerView.getChildAt(position).findViewById(R.id.id_item_agenda_name_title)).
-                setTextColor(getResources().getColor(R.color.color_white));
-
-    }
-
     @Override
     public void showNoAgendaList() {
 
@@ -303,9 +286,11 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
 
     @Override
     public void onAgendaItemClick(int position) {
-        int childCount = mAgendaRecyclerView.getChildCount();
-        setBackgroundColor(childCount, position);
+        if(position == currentAgendaPositon)
+            return;
         currentAgendaPositon = position;
+        mAgendaListAdapter.setSelectedPosition(position);
+        mAgendaListAdapter.notifyDataSetChanged();
         Log.d("test", "Click:" + currentAgendaPositon);
         mPresenter.showAgendaDetail(mAgendasList.get(position));
     }

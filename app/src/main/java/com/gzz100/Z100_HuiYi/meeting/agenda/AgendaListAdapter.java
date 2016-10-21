@@ -26,6 +26,11 @@ public class AgendaListAdapter extends RecyclerView.Adapter<AgendaHolder> {
         this.mOnItemClickListener = onItemClickListener;
     }
 
+    private int selectedPosition;
+    public void setSelectedPosition(int position){
+        this.selectedPosition = position;
+    }
+
     private Context mContext;
     private List<Agenda> mAgendas;
     private LayoutInflater mInflater;
@@ -58,6 +63,15 @@ public class AgendaListAdapter extends RecyclerView.Adapter<AgendaHolder> {
             holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_white));
             holder.mAgendaLayout.setBackgroundColor(mContext.
                     getResources().getColor(R.color.color_tab_selected));
+        }
+        if (selectedPosition == position){
+            holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_white));
+            holder.mAgendaLayout.setBackgroundColor(mContext.
+                    getResources().getColor(R.color.color_tab_selected));
+        }else {
+            holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_black));
+            holder.mAgendaLayout.setBackgroundColor(mContext.
+                    getResources().getColor(R.color.color_tab_normal));
         }
     }
 
