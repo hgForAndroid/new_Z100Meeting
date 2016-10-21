@@ -156,7 +156,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
             mPresenter.startTCPService();
             //获取当前平板在局域网内的ip地址
             String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
-//            mPresenter.sendMeetingIdAndServerIP(mMeetingID,localIpAddress);
+            mPresenter.sendMeetingIdAndServerIP(mMeetingID,localIpAddress);
         }
     }
 
