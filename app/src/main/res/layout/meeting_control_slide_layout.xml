@@ -10,12 +10,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:src="@drawable/file_detail_slide_to_right"/>
+
     <Button
         android:id="@+id/id_btn_start_meeting"
         android:text="开始"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"/>
+
     <Button
         android:id="@+id/id_btn_pause_meeting"
         android:text="暂停"
@@ -24,7 +26,7 @@
         android:layout_weight="1"/>
     <Button
         android:id="@+id/id_btn_start_vote"
-        android:text="开始投票"
+        android:text="投票"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"/>

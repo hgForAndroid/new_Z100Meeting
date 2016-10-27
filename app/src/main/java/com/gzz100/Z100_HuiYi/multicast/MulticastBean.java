@@ -26,7 +26,11 @@ public class MulticastBean implements Serializable,Cloneable{
     private int voteState;                  //投票状态 未开始1；已开始 2；已结束 4；
     private int IsUpdate;                //是否更新 未更新0；待更新 1
     private int IsReturnVoteResult;      //是否返回表决结果 不返回0；要返回 1；
-
+    /**
+     * 议程是否改变，在主持人端点击上一个，下一个时需要发送为true，
+     * 其他为false或不传值
+     */
+    private boolean isAgendaChange = false;
     public MulticastBean() {
     }
 
@@ -120,5 +124,13 @@ public class MulticastBean implements Serializable,Cloneable{
 
     public void setIsReturnVoteResult(int isReturnVoteResult) {
         IsReturnVoteResult = isReturnVoteResult;
+    }
+
+    public boolean isAgendaChange() {
+        return isAgendaChange;
+    }
+
+    public void setAgendaChange(boolean agendaChange) {
+        isAgendaChange = agendaChange;
     }
 }

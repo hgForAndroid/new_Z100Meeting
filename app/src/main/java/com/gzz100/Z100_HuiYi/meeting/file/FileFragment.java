@@ -42,7 +42,8 @@ import butterknife.OnClick;
  *         create at 2016/8/23 17:01
  */
 
-public class FileFragment extends Fragment implements FileContract.View, OnAgendaTabClickListener, OnFileItemClickListener, OnSearchItemClickListener, View.OnClickListener {
+public class FileFragment extends Fragment implements FileContract.View, OnAgendaTabClickListener,
+        OnFileItemClickListener, OnSearchItemClickListener, View.OnClickListener {
     //    @BindView(R.id.id_edt_fgm_file)
     private EditText mEdtSearchContent;
     //    @BindView(R.id.id_btn_fgm_file)
@@ -168,8 +169,10 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void showFileDetail() {
+        //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
+        mMainActivity.removeControllerView();
         String currentTitle = mMainActivity.getCurrentTitle();
-        FileDetailActivity.start(getActivity(),mAgendaIndex,mFileIndex,currentTitle,false);
+        FileDetailActivity.start(getActivity(),mAgendaIndex,mFileIndex,currentTitle,false,false);
     }
 
     @Override
@@ -177,7 +180,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         String currentTitle = mMainActivity.getCurrentTitle();
 //        FileDetailActivity.showFileDetailActivity(getActivity(), mAgendasSum, mSearchAgendaIndex,
 //                mResultDocumentBeen, mSearchFileIndex1, mAgendas.get(mSearchAgendaIndex).getAgendaDuration(), currentTitle);
-        FileDetailActivity.start(getActivity(),mSearchAgendaIndex,mSearchFileIndex1,currentTitle,false);
+        FileDetailActivity.start(getActivity(),mSearchAgendaIndex,mSearchFileIndex1,currentTitle,false,false);
     }
 
     @Override

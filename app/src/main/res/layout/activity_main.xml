@@ -1,59 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/id_main_fl_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".meeting.MainActivity">
-    <com.gzz100.Z100_HuiYi.meeting.NavBarView
-        android:id="@+id/id_main_tbv"
+    android:layout_height="match_parent">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+        <com.gzz100.Z100_HuiYi.meeting.NavBarView
+            android:id="@+id/id_main_tbv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </com.gzz100.Z100_HuiYi.meeting.NavBarView>
-    <android.support.v4.view.ViewPager
-        android:layout_below="@id/id_main_tbv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/id_main_ViewPager">
+        </com.gzz100.Z100_HuiYi.meeting.NavBarView>
+        <android.support.v4.view.ViewPager
+            android:layout_below="@id/id_main_tbv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_main_ViewPager">
 
-    </android.support.v4.view.ViewPager>
-    <RadioGroup
-        android:id="@+id/id_main_rdg"
-        android:background="@color/color_tab_bg"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/tab_height"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <RadioButton
-            android:id="@+id/id_main_meetingTab"
-            android:text="@string/string_main_tab_meeting"
-            style="@style/radio_button_same_attr"/>
-        <RadioButton
-            android:id="@+id/id_main_delegateTab"
-            android:text="@string/string_main_tab_delegate"
-            style="@style/radio_button_same_attr"/>
-        <RadioButton
-            android:id="@+id/id_main_agendaTab"
-            android:text="@string/string_main_tab_agenda"
-            style="@style/radio_button_same_attr"/>
-        <RadioButton
-            android:id="@+id/id_main_fileTab"
-            android:text="@string/string_main_tab_file"
-            style="@style/radio_button_same_attr"/>
-        <RadioButton
-            android:id="@+id/id_main_aboutTab"
-            android:text="@string/string_main_tab_about"
-            style="@style/radio_button_same_attr"/>
-        <RadioButton
-            android:id="@+id/id_main_voteTab"
-            android:text="@string/string_main_tab_vote"
-            style="@style/radio_button_same_attr"/>
-    </RadioGroup>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@android:color/black"
-        android:layout_above="@id/id_main_rdg"/>
-</RelativeLayout>
+        </android.support.v4.view.ViewPager>
+        <RadioGroup
+            android:id="@+id/id_main_rdg"
+            android:background="@color/color_tab_bg"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_height"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <RadioButton
+                android:id="@+id/id_main_meetingTab"
+                android:text="@string/string_main_tab_meeting"
+                style="@style/radio_button_same_attr"/>
+            <RadioButton
+                android:id="@+id/id_main_delegateTab"
+                android:text="@string/string_main_tab_delegate"
+                style="@style/radio_button_same_attr"/>
+            <RadioButton
+                android:id="@+id/id_main_agendaTab"
+                android:text="@string/string_main_tab_agenda"
+                style="@style/radio_button_same_attr"/>
+            <RadioButton
+                android:id="@+id/id_main_fileTab"
+                android:text="@string/string_main_tab_file"
+                style="@style/radio_button_same_attr"/>
+            <RadioButton
+                android:id="@+id/id_main_aboutTab"
+                android:text="@string/string_main_tab_about"
+                style="@style/radio_button_same_attr"/>
+            <RadioButton
+                android:id="@+id/id_main_voteTab"
+                android:text="@string/string_main_tab_vote"
+                style="@style/radio_button_same_attr"/>
+        </RadioGroup>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/black"
+            android:layout_above="@id/id_main_rdg"/>
+    </RelativeLayout>
+</FrameLayout>
+

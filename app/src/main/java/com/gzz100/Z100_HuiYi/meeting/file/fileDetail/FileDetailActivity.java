@@ -4,14 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.gzz100.Z100_HuiYi.BaseActivity;
@@ -20,17 +23,20 @@ import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
+import com.gzz100.Z100_HuiYi.meeting.ControllerView;
+import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.multicast.MulticastBean;
-import com.gzz100.Z100_HuiYi.multicast.MulticastController;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.meeting.NavBarView;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.StringUtils;
+import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.io.File;
 
@@ -38,12 +44,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FileDetailActivity extends BaseActivity implements FileDetailContract.DetailView, View.OnClickListener, AdapterView.OnItemClickListener {
+public class FileDetailActivity extends BaseActivity implements FileDetailContract.DetailView,
+        View.OnClickListener, AdapterView.OnItemClickListener,ControllerView.IOnControllerListener {
     public static final String BUNDLE = "bundle";
     public static final String AGENDA_INDEX = "agendaIndex";
     public static final String FILE_INDEX = "fileIndex";
     public static final String UP_LEVEL_TITLE = "upLevelTitle";
     public static final String PASSIVE = "passive";
+    public static final String ISHOSTFROMMAIN = "isHostFromMain";
+    private MyHandler mMyHandler;
+    private ControllerView mControllerView;
+    private FrameLayout.LayoutParams mFl;
 
     /**
      * 跳转到文件详情界面
@@ -53,17 +64,22 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
      * @param fileIndex    选择的文件序号
      * @param upLevelTitle 当前界面的标题
      * @param passive      是否被动跳转
+     * @param isHostFromMain   主持人从主界面跳转过来
      */
-    public static void start(Context context, int agendaIndex, int fileIndex, String upLevelTitle, boolean passive) {
+    public static void start(Context context, int agendaIndex, int fileIndex, String upLevelTitle, boolean passive,boolean isHostFromMain) {
         Intent starter = new Intent(context, FileDetailActivity.class);
         Bundle extraBundle = new Bundle();
         extraBundle.putInt(AGENDA_INDEX, agendaIndex);
         extraBundle.putInt(FILE_INDEX, fileIndex);
         extraBundle.putString(UP_LEVEL_TITLE, upLevelTitle);
         extraBundle.putBoolean(PASSIVE, passive);
+        extraBundle.putBoolean(ISHOSTFROMMAIN, isHostFromMain);
         starter.putExtra(BUNDLE, extraBundle);
         context.startActivity(starter);
     }
+
+    @BindView(R.id.id_main_fl_root)
+    FrameLayout mRootView;
 
     View mSlideLayout;//侧边文件列表的布局
     @BindView(R.id.id_file_detail_tbv)
@@ -72,20 +88,14 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     ListView mFileNameRcv;//侧边文件列表的显示控件
     @BindView(R.id.id_file_pdf_view)
     PDFView mPDFView;//显示PDF 文件的控件
-    @BindView(R.id.id_control_bar)
-    View mLayoutControlBar;//角色为主持人，才会显示该控制条
+//    @BindView(R.id.id_control_bar)
+//    View mLayoutControlBar;//角色为主持人，才会显示该控制条
     @BindView(R.id.id_ll_file_detail_controller)
     LinearLayout mLayoutController;//文件列表下面的上一个，下一个操作的布局，角色为主持人时才显示
     @BindView(R.id.id_btn_previous)
     Button mBtnPrevious;//上一个
     @BindView(R.id.id_btn_next)
     Button mBtnNext;//下一个
-    @BindView(R.id.id_btn_pause_meeting)
-    Button mBtnPause;//暂停，点击后变为继续
-    @BindView(R.id.id_btn_start_meeting)
-    Button mBtnStart;//开始，点击后变为结束
-    @BindView(R.id.id_iv_control_bar_slide_to_left)
-    ImageView mIvControlSlideToLeft;//控制条向左显示的按钮，只有角色为主持人才显示
 
     private int mAgendaSum;//议程总数
     private int mAgendaIndex;//当前的议程序号
@@ -97,6 +107,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
      * 是否是被动状态，支持人点击开始或继续而跳转进来的，代表被动，值为true
      */
     private boolean mPassive;
+    /**
+     * 主持人从主界面跳转过来
+     */
+    private boolean mIsHostFromMain;
     private String mFileName;//当前显示的文件的名称
     //消息的实体类，只实例一次，之后发送该实体类，使用原型模式，避免多次创建同一个类
     private MulticastBean mMulticastBean = new MulticastBean();
@@ -120,7 +134,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         setContentView(R.layout.activity_file_detail);
         mSlideLayout = findViewById(R.id.id_slide_layout);
         ButterKnife.bind(this);
-
         //根据用户角色，是否显示控制界面
         showControlBar();
 
@@ -133,14 +146,15 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     private void showControlBar() {
         int userRole = MyAPP.getInstance().getUserRole();
         if (userRole == 1) {//主持人
-            mLayoutController.setVisibility(View.VISIBLE);
-            mLayoutControlBar.setVisibility(View.VISIBLE);
-            mIvControlSlideToLeft.setVisibility(View.VISIBLE);
             isHost = true;
+
+            mControllerView = ControllerView.getInstance(this);
+            mFl = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mFl.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+            mRootView.addView(mControllerView, mFl);
+            mControllerView.setIOnControllerListener(this);
+
         } else {//其他参会人员
-            mLayoutController.setVisibility(View.GONE);
-            mLayoutControlBar.setVisibility(View.GONE);
-            mIvControlSlideToLeft.setVisibility(View.GONE);
             isHost = false;
         }
     }
@@ -152,13 +166,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mFileIndex = mBundle.getInt(FILE_INDEX);
             mUpLevelText = mBundle.getString(UP_LEVEL_TITLE);
             mPassive = mBundle.getBoolean(PASSIVE, false);
+            mIsHostFromMain = mBundle.getBoolean(ISHOSTFROMMAIN, false);
             List<Agenda> agendas = FileOperate.getInstance(this).queryAgendaList(Constant.COLUMNS_AGENDAS);
             mAgendaSum = agendas.size();
-            if (mPassive) {
-                mAgendaDuration = agendas.get(mAgendaIndex).getAgendaDuration();
-            } else {
-                mAgendaDuration = agendas.get(mAgendaIndex - 1).getAgendaDuration();
-            }
+            mAgendaDuration = agendas.get(mAgendaIndex).getAgendaDuration();
             mFileList = FileOperate.getInstance(this).queryFileList(mAgendaIndex);
             mFileName = mFileList.get(mFileIndex).getDocumentName();
 
@@ -197,6 +208,11 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         } else {
             mNavBarView.setCurrentMeetingState("（未开始）");
         }
+        if (mIsHostFromMain){
+            mMeetingState = Constant.MEETING_STATE_BEGIN;
+            mIsHostFromMain = !mIsHostFromMain;
+        }
+
         //返回上一级的监听
         mNavBarView.setFallBackListener(this);
         //分割议程时间，并设置到当前页面，随后进行倒计时操作
@@ -205,6 +221,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mSec = Integer.valueOf(split[1]);
         mNavBarView.setTimeHour(StringUtils.resetNum(mMin));
         mNavBarView.setTimeMin(StringUtils.resetNum(mSec));
+
+        mMyHandler = new MyHandler(this);
         countingTime();
         //设置文件列表数据
         mFileDetailAdapter = new FileDetailAdapter(mFileList, this);
@@ -217,31 +235,87 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mPresenter.loadFile(mFileList.get(mFileIndex).getDocumentName());
     }
 
-    //倒计时
-    private void countingTime() {
-        if (mPassive)
-            mHandler.post(mRunnable);
+
+    @Override
+    public void startMeeting(View view) {
+        if ("开始".equals(((Button)view).getText().toString())) {
+            mMeetingState = Constant.MEETING_STATE_BEGIN;
+            mPresenter.begin(mMulticastBean, mMeetingState, mAgendaIndex, mFileIndex, mUpLevelText);
+        } else {//结束
+            mMeetingState = Constant.MEETING_STATE_ENDING;
+            mPresenter.ending(mMulticastBean, mMeetingState);
+        }
     }
 
-    private Handler mHandler = new Handler();
+    @Override
+    public void pauseMeeting(View view) {
+        if ("暂停".equals(((Button)view).getText().toString())) {
+            mMeetingState = Constant.MEETING_STATE_PAUSE;
+            mPresenter.pause(mMulticastBean, mMeetingState);
+        } else {//继续
+            mMeetingState = Constant.MEETING_STATE_CONTINUE;
+            mPresenter.meetingContinue(mMulticastBean, mMeetingState, mAgendaIndex, mFileIndex,
+                    mUpLevelText,mIsAgendaChange);
+        }
+    }
 
-    private Runnable mRunnable = new Runnable() {
+    @Override
+    public void startVote(View view) {
+        EventBus.getDefault().post(MainActivity.PAGE_SIX);
+        mRootView.removeView(mControllerView);
+        EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
+        ActivityStackManager.pop();
+
+    }
+
+    @Override
+    public void voteResult(View view) {
+
+    }
+
+    private static class MyHandler extends Handler {
+        private WeakReference<FileDetailActivity> activityWeakReference;
+
+        public MyHandler(FileDetailActivity activity) {
+            activityWeakReference = new WeakReference<FileDetailActivity>(activity);
+        }
+
         @Override
-        public void run() {
-            if (getMin().equals("00") && getSec().equals("00")) {
-                Toast.makeText(FileDetailActivity.this, "议程时间到！！！！！！", Toast.LENGTH_LONG).show();
-            } else {
-                mHandler.postDelayed(this, 1000);
-                mNavBarView.setTimeHour(getMin());
-                mNavBarView.setTimeMin(getSec());
-                mSec--;
+        public void handleMessage(Message msg) {
+            FileDetailActivity fileDetailActivity = activityWeakReference.get();
+            switch (msg.what) {
+                case 0x00:
+
+                    if (fileDetailActivity.getMin().equals("00") && fileDetailActivity.getSec(false).equals("00")) {
+                        ToastUtil.showMessage("议程已结束");
+                    } else {
+                        fileDetailActivity.mNavBarView.setTimeHour(fileDetailActivity.getMin());
+                        fileDetailActivity.mNavBarView.setTimeMin(fileDetailActivity.getSec(false));
+                        fileDetailActivity.mSec--;
+                        if (fileDetailActivity.mPassive){
+                            Message message = Message.obtain();
+                            message.what = 0x00;
+                            sendMessageDelayed(message, 1000);
+                        }
+                    }
+                    break;
             }
         }
-    };
+    }
+
+    //倒计时
+    private void countingTime() {
+        if (mPassive) {
+            Message message = Message.obtain();
+            message.what = 0x00;
+            mMyHandler.sendMessageDelayed(message, 1000);
+        }
+    }
 
     /**
      * 设置分钟的显示值，如1-9，则在前面加上“0”，否则直接返回该值的字符串
-     * @return   重新设置后的新的值
+     *
+     * @return 重新设置后的新的值
      */
     private String getMin() {
         String newHour = mMin >= 10 ? "" + mMin : "0" + mMin;
@@ -251,70 +325,63 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     /**
      * 设置秒钟的显示值，如1-9，则在前面加上“0”，否则不加
      * 然后，判断该值是否等于“00”，是则代表过了一分钟，将分钟数减1，秒钟重新设置为60，继续倒计时
-     * @return  重新设置后的新的值
+     * @param flag  会议进行中主动切换议程。主持人为true，其他为false
+     * @return 重新设置后的新的值
      */
-    private String getSec() {
+    private String getSec(boolean flag) {
         String newSex = mSec >= 10 ? "" + mSec : "0" + mSec;
         if (newSex.equals("00")) {
             mMin--;
-            mSec = 60;
+            if (flag){
+                mSec = 59;
+            }else {
+                mSec = 60;
+            }
             return "00";
         }
         return newSex;
     }
 
-    @OnClick(R.id.id_iv_slide_to_left)//点击侧边文件列表向左隐藏
+    @OnClick(R.id.id_iv_slide_to_left)
+//点击侧边文件列表向左隐藏
     void onToLeft() {
         mPresenter.slideLeft(null);
     }
 
-    @OnClick(R.id.id_iv_slide_to_right)//点击侧边文件列表向右显示
+    @OnClick(R.id.id_iv_slide_to_right)
+//点击侧边文件列表向右显示
     void toRight() {
         mPresenter.slideRight(null);
     }
 
     //会议的   开始(结束)，暂停(继续)，投票，显示投票结果，上一个，下一个  点击监听
-    @OnClick({R.id.id_btn_start_meeting, R.id.id_btn_pause_meeting
-            , R.id.id_btn_start_vote, R.id.id_btn_vote_result
-            , R.id.id_btn_previous, R.id.id_btn_next})
+    @OnClick({R.id.id_btn_previous, R.id.id_btn_next})
     void onControlClick(View v) {
         switch (v.getId()) {
-            case R.id.id_btn_start_meeting://开始
-                if ("开始".equals(mBtnStart.getText().toString())) {
-                    mMeetingState = Constant.MEETING_STATE_BEGIN;
-                    mPresenter.begin(mMulticastBean, mMeetingState, mAgendaIndex, mFileIndex, mUpLevelText);
-                } else {//结束
-                    mMeetingState = Constant.MEETING_STATE_ENDING;
-                    mPresenter.ending(mMulticastBean, mMeetingState);
-                }
-                break;
-            case R.id.id_btn_pause_meeting://暂停
-                if ("暂停".equals(mBtnPause.getText().toString())) {
-                    mMeetingState = Constant.MEETING_STATE_PAUSE;
-                    mPresenter.pause(mMulticastBean, mMeetingState);
-                } else {//继续
-                    mMeetingState = Constant.MEETING_STATE_CONTINUE;
-                    mPresenter.meetingContinue(mMulticastBean, mMeetingState, mAgendaIndex, mFileIndex, mUpLevelText);
-                }
-                break;
-            case R.id.id_btn_start_vote://投票
-                //TODO  投票操作
-                break;
-            case R.id.id_btn_vote_result://投票结果
-                //TODO  显示投票结果
-                break;
             case R.id.id_btn_previous://上一个
                 if (mAgendaIndex > 1) {
-                    if (mMeetingState == Constant.MEETING_STATE_CONTINUE)
-                        mMeetingState = Constant.MEETING_STATE_BEGIN;
-                    mPresenter.previousAgenda(mMulticastBean, mMeetingState, mAgendaIndex);
+                    mIsAgendaChange = true;
+                    if (isHost){
+                        if (mMeetingState == Constant.MEETING_STATE_CONTINUE)
+                            mMeetingState = Constant.MEETING_STATE_BEGIN;
+                        mPresenter.previousAgendaForHost(mMulticastBean, mMeetingState, mAgendaIndex);
+                    }else {
+                        mPresenter.previousAgenda(mAgendaIndex);
+                    }
+
                 }
                 break;
             case R.id.id_btn_next://下一个
                 if (mAgendaIndex > 0 && mAgendaIndex < mAgendaSum) {
-                    if (mMeetingState == Constant.MEETING_STATE_CONTINUE)
-                        mMeetingState = Constant.MEETING_STATE_BEGIN;
-                    mPresenter.nextAgenda(mMulticastBean, mMeetingState, mAgendaIndex);
+                    mIsAgendaChange = true;
+                    if (isHost){
+                        if (mMeetingState == Constant.MEETING_STATE_CONTINUE)
+                            mMeetingState = Constant.MEETING_STATE_BEGIN;
+                        mPresenter.nextAgendaForHost(mMulticastBean, mMeetingState, mAgendaIndex);
+                    }else {
+                        mPresenter.nextAgenda(mAgendaIndex);
+                    }
+
                 }
                 break;
         }
@@ -322,42 +389,53 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     /**
      * 切换议程后，重设议程的时间
+     *
      * @param mAgendaIndex 议程序号
      */
     @Override
     public void resetAgendaTimeCounting(int mAgendaIndex) {
-        //取议程时传入的是mAgendaIndex-1，因为存储议程时，是从0开始的
-        String agendaDuration = FileOperate.getInstance(FileDetailActivity.this)
-                .queryAgendaList(Constant.COLUMNS_AGENDAS).get(mAgendaIndex - 1).getAgendaDuration();
-        mMin = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[0]);
-        mSec = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[1]);
-        mHandler.removeCallbacks(mRunnable);
-        mHandler.post(mRunnable);
+        if (mIsAgendaChange){
+            //取议程时传入的是mAgendaIndex-1，因为存储议程时，是从0开始的
+            String agendaDuration = FileOperate.getInstance(FileDetailActivity.this)
+                    .queryAgendaList(Constant.COLUMNS_AGENDAS).get(mAgendaIndex - 1).getAgendaDuration();
+            mMin = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[0]);
+            mSec = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[1]);
+
+            mNavBarView.setTimeHour(getMin());
+            mNavBarView.setTimeMin(getSec(true));
+
+            mMyHandler.removeCallbacksAndMessages(null);
+            countingTime();
+        }
     }
 
     /**
      * 切换议程后，重设议程的各部分内容
+     *
      * @param agendaIndex 议程序号
      */
     @Override
     public void resetAgendaContent(int agendaIndex) {
-        mAgendaIndex = agendaIndex;
-        mNavBarView.setMeetingStateOrAgendaState("议程" + agendaIndex + "/" + mAgendaSum);
-        mDocuments = FileOperate.getInstance(FileDetailActivity.this).queryFileList(agendaIndex);
-        if (mDocuments != null && mDocuments.size() > 0) {
-            mFileList = mDocuments;
-            mNavBarView.setTitle(mDocuments.get(0).getDocumentName());
-            mFileDetailAdapter = new FileDetailAdapter(mDocuments, this);
-            mFileNameRcv.setAdapter(mFileDetailAdapter);
-            mFileNameRcv.setOnItemClickListener(this);
-            mFileDetailAdapter.setSelectedItem(0);
-            mFileDetailAdapter.notifyDataSetInvalidated();
+        if (mIsAgendaChange){
+            mAgendaIndex = agendaIndex;
+            mNavBarView.setMeetingStateOrAgendaState("议程" + agendaIndex + "/" + mAgendaSum);
+            mDocuments = FileOperate.getInstance(FileDetailActivity.this).queryFileList(agendaIndex);
+            if (mDocuments != null && mDocuments.size() > 0) {
+                mFileList = mDocuments;
+                mFileIndex = 0;
+                mNavBarView.setTitle(mDocuments.get(mFileIndex).getDocumentName());
+                mFileDetailAdapter = new FileDetailAdapter(mFileList, this);
+                mFileNameRcv.setAdapter(mFileDetailAdapter);
+                mFileNameRcv.setOnItemClickListener(this);
+                mFileDetailAdapter.setSelectedItem(mFileIndex);
+                mFileDetailAdapter.notifyDataSetInvalidated();
+            }
         }
     }
 
     //接收到主持人发送的数据，如果当前设备参会人员不是支持人，则进行处理
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMulticase(MulticastBean data) {
+    public void getMulticast(MulticastBean data) {
         if (!isHost) {
             mPresenter.handleMessageFromHost(data);
         }
@@ -375,32 +453,49 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mFileIndex = documentIndex;
         mPresenter.loadFile(mFileList.get(documentIndex).getDocumentName());
         mNavBarView.setTitle(mFileList.get(documentIndex).getDocumentName());
-//                mFileNameRcv.setSelection(documentIndex);
         mFileDetailAdapter.setSelectedItem(documentIndex);
         mFileDetailAdapter.notifyDataSetInvalidated();
     }
 
     @Override
-    public void respondMeetingBegin() {
-        mBtnStart.setText("结束");
+    public void respondMeetingBegin(boolean isAgendaChange) {
+        mIsAgendaChange = isAgendaChange;
         mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;
     }
+
+    //是否已经切换了议程
+    private boolean mIsAgendaChange = false;
+    //临时的分秒变量
+    private int tempMin, tempSec;
 
     @Override
     public void respondMeetingPause() {
-        mBtnPause.setText("继续");
         mNavBarView.setCurrentMeetingState("(暂停中)");
         mPassive = false;
-        mHandler.removeCallbacks(mRunnable);
+        if (!mPassive)
+            mMyHandler.removeCallbacksAndMessages(null);
+
+        tempSec = Integer.valueOf(mNavBarView.getTimeMin());
+        tempMin = Integer.valueOf(mNavBarView.getTimeHour());
+        mIsAgendaChange  =  false;
     }
 
     @Override
-    public void respondMeetingContinue() {
-        mBtnPause.setText("暂停");
+    public void respondMeetingContinue(boolean isAgendaChange) {
         mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;
-        countingTime();
+        mMin = tempMin;
+        mSec = tempSec;
+        mIsAgendaChange = isAgendaChange;
+        //继续时还是同一个议程，则继续进行倒计时，
+        //如果切换了议程，则不继续这次议程的倒计时
+        if (!mIsAgendaChange){
+            //减低时间延迟
+            Message message = Message.obtain();
+            message.what = 0x00;
+            mMyHandler.sendMessage(message);
+        }
     }
 
     @Override
@@ -427,6 +522,11 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             if (mPassive) {
                 //无操作
             } else {
+                if (mControllerView != null){
+                    mRootView.removeView(mControllerView);//本界面先移除控制View
+                    //通知主界面添加控制View,只有这个界面先移除后，主界面才能添加
+                    EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
+                }
                 ActivityStackManager.pop();
             }
             return true;
@@ -472,30 +572,34 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void meetingBegin() {
-        mNavBarView.setCurrentMeetingState("（开会中）");
+        mControllerView.setBeginAndEndText("结束");
+        mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;
         countingTime();
     }
 
     @Override
     public void meetingEnding() {
-        mNavBarView.setCurrentMeetingState("（已结束）");
+        mNavBarView.setCurrentMeetingState("(已结束)");
         mPassive = false;
         if (!mPassive)
-            mHandler.removeCallbacks(mRunnable);
+            mMyHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
     public void meetingPause() {
-        mNavBarView.setCurrentMeetingState("（暂停中）");
+        mControllerView.setPauseAndContinueText("继续");
+        mNavBarView.setCurrentMeetingState("(暂停中)");
         mPassive = false;
         if (!mPassive)
-            mHandler.removeCallbacks(mRunnable);
+            mMyHandler.removeCallbacksAndMessages(null);
+        mIsAgendaChange = false;
     }
 
     @Override
     public void meetingContinue() {
-        mNavBarView.setCurrentMeetingState("（开会中）");
+        mControllerView.setPauseAndContinueText("暂停");
+        mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;
         countingTime();
     }
@@ -503,8 +607,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mHandler.removeCallbacks(mRunnable);
-        mHandler = null;
+        if (mMyHandler != null) {
+            mMyHandler.removeCallbacksAndMessages(null);
+            mMyHandler = null;
+        }
     }
 
     @Override
@@ -522,7 +628,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mNavBarView.setTitle(mFileList.get(position).getDocumentName());
         }
         if (isHost) {//主持人操作后发送消息通知全部客户端
-            mPresenter.handleFileClickFromHost(mMulticastBean,mMeetingState,mAgendaIndex,position);
+            mPresenter.handleFileClickFromHost(mMulticastBean, mMeetingState, mAgendaIndex, position);
         }
     }
 }

@@ -34,7 +34,7 @@ public abstract class BaseEntity<T> implements Func1<BaseResultEntity<T>, T> {
 
     @Override
     public T call(BaseResultEntity<T> httpResult) {
-        if (httpResult.getCode() == -1) {
+        if (httpResult.getCode() == -1) {//如果取值不成功，调用该方法，之后
             throw new HttpTimeException(httpResult.getMsg());
         }
         return httpResult.getResult();

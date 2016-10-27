@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/id_main_fl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity">
-    <com.gzz100.Z100_HuiYi.meeting.NavBarView
-        android:id="@+id/id_file_detail_tbv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </com.gzz100.Z100_HuiYi.meeting.NavBarView>
-    <FrameLayout
-        android:layout_below="@id/id_file_detail_tbv"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
+        <com.gzz100.Z100_HuiYi.meeting.NavBarView
+            android:id="@+id/id_file_detail_tbv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <com.github.barteksc.pdfviewer.PDFView
-                android:id="@+id/id_file_pdf_view"
+            android:layout_height="wrap_content">
+
+        </com.gzz100.Z100_HuiYi.meeting.NavBarView>
+
+        <FrameLayout
+            android:layout_below="@id/id_file_detail_tbv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-        <ImageView
-            android:id="@+id/id_iv_slide_to_right"
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/file_detail_slide_to_right"/>
-        <include
-            android:id="@+id/id_slide_layout"
-            layout="@layout/file_detail_slide_layout"/>
-        <ImageView
-            android:id="@+id/id_iv_control_bar_slide_to_left"
-            android:layout_gravity="bottom|right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/file_detail_slide_to_left"/>
-        <include
-            android:id="@+id/id_control_bar"
-            layout="@layout/meeting_control_slide_layout"/>
-    </FrameLayout>
-</RelativeLayout>
+                android:layout_height="match_parent">
+                <com.github.barteksc.pdfviewer.PDFView
+                    android:id="@+id/id_file_pdf_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/id_iv_slide_to_right"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/file_detail_slide_to_right"/>
+            <include
+                android:id="@+id/id_slide_layout"
+                layout="@layout/file_detail_slide_layout"/>
+        </FrameLayout>
+    </RelativeLayout>
+</FrameLayout>
+

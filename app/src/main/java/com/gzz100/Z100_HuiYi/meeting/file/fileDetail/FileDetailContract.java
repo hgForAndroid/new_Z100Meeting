@@ -88,8 +88,9 @@ public interface FileDetailContract {
         /**
          * 处理完主持人发送过来的消息后，如果是开始的消息，则继续响应会议开始的其他操作，
          * 如设置  当前会议状态为   “开会中”
+         * @param isAgendaChange    议程是否改变
          */
-        void respondMeetingBegin();
+        void respondMeetingBegin(boolean isAgendaChange);
 
         /**
          * 处理完主持人发送过来的消息后，如果是暂停的消息，则继续响应会议开始的其他操作，
@@ -100,8 +101,9 @@ public interface FileDetailContract {
         /**
          * 处理完主持人发送过来的消息后，如果是继续的消息，则继续响应会议开始的其他操作，
          * 如设置  当前会议状态为   “开会中”
+         * @param isAgendaChange    议程是否改变
          */
-        void respondMeetingContinue();
+        void respondMeetingContinue(boolean isAgendaChange);
 
         /**
          * 处理完主持人发送过来的消息后，如果是结束的消息，则继续响应会议开始的其他操作，
@@ -127,7 +129,7 @@ public interface FileDetailContract {
 
         /**
          * 开始的操作
-         * @param multicastBean   组播实体
+         * @param multicastBean   发送的信息实体
          * @param meetingState    会议状态
          * @param agendaIndex     议程序号
          * @param DocumentIndex   文件序号
@@ -136,40 +138,54 @@ public interface FileDetailContract {
         void begin(MulticastBean multicastBean,int meetingState,int agendaIndex,int DocumentIndex,String upLevelText);
         /**
          * 结束的操作
-         * @param multicastBean    组播实体
+         * @param multicastBean    发送的信息实体
          * @param meetingState     会议状态
          */
         void ending(MulticastBean multicastBean,int meetingState);
         /**
          * 暂停的操作
-         * @param multicastBean    组播实体
+         * @param multicastBean    发送的信息实体
          * @param meetingState     会议状态
          */
         void pause(MulticastBean multicastBean,int meetingState);
         /**
          * 继续 的操作
-         * @param multicastBean   组播实体
+         * @param multicastBean   发送的信息实体
          * @param meetingState    会议状态
          * @param agendaIndex     议程序号
          * @param DocumentIndex   文件序号
          * @param upLevelText     上一级标题
+         * @param isAgendaChange   议程是否已经改变
          */
-        void meetingContinue(MulticastBean multicastBean,int meetingState,int agendaIndex,int DocumentIndex,String upLevelText);
+        void meetingContinue(MulticastBean multicastBean,int meetingState,int agendaIndex,
+                             int DocumentIndex,String upLevelText,boolean isAgendaChange);
 
         /**
-         * 上一个议程
-         * @param multicastBean    组播实体
+         * 上一个议程，主持人端调用的方法
+         * @param multicastBean    发送的信息实体
          * @param meetingState     会议状态
          * @param agendaIndex      议程序号
          */
-        void previousAgenda(MulticastBean multicastBean,int meetingState,int agendaIndex);
+        void previousAgendaForHost(MulticastBean multicastBean,int meetingState,int agendaIndex);
         /**
-         * 下一个议程
-         * @param multicastBean    组播实体
+         * 下一个议程，主持人端调用的方法
+         * @param multicastBean    发送的信息实体
          * @param meetingState     会议状态
          * @param agendaIndex      议程序号
          */
-        void nextAgenda(MulticastBean multicastBean,int meetingState,int agendaIndex);
+        void nextAgendaForHost(MulticastBean multicastBean,int meetingState,int agendaIndex);
+
+        /**
+         * 上一个议程，其他参会人员调用的方法
+         * @param agendaIndex  议程序号
+         */
+        void previousAgenda(int agendaIndex);
+
+        /**
+         * 下一个议程，其他参会人员调用的方法
+         * @param agendaIndex   议程序号
+         */
+        void nextAgenda(int agendaIndex);
 
         /**
          * 处理主持人发送过来的消息

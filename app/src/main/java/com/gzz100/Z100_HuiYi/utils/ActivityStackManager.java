@@ -1,6 +1,8 @@
 package com.gzz100.Z100_HuiYi.utils;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.util.Log;
 
 
 import java.util.LinkedList;
@@ -44,6 +46,15 @@ public class ActivityStackManager {
     public static void push(Activity activity) {
         mInstance.mActivityStack.push(activity);
         showStack();
+    }
+
+    //压入栈顶,根据类名
+    public static void pushMain(String className) {
+        for (int i=0;i<mInstance.mActivityStack.size();i++){
+            if (mInstance.mActivityStack.get(i).getComponentName().getClassName().equals(className)){
+                mInstance.mActivityStack.push(mInstance.mActivityStack.get(i));
+            }
+        }
     }
 
     //移除栈顶Activity，并finish
@@ -109,4 +120,16 @@ public class ActivityStackManager {
     public static int stackSize() {
         return mInstance.mActivityStack.size();
     }
+
+    public static void moveToFirst(Activity activity){
+        for (int i = 0; i < mInstance.mActivityStack.size(); i++) {
+            if (mInstance.mActivityStack.get(i) == activity){
+                mInstance.mActivityStack.set(0,activity);
+                ComponentName componentName = mInstance.mActivityStack.get(i).getComponentName();
+
+                Log.e("ActivityStackManager","===================  "+componentName.getClassName());
+            }
+        }
+    }
+
 }

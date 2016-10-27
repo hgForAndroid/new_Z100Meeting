@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -50,7 +52,7 @@ public class Server extends Service implements IControllerListener{
                     Log.e(TAG,"等待请求发来");
                     Socket s = ss.accept();
                     Log.e(TAG,"请求已到，连接客户端");
-                    addIPToList(s);
+                    addClientSocketToList(s);
                     //读取客户端发来的消息
                     BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()));
                     String message = input.readLine();
@@ -59,7 +61,7 @@ public class Server extends Service implements IControllerListener{
                     //注意第二个参数据为true将会自动flush，否则需要需要手动操作output.flush()
                     mOutput = new PrintWriter(s.getOutputStream(), true);
                     mOutput.println("已连接到服务器！！！");
-
+                    //发送消息需要先调用该方法
                     ControllerUtil.getInstance().setIControllerListener(Server.this);
                 }
                 ss.close();
@@ -73,19 +75,36 @@ public class Server extends Service implements IControllerListener{
         }
     };
 
-    private List<Socket> ips = new ArrayList<>();
+    private List<Socket> clientSockets = new ArrayList<>();
 
-    private void addIPToList(Socket socket) {
-        ips.add(socket);
+    private void addClientSocketToList(Socket socket) {
+        if (clientSockets != null && clientSockets.size() > 0){
+            boolean isInside = false;
+            for (int i = 0; i < clientSockets.size(); i++) {
+                String address = clientSockets.get(i).getInetAddress().getHostAddress();
+                if (socket.getInetAddress().getHostAddress().equals(address)){
+                    //设备ip与存储的Socket有相同的ip
+                    isInside = true;
+                }
+            }
+            if (!isInside){//没有保存过
+                clientSockets.add(socket);
+            }
+        }else {
+            clientSockets.add(socket);
+        }
+        //更新连接数
+        EventBus.getDefault().post(clientSockets.size()+"");
+
     }
 
     @Override
     public void sendMessage(String message) {
-        if (ips != null && ips.size() > 0) {
-            Log.e(TAG,"连接数  ====== "+ips.size());
-            for (int i = 0; i < ips.size(); i++) {
+        if (clientSockets != null && clientSockets.size() > 0) {
+            Log.e(TAG,"连接数  ====== "+ clientSockets.size());
+            for (int i = 0; i < clientSockets.size(); i++) {
                 try {
-                    Socket next = ips.get(i);
+                    Socket next = clientSockets.get(i);
                     mOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(next.getOutputStream(),"UTF-8")),true);
 //                    mOut = new PrintWriter(next.getOutputStream(),true);
                     mOut.println(message);

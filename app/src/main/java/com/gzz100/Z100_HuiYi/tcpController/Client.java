@@ -5,8 +5,12 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.gzz100.Z100_HuiYi.multicast.MulticastBean;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -70,8 +74,12 @@ public class Client extends Service {
                             int j = decode.lastIndexOf("}");
                             //截取整个对象的json字符串
                             decode = decode.substring(i, j + 1);
+                            Gson gson = new Gson();
+                            MulticastBean bean = gson.fromJson(decode,MulticastBean.class);
+                            EventBus.getDefault().post(bean);
                         }
                         Log.e("客户端的服务接收到  === ", decode);
+
 //                        break;
                     }
                 }

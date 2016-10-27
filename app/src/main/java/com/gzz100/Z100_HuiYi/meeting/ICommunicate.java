@@ -11,4 +11,9 @@ public interface ICommunicate {
      * @return
      */
     String getCurrentTitle();
+
+    /**
+     * 移除控制条
+     */
+    void removeControllerView();
 }

@@ -9,10 +9,17 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
@@ -31,7 +38,11 @@ import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
 import com.gzz100.Z100_HuiYi.multicast.MulticastBean;
 import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
+import com.gzz100.Z100_HuiYi.tcpController.Client;
+import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
+import com.gzz100.Z100_HuiYi.tcpController.Server;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
+import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import org.greenrobot.eventbus.EventBus;
@@ -44,13 +55,24 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, ViewPager.OnPageChangeListener, ICommunicate {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener,
+        ViewPager.OnPageChangeListener, ICommunicate, ControllerView.IOnControllerListener {
+
+    private ControllerView mControllerView;
+    private FrameLayout.LayoutParams mFl;
+    private int mMeetingState;
+    private MulticastBean mMulticastBean;
+    private Gson mGson;
+
     public static void toMainActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
     }
 
+    public static final Long TRIGGER_OF_REMOVE_CONTROLLERVIEW = 1L;
 
+    @BindView(R.id.id_main_fl_root)
+    FrameLayout mRootView;
     @BindView(R.id.id_main_tbv)
     NavBarView mNavBarView;
     @BindView(R.id.id_main_ViewPager)
@@ -94,6 +116,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         setContentView(R.layout.activity_main);
         ActivityStackManager.clearExceptOne(this);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         init();
 
 //        Configuration config = getResources().getConfiguration();
@@ -121,18 +144,41 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mFragments.add(mFileFragment);
         mFragments.add(mAboutFragment);
         //测试
-        mFragments.add(mVoteFragment);
+        if (MyAPP.getInstance().getUserRole() == 1){//主持人
+            mFragments.add(mVoteFragment);
+            mVoteTab.setVisibility(View.VISIBLE);
+            //控制条显示与事件监听
+//            this.setIOnControllerListener(this);
+//            this.setControllerVisibility(true);
+            mControllerView = ControllerView.getInstance(this);
+            mFl = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mFl.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+            mRootView.addView(mControllerView, mFl);
+            mControllerView.setIOnControllerListener(this);
+            //发送消息的实体
+            mMulticastBean = new MulticastBean();
+            mGson = new Gson();
 
+        }else {//不是主持人
+            mVoteTab.setVisibility(View.GONE);
+        }
+        //默认选择哪个
+        defaultSelected();
+
+        initEvent();
+        initPresenter();
+        //接收组播，已换成tcp
+//        initMulticastService();
+
+        timeCounting();
+    }
+
+    private void defaultSelected(){
         mMainFragmentAdapter = new MainFragmentAdapter(getSupportFragmentManager(), mFragments);
         mViewPager.setAdapter(mMainFragmentAdapter);
         mViewPager.setCurrentItem(PAGE_ONE);
         mNavBarView.mTvTitle.setText(mMeetingTab.getText());
         mMeetingTab.setChecked(true);
-        initEvent();
-        initPresenter();
-        initMulticastService();
-
-        timeCounting();
     }
 
     private void timeCounting() {
@@ -261,6 +307,23 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         return mNavBarView.mTvTitle.getText().toString();
     }
 
+    @Override
+    public void removeControllerView() {
+        mRootView.removeView(mControllerView);
+    }
+
+    /**
+     * 重新添加控制条
+     * @param reAdd   值为1l
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void reAddControllerView(Long reAdd){
+        if (reAdd == TRIGGER_OF_REMOVE_CONTROLLERVIEW){//从文件详情界面发送，
+            mRootView.addView(mControllerView, mFl);
+            mControllerView.setIOnControllerListener(this);
+        }
+    }
+
     /**
      * 跳转到人员界面的  其他参会人员
      */
@@ -273,25 +336,42 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     protected void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onStop() {
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
 
     //接收组播
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMulticase(MulticastBean data) {
+    public void getMultiCast(MulticastBean data) {
         if (MyAPP.getInstance().getUserRole() != 1) {
-            if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN) {
+            if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN ||
+                    data.getMeetingState() == Constant.MEETING_STATE_CONTINUE) {
                 int agendaIndex = data.getAgendaIndex();
                 int documentIndex = data.getDocumentIndex();
                 String upLevelTitle = data.getUpLevelTitle();
-                FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle,true);
+                FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle,true,false);
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showVoteFragment(Integer votePage){
+        Log.e("MainActivity ==","===============   "+votePage);
+        if (PAGE_SIX == votePage){
+            if (MyAPP.getInstance().getUserRole() != 1){
+                //不是主持人
+                mFragments.add(mVoteFragment);
+                mVoteTab.setVisibility(View.VISIBLE);
+                defaultSelected();
+            }else {
+                //主持人
+                mVoteTab.setChecked(true);
             }
         }
     }
@@ -305,7 +385,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     .setPositiveButton("是", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            stopService(new Intent(MainActivity.this, ReceivedMulticastService.class));
+                            if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Server")) {
+                                stopService(new Intent(MainActivity.this, Server.class));
+                            }
+                            if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
+                                stopService(new Intent(MainActivity.this, Client.class));
+                            }
                             ActivityStackManager.exit();
                         }
                     })
@@ -319,5 +404,79 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void startMeeting(View view) {
+        if ("开始".equals(((Button)view).getText().toString())) {
+            mMeetingState = Constant.MEETING_STATE_BEGIN;
+            try {
+                MulticastBean multicastBean = mMulticastBean.clone();
+                multicastBean.setMeetingState(mMeetingState);
+                multicastBean.setAgendaIndex(1);
+                multicastBean.setDocumentIndex(0);
+                multicastBean.setUpLevelTitle("文件");
+
+                String json = mGson.toJson(multicastBean);
+
+                mRootView.removeView(mControllerView);
+                FileDetailActivity.start(this, multicastBean.getAgendaIndex(), multicastBean.getDocumentIndex(), "文件",true,true);
+
+                ControllerUtil.getInstance().sendMessage(json);
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+
+            mControllerView.setBeginAndEndText("结束");
+        } else {//结束
+            mMeetingState = Constant.MEETING_STATE_ENDING;
+
+            try {
+                MulticastBean multicastBean = mMulticastBean.clone();
+                multicastBean.setMeetingState(mMeetingState);
+
+                String json = mGson.toJson(multicastBean);
+
+                ControllerUtil.getInstance().sendMessage(json);
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+    }
+
+    @Override
+    public void pauseMeeting(View view) {
+        if ("暂停".equals(((Button)view).getText().toString())) {
+            mMeetingState = Constant.MEETING_STATE_PAUSE;
+            try {
+                MulticastBean multicastBean = mMulticastBean.clone();
+                multicastBean.setMeetingState(mMeetingState);
+
+                String json = mGson.toJson(multicastBean);
+                ControllerUtil.getInstance().sendMessage(json);
+                getMultiCast(multicastBean);
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        }else {//继续
+
+        }
+
+
+
+    }
+
+    @Override
+    public void startVote(View view) {
+        mControllerView.setVoteAndEndVoteText("结束投票");
+    }
+
+    @Override
+    public void voteResult(View view) {
+
     }
 }

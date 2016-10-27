@@ -215,7 +215,7 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
     @Override
     public void showFileDetail() {
         String currentTitle = mMainActivity.getCurrentTitle();
-        FileDetailActivity.start(getActivity(),currentAgendaPositon + 1,0,currentTitle,false);
+        FileDetailActivity.start(getActivity(),currentAgendaPositon + 1,0,currentTitle,false,false);
     }
 
     @Override

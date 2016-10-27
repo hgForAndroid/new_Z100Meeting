@@ -2,6 +2,9 @@ package com.gzz100.Z100_HuiYi;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 
@@ -14,15 +17,19 @@ public class BaseActivity extends AppCompatActivity {
 //        setContentView(R.layout.activity_base);
     }
 
-//    @Override
-//    public void setContentView(int layoutResID) {
-//        DetailView mContentLayout = getLayoutInflater().inflate(R.layout.activity_base, null);
-//        LinearLayout rootContent = (LinearLayout) mContentLayout.findViewById(R.id.id_base_linearlayout);
-//        DetailView contentView = getLayoutInflater().inflate(layoutResID, null);
-//        //添加内容布局
-//        if (null != contentView) {
-//            rootContent.addView(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//        }
-//        super.setContentView(mContentLayout);
-//    }
+    @Override
+    public void setContentView(int layoutResID) {
+        View mContentLayout = getLayoutInflater().inflate(R.layout.activity_base, null);
+        FrameLayout rootContent = (FrameLayout) mContentLayout.findViewById(R.id.id_fl_base_layout);
+//        LinearLayout rootContent = (LinearLayout) mContentLayout.findViewById(R.id.id_base_layout);
+        View contentView = getLayoutInflater().inflate(layoutResID, null);
+        //添加内容布局
+        if (null != contentView) {
+            rootContent.addView(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+        }
+
+        super.setContentView(mContentLayout);
+
+    }
 }
