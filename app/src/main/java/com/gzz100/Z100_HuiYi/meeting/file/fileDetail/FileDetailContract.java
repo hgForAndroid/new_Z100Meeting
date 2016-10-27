@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
-import com.gzz100.Z100_HuiYi.multicast.MulticastBean;
+import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 
 import java.io.File;
 
@@ -129,51 +129,51 @@ public interface FileDetailContract {
 
         /**
          * 开始的操作
-         * @param multicastBean   发送的信息实体
+         * @param controllerInfoBean   发送的信息实体
          * @param meetingState    会议状态
          * @param agendaIndex     议程序号
          * @param DocumentIndex   文件序号
          * @param upLevelText     上一级标题
          */
-        void begin(MulticastBean multicastBean,int meetingState,int agendaIndex,int DocumentIndex,String upLevelText);
+        void begin(ControllerInfoBean controllerInfoBean, int meetingState, int agendaIndex, int DocumentIndex, String upLevelText);
         /**
          * 结束的操作
-         * @param multicastBean    发送的信息实体
+         * @param controllerInfoBean    发送的信息实体
          * @param meetingState     会议状态
          */
-        void ending(MulticastBean multicastBean,int meetingState);
+        void ending(ControllerInfoBean controllerInfoBean, int meetingState);
         /**
          * 暂停的操作
-         * @param multicastBean    发送的信息实体
+         * @param controllerInfoBean    发送的信息实体
          * @param meetingState     会议状态
          */
-        void pause(MulticastBean multicastBean,int meetingState);
+        void pause(ControllerInfoBean controllerInfoBean, int meetingState);
         /**
          * 继续 的操作
-         * @param multicastBean   发送的信息实体
+         * @param controllerInfoBean   发送的信息实体
          * @param meetingState    会议状态
          * @param agendaIndex     议程序号
          * @param DocumentIndex   文件序号
          * @param upLevelText     上一级标题
          * @param isAgendaChange   议程是否已经改变
          */
-        void meetingContinue(MulticastBean multicastBean,int meetingState,int agendaIndex,
-                             int DocumentIndex,String upLevelText,boolean isAgendaChange);
+        void meetingContinue(ControllerInfoBean controllerInfoBean, int meetingState, int agendaIndex,
+                             int DocumentIndex, String upLevelText, boolean isAgendaChange);
 
         /**
          * 上一个议程，主持人端调用的方法
-         * @param multicastBean    发送的信息实体
+         * @param controllerInfoBean    发送的信息实体
          * @param meetingState     会议状态
          * @param agendaIndex      议程序号
          */
-        void previousAgendaForHost(MulticastBean multicastBean,int meetingState,int agendaIndex);
+        void previousAgendaForHost(ControllerInfoBean controllerInfoBean, int meetingState, int agendaIndex);
         /**
          * 下一个议程，主持人端调用的方法
-         * @param multicastBean    发送的信息实体
+         * @param controllerInfoBean    发送的信息实体
          * @param meetingState     会议状态
          * @param agendaIndex      议程序号
          */
-        void nextAgendaForHost(MulticastBean multicastBean,int meetingState,int agendaIndex);
+        void nextAgendaForHost(ControllerInfoBean controllerInfoBean, int meetingState, int agendaIndex);
 
         /**
          * 上一个议程，其他参会人员调用的方法
@@ -191,15 +191,15 @@ public interface FileDetailContract {
          * 处理主持人发送过来的消息
          * @param data  消息实体
          */
-        void handleMessageFromHost(MulticastBean data);
+        void handleMessageFromHost(ControllerInfoBean data);
 
         /**
          * 处理支持人点击切换文件的操作
-         * @param multicastBean   消息实体，切换后将信息填充到该实体类，再进行发送
+         * @param controllerInfoBean   消息实体，切换后将信息填充到该实体类，再进行发送
          * @param meetingState    会议状态
          * @param agendaIndex     议程序号
          * @param documentPosition 点击的文件序号
          */
-        void handleFileClickFromHost(MulticastBean multicastBean,int meetingState,int agendaIndex,int documentPosition);
+        void handleFileClickFromHost(ControllerInfoBean controllerInfoBean, int meetingState, int agendaIndex, int documentPosition);
     }
 }

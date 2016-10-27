@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,7 +24,7 @@ import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
 import com.gzz100.Z100_HuiYi.meeting.ControllerView;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
-import com.gzz100.Z100_HuiYi.multicast.MulticastBean;
+import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.meeting.NavBarView;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -51,7 +50,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     public static final String FILE_INDEX = "fileIndex";
     public static final String UP_LEVEL_TITLE = "upLevelTitle";
     public static final String PASSIVE = "passive";
-    public static final String ISHOSTFROMMAIN = "isHostFromMain";
+    public static final String IS_HOST_FROM_MAIN = "isHostFromMain";
     private MyHandler mMyHandler;
     private ControllerView mControllerView;
     private FrameLayout.LayoutParams mFl;
@@ -73,7 +72,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         extraBundle.putInt(FILE_INDEX, fileIndex);
         extraBundle.putString(UP_LEVEL_TITLE, upLevelTitle);
         extraBundle.putBoolean(PASSIVE, passive);
-        extraBundle.putBoolean(ISHOSTFROMMAIN, isHostFromMain);
+        extraBundle.putBoolean(IS_HOST_FROM_MAIN, isHostFromMain);
         starter.putExtra(BUNDLE, extraBundle);
         context.startActivity(starter);
     }
@@ -113,7 +112,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     private boolean mIsHostFromMain;
     private String mFileName;//当前显示的文件的名称
     //消息的实体类，只实例一次，之后发送该实体类，使用原型模式，避免多次创建同一个类
-    private MulticastBean mMulticastBean = new MulticastBean();
+    private ControllerInfoBean mControllerInfoBean = new ControllerInfoBean();
     //开会中有切换议程时，切换后的议程文件列表
     private List<Document> mDocuments;
     private Bundle mBundle;
@@ -166,7 +165,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mFileIndex = mBundle.getInt(FILE_INDEX);
             mUpLevelText = mBundle.getString(UP_LEVEL_TITLE);
             mPassive = mBundle.getBoolean(PASSIVE, false);
-            mIsHostFromMain = mBundle.getBoolean(ISHOSTFROMMAIN, false);
+            mIsHostFromMain = mBundle.getBoolean(IS_HOST_FROM_MAIN, false);
             List<Agenda> agendas = FileOperate.getInstance(this).queryAgendaList(Constant.COLUMNS_AGENDAS);
             mAgendaSum = agendas.size();
             mAgendaDuration = agendas.get(mAgendaIndex).getAgendaDuration();
@@ -240,10 +239,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     public void startMeeting(View view) {
         if ("开始".equals(((Button)view).getText().toString())) {
             mMeetingState = Constant.MEETING_STATE_BEGIN;
-            mPresenter.begin(mMulticastBean, mMeetingState, mAgendaIndex, mFileIndex, mUpLevelText);
+            mPresenter.begin(mControllerInfoBean, mMeetingState, mAgendaIndex, mFileIndex, mUpLevelText);
         } else {//结束
             mMeetingState = Constant.MEETING_STATE_ENDING;
-            mPresenter.ending(mMulticastBean, mMeetingState);
+            mPresenter.ending(mControllerInfoBean, mMeetingState);
         }
     }
 
@@ -251,10 +250,11 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     public void pauseMeeting(View view) {
         if ("暂停".equals(((Button)view).getText().toString())) {
             mMeetingState = Constant.MEETING_STATE_PAUSE;
-            mPresenter.pause(mMulticastBean, mMeetingState);
+            mPresenter.pause(mControllerInfoBean, mMeetingState);
         } else {//继续
             mMeetingState = Constant.MEETING_STATE_CONTINUE;
-            mPresenter.meetingContinue(mMulticastBean, mMeetingState, mAgendaIndex, mFileIndex,
+            //为了暂停时，设备不在文件详情界面，而从主界面跳进来，所以得传递一个当前倒计时时间参数值，
+            mPresenter.meetingContinue(mControllerInfoBean, mMeetingState, mAgendaIndex, mFileIndex,
                     mUpLevelText,mIsAgendaChange);
         }
     }
@@ -343,13 +343,13 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     }
 
     @OnClick(R.id.id_iv_slide_to_left)
-//点击侧边文件列表向左隐藏
+    //点击侧边文件列表向左隐藏
     void onToLeft() {
         mPresenter.slideLeft(null);
     }
 
     @OnClick(R.id.id_iv_slide_to_right)
-//点击侧边文件列表向右显示
+    //点击侧边文件列表向右显示
     void toRight() {
         mPresenter.slideRight(null);
     }
@@ -364,7 +364,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                     if (isHost){
                         if (mMeetingState == Constant.MEETING_STATE_CONTINUE)
                             mMeetingState = Constant.MEETING_STATE_BEGIN;
-                        mPresenter.previousAgendaForHost(mMulticastBean, mMeetingState, mAgendaIndex);
+                        mPresenter.previousAgendaForHost(mControllerInfoBean, mMeetingState, mAgendaIndex);
                     }else {
                         mPresenter.previousAgenda(mAgendaIndex);
                     }
@@ -377,7 +377,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                     if (isHost){
                         if (mMeetingState == Constant.MEETING_STATE_CONTINUE)
                             mMeetingState = Constant.MEETING_STATE_BEGIN;
-                        mPresenter.nextAgendaForHost(mMulticastBean, mMeetingState, mAgendaIndex);
+                        mPresenter.nextAgendaForHost(mControllerInfoBean, mMeetingState, mAgendaIndex);
                     }else {
                         mPresenter.nextAgenda(mAgendaIndex);
                     }
@@ -435,7 +435,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     //接收到主持人发送的数据，如果当前设备参会人员不是支持人，则进行处理
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMulticast(MulticastBean data) {
+    public void getMulticast(ControllerInfoBean data) {
         if (!isHost) {
             mPresenter.handleMessageFromHost(data);
         }
@@ -628,7 +628,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mNavBarView.setTitle(mFileList.get(position).getDocumentName());
         }
         if (isHost) {//主持人操作后发送消息通知全部客户端
-            mPresenter.handleFileClickFromHost(mMulticastBean, mMeetingState, mAgendaIndex, position);
+            mPresenter.handleFileClickFromHost(mControllerInfoBean, mMeetingState, mAgendaIndex, position);
         }
     }
 }

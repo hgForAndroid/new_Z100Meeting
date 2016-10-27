@@ -1,11 +1,11 @@
-package com.gzz100.Z100_HuiYi.multicast;
+package com.gzz100.Z100_HuiYi.tcpController;
 
 import java.io.Serializable;
 
 /**
  * Created by XieQXiong on 2016/10/1.
  */
-public class MulticastBean implements Serializable,Cloneable{
+public class ControllerInfoBean implements Serializable,Cloneable{
     private String serverIP;            //服务器IP
     private String meetingID;            //会议ID
     private int meetingState;            //会议状态 未开始1；已开始 2；已暂停 4；已结束 8；
@@ -31,19 +31,19 @@ public class MulticastBean implements Serializable,Cloneable{
      * 其他为false或不传值
      */
     private boolean isAgendaChange = false;
-    public MulticastBean() {
+    public ControllerInfoBean() {
     }
 
     @Override
-    public MulticastBean clone() throws CloneNotSupportedException {
-        MulticastBean multicastBean = null;
+    public ControllerInfoBean clone() throws CloneNotSupportedException {
+        ControllerInfoBean controllerInfoBean = null;
         try {
-            multicastBean = (MulticastBean) super.clone();
+            controllerInfoBean = (ControllerInfoBean) super.clone();
         }catch (CloneNotSupportedException e){
             e.printStackTrace();
         }
 
-        return multicastBean;
+        return controllerInfoBean;
     }
 
     public String getServerIP() {

@@ -4,8 +4,7 @@ import android.view.View;
 
 import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.data.file.FileDetailRepository;
-import com.gzz100.Z100_HuiYi.multicast.MulticastBean;
-import com.gzz100.Z100_HuiYi.multicast.MulticastController;
+import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
@@ -64,16 +63,16 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void begin(final MulticastBean multicastBean, final int meetingState,
+    public void begin(final ControllerInfoBean controllerInfoBean, final int meetingState,
                       final int agendaIndex, final int DocumentIndex, final String upLevelText) {
         try {
-            MulticastBean mMulticastBean = multicastBean.clone();
-            mMulticastBean.setMeetingState(meetingState);
-            mMulticastBean.setAgendaIndex(agendaIndex);
-            mMulticastBean.setDocumentIndex(DocumentIndex);
-            mMulticastBean.setUpLevelTitle(upLevelText);
+            ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
+            mControllerInfoBean.setMeetingState(meetingState);
+            mControllerInfoBean.setAgendaIndex(agendaIndex);
+            mControllerInfoBean.setDocumentIndex(DocumentIndex);
+            mControllerInfoBean.setUpLevelTitle(upLevelText);
 
-            String json = mGson.toJson(mMulticastBean);
+            String json = mGson.toJson(mControllerInfoBean);
             ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -82,12 +81,12 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void ending(final MulticastBean multicastBean, final int meetingState) {
+    public void ending(final ControllerInfoBean controllerInfoBean, final int meetingState) {
         try {
-            MulticastBean mMulticastBean = multicastBean.clone();
-            mMulticastBean.setMeetingState(meetingState);
+            ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
+            mControllerInfoBean.setMeetingState(meetingState);
 
-            String json = mGson.toJson(mMulticastBean);
+            String json = mGson.toJson(mControllerInfoBean);
             ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -96,12 +95,12 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void pause(final MulticastBean multicastBean, final int meetingState) {
+    public void pause(final ControllerInfoBean controllerInfoBean, final int meetingState) {
         try {
-            MulticastBean mMulticastBean = multicastBean.clone();
-            mMulticastBean.setMeetingState(meetingState);
+            ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
+            mControllerInfoBean.setMeetingState(meetingState);
 
-            String json = mGson.toJson(mMulticastBean);
+            String json = mGson.toJson(mControllerInfoBean);
             ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -110,18 +109,18 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void meetingContinue(final MulticastBean multicastBean, final int meetingState,
-                       final int agendaIndex, final int DocumentIndex, final String upLevelText,
+    public void meetingContinue(final ControllerInfoBean controllerInfoBean, final int meetingState,
+                                final int agendaIndex, final int DocumentIndex, final String upLevelText,
                                 boolean isAgendaChange) {
         try {
-            MulticastBean mMulticastBean = multicastBean.clone();
-            mMulticastBean.setMeetingState(meetingState);
-            mMulticastBean.setAgendaIndex(agendaIndex);
-            mMulticastBean.setDocumentIndex(DocumentIndex);
-            mMulticastBean.setUpLevelTitle(upLevelText);
-            mMulticastBean.setAgendaChange(isAgendaChange);
+            ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
+            mControllerInfoBean.setMeetingState(meetingState);
+            mControllerInfoBean.setAgendaIndex(agendaIndex);
+            mControllerInfoBean.setDocumentIndex(DocumentIndex);
+            mControllerInfoBean.setUpLevelTitle(upLevelText);
+            mControllerInfoBean.setAgendaChange(isAgendaChange);
 
-            String json = mGson.toJson(mMulticastBean);
+            String json = mGson.toJson(mControllerInfoBean);
             ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -130,20 +129,20 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void previousAgendaForHost(final MulticastBean multicastBean, final int meetingState, int agendaIndex) {
+    public void previousAgendaForHost(final ControllerInfoBean controllerInfoBean, final int meetingState, int agendaIndex) {
         agendaIndex -= 1;
         mView.resetAgendaTimeCounting(agendaIndex);
         mView.resetAgendaContent(agendaIndex);
         final int finalAgendaIndex = agendaIndex;
         try {
-            MulticastBean mMulticastBean = multicastBean.clone();
+            ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
             //已开始  2
-            mMulticastBean.setMeetingState(meetingState);
-            mMulticastBean.setAgendaIndex(finalAgendaIndex);
-            mMulticastBean.setDocumentIndex(0);
-            mMulticastBean.setAgendaChange(true);
+            mControllerInfoBean.setMeetingState(meetingState);
+            mControllerInfoBean.setAgendaIndex(finalAgendaIndex);
+            mControllerInfoBean.setDocumentIndex(0);
+            mControllerInfoBean.setAgendaChange(true);
 
-            String json = mGson.toJson(mMulticastBean);
+            String json = mGson.toJson(mControllerInfoBean);
             ControllerUtil.getInstance().sendMessage(json);
 
         } catch (CloneNotSupportedException e) {
@@ -152,19 +151,19 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void nextAgendaForHost(final MulticastBean multicastBean, final int meetingState, int agendaIndex) {
+    public void nextAgendaForHost(final ControllerInfoBean controllerInfoBean, final int meetingState, int agendaIndex) {
         agendaIndex += 1;
         mView.resetAgendaTimeCounting(agendaIndex);
         mView.resetAgendaContent(agendaIndex);
         final int finalAgendaIndex = agendaIndex;
         try {
-            MulticastBean mMulticastBean = multicastBean.clone();
-            mMulticastBean.setMeetingState(meetingState);
-            mMulticastBean.setAgendaIndex(finalAgendaIndex);
-            mMulticastBean.setDocumentIndex(0);
-            mMulticastBean.setAgendaChange(true);
+            ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
+            mControllerInfoBean.setMeetingState(meetingState);
+            mControllerInfoBean.setAgendaIndex(finalAgendaIndex);
+            mControllerInfoBean.setDocumentIndex(0);
+            mControllerInfoBean.setAgendaChange(true);
 
-            String json = mGson.toJson(mMulticastBean);
+            String json = mGson.toJson(mControllerInfoBean);
             ControllerUtil.getInstance().sendMessage(json);
 
         } catch (CloneNotSupportedException e) {
@@ -187,7 +186,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void handleMessageFromHost(MulticastBean data) {
+    public void handleMessageFromHost(ControllerInfoBean data) {
 
         //会议开始状态才响应
         if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN) {
@@ -224,25 +223,25 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void handleFileClickFromHost(final MulticastBean mMulticastBean, final int meetingState,
+    public void handleFileClickFromHost(final ControllerInfoBean mControllerInfoBean, final int meetingState,
                                         final int agendaIndex, final int documentPosition) {
         try {
-            MulticastBean multicastBean = mMulticastBean.clone();
+            ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
             ///如果是继续状态，将状态改为开始，为了重新开始计时不混乱
             if (meetingState == Constant.MEETING_STATE_CONTINUE) {
                 mView.setMeetingState(Constant.MEETING_STATE_BEGIN);
-                multicastBean.setMeetingState(Constant.MEETING_STATE_BEGIN);
+                controllerInfoBean.setMeetingState(Constant.MEETING_STATE_BEGIN);
                 //这里设置议程序号为0.切换文件时，忽略切换议程
-                multicastBean.setAgendaIndex(agendaIndex);
-                multicastBean.setDocumentIndex(documentPosition);
+                controllerInfoBean.setAgendaIndex(agendaIndex);
+                controllerInfoBean.setDocumentIndex(documentPosition);
             } else {
-                multicastBean.setMeetingState(meetingState);
+                controllerInfoBean.setMeetingState(meetingState);
                 //这里设置议程序号为0.切换文件时，忽略切换议程
-                multicastBean.setAgendaIndex(0);
-                multicastBean.setDocumentIndex(documentPosition);
+                controllerInfoBean.setAgendaIndex(0);
+                controllerInfoBean.setDocumentIndex(documentPosition);
             }
 
-            String json = mGson.toJson(multicastBean);
+            String json = mGson.toJson(controllerInfoBean);
             ControllerUtil.getInstance().sendMessage(json);
 
         } catch (CloneNotSupportedException e) {

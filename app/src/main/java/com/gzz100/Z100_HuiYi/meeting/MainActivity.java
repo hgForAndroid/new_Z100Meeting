@@ -36,7 +36,7 @@ import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingPresenter;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
-import com.gzz100.Z100_HuiYi.multicast.MulticastBean;
+import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
 import com.gzz100.Z100_HuiYi.tcpController.Client;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
@@ -61,7 +61,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private ControllerView mControllerView;
     private FrameLayout.LayoutParams mFl;
     private int mMeetingState;
-    private MulticastBean mMulticastBean;
+    private ControllerInfoBean mControllerInfoBean;
     private Gson mGson;
 
     public static void toMainActivity(Context context) {
@@ -156,7 +156,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mRootView.addView(mControllerView, mFl);
             mControllerView.setIOnControllerListener(this);
             //发送消息的实体
-            mMulticastBean = new MulticastBean();
+            mControllerInfoBean = new ControllerInfoBean();
             mGson = new Gson();
 
         }else {//不是主持人
@@ -348,7 +348,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     //接收组播
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMultiCast(MulticastBean data) {
+    public void getMultiCast(ControllerInfoBean data) {
         if (MyAPP.getInstance().getUserRole() != 1) {
             if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN ||
                     data.getMeetingState() == Constant.MEETING_STATE_CONTINUE) {
@@ -412,16 +412,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if ("开始".equals(((Button)view).getText().toString())) {
             mMeetingState = Constant.MEETING_STATE_BEGIN;
             try {
-                MulticastBean multicastBean = mMulticastBean.clone();
-                multicastBean.setMeetingState(mMeetingState);
-                multicastBean.setAgendaIndex(1);
-                multicastBean.setDocumentIndex(0);
-                multicastBean.setUpLevelTitle("文件");
+                ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
+                controllerInfoBean.setMeetingState(mMeetingState);
+                controllerInfoBean.setAgendaIndex(1);
+                controllerInfoBean.setDocumentIndex(0);
+                controllerInfoBean.setUpLevelTitle("文件");
 
-                String json = mGson.toJson(multicastBean);
+                String json = mGson.toJson(controllerInfoBean);
 
                 mRootView.removeView(mControllerView);
-                FileDetailActivity.start(this, multicastBean.getAgendaIndex(), multicastBean.getDocumentIndex(), "文件",true,true);
+                FileDetailActivity.start(this, controllerInfoBean.getAgendaIndex(), controllerInfoBean.getDocumentIndex(), "文件",true,true);
 
                 ControllerUtil.getInstance().sendMessage(json);
             } catch (CloneNotSupportedException e) {
@@ -433,10 +433,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mMeetingState = Constant.MEETING_STATE_ENDING;
 
             try {
-                MulticastBean multicastBean = mMulticastBean.clone();
-                multicastBean.setMeetingState(mMeetingState);
+                ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
+                controllerInfoBean.setMeetingState(mMeetingState);
 
-                String json = mGson.toJson(multicastBean);
+                String json = mGson.toJson(controllerInfoBean);
 
                 ControllerUtil.getInstance().sendMessage(json);
             } catch (CloneNotSupportedException e) {
@@ -453,12 +453,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if ("暂停".equals(((Button)view).getText().toString())) {
             mMeetingState = Constant.MEETING_STATE_PAUSE;
             try {
-                MulticastBean multicastBean = mMulticastBean.clone();
-                multicastBean.setMeetingState(mMeetingState);
+                ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
+                controllerInfoBean.setMeetingState(mMeetingState);
 
-                String json = mGson.toJson(multicastBean);
+                String json = mGson.toJson(controllerInfoBean);
                 ControllerUtil.getInstance().sendMessage(json);
-                getMultiCast(multicastBean);
+                getMultiCast(controllerInfoBean);
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
