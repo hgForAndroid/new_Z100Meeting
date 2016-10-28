@@ -134,6 +134,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void previousAgendaForHost(final ControllerInfoBean controllerInfoBean, final int meetingState, int agendaIndex) {
         agendaIndex -= 1;
+        mView.respondAgendaTimeIsCounting(false);
         mView.resetAgendaTimeCounting(controllerInfoBean,agendaIndex);
         mView.resetAgendaContent(agendaIndex);
         final int finalAgendaIndex = agendaIndex;
@@ -156,6 +157,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void nextAgendaForHost(final ControllerInfoBean controllerInfoBean, final int meetingState, int agendaIndex) {
         agendaIndex += 1;
+        mView.respondAgendaTimeIsCounting(false);
         mView.resetAgendaTimeCounting(controllerInfoBean,agendaIndex);
         mView.resetAgendaContent(agendaIndex);
         final int finalAgendaIndex = agendaIndex;

@@ -327,7 +327,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mRootView.removeView(mControllerView);
         EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
         ActivityStackManager.pop();
-
     }
 
     @Override
@@ -420,6 +419,9 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     //会议的   开始(结束)，暂停(继续)，投票，显示投票结果，上一个，下一个  点击监听
     @OnClick({R.id.id_btn_previous, R.id.id_btn_next})
     void onControlClick(View v) {
+        if (mPassive && !isHost){//客户端被控制时，不能切换议程
+            return;
+        }
         switch (v.getId()) {
             case R.id.id_btn_previous://上一个
                 if (mAgendaIndex > 1) {
@@ -637,6 +639,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (mPassive) {
             //无操作
         } else {
+            if (isHost){
+                mRootView.removeView(mControllerView);
+                EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
+            }
             ActivityStackManager.pop();
         }
     }

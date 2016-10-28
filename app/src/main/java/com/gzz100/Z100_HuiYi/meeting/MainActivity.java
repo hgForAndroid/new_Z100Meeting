@@ -45,6 +45,7 @@ import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
+import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -61,7 +62,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     private ControllerView mControllerView;
     private FrameLayout.LayoutParams mFl;
-    private int mMeetingState;
+    private int mMeetingState = Constant.MEETING_STATE_NOT_BEGIN;
     private ControllerInfoBean mControllerInfoBean;
     private Gson mGson;
 
@@ -148,9 +149,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (MyAPP.getInstance().getUserRole() == 1){//主持人
             mFragments.add(mVoteFragment);
             mVoteTab.setVisibility(View.VISIBLE);
-            //控制条显示与事件监听
-//            this.setIOnControllerListener(this);
-//            this.setControllerVisibility(true);
             mControllerView = ControllerView.getInstance(this);
             mFl = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             mFl.gravity = Gravity.BOTTOM | Gravity.RIGHT;
@@ -168,9 +166,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         initEvent();
         initPresenter();
-        //接收组播，已换成tcp
-//        initMulticastService();
-
+        //这里没有使用跟文件详情界面一样的方式，因为在这里不用关心Handler被强引用的问题
+        //因为时间是要一直进行的
         timeCounting();
     }
 
@@ -183,9 +180,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     private void timeCounting() {
-
         mHandler.post(mRunnable);
-
     }
 
     private int hour = 0;
@@ -262,17 +257,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 mNavBarView.mTvTitle.setText(mVoteTab.getText());
                 break;
         }
-
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
     }
 
     @Override
     public void onPageSelected(int position) {
-
     }
 
     @Override
@@ -297,10 +289,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 case PAGE_SIX:
                     mVoteTab.setChecked(true);
                     break;
-
+                default:break;
             }
         }
-
     }
 
     @Override
@@ -319,7 +310,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void reAddControllerView(Long reAdd){
-        if (reAdd == TRIGGER_OF_REMOVE_CONTROLLERVIEW){//从文件详情界面发送，
+        if (reAdd == TRIGGER_OF_REMOVE_CONTROLLERVIEW){//从文件详情界面发送
             mRootView.addView(mControllerView, mFl);
             mControllerView.setIOnControllerListener(this);
         }
@@ -333,19 +324,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (showDelegate)
             mDelegateTab.setChecked(showDelegate);
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onStop() {
-//        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-
 
     //接收组播
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -369,43 +347,20 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showVoteFragment(Integer votePage){
-        Log.e("MainActivity ==","===============   "+votePage);
         if (PAGE_SIX == votePage){
-            if (MyAPP.getInstance().getUserRole() != 1){
-                //不是主持人
-                mFragments.add(mVoteFragment);
-                mVoteTab.setVisibility(View.VISIBLE);
-                defaultSelected();
-            }else {
-                //主持人
-                mVoteTab.setChecked(true);
-            }
-        }
-    }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Dialog dialog = new AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage("退出系统？")
-                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Server")) {
-                                stopService(new Intent(MainActivity.this, Server.class));
-                            }
-                            if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
-                                stopService(new Intent(MainActivity.this, Client.class));
-                            }
-                            ActivityStackManager.exit();
-                        }
-                    })
-                    .setNegativeButton("否", null)
-                    .create();
-            dialog.show();
+            mVoteTab.setChecked(true);
+
+//            if (MyAPP.getInstance().getUserRole() != 1){
+//                //不是主持人
+//                mFragments.add(mVoteFragment);
+//                mVoteTab.setVisibility(View.VISIBLE);
+//                defaultSelected();
+//            }else {
+//                //主持人
+//                mVoteTab.setChecked(true);
+//            }
         }
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -439,7 +394,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mControllerView.setBeginAndEndText("结束");
         } else {//结束
             mMeetingState = Constant.MEETING_STATE_ENDING;
-
             try {
                 ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
                 controllerInfoBean.setMeetingState(mMeetingState);
@@ -450,32 +404,67 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
-
-
         }
 
     }
 
     @Override
     public void pauseMeeting(View view) {
+        if (mMeetingState == Constant.MEETING_STATE_NOT_BEGIN ){
+            ToastUtil.showMessage("会议未开始！");
+            return;
+        }
+        if (mMeetingState == Constant.MEETING_STATE_ENDING){
+            ToastUtil.showMessage("会议已结束！");
+            return;
+        }
         if ("暂停".equals(((Button)view).getText().toString())) {
             mMeetingState = Constant.MEETING_STATE_PAUSE;
             try {
                 ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
                 controllerInfoBean.setMeetingState(mMeetingState);
-
                 String json = mGson.toJson(controllerInfoBean);
                 ControllerUtil.getInstance().sendMessage(json);
                 getMultiCast(controllerInfoBean);
+                mControllerView.setPauseAndContinueText("继续");
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
         }else {//继续
+            mMeetingState = Constant.MEETING_STATE_CONTINUE;
+            String tempCountingMin = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                    .getString(Constant.COUNTING_MIN, "");
+            String tempCountingSec = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                    .getString(Constant.COUNTING_SEC, "");
+            int pauseAgendaIndex = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                    .getInt(Constant.PAUSE_AGENDA_INDEX, 0);
+            int pauseDocumentIndex = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                    .getInt(Constant.PAUSE_DOCUMENT_INDEX, 0);
+            try {
+                ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
+                controllerInfoBean.setMeetingState(mMeetingState);
+                controllerInfoBean.setAgendaIndex(pauseAgendaIndex);
+                controllerInfoBean.setDocumentIndex(pauseDocumentIndex);
+                controllerInfoBean.setCountdingMin(tempCountingMin);
+                controllerInfoBean.setCountdingSec(tempCountingSec);
+                controllerInfoBean.setAgendaChange(false);
+                controllerInfoBean.setAgendaTimeCountDown(true);
+                controllerInfoBean.setUpLevelTitle("文件");
+
+                String json = mGson.toJson(controllerInfoBean);
+
+                mRootView.removeView(mControllerView);
+                FileDetailActivity.start(this, pauseAgendaIndex,
+                        pauseDocumentIndex, "文件",true,true,true,tempCountingMin,tempCountingSec);
+
+                ControllerUtil.getInstance().sendMessage(json);
+
+                mControllerView.setPauseAndContinueText("暂停");
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
 
         }
-
-
-
     }
 
     @Override
@@ -486,5 +475,30 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void voteResult(View view) {
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Dialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("提示")
+                    .setMessage("退出系统？")
+                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Server")) {
+                                stopService(new Intent(MainActivity.this, Server.class));
+                            }
+                            if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
+                                stopService(new Intent(MainActivity.this, Client.class));
+                            }
+                            ActivityStackManager.exit();
+                        }
+                    })
+                    .setNegativeButton("否", null)
+                    .create();
+            dialog.show();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
