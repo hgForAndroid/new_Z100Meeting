@@ -268,9 +268,11 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if ("开始".equals(((Button) view).getText().toString())) {
             mMeetingState = Constant.MEETING_STATE_BEGIN;
             mPresenter.begin(mControllerInfoBean, mMeetingState, mAgendaIndex, mFileIndex, mUpLevelText);
+            EventBus.getDefault().post("开会中");
         } else {//结束
             mMeetingState = Constant.MEETING_STATE_ENDING;
             mPresenter.ending(mControllerInfoBean, mMeetingState);
+            EventBus.getDefault().post("已结束");
         }
     }
 
@@ -283,6 +285,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             saveCountingMinAndSec(mNavBarView.getTimeHour(), mNavBarView.getTimeMin());
             //保存当前的议程序号与议程文件序号
             savePauseAgendaIndexAndDocumentIndex(mAgendaIndex,mFileIndex);
+
+            EventBus.getDefault().post("暂停中");
         } else {//继续
             mMeetingState = Constant.MEETING_STATE_CONTINUE;
             //为了暂停时，设备不在文件详情界面，而从主界面跳进来，所以得传递一个当前倒计时时间参数值，
@@ -296,6 +300,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                     .getInt(Constant.PAUSE_DOCUMENT_INDEX, 0);
             mPresenter.meetingContinue(mControllerInfoBean, mMeetingState, pauseAgendaIndex, pauseDocumentIndex,
                     mUpLevelText, mIsAgendaChange, true, tempCountingMin, tempCountingSec);
+
+            EventBus.getDefault().post("开会中");
         }
     }
 
@@ -326,6 +332,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         EventBus.getDefault().post(MainActivity.PAGE_SIX);
         mRootView.removeView(mControllerView);
         EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
+        EventBus.getDefault().post("投票中");
         ActivityStackManager.pop();
     }
 

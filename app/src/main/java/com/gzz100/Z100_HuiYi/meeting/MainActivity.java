@@ -336,11 +336,17 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN ) {
                 FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle,true,
                         false,false,"","");
+                mNavBarView.setMeetingStateOrAgendaState("开会中");
             }
             //继续
             else if (data.getMeetingState() == Constant.MEETING_STATE_CONTINUE){
                 FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle,true,false,
                         true,data.getCountdingMin(),data.getCountdingSec());
+                mNavBarView.setMeetingStateOrAgendaState("开会中");
+            }
+            //暂停
+            else if (data.getMeetingState() == Constant.MEETING_STATE_PAUSE){
+                mNavBarView.setMeetingStateOrAgendaState("暂停中");
             }
         }
     }
@@ -361,6 +367,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 //                mVoteTab.setChecked(true);
 //            }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setCurrentMeetingState(String meetingState){
+        mNavBarView.setMeetingStateOrAgendaState(meetingState);
     }
 
     @Override
@@ -390,7 +401,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
-
+            mNavBarView.setMeetingStateOrAgendaState("开会中");
             mControllerView.setBeginAndEndText("结束");
         } else {//结束
             mMeetingState = Constant.MEETING_STATE_ENDING;
@@ -404,20 +415,21 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
+            mNavBarView.setMeetingStateOrAgendaState("已结束");
         }
 
     }
 
     @Override
     public void pauseMeeting(View view) {
-        if (mMeetingState == Constant.MEETING_STATE_NOT_BEGIN ){
-            ToastUtil.showMessage("会议未开始！");
-            return;
-        }
-        if (mMeetingState == Constant.MEETING_STATE_ENDING){
-            ToastUtil.showMessage("会议已结束！");
-            return;
-        }
+//        if (mMeetingState == Constant.MEETING_STATE_NOT_BEGIN ){
+//            ToastUtil.showMessage("会议未开始！");
+//            return;
+//        }
+//        if (mMeetingState == Constant.MEETING_STATE_ENDING){
+//            ToastUtil.showMessage("会议已结束！");
+//            return;
+//        }
         if ("暂停".equals(((Button)view).getText().toString())) {
             mMeetingState = Constant.MEETING_STATE_PAUSE;
             try {
@@ -430,6 +442,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
+            mNavBarView.setMeetingStateOrAgendaState("暂停中");
         }else {//继续
             mMeetingState = Constant.MEETING_STATE_CONTINUE;
             String tempCountingMin = SharedPreferencesUtil.getInstance(this.getApplicationContext())
@@ -460,6 +473,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 ControllerUtil.getInstance().sendMessage(json);
 
                 mControllerView.setPauseAndContinueText("暂停");
+                mNavBarView.setMeetingStateOrAgendaState("开会中");
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }

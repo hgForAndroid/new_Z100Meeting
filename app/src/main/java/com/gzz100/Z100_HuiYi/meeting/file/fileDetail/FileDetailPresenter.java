@@ -179,6 +179,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void previousAgenda(int agendaIndex) {
         agendaIndex -= 1;
+        mView.respondAgendaTimeIsCounting(false);
         mView.resetAgendaTimeCounting(null,agendaIndex);
         mView.resetAgendaContent(agendaIndex);
     }
@@ -186,6 +187,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void nextAgenda(int agendaIndex) {
         agendaIndex += 1;
+        mView.respondAgendaTimeIsCounting(false);
         mView.resetAgendaTimeCounting(null,agendaIndex);
         mView.resetAgendaContent(agendaIndex);
     }
