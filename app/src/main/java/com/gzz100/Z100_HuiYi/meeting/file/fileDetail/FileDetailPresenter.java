@@ -111,7 +111,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void meetingContinue(final ControllerInfoBean controllerInfoBean, final int meetingState,
                                 final int agendaIndex, final int DocumentIndex, final String upLevelText,
-                                boolean isAgendaChange) {
+                                boolean isAgendaChange,boolean isAgendaTimeCountDown,String min,String sec) {
         try {
             ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
             mControllerInfoBean.setMeetingState(meetingState);
@@ -119,6 +119,9 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setDocumentIndex(DocumentIndex);
             mControllerInfoBean.setUpLevelTitle(upLevelText);
             mControllerInfoBean.setAgendaChange(isAgendaChange);
+            mControllerInfoBean.setAgendaTimeCountDown(isAgendaTimeCountDown);
+            mControllerInfoBean.setCountdingMin(min);
+            mControllerInfoBean.setCountdingSec(sec);
 
             String json = mGson.toJson(mControllerInfoBean);
             ControllerUtil.getInstance().sendMessage(json);
@@ -131,7 +134,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void previousAgendaForHost(final ControllerInfoBean controllerInfoBean, final int meetingState, int agendaIndex) {
         agendaIndex -= 1;
-        mView.resetAgendaTimeCounting(agendaIndex);
+        mView.resetAgendaTimeCounting(controllerInfoBean,agendaIndex);
         mView.resetAgendaContent(agendaIndex);
         final int finalAgendaIndex = agendaIndex;
         try {
@@ -153,7 +156,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void nextAgendaForHost(final ControllerInfoBean controllerInfoBean, final int meetingState, int agendaIndex) {
         agendaIndex += 1;
-        mView.resetAgendaTimeCounting(agendaIndex);
+        mView.resetAgendaTimeCounting(controllerInfoBean,agendaIndex);
         mView.resetAgendaContent(agendaIndex);
         final int finalAgendaIndex = agendaIndex;
         try {
@@ -174,14 +177,14 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void previousAgenda(int agendaIndex) {
         agendaIndex -= 1;
-        mView.resetAgendaTimeCounting(agendaIndex);
+        mView.resetAgendaTimeCounting(null,agendaIndex);
         mView.resetAgendaContent(agendaIndex);
     }
 
     @Override
     public void nextAgenda(int agendaIndex) {
         agendaIndex += 1;
-        mView.resetAgendaTimeCounting(agendaIndex);
+        mView.resetAgendaTimeCounting(null,agendaIndex);
         mView.resetAgendaContent(agendaIndex);
     }
 
@@ -192,7 +195,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
         if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN) {
             mView.respondMeetingBegin(data.isAgendaChange());
             if (data.getAgendaIndex() > 0) {
-                mView.respondAgendaIndexChange(data.getAgendaIndex());
+                mView.respondAgendaTimeIsCounting(data.isAgendaTimeCountDown());
+                mView.respondAgendaIndexChange(data);
             }
             if (data.getDocumentIndex() >= 0) {
                 mView.respondDocumentIndexChange(data.getDocumentIndex());
@@ -211,13 +215,17 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
         else if (data.getMeetingState() == Constant.MEETING_STATE_CONTINUE) {
             mView.respondMeetingContinue(data.isAgendaChange());
 
-            if (data.getAgendaIndex() > 0) {
-                mView.respondAgendaIndexChange(data.getAgendaIndex());
+            if (data.isAgendaChange()){//议程已改变
+                if (data.getAgendaIndex() > 0) {
+                    mView.respondAgendaTimeIsCounting(data.isAgendaTimeCountDown());
+                    mView.respondAgendaIndexChange(data);
+                }
+                if (data.getDocumentIndex() >= 0) {
+                    mView.respondDocumentIndexChange(data.getDocumentIndex());
+                }
+            }else {//议程无变化
+                mView.respondAgendaNotChange(data);
             }
-            if (data.getDocumentIndex() >= 0) {
-                mView.respondDocumentIndexChange(data.getDocumentIndex());
-            }
-
         }
 
     }

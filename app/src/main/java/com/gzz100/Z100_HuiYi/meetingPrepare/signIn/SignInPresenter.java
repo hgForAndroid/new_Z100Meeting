@@ -73,7 +73,6 @@ public class SignInPresenter implements SignInContract.Presenter {
      */
     private void saveUserRole(int role){
         MyAPP.getInstance().setUserRole(role);
-//        SharedPreferencesUtil.getInstance(mContext.getApplicationContext()).putInt(Constant.USER_ROLE,role);
     }
 
     @Override

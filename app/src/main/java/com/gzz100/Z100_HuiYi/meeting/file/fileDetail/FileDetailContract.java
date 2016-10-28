@@ -64,10 +64,13 @@ public interface FileDetailContract {
         void meetingContinue();
 
         /**
-         * 重设议程时间
-         * @param agendaIndex   议程序号
+         * 重设议程时间，
+         * 如果是主持人端的，controllerInfoBean应该设为null,只传入agendaIndex
+         * 如果是客户端的，则需要处理controllerInfoBean，而不处理agendaIndex
+         * @param controllerInfoBean   消息实体
+         * @param agendaIndex          议程序号
          */
-        void resetAgendaTimeCounting(int agendaIndex);
+        void resetAgendaTimeCounting(ControllerInfoBean controllerInfoBean,int agendaIndex);
 
         /**
          * 重设议程所有显示的信息
@@ -76,10 +79,23 @@ public interface FileDetailContract {
         void resetAgendaContent(int agendaIndex);
 
         /**
-         * 主持人发送过来的消息中，议程序号变化了，进行响应
-         * @param agendaIndex    变化的议程序号
+         * 该方法是客户端在会议继续时，并且议程无变化时调用
+         * 主持人发送过来的消息中，议程无变化，进行响应
+         * @param controllerInfoBean    消息实体
          */
-        void respondAgendaIndexChange(int agendaIndex);
+        void respondAgendaNotChange(ControllerInfoBean controllerInfoBean);
+
+        /**
+         * 会议开启过，并且议程倒计时了 ，该方法是在客户端接收到继续时，通知界面
+         * 为了将客户端的时间倒计时与主持人端的一致，而使用的此标识
+         * @param isAgendaTimeCountDown
+         */
+        void respondAgendaTimeIsCounting(boolean isAgendaTimeCountDown);
+        /**
+         * 主持人发送过来的消息中，议程序号变化了，进行响应
+         * @param controllerInfoBean  消息实体
+         */
+        void respondAgendaIndexChange(ControllerInfoBean controllerInfoBean);
         /**
          * 主持人发送过来的消息中，文件序号变化了，进行响应
          * @param documentIndex    变化的文件序号
@@ -156,9 +172,13 @@ public interface FileDetailContract {
          * @param DocumentIndex   文件序号
          * @param upLevelText     上一级标题
          * @param isAgendaChange   议程是否已经改变
+         * @param isAgendaTimeCountDown 议程已经开始，并且已经倒计时过了
+         * @param min              倒计时的分
+         * @param sec              倒计时的秒
          */
         void meetingContinue(ControllerInfoBean controllerInfoBean, int meetingState, int agendaIndex,
-                             int DocumentIndex, String upLevelText, boolean isAgendaChange);
+                             int DocumentIndex, String upLevelText, boolean isAgendaChange,
+                             boolean isAgendaTimeCountDown,String min,String sec);
 
         /**
          * 上一个议程，主持人端调用的方法

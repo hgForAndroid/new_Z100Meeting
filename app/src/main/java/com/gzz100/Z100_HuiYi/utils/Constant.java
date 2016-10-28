@@ -47,4 +47,16 @@ public class Constant {
     public static final int MEETING_STATE_CONTINUE = 9;
     //作为TCP服务器端的平板的ip
     public static final String TCP_SERVER_IP = "tcp_server_ip";
+
+    /**
+     * 下面的设置，为主持人端点击暂停后，需要保存在本地的各种信息的key
+     */
+    //议程在倒计时，按下暂停后用于保存当前议程倒计时时间的 分 的key
+    public static final String COUNTING_MIN = "counting_min";
+    //议程在倒计时，按下暂停后用于保存当前议程倒计时时间的 秒 的key
+    public static final String COUNTING_SEC = "counting_sec";
+    //按下暂停后用于保存当前的议程序号
+    public static final String PAUSE_AGENDA_INDEX = "pause_agenda_index";
+    //按下暂停后用于保存当前的议程文件序号
+    public static final String PAUSE_DOCUMENT_INDEX = "pause_document_index";
 }

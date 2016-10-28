@@ -10,15 +10,6 @@ public class ControllerInfoBean implements Serializable,Cloneable{
     private String meetingID;            //会议ID
     private int meetingState;            //会议状态 未开始1；已开始 2；已暂停 4；已结束 8；
     private int agendaIndex;               //议程序号
-
-    public String getUpLevelTitle() {
-        return upLevelTitle;
-    }
-
-    public void setUpLevelTitle(String upLevelTitle) {
-        this.upLevelTitle = upLevelTitle;
-    }
-
     private String upLevelTitle;           //上级界面名称
     private int contentType;             //会议当前内容类型  ,文件还投票是
     private int documentIndex;           //文件序号
@@ -31,6 +22,13 @@ public class ControllerInfoBean implements Serializable,Cloneable{
      * 其他为false或不传值
      */
     private boolean isAgendaChange = false;
+    /**
+     * 议程已经开始，已经倒计时过
+     */
+    private boolean isAgendaTimeCountDown;
+    private String countdingMin;
+    private String countdingSec;
+
     public ControllerInfoBean() {
     }
 
@@ -125,6 +123,13 @@ public class ControllerInfoBean implements Serializable,Cloneable{
     public void setIsReturnVoteResult(int isReturnVoteResult) {
         IsReturnVoteResult = isReturnVoteResult;
     }
+    public String getUpLevelTitle() {
+        return upLevelTitle;
+    }
+
+    public void setUpLevelTitle(String upLevelTitle) {
+        this.upLevelTitle = upLevelTitle;
+    }
 
     public boolean isAgendaChange() {
         return isAgendaChange;
@@ -132,5 +137,29 @@ public class ControllerInfoBean implements Serializable,Cloneable{
 
     public void setAgendaChange(boolean agendaChange) {
         isAgendaChange = agendaChange;
+    }
+
+    public boolean isAgendaTimeCountDown() {
+        return isAgendaTimeCountDown;
+    }
+
+    public void setAgendaTimeCountDown(boolean agendaTimeCountDown) {
+        isAgendaTimeCountDown = agendaTimeCountDown;
+    }
+
+    public String getCountdingMin() {
+        return countdingMin;
+    }
+
+    public void setCountdingMin(String countdingMin) {
+        this.countdingMin = countdingMin;
+    }
+
+    public String getCountdingSec() {
+        return countdingSec;
+    }
+
+    public void setCountdingSec(String countdingSec) {
+        this.countdingSec = countdingSec;
     }
 }

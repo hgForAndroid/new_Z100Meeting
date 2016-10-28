@@ -165,15 +165,13 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
         mMainActivity.removeControllerView();
         String currentTitle = mMainActivity.getCurrentTitle();
-        FileDetailActivity.start(getActivity(),mAgendaIndex,mFileIndex,currentTitle,false,false);
+        FileDetailActivity.start(getActivity(),mAgendaIndex,mFileIndex,currentTitle,false,false,false,"","");
     }
 
     @Override
     public void showSearchFileDetail() {
         String currentTitle = mMainActivity.getCurrentTitle();
-//        FileDetailActivity.showFileDetailActivity(getActivity(), mAgendasSum, mSearchAgendaIndex,
-//                mResultDocumentBeen, mSearchFileIndex1, mAgendas.get(mSearchAgendaIndex).getAgendaDuration(), currentTitle);
-        FileDetailActivity.start(getActivity(),mSearchAgendaIndex,mSearchFileIndex1,currentTitle,false,false);
+        FileDetailActivity.start(getActivity(),mSearchAgendaIndex,mSearchFileIndex1,currentTitle,false,false,false,"","");
     }
 
     @Override

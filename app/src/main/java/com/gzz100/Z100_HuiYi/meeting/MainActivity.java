@@ -44,6 +44,7 @@ import com.gzz100.Z100_HuiYi.tcpController.Server;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -350,12 +351,18 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getMultiCast(ControllerInfoBean data) {
         if (MyAPP.getInstance().getUserRole() != 1) {
-            if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN ||
-                    data.getMeetingState() == Constant.MEETING_STATE_CONTINUE) {
-                int agendaIndex = data.getAgendaIndex();
-                int documentIndex = data.getDocumentIndex();
-                String upLevelTitle = data.getUpLevelTitle();
-                FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle,true,false);
+            int agendaIndex = data.getAgendaIndex();
+            int documentIndex = data.getDocumentIndex();
+            String upLevelTitle = data.getUpLevelTitle();
+            //开始
+            if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN ) {
+                FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle,true,
+                        false,false,"","");
+            }
+            //继续
+            else if (data.getMeetingState() == Constant.MEETING_STATE_CONTINUE){
+                FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle,true,false,
+                        true,data.getCountdingMin(),data.getCountdingSec());
             }
         }
     }
@@ -421,7 +428,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 String json = mGson.toJson(controllerInfoBean);
 
                 mRootView.removeView(mControllerView);
-                FileDetailActivity.start(this, controllerInfoBean.getAgendaIndex(), controllerInfoBean.getDocumentIndex(), "文件",true,true);
+                FileDetailActivity.start(this, controllerInfoBean.getAgendaIndex(),
+                        controllerInfoBean.getDocumentIndex(), "文件",true,true,false,"","");
 
                 ControllerUtil.getInstance().sendMessage(json);
             } catch (CloneNotSupportedException e) {
