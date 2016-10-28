@@ -286,8 +286,6 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
 
     @Override
     public void onAgendaItemClick(int position) {
-        if(position == currentAgendaPositon)
-            return;
         currentAgendaPositon = position;
         mAgendaListAdapter.setSelectedPosition(position);
         mAgendaListAdapter.notifyDataSetChanged();

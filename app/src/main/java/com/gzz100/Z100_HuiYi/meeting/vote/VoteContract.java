@@ -4,6 +4,8 @@ import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
 import com.gzz100.Z100_HuiYi.data.Vote;
 
+import java.util.List;
+
 /**
  * Created by Lee on 2016/9/1.
  */
@@ -15,9 +17,20 @@ public interface VoteContract {
         boolean isActive();
 
         /**
+         * 设置Host所有Vote信息
+         * @param voteList 相应会议的全部投票列表
+         */
+        void setAllVoteInf(List<Vote> voteList);
+
+        /**
          * 设置投票信息
          */
         void setVoteInf(Vote vote);
+
+        /**
+         * 显示Host所有Vote信息
+         */
+        void showAllVoteInf();
 
         /**
          * 显示投票信息
@@ -37,6 +50,9 @@ public interface VoteContract {
     }
 
     public interface Presenter extends BasePresenter{
+
+        void fetchAllVoteInf(boolean forceUpdate, String meetingID);
+
         /**
          * 获取投票信息
          * @param IMEI 设备编号
@@ -55,5 +71,17 @@ public interface VoteContract {
          * @param reLoad 重新加载
          */
         void setFirstLoad(Boolean reLoad);
+
+        /**
+         * 主持人发起投票
+         * @param vote 投票对象
+         */
+        void startVote(Vote vote);
+
+        /**
+         * 主持人查看投票结果
+         * @param vote 投票对象
+         */
+        void checkVoteResult(Vote vote);
     }
 }

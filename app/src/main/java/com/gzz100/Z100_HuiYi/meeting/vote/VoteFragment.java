@@ -28,10 +28,13 @@ import java.util.List;
 * create at 2016/8/23 17:01
 */
 
-public class VoteFragment extends Fragment implements VoteContract.VoteView, OnVoteOptionClickListener{
+public class VoteFragment extends Fragment implements VoteContract.VoteView, OnVoteOptionClickListener, OnAllVoteItemClickListener{
     private VoteContract.Presenter mPresenter;
+
+    private List<Vote> mAllVoteList;
     private Vote mVote;
 
+    private RecyclerView mAllVoteInfRecyclerView;
     private RecyclerView mVoteOptionRecyclerView;
     private TextView mVoteTitleTextView;
     private TextView mVoteQuestionTextView;
@@ -67,6 +70,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vote, null);
+        mAllVoteInfRecyclerView = (RecyclerView) view.findViewById(R.id.id_rev_all_vote_inf_list);
         mVoteOptionRecyclerView = (RecyclerView) view.findViewById(R.id.id_rev_vote_options);
         mVoteTitleTextView = (TextView) view.findViewById(R.id.id_text_view_vote_title);
         mVoteQuestionTextView = (TextView) view.findViewById(R.id.id_text_view_vote_question);
@@ -107,7 +111,25 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
     }
 
     @Override
+    public void setAllVoteInf(List<Vote> voteList) {
+        this.mAllVoteList = voteList;
+    }
+
+    @Override
+    public void showAllVoteInf() {
+        mAllVoteInfRecyclerView.setVisibility(View.VISIBLE);
+        mVoteMainLayout.setVisibility(View.INVISIBLE);
+        AllVoteListAdapter adapter = new AllVoteListAdapter(getContext(), mAllVoteList);
+        adapter.setmOnAllVoteItemClickListener(this);
+        mAllVoteInfRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mAllVoteInfRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
     public void showVoteInf() {
+        mAllVoteInfRecyclerView.setVisibility(View.INVISIBLE);
+        mVoteMainLayout.setVisibility(View.VISIBLE);
         optionStateList = new ArrayList<Boolean>();
         for(int i = 0; i < mVote.getVoteOptionsList().size(); i++){
             optionStateList.add(false);
@@ -187,6 +209,16 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
             mVoteFinishedInfTextView.setText("投票失败，请确认网络环境是否正常");
         }
         mVoteFinishedInfTextView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onVoteStartStopButtonClick(View view, int position) {
+        mPresenter.startVote(mAllVoteList.get(position));
+    }
+
+    @Override
+    public void onCheckResultButtonClick(View view, int position) {
+        mPresenter.checkVoteResult(mAllVoteList.get(position));
     }
 
     @Override

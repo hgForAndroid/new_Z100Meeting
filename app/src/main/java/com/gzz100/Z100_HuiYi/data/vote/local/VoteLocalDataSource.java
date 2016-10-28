@@ -7,6 +7,8 @@ import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
 import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 
+import java.util.List;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -36,6 +38,19 @@ public class VoteLocalDataSource implements VoteDataSource{
             callback.onVoteDetailLoaded(vote);
         } else {
             callback.onDataNotAvailable();
+        }
+    }
+
+    @Override
+    public void getAllVoteInf(String meetingID, @NonNull LoadAllVoteInfCallBack callback) {
+        checkNotNull(callback, "Callback cannot be null");
+        //fake data
+
+        List<Vote> list = FakeDataProvider.getAllVoteByMeetingID(meetingID);
+        if(list.size() == 0){
+            callback.onDataNotAvailable();
+        } else {
+            callback.onAllVoteLoaded(list);
         }
     }
 }

@@ -45,4 +45,15 @@ public class VoteRepository implements VoteDataSource{
             setHaveVoteCache(true); //不从本地取数据 实际使用应一直设为false
         }
     }
+
+    @Override
+    public void getAllVoteInf(String meetingID, @NonNull LoadAllVoteInfCallBack callback) {
+        checkNotNull(callback, "Callback cannot be null");
+        if(mHaveVoteCache){
+            mVoteLocalDataSource.getAllVoteInf(meetingID, callback);
+        } else {
+            mVoteRemoteDataSource.getAllVoteInf(meetingID, callback);
+            setHaveVoteCache(true); //不从本地取数据 实际使用应一直设为false
+        }
+    }
 }
