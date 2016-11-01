@@ -88,7 +88,6 @@ public class SignInPresenter implements SignInContract.Presenter {
         MyAPP.getInstance().setUserRole(role);
     }
 
-
     @Override
     public void signIn(String IMEI,String meetingID) {
         SignInRemoteDataSource.getInstance(mContext).signIn(IMEI, meetingID, new SignInDataSource.LoadMeetingSummaryCallback() {
