@@ -16,10 +16,12 @@ import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,7 +41,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
     private MeetingRoomView mMeetingRoomView;
 
-    private List<DelegateBean> mUsers = new ArrayList<>();
+    private List<DelegateModel> mUsers = new ArrayList<>();
     //会议结束后显示的布局
     private RelativeLayout mTopLayout;
     //会议未结束显示的布局
@@ -133,8 +135,8 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     }
 
     @Override
-    public void showUserInfo(DelegateBean delegateBean) {
-        DelegateDetailActivity.showDelegateDetailActivity(getActivity(),delegateBean,mainActivity.getCurrentTitle());
+    public void showUserInfo(DelegateModel DelegateModel) {
+        DelegateDetailActivity.showDelegateDetailActivity(getActivity(),DelegateModel,mainActivity.getCurrentTitle());
 //        Intent intent = new Intent(getActivity(), DelegateDetailActivity.class);
 //        startActivity(intent);
 
@@ -152,9 +154,10 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     }
 
     @Override
-    public void showMeetingRoom(List<DelegateBean> users) {
+    public void showMeetingRoom(List<DelegateModel> users) {
         mUsers = users;
-        mMeetingRoomView.addUsers(users,"李四",this);
+        String userName = SharedPreferencesUtil.getInstance(this.getContext()).getString(Constant.USER_NAME, "");
+        mMeetingRoomView.addUsers(users,userName,this);
     }
 
     @Override
@@ -197,6 +200,6 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     @Override
     public void onUserClick(View v, int position) {
 //        Toast.makeText(getActivity(),mUsers.get(position).getUserName(),Toast.LENGTH_SHORT).show();
-        mPresenter.fetchUserInfo(mUsers.get(position).getDelegateId());
+        mPresenter.fetchUserInfo(mUsers.get(position).getDelegateID());
     }
 }

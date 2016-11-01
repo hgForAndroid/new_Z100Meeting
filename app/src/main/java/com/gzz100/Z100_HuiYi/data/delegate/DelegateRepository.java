@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.delegate.local.DelegateLocalDataSource;
 import com.gzz100.Z100_HuiYi.data.delegate.remote.DelegateRemoteDataSource;
 
@@ -43,7 +44,7 @@ public class DelegateRepository implements DelegateDataSource {
         checkNotNull(callback);
             mDelegateLocalDataSource.getDelegateList(rolePos, new LoadDelegateListCallback() {
                 @Override
-                public void onDelegateListLoaded(List<DelegateBean> delegateBeans) {
+                public void onDelegateListLoaded(List<DelegateModel> delegateBeans) {
                     callback.onDelegateListLoaded(delegateBeans);
                 }
 

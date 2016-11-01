@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,6 +17,7 @@ import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.meetingPrepare.ItemSpaceDecoration;
 import com.gzz100.Z100_HuiYi.meetingPrepare.signIn.SignInActivity;
+import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
@@ -21,6 +25,7 @@ import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 import org.w3c.dom.Text;
 
 import java.util.List;
+import java.util.logging.ErrorManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +52,7 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_meeting);
         ButterKnife.bind(this);
-        mPresenter = new SelectMeetingPresenter(this, this);
+        mPresenter = new SelectMeetingPresenter(SelectMeetingActivity.this, this);
         saveIMEI();
     }
 
@@ -86,8 +91,13 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
     }
 
     @Override
-    public void showNoMeetingList() {
-        mTvNoMeeting.setVisibility(View.VISIBLE);
+    public void showNoMeetingList(String errorMsg) {
+        if (TextUtils.isEmpty(errorMsg)){
+            mTvNoMeeting.setVisibility(View.VISIBLE);
+        }else {
+            mTvNoMeeting.setText(errorMsg);
+            mTvNoMeeting.setVisibility(View.VISIBLE);
+        }
         mRcvSelectMeeting.setVisibility(View.GONE);
     }
 
@@ -106,5 +116,15 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
         int meetingID = mMeetings.get(position).getMeetingID();
         String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
         mPresenter.selectMeeting(deviceIMEI, meetingID + "");
+        Log.e("会议ID ===== ",meetingID+"");
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            ActivityStackManager.pop();
+            return  true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -16,12 +16,11 @@ import rx.Subscriber;
  * 用于在Http请求开始时，自动显示一个ProgressDialog
  * 在Http请求结束是，关闭ProgressDialog
  * 调用者自己对请求数据进行处理
- * Created by WZG on 2016/7/16.
  */
 public class ProgressSubscriber<T> extends Subscriber<T> {
     //    回调接口
     private HttpRxCallbackListener mSubscriberOnNextListener;
-    //    弱引用反正内存泄露
+    //    弱引用防止内存泄露
     private WeakReference<Context> mActivity;
     //    是否能取消请求
     private boolean cancel;
@@ -81,6 +80,10 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
     private void dismissProgressDialog() {
         if (pd != null && pd.isShowing()) {
             pd.dismiss();
+            pd = null;
+        }
+        if (pd != null){
+            pd = null;
         }
     }
 
@@ -111,16 +114,23 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable e) {
         Context context = mActivity.get();
+        String errorMsg;
         if (context == null) return;
         if (e instanceof SocketTimeoutException) {
             Toast.makeText(context, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
+            errorMsg = "网络中断，请检查您的网络状态";
         } else if (e instanceof ConnectException) {
             Toast.makeText(context, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
+            errorMsg = "网络中断，请检查您的网络状态";
         } else {
-            Toast.makeText(context, "错误" + e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.i("tag", "error----------->" + e.toString());
+            Toast.makeText(context, "错误 ====== " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//            Log.i("tag", "error----------->" + e.toString());
+            errorMsg = e.getMessage();
         }
         dismissProgressDialog();
+        if (mSubscriberOnNextListener != null) {
+            mSubscriberOnNextListener.onError(errorMsg);
+        }
     }
 
     /**
@@ -130,7 +140,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
      */
     @Override
     public void onNext(T t) {
-        if (mSubscriberOnNextListener != null) {
+        if (mSubscriberOnNextListener != null && t != null) {
             mSubscriberOnNextListener.onNext(t);
         }
     }

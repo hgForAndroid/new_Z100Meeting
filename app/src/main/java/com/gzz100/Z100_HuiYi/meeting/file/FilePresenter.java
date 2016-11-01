@@ -3,7 +3,9 @@ package com.gzz100.Z100_HuiYi.meeting.file;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.file.FileDataSource;
 import com.gzz100.Z100_HuiYi.data.file.FileRepository;
 
@@ -30,7 +32,7 @@ public class FilePresenter implements FileContract.Presenter {
     public void searchFileOrName(String fileOrName) {
         mFileRepository.getSearchResult(fileOrName, new FileDataSource.LoadFileListCallback() {
             @Override
-            public void onFileListLoaded(List<Document> documents) {
+            public void onFileListLoaded(List<DocumentModel> documents) {
 
                 if (!mFileView.isActive()) {
                     return;
@@ -55,14 +57,14 @@ public class FilePresenter implements FileContract.Presenter {
 //            mFirstLoad = false;
             mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.LoadAgendaListCallback() {
                 @Override
-                public void onAgendaListLoaded(List<Agenda> agendas) {
+                public void onAgendaListLoaded(List<AgendaModel> agendas) {
                     if (!mFileView.isActive()) {
                         return;
                     }
                     mFileView.showAgendaList(agendas);
                     mFileView.setAgendasSum(agendas.size());
                     if (mFirstLoad){
-                        mFileView.setAgendaTime(agendas.get(0).getAgendaDuration());
+                        mFileView.setAgendaTime(agendas.get(0).getAgendaDuration()+"");
                     }
                 }
 
@@ -84,7 +86,7 @@ public class FilePresenter implements FileContract.Presenter {
 //            fileModel.getFileListByAgendaPos(agendaPos);
             mFileRepository.getFileList(agendaPos, new FileDataSource.LoadFileListCallback() {
                 @Override
-                public void onFileListLoaded(List<Document> documents) {
+                public void onFileListLoaded(List<DocumentModel> documents) {
 
                     if (!mFileView.isActive()) {
                         return;
@@ -122,7 +124,7 @@ public class FilePresenter implements FileContract.Presenter {
     public void fetchSearchFileList(final int agendaIndex) {
         mFileRepository.getFileList(agendaIndex, new FileDataSource.LoadFileListCallback() {
             @Override
-            public void onFileListLoaded(List<Document> documents) {
+            public void onFileListLoaded(List<DocumentModel> documents) {
 
                 if (!mFileView.isActive()) {
                     return;

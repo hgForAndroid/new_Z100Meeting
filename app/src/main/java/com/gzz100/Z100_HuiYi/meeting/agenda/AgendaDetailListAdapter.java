@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 
 import java.util.List;
 import java.util.zip.Inflater;
@@ -27,10 +28,10 @@ public class AgendaDetailListAdapter extends RecyclerView.Adapter<AgendaDetailHo
     }
 
     private Context mContext;
-    private List<Agenda> mAgendaList;
+    private List<AgendaModel> mAgendaList;
     private LayoutInflater mInflater;
 
-    public AgendaDetailListAdapter(Context context, List<Agenda> list){
+    public AgendaDetailListAdapter(Context context, List<AgendaModel> list){
         mContext = context;
         mAgendaList = list;
         mInflater = LayoutInflater.from(context);
@@ -47,7 +48,7 @@ public class AgendaDetailListAdapter extends RecyclerView.Adapter<AgendaDetailHo
     public void onBindViewHolder(AgendaDetailHolder holder, final int position) {
         holder.mAgendaTitleTextView.setText(mAgendaList.get(position).getAgendaName());
         holder.mAgendaSperkerTextView.setText(mAgendaList.get(position).getAgendaSpeaker());
-        holder.mAgendaTimeTextView.setText(mAgendaList.get(position).getAgendaDuration());
+        holder.mAgendaTimeTextView.setText(mAgendaList.get(position).getAgendaDuration()+"");
         holder.mAgendaFileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

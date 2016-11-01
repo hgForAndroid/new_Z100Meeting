@@ -6,6 +6,7 @@ import android.content.Context;
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public interface MeetingContract {
         /**
          * 跳转到用户详情界面
          */
-        void showUserInfo(DelegateBean delegateBean);
+        void showUserInfo(DelegateModel delegateBean);
 
         /**
          * 跳转到个人详情时，查询没有这个人
@@ -41,7 +42,7 @@ public interface MeetingContract {
          * 显示会议桌
          * @param users 用户列表
          */
-        void showMeetingRoom(List<DelegateBean> users);
+        void showMeetingRoom(List<DelegateModel> users);
 
         /**
          * 设置其他人员个数

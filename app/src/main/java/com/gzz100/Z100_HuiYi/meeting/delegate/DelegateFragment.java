@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
@@ -163,10 +164,10 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
     }
 
     @Override
-    public void setAutoCompleteTextView(final List<DelegateBean> delegateBeans) {
+    public void setAutoCompleteTextView(final List<DelegateModel> delegateBeans) {
 
         final List<String> delegateNames=new ArrayList<>();
-        for(DelegateBean delegateBean: delegateBeans){
+        for(DelegateModel delegateBean: delegateBeans){
             delegateNames.add(delegateBean.getDelegateName());
         }
         ArrayAdapter<DelegateBean> arrayAdapter=new ArrayAdapter(getContext(),R.layout.item_delegate_search_list,delegateNames);
@@ -210,7 +211,7 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
 
 
     @Override
-    public void showDelegateList(List<DelegateBean> delegateBean) {
+    public void showDelegateList(List<DelegateModel> delegateBean) {
         DelegateListAdapter mDelegateListAdapter;
         mDelegateListAdapter=new DelegateListAdapter(getContext(),delegateBean);
         mDelegateListRecView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
@@ -225,7 +226,7 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
 
 
     @Override
-    public void showDelegateDetail(DelegateBean delegateBean) {
+    public void showDelegateDetail(DelegateModel delegateBean) {
         DelegateDetailActivity.showDelegateDetailActivity(getActivity(),delegateBean ,"人员");
 
         }

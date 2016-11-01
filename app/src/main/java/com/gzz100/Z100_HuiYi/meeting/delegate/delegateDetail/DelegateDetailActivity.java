@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.meeting.NavBarView;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -34,15 +35,15 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
      * @param activity     当前Activity
      * @param delegateBean 传输的信息
      */
-    public static void showDelegateDetailActivity(Activity activity, DelegateBean delegateBean, String upLevelText) {
+    public static void showDelegateDetailActivity(Activity activity, DelegateModel delegateBean, String upLevelText) {
         Intent intent = new Intent(activity, DelegateDetailActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(UP_LEVEL_TEXT, upLevelText);
         bundle.putString(DELEGATE_NAME, delegateBean.getDelegateName());
         bundle.putString(DELEGATE_DEPARTMENT, delegateBean.getDelegateDepartment());
-        bundle.putInt(DELEGATE_ROLE, delegateBean.getRole());
+        bundle.putInt(DELEGATE_ROLE, delegateBean.getDelegateRole());
         bundle.putString(DELEGATE_JOB, delegateBean.getDelegateJob());
-        bundle.putSerializable(DELEGATE_AGENDA_LIST, (Serializable) delegateBean.getDelegateAgendaList());
+        bundle.putSerializable(DELEGATE_AGENDA_LIST, (Serializable) delegateBean.getDelegateAgendaIndexList());
         bundle.putString(DELEGATE_DETAIL_INFO, delegateBean.getDelegateDetailInfo());
         intent.putExtra(BUNDLE, bundle);
 

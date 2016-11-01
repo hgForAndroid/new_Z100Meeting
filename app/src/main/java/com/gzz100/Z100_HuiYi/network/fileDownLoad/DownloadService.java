@@ -6,6 +6,7 @@ import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 import rx.Observable;
 /**
+ * 下载文件的接口
 * @author XieQXiong
 * create at 2016/9/27 16:36
 */

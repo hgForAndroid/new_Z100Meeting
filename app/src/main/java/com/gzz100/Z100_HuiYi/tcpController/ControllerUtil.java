@@ -34,6 +34,10 @@ public class ControllerUtil {
         mIControllerListener = controllerListener;
     }
 
+    public IControllerListener getIControllerListener() {
+        return mIControllerListener;
+    }
+
     /**
      * 发送数据，数据类型为json字符串
      * @param jsonBean  json字符串

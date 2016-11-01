@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 
 import java.util.List;
 
@@ -23,11 +24,11 @@ import butterknife.ButterKnife;
  * Created by XieQXiong on 2016/8/30.
  */
 public class FileDetailAdapter extends BaseAdapter {
-    private List<Document> documents;
+    private List<DocumentModel> documents;
     private Context mContext;
     private LayoutInflater mInflater;
 
-    public FileDetailAdapter(List<Document> documents, Context context) {
+    public FileDetailAdapter(List<DocumentModel> documents, Context context) {
         this.documents = documents;
         mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -40,7 +41,7 @@ public class FileDetailAdapter extends BaseAdapter {
     }
 
     @Override
-    public Document getItem(int position) {
+    public DocumentModel getItem(int position) {
         return documents.get(position);
     }
 

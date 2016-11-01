@@ -20,7 +20,9 @@ import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
 import com.gzz100.Z100_HuiYi.meeting.ControllerView;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
@@ -116,8 +118,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     private int mAgendaSum;//议程总数
     private int mAgendaIndex;//当前的议程序号
     private int mFileIndex;//当前显示的文件序号
-    private List<Document> mFileList;//文件列表
-    private String mAgendaDuration;//当前议程时间
+    private List<DocumentModel> mFileList;//文件列表
+    private int mAgendaDuration;//当前议程时间
     private String mUpLevelText;//上一级界面的名称
     /**
      * 是否是被动状态，支持人点击开始或继续而跳转进来的，代表被动，值为true
@@ -131,7 +133,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     //消息的实体类，只实例一次，之后发送该实体类，使用原型模式，避免多次创建同一个类
     private ControllerInfoBean mControllerInfoBean = new ControllerInfoBean();
     //开会中有切换议程时，切换后的议程文件列表
-    private List<Document> mDocuments;
+    private List<DocumentModel> mDocuments;
     private Bundle mBundle;
     private FileDetailContract.Presenter mPresenter;
     private FileDetailAdapter mFileDetailAdapter;
@@ -153,7 +155,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         //根据用户角色，是否显示控制界面
         showControlBar();
 
-        mPresenter = new FileDetailPresenter(null, this);
+        mPresenter = new FileDetailPresenter(null, this,this);
         //获取传过来的数据
         dataFormUpLevel();
 
@@ -186,7 +188,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mIsAgendaTimeCountDown = mBundle.getBoolean(IS_AGENDA_TIME_COUNT_DOWN, false);
             mCountingMin = mBundle.getString(MIN);
             mCountingSec = mBundle.getString(SEC);
-            List<Agenda> agendas = FileOperate.getInstance(this).queryAgendaList(Constant.COLUMNS_AGENDAS);
+            List<AgendaModel> agendas = FileOperate.getInstance(this).queryAgendaList(Constant.COLUMNS_AGENDAS);
             mAgendaSum = agendas.size();
             mAgendaDuration = agendas.get(mAgendaIndex-1).getAgendaDuration();
             mFileList = FileOperate.getInstance(this).queryFileList(mAgendaIndex);
@@ -242,9 +244,11 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mNavBarView.setTimeMin(mCountingSec);
         } else {
             //分割议程时间，并设置到当前页面，随后进行倒计时操作
-            String[] split = mAgendaDuration.split(":");
-            mMin = Integer.valueOf(split[0]);
-            mSec = Integer.valueOf(split[1]);
+//            String[] split = mAgendaDuration.split(":");
+//            mMin = Integer.valueOf(split[0]);
+//            mSec = Integer.valueOf(split[1]);
+            mMin = mAgendaDuration;
+            mSec = 0;
             mNavBarView.setTimeHour(StringUtils.resetNum(mMin));
             mNavBarView.setTimeMin(StringUtils.resetNum(mSec));
         }
@@ -516,6 +520,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mFileList = mDocuments;
             mFileIndex = documentIndex;
             mNavBarView.setTitle(mDocuments.get(mFileIndex).getDocumentName());
+            //加载文件
+            mPresenter.loadFile(mDocuments.get(mFileIndex).getDocumentName());
             mFileDetailAdapter = new FileDetailAdapter(mFileList, this);
             mFileNameRcv.setAdapter(mFileDetailAdapter);
             mFileNameRcv.setOnItemClickListener(this);
@@ -528,10 +534,12 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (mIsAgendaChange || mIsAgendaTimeCountDown) {
             if (!mIsAgendaTimeCountDown){
                 //取议程时传入的是mAgendaIndex-1，因为存储议程时，是从0开始的
-                String agendaDuration = FileOperate.getInstance(FileDetailActivity.this)
+                int agendaDuration = FileOperate.getInstance(FileDetailActivity.this)
                         .queryAgendaList(Constant.COLUMNS_AGENDAS).get(mAgendaIndex - 1).getAgendaDuration();
-                mMin = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[0]);
-                mSec = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[1]);
+//                mMin = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[0]);
+//                mSec = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[1]);
+                mMin = agendaDuration;
+                mSec = 0;
                 mNavBarView.setTimeHour(getMin());
                 mNavBarView.setTimeMin(getSec(true));
             }else {
@@ -564,6 +572,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 mFileList = mDocuments;
                 mFileIndex = 0;
                 mNavBarView.setTitle(mDocuments.get(mFileIndex).getDocumentName());
+                mPresenter.loadFile(mDocuments.get(mFileIndex).getDocumentName());
                 mFileDetailAdapter = new FileDetailAdapter(mFileList, this);
                 mFileNameRcv.setAdapter(mFileDetailAdapter);
                 mFileNameRcv.setOnItemClickListener(this);
@@ -696,12 +705,12 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void loadFile(File file) {
-//        mPDFView.fromFile(file)
-//                .enableSwipe(true)
-//                .swipeHorizontal(false)
-//                .enableDoubletap(true)
-//                .defaultPage(1)
-//                .load();
+        mPDFView.fromFile(file)
+                .enableSwipe(true)
+                .swipeHorizontal(false)
+                .enableDoubletap(true)
+                .defaultPage(1)
+                .load();
     }
 
     @Override

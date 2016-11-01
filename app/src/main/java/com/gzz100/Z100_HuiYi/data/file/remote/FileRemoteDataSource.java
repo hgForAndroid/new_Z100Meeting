@@ -4,10 +4,17 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
+import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.data.file.FileDataSource;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
 import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
+import com.gzz100.Z100_HuiYi.network.HttpManager;
+import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
+import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
+import com.gzz100.Z100_HuiYi.network.entity.DocumentPost;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;
@@ -21,12 +28,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FileRemoteDataSource implements FileDataSource {
     private static FileRemoteDataSource INSTANCE;
-//    private final DBHelper mDbHelper;
     private FileOperate mFileOperate;
     private static Context mContext;
 
     private FileRemoteDataSource(@NonNull Context context) {
-//        mDbHelper = DBHelper.getInstance(context);
         mFileOperate = FileOperate.getInstance(context);
     }
 
@@ -41,29 +46,25 @@ public class FileRemoteDataSource implements FileDataSource {
     public void getFileList(final int agendaPos, @NonNull final LoadFileListCallback callback) {
         checkNotNull(callback);
         //测试存数据库
-        List<Document> fileListByIndex = FakeDataProvider.getFileListByindex(agendaPos);
-        callback.onFileListLoaded(fileListByIndex);
-        mFileOperate.insertFileList(agendaPos,fileListByIndex);
+//        List<DocumentModel> fileListByIndex = FakeDataProvider.getFileListByindex(agendaPos);
+//        callback.onFileListLoaded(fileListByIndex);
+//        mFileOperate.insertFileList(agendaPos,fileListByIndex);
         //加载服务器数据
-//        DocumentPost documentPost = new DocumentPost(
-//                new ProgressSubscriber(new HttpRxCallbackListener<List<Document>>(){
-//                    @Override
-//                    public void onNext(List<Document> documents) {
-//                        callback.onFileListLoaded(documents);
-//                        //存数据库
-//                        mDbHelper.insertFileList(agendaPos,documents);
-//                    }
-//                }, mContext), agendaPos);
-//        HttpManager.getInstance(mContext).doHttpDeal(documentPost);
+        DocumentPost documentPost = new DocumentPost(
+                new ProgressSubscriber(new HttpRxCallbackListener<List<DocumentModel>>(){
+                    @Override
+                    public void onNext(List<DocumentModel> documents) {
+                        callback.onFileListLoaded(documents);
+                        //存数据库
+                        FileOperate.getInstance(mContext).insertFileList(agendaPos,documents);
+                    }
 
-        //测试
-//        OnePost onePost = new OnePost(new ProgressSubscriber(new HttpRxCallbackListener<List<OneTitle>>() {
-//            @Override
-//            public void onNext(List<OneTitle> oneTitles) {
-//                Log.e("getList ===", oneTitles.size() + "");
-//            }
-//        }, mContext));
-//        HttpManager.getInstance().doHttpDeal(onePost);
+                    @Override
+                    public void onError(String errorMsg) {
+                        callback.onDataNotAvailable();
+                    }
+                }, mContext), agendaPos);
+        HttpManager.getInstance(mContext).doHttpDeal(documentPost);
 
         //去完数据需存在本地
     }
@@ -72,7 +73,7 @@ public class FileRemoteDataSource implements FileDataSource {
     @Override
     public void getAgendaList(String IMEI, String userId, @NonNull final LoadAgendaListCallback callback) {
         checkNotNull(callback);
-        List<Agenda> agendas = FakeDataProvider.getAgendas();
+        List<AgendaModel> agendas = FakeDataProvider.getAgendas();
         if (agendas != null && agendas.size() > 0){
             callback.onAgendaListLoaded(agendas);
             mFileOperate.insertAgendaList(Constant.COLUMNS_AGENDAS,agendas);

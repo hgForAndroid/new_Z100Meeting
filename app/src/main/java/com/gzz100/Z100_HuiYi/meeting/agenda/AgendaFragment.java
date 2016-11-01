@@ -19,7 +19,9 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
 
@@ -45,12 +47,12 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
 
     private AgendaContract.Presenter mPresenter;
 
-    private List<Agenda> mAgendasList;
+    private List<AgendaModel> mAgendasList;
     private int currentAgendaPositon;
     private AgendaListAdapter mAgendaListAdapter;
     private AgendaDetailListAdapter mAgendaDetailAdapter;
 
-    private List<Document> mDocumentsList;
+    private List<DocumentModel> mDocumentsList;
 
     private ICommunicate mMainActivity;
 
@@ -168,7 +170,7 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
     }
 
     @Override
-    public void showAgendasList(List<Agenda> agendas) {
+    public void showAgendasList(List<AgendaModel> agendas) {
         mAgendasList = agendas;
         mAgendaListAdapter = new AgendaListAdapter(getContext(), mAgendasList);
         mAgendaRecyclerView.setLayoutManager(
@@ -205,7 +207,7 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
     }
 
     @Override
-    public void showAgendaDetail(Agenda agenda) {
+    public void showAgendaDetail(AgendaModel agenda) {
         mAgendaDetailRecyclerView.smoothScrollToPosition(currentAgendaPositon);
         mAgendaTitleTextView.setText(agenda.getAgendaName());
         mAgendaSpeakerTextView.setText("主讲人：" + agenda.getAgendaSpeaker());
@@ -219,7 +221,7 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
     }
 
     @Override
-    public void setFileList(List<Document> documents) {
+    public void setFileList(List<DocumentModel> documents) {
         mDocumentsList = documents;
     }
 

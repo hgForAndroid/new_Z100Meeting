@@ -3,6 +3,7 @@ package com.gzz100.Z100_HuiYi.meeting.delegate;
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 
 import java.util.List;
 
@@ -14,9 +15,9 @@ public interface DelegateContract {
 
         void showRoleList(List<String> roleList);
 
-        void showDelegateDetail(DelegateBean delegateBean);
+        void showDelegateDetail(DelegateModel delegateBean);
 
-        void showDelegateList(List<DelegateBean> delegateBean);
+        void showDelegateList(List<DelegateModel> delegateBean);
 
         void showNoDelegateDetail();
 
@@ -28,7 +29,7 @@ public interface DelegateContract {
 
         void showDelegateNameGridItemDecoration();
 
-        void setAutoCompleteTextView(List<DelegateBean> delegateBeans);
+        void setAutoCompleteTextView(List<DelegateModel> delegateBeans);
 
     }
     interface Presenter extends BasePresenter {

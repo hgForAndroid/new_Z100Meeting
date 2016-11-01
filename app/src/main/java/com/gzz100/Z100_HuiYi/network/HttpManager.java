@@ -77,7 +77,7 @@ public class HttpManager {
 
 
     private String getServerIP(){
-        return SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP,"");
+        return "http://"+SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP,"");
     }
 
 }

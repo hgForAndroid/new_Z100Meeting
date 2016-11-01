@@ -212,8 +212,8 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         if (fileIDs != null && fileIDs.size() > 0){
             mFileIDs = fileIDs;
             mIntent = new Intent(SignInActivity.this, DownLoadService.class);
-            mUrlPrefix = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-                    .getString(Constant.CURRENT_IP, "") + "/DownloadDocument?fileID=";
+            mUrlPrefix = "http://"+SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                    .getString(Constant.CURRENT_IP, "") + "/api/Common/DownloadDocument?documentPath=";
             mIntent.putExtra("url",mUrlPrefix+mFileIDs.get(0));
             mIntent.putExtra("id",0);
             mIntent.putExtra("name",mFileIDs.get(0));

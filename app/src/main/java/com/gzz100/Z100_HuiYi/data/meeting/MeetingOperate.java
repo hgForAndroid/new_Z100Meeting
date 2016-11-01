@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.data.db.PersistenceContract;
@@ -43,7 +44,7 @@ public class MeetingOperate {
      * @param userColumn  查询取参会人员列表需用到的 那一列对应的 值  Constant.COLUMNS_USER
      * @param userList    参会人员列表
      */
-    public void insertUserList(int userColumn,List<DelegateBean> userList){
+    public void insertUserList(int userColumn,List<DelegateModel> userList){
         byte[] data = ObjectTransverter.ListToByteArr(userList);
         ContentValues values =new ContentValues();
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_ROLE,userColumn);
@@ -57,8 +58,8 @@ public class MeetingOperate {
      * @param userColumn   数据库中参会人员列表对应的字段值，Constant.COLUMNS_USER
      * @return   参会人员列表
      */
-    public List<DelegateBean> queryUserList(int userColumn){
-        List<DelegateBean> userList = null;
+    public List<DelegateModel> queryUserList(int userColumn){
+        List<DelegateModel> userList = null;
         mDatabase = mDBHelper.getReadableDatabase();
         String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE + " where " +
                 PersistenceContract.ColumnsName.COLUMN_NAME_ROLE + " = ?";
@@ -66,7 +67,7 @@ public class MeetingOperate {
         if ( cursor.moveToFirst()){
             byte[] data = cursor.getBlob(cursor.getColumnIndex(
                     PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE));
-            userList = (List<DelegateBean>) ObjectTransverter.byteArrToList(data);
+            userList = (List<DelegateModel>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();
         return userList;

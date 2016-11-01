@@ -4,7 +4,9 @@ package com.gzz100.Z100_HuiYi.meeting.agenda;
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 
 import java.util.List;
 
@@ -16,7 +18,8 @@ public interface AgendaContract {
         /**
          * 显示议程列表
          */
-        void showAgendasList(List<Agenda> agendas);
+//        void showAgendasList(List<Agenda> agendas);
+        void showAgendasList(List<AgendaModel> agendas);
 
         /**
          * 判断是否已经添加到Activity
@@ -33,13 +36,14 @@ public interface AgendaContract {
         /**
         *  显示议程详细信息
         */
-        void showAgendaDetail(Agenda agenda);
+        void showAgendaDetail(AgendaModel agenda);
 
         /**
          *跳转文件详情界面
          */
         void showFileDetail();
-        void setFileList(List<Document> documents);
+//        void setFileList(List<Document> documents);
+        void setFileList(List<DocumentModel> documents);
     }
 
     public interface Presenter extends BasePresenter{
@@ -62,7 +66,7 @@ public interface AgendaContract {
          *  显示议程详细信息
          *  @param agenda 需要显示的议程
          */
-        void showAgendaDetail(Agenda agenda);
+        void showAgendaDetail(AgendaModel agenda);
 
         /**
          * 当Fragment销毁后，重新设置加载

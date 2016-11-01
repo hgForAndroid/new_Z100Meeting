@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.MeetingSummary;
+import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 
 /**
@@ -15,7 +16,8 @@ public interface SignInDataSource {
         void onDataNotAvailable();
     }
     interface LoadMeetingSummaryCallback{
-        void onMeetingSummaryLoaded(MeetingSummary meetingSummary);
+//        void onMeetingSummaryLoaded(MeetingSummary meetingSummary);
+        void onMeetingSummaryLoaded(MeetingSummaryBean meetingSummary);
         void onDataNotAvailable();
     }
 

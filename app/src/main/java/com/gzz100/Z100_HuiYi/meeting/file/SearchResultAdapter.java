@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 
 import java.util.List;
 
@@ -29,9 +30,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<ResultHolder>{
 
 
     private Context mContext;
-    private List<Document> mDocuments;
+    private List<DocumentModel> mDocuments;
     private LayoutInflater mInflater;
-    public SearchResultAdapter(Context context, List<Document> documents) {
+    public SearchResultAdapter(Context context, List<DocumentModel> documents) {
         mContext = context;
         mDocuments = documents;
         mInflater = LayoutInflater.from(context);
@@ -54,7 +55,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<ResultHolder>{
             }
         });
         holder.mFileSize.setText(mDocuments.get(position).getDocumentSize()+"kb");
-        holder.mKeynoteSpeaker.setText(mDocuments.get(position).getDocumentSpeaker());
+
+//        holder.mKeynoteSpeaker.setText(mDocuments.get(position).getDocumentSpeaker());
         mDocuments.get(position).setImageForFile(mContext,holder.mFileImage);
         holder.mAgenda.setText("议程"+mDocuments.get(position).getDocumentAgendaIndex());
 

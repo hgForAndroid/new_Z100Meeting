@@ -1,11 +1,14 @@
 package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
+import android.content.Context;
+import android.os.Environment;
 import android.view.View;
 
 import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.data.file.FileDetailRepository;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
+import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -16,13 +19,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class FileDetailPresenter implements FileDetailContract.Presenter {
     private FileDetailRepository mRepository;
     private FileDetailContract.DetailView mView;
+    private Context mContext;
     private final Gson mGson;
 
-    public FileDetailPresenter(FileDetailRepository repository, FileDetailContract.DetailView view) {
+    public FileDetailPresenter(FileDetailRepository repository, Context context, FileDetailContract.DetailView view) {
 //        this.mRepository = checkNotNull(repository);
         this.mView = checkNotNull(view);
         this.mView.setPresenter(this);
-
+        mContext = context;
         mGson = new Gson();
     }
 
@@ -51,15 +55,17 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     public void loadFile(String fileName) {
 //        java.io.File file = new java.io.File(Environment.getExternalStorageDirectory().getPath()
 //                + "/" +  fileName + ".pdf");
-//        if (!file.exists()) {
-//            try {
-//                file.createNewFile();
-//            } catch (Exception e){
-//                e.printStackTrace();
-//            }
-//
-//        }
-//        mView.loadFile(file);
+        java.io.File file = new java.io.File(AppUtil.getCacheDir(mContext)
+                + "/" + fileName);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        mView.loadFile(file);
     }
 
     @Override
@@ -73,6 +79,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setUpLevelTitle(upLevelText);
 
             String json = mGson.toJson(mControllerInfoBean);
+            if (ControllerUtil.getInstance().getIControllerListener() != null)
             ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -87,6 +94,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setMeetingState(meetingState);
 
             String json = mGson.toJson(mControllerInfoBean);
+            if (ControllerUtil.getInstance().getIControllerListener() != null)
             ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -101,6 +109,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setMeetingState(meetingState);
 
             String json = mGson.toJson(mControllerInfoBean);
+            if (ControllerUtil.getInstance().getIControllerListener() != null)
             ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -111,7 +120,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void meetingContinue(final ControllerInfoBean controllerInfoBean, final int meetingState,
                                 final int agendaIndex, final int DocumentIndex, final String upLevelText,
-                                boolean isAgendaChange,boolean isAgendaTimeCountDown,String min,String sec) {
+                                boolean isAgendaChange, boolean isAgendaTimeCountDown, String min, String sec) {
         try {
             ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
             mControllerInfoBean.setMeetingState(meetingState);
@@ -124,6 +133,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setCountdingSec(sec);
 
             String json = mGson.toJson(mControllerInfoBean);
+            if (ControllerUtil.getInstance().getIControllerListener() != null)
             ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -135,7 +145,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     public void previousAgendaForHost(final ControllerInfoBean controllerInfoBean, final int meetingState, int agendaIndex) {
         agendaIndex -= 1;
         mView.respondAgendaTimeIsCounting(false);
-        mView.resetAgendaTimeCounting(controllerInfoBean,agendaIndex);
+        mView.resetAgendaTimeCounting(controllerInfoBean, agendaIndex);
         mView.resetAgendaContent(agendaIndex);
         final int finalAgendaIndex = agendaIndex;
         try {
@@ -147,6 +157,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setAgendaChange(true);
 
             String json = mGson.toJson(mControllerInfoBean);
+            if (ControllerUtil.getInstance().getIControllerListener() != null)
             ControllerUtil.getInstance().sendMessage(json);
 
         } catch (CloneNotSupportedException e) {
@@ -158,7 +169,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     public void nextAgendaForHost(final ControllerInfoBean controllerInfoBean, final int meetingState, int agendaIndex) {
         agendaIndex += 1;
         mView.respondAgendaTimeIsCounting(false);
-        mView.resetAgendaTimeCounting(controllerInfoBean,agendaIndex);
+        mView.resetAgendaTimeCounting(controllerInfoBean, agendaIndex);
         mView.resetAgendaContent(agendaIndex);
         final int finalAgendaIndex = agendaIndex;
         try {
@@ -169,6 +180,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setAgendaChange(true);
 
             String json = mGson.toJson(mControllerInfoBean);
+            if (ControllerUtil.getInstance().getIControllerListener() != null)
             ControllerUtil.getInstance().sendMessage(json);
 
         } catch (CloneNotSupportedException e) {
@@ -180,7 +192,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     public void previousAgenda(int agendaIndex) {
         agendaIndex -= 1;
         mView.respondAgendaTimeIsCounting(false);
-        mView.resetAgendaTimeCounting(null,agendaIndex);
+        mView.resetAgendaTimeCounting(null, agendaIndex);
         mView.resetAgendaContent(agendaIndex);
     }
 
@@ -188,7 +200,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     public void nextAgenda(int agendaIndex) {
         agendaIndex += 1;
         mView.respondAgendaTimeIsCounting(false);
-        mView.resetAgendaTimeCounting(null,agendaIndex);
+        mView.resetAgendaTimeCounting(null, agendaIndex);
         mView.resetAgendaContent(agendaIndex);
     }
 
@@ -219,7 +231,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
         else if (data.getMeetingState() == Constant.MEETING_STATE_CONTINUE) {
             mView.respondMeetingContinue(data.isAgendaChange());
 
-            if (data.isAgendaChange()){//议程已改变
+            if (data.isAgendaChange()) {//议程已改变
                 if (data.getAgendaIndex() > 0) {
                     mView.respondAgendaTimeIsCounting(data.isAgendaTimeCountDown());
                     mView.respondAgendaIndexChange(data);
@@ -227,7 +239,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
                 if (data.getDocumentIndex() >= 0) {
                     mView.respondDocumentIndexChange(data.getDocumentIndex());
                 }
-            }else {//议程无变化
+            } else {//议程无变化
                 mView.respondAgendaNotChange(data);
             }
         }
@@ -254,7 +266,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             }
 
             String json = mGson.toJson(controllerInfoBean);
-            ControllerUtil.getInstance().sendMessage(json);
+            if (ControllerUtil.getInstance().getIControllerListener() != null)
+                ControllerUtil.getInstance().sendMessage(json);
 
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();

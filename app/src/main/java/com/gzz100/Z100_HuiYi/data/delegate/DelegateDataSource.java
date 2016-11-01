@@ -3,6 +3,7 @@ package com.gzz100.Z100_HuiYi.data.delegate;
 
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 
 import java.util.List;
 
@@ -20,12 +21,12 @@ public interface DelegateDataSource {
         void onDataNotAvailable();
     }
     interface LoadDelegateListCallback {
-        void onDelegateListLoaded(List<DelegateBean> delegateBeans);
+        void onDelegateListLoaded(List<DelegateModel> delegateBeans);
 
         void onDataNotAvailable();
     }
     interface LoadDelegateNameHintCallback {
-        void onDelegateNameHintLoaded(List<DelegateBean> delegataBeanList);
+        void onDelegateNameHintLoaded(List<DelegateModel> delegataBeanList);
 
         void onDataNotAvailable();
     }

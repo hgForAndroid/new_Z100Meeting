@@ -52,9 +52,7 @@ public class Client extends Service {
         @Override
         public void run() {
             try {
-                Log.e(TAG,"准备连接");
                 mS = new Socket(ip, Constant.TCP_PORT);
-                Log.e(TAG,"连接完成");
                 // outgoing stream redirect to socket
                 OutputStream out = mS.getOutputStream();
                 // 注意第二个参数据为true将会自动flush，否则需要需要手动操作out.flush()

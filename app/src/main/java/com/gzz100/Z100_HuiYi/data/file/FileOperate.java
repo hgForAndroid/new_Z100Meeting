@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.data.db.PersistenceContract;
 import com.gzz100.Z100_HuiYi.data.file.local.ObjectTransverter;
@@ -44,7 +46,7 @@ public class FileOperate {
      * @param agendaIndex  议程序号
      * @param documentList 文件列表
      */
-    public void insertFileList(int agendaIndex,List<Document> documentList){
+    public void insertFileList(int agendaIndex,List<DocumentModel> documentList){
         byte[] data = ObjectTransverter.ListToByteArr(documentList);
         ContentValues values =new ContentValues();
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_INDEX,agendaIndex);
@@ -58,8 +60,8 @@ public class FileOperate {
      * @param agendaIndex  议程序号
      * @return  文件列表
      */
-    public List<Document> queryFileList(int agendaIndex){
-        List<Document> documents = null;
+    public List<DocumentModel> queryFileList(int agendaIndex){
+        List<DocumentModel> documents = null;
         mDatabase = mDBHelper.getReadableDatabase();
         String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_FILE + " where " +
                 PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_INDEX + " = ?";
@@ -67,7 +69,7 @@ public class FileOperate {
         if ( cursor.moveToFirst()){
             byte[] data = cursor.getBlob(cursor.getColumnIndex(
                     PersistenceContract.ColumnsName.COLUMN_NAME_FILE_LIST));
-            documents = (List<Document>) ObjectTransverter.byteArrToList(data);
+            documents = (List<DocumentModel>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();
         return documents;
@@ -79,7 +81,7 @@ public class FileOperate {
      * @param agendas      数据库中唯一标识议程列表的字段对应的值,Constant.COLUMNS_AGENDAS
      * @param agendaList  议程列表
      */
-    public void insertAgendaList(int agendas, List<Agenda> agendaList){
+    public void insertAgendaList(int agendas, List<AgendaModel> agendaList){
         byte[] data = ObjectTransverter.ListToByteArr(agendaList);
         ContentValues values =new ContentValues();
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDAS,agendas);
@@ -92,8 +94,8 @@ public class FileOperate {
      * @param agendas  议程列表标识
      * @return  议程列表
      */
-    public List<Agenda> queryAgendaList(int agendas){
-        List<Agenda> baseBeen = null;
+    public List<AgendaModel> queryAgendaList(int agendas){
+        List<AgendaModel> baseBeen = null;
         mDatabase = mDBHelper.getReadableDatabase();
         String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_AGENDA + " where " +
                 PersistenceContract.ColumnsName.COLUMN_NAME_AGENDAS + " = ?";
@@ -101,7 +103,7 @@ public class FileOperate {
         if ( cursor.moveToFirst()){
             byte[] data = cursor.getBlob(cursor.getColumnIndex(
                     PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST));
-            baseBeen = (List<Agenda>) ObjectTransverter.byteArrToList(data);
+            baseBeen = (List<AgendaModel>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();
         return baseBeen;

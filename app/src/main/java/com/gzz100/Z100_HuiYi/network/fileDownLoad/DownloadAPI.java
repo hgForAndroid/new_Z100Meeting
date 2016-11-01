@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.downLoad.DownloadProgressInterceptor;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.downLoad.DownloadProgressListener;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.FileUtils;
 
 import java.io.File;
@@ -21,10 +22,11 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
 /**
-* @author XieQXiong
-* create at 2016/9/27 16:20
-*/
+ * @author XieQXiong
+ *         create at 2016/9/27 16:20
+ */
 
 
 public class DownloadAPI {
@@ -52,7 +54,8 @@ public class DownloadAPI {
     }
 
     public void downloadFile(@NonNull String url, final File file, Subscriber subscriber) {
-        Log.d(TAG, "downloadFile: " + url);
+        if (Constant.DEBUG)
+            Log.d(TAG, "downloadFile: " + url);
 
         retrofit.create(DownloadService.class)
                 .download(url)

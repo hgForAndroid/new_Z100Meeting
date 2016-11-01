@@ -100,7 +100,7 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
 
     @Override
     public void showSelectMeeting() {
-        mPresenter.saveCurrentIP(mIp);
+//        mPresenter.saveCurrentIP(mIp);
         SelectMeetingActivity.toSelectMeetingActivity(this);
     }
 

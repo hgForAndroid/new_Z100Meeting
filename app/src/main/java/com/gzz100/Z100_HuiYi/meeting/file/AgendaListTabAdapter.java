@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 
 import java.util.List;
 
@@ -25,10 +26,10 @@ public class AgendaListTabAdapter extends RecyclerView.Adapter<AgendaHolder>{
         this.mOnItemClickListener = onItemClickListener;
     }
     private Context mContext;
-    private List<Agenda> mAgendas;
+    private List<AgendaModel> mAgendas;
     private LayoutInflater mInflater;
 
-    public AgendaListTabAdapter(Context context, List<Agenda> agendas) {
+    public AgendaListTabAdapter(Context context, List<AgendaModel> agendas) {
         mContext = context;
         mAgendas = agendas;
         mInflater = LayoutInflater.from(context);

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 
 import java.util.List;
 
@@ -28,9 +29,9 @@ public class FileListAdapter extends RecyclerView.Adapter<FileBeanHolder>{
 
 
     private Context mContext;
-    private List<Document> mDocuments;
+    private List<DocumentModel> mDocuments;
     private LayoutInflater mInflater;
-    public FileListAdapter(Context context, List<Document> documents) {
+    public FileListAdapter(Context context, List<DocumentModel> documents) {
         mContext = context;
         mDocuments = documents;
         mInflater = LayoutInflater.from(context);
@@ -53,7 +54,8 @@ public class FileListAdapter extends RecyclerView.Adapter<FileBeanHolder>{
             }
         });
         holder.mFileSize.setText(mDocuments.get(position).getDocumentSize()+"kb");
-        holder.mKeynoteSpeaker.setText(mDocuments.get(position).getDocumentSpeaker());
+
+//        holder.mKeynoteSpeaker.setText(mDocuments.get(position).getDocumentSpeaker());
         mDocuments.get(position).setImageForFile(mContext,holder.mFileImage);
 
     }

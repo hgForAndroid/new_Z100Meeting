@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.meeting.about.AboutFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaPresenter;
@@ -506,6 +507,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                             if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
                                 stopService(new Intent(MainActivity.this, Client.class));
                             }
+                            MainActivity.this.deleteDatabase(DBHelper.DB_NAME);
                             ActivityStackManager.exit();
                         }
                     })

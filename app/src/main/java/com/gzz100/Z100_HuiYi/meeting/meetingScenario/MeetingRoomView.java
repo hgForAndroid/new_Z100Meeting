@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.utils.ScreenSize;
 
 import java.util.List;
@@ -148,7 +149,7 @@ public class MeetingRoomView extends ViewGroup {
      * @param currentName           当前人员的名字
      * @param onUserClickListener   单个用户点击监听
      */
-    public void addUsers(List<DelegateBean> Users, String currentName, final OnUserClickListener onUserClickListener) {
+    public void addUsers(List<DelegateModel> Users, String currentName, final OnUserClickListener onUserClickListener) {
         this.removeAllViews();
         for (int i = 0; i < Users.size(); i++) {
             View view = View.inflate(this.getContext(), R.layout.user_for_meeting_room, null);

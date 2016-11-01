@@ -5,6 +5,7 @@ import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.MeetingSummary;
+import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.Update;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.fakeData.OneTitle;
@@ -14,6 +15,7 @@ import com.gzz100.Z100_HuiYi.fakeData.TestResultEntity;
 import java.util.List;
 
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -40,7 +42,7 @@ public interface ApiService {
      * @param IMEI    设备id
      * @return    会议列表
      */
-    @GET("/RequestMeetingList")
+    @GET("/api/Common/RequestMeetingList")
     Observable<BaseResultEntity<List<MeetingBean>>> getMeetingList(@Query("IMEI") String IMEI);
 
     /**
@@ -49,20 +51,21 @@ public interface ApiService {
      * @param IMEI          设备id
      * @return
      */
-    @POST("/StartMeeting")
-    Observable startMeeting(@Field("meetingID") String meetingID,@Field("IMEI") String IMEI);
+    @GET("/api/Host/StartMeeting")
+    Observable<BaseResultEntity<String>> startMeeting(@Query("meetingID") String meetingID,@Query("IMEI") String IMEI);
 
-    @POST("/CheckUser")
-    Observable<BaseResultEntity<UserBean>> checkUser(@Field("IMEI") String IMEI,@Field("meetingID") String meetingID);
+//    @FormUrlEncoded
+    @GET("/api/Common/CheckUser")
+    Observable<BaseResultEntity<UserBean>> checkUser(@Query("IMEI") String IMEI,@Query("meetingID") String meetingID);
 
-    @POST("/CheckUpdate")
-    Observable<BaseResultEntity<Update>> checkUpdate(@Field("meetingID") String meetingID);
+    @GET("/CheckUpdate")
+    Observable<BaseResultEntity<Update>> checkUpdate(@Query("meetingID") String meetingID);
 
-    @POST("/SignIn")
-    Observable<BaseResultEntity<MeetingSummary>> signIn(@Field("IMEI") String IMEI,@Field("meetingID") String meetingID);
+    @GET("/api/Common/SignIn")
+    Observable<BaseResultEntity<MeetingSummaryBean>> signIn(@Query("IMEI") String IMEI, @Query("meetingID") String meetingID);
 
-    @POST("login")
-    Observable<BaseResultEntity<List<Agenda>>> login(@Field("IMEI") String IMEI, @Field("userId") String userId);
+    @GET("login")
+    Observable<BaseResultEntity<List<Agenda>>> login(@Query("IMEI") String IMEI, @Query("userId") String userId);
 
     @GET("getMeetingInfo")
     Observable<BaseResultEntity<MeetingInfo>> getMeetingInfo();

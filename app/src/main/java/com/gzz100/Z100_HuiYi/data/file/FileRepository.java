@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
@@ -47,7 +49,7 @@ public class FileRepository implements FileDataSource {
         checkNotNull(callback);
         mFileLocalDataSource.getFileList(agendaPos, new LoadFileListCallback() {
             @Override
-            public void onFileListLoaded(List<Document> documents) {
+            public void onFileListLoaded(List<DocumentModel> documents) {
                 callback.onFileListLoaded(documents);
             }
 
@@ -63,7 +65,7 @@ public class FileRepository implements FileDataSource {
         checkNotNull(callback);
         mFileLocalDataSource.getAgendaList(IMEI, userId, new LoadAgendaListCallback() {
             @Override
-            public void onAgendaListLoaded(List<Agenda> agendas) {
+            public void onAgendaListLoaded(List<AgendaModel> agendas) {
                 callback.onAgendaListLoaded(agendas);
             }
 

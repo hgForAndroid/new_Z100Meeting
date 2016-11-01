@@ -3,7 +3,9 @@ package com.gzz100.Z100_HuiYi.meeting.agenda;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.file.FileDataSource;
 import com.gzz100.Z100_HuiYi.data.file.FileRepository;
 
@@ -37,7 +39,7 @@ public class AgendaPresenter implements AgendaContract.Presenter {
             mFirstLoad = false;
             mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.LoadAgendaListCallback() {
                 @Override
-                public void onAgendaListLoaded(List<Agenda> agendas) {
+                public void onAgendaListLoaded(List<AgendaModel> agendas) {
                     if (!mAgendaView.isActive()) {
                         return;
                     }
@@ -61,7 +63,7 @@ public class AgendaPresenter implements AgendaContract.Presenter {
 //            fileModel.getFileListByAgendaPos(agendaPos);
             mFileRepository.getFileList(agendaPos, new FileDataSource.LoadFileListCallback() {
                 @Override
-                public void onFileListLoaded(List<Document> documents) {
+                public void onFileListLoaded(List<DocumentModel> documents) {
 
                             if (!mAgendaView.isActive()) {
                                 return;
@@ -80,7 +82,7 @@ public class AgendaPresenter implements AgendaContract.Presenter {
     }
 
     @Override
-    public void showAgendaDetail (Agenda agenda){
+    public void showAgendaDetail (AgendaModel agenda){
         mAgendaView.showAgendaDetail(agenda);
     }
 

@@ -7,4 +7,5 @@ package com.gzz100.Z100_HuiYi.network;
 
 public interface HttpRxCallbackListener<T> {
     void onNext(T t);
+    void onError(String errorMsg);
 }

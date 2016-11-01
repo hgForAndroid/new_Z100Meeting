@@ -78,7 +78,11 @@ public class DownLoadService extends IntentService {
         };
 //        File outputFile = new File(Environment.getExternalStoragePublicDirectory
 //                (Environment.DIRECTORY_DOWNLOADS), name+".apk");
-        File outputFile = new File(AppUtil.getCacheDir(this.getApplicationContext()), name+".pdf");
+        if (name.contains("/")){
+            //如果路劲包含“/”，取最后的名字
+            name = name.substring(name.lastIndexOf("/"),name.length());
+        }
+        File outputFile = new File(AppUtil.getCacheDir(this.getApplicationContext()), name);
         String baseUrl = StringUtils.getHostName(apkUrl);
 
         new DownloadAPI(baseUrl, listener).downloadFile(apkUrl, outputFile, new Subscriber() {

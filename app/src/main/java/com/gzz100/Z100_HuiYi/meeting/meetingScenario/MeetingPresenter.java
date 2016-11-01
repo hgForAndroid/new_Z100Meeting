@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingRepository;
@@ -68,13 +69,13 @@ public class MeetingPresenter implements MeetingContract.Presenter {
     }
 
     //这个是全部参会人员
-    private List<DelegateBean> mDelegateBeen = null;
+    private List<DelegateModel> mDelegateBeen = null;
 
     @Override
     public void fetchUserInfo(int userId) {
-        DelegateBean delegate = null;
-        for (DelegateBean tempDelegate :mDelegateBeen) {
-            if (tempDelegate.getDelegateId() == userId){
+        DelegateModel delegate = null;
+        for (DelegateModel tempDelegate :mDelegateBeen) {
+            if (tempDelegate.getDelegateID() == userId){
                 delegate = tempDelegate;
                 break;
             }
@@ -96,7 +97,7 @@ public class MeetingPresenter implements MeetingContract.Presenter {
             firstLoad = false;
             mMeetingRepository.getDelegateList(new MeetingDataSource.LoadDelegateCallback() {
                 @Override
-                public void onDelegateLoaded(List<DelegateBean> users) {
+                public void onDelegateLoaded(List<DelegateModel> users) {
                     mDelegateBeen = users;
                     mView.showMeetingRoom(users);
                     //参会人数大于10个人

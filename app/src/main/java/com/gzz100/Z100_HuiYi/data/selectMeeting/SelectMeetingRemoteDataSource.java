@@ -2,14 +2,17 @@ package com.gzz100.Z100_HuiYi.data.selectMeeting;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.data.file.local.ObjectTransverter;
 import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
+import com.gzz100.Z100_HuiYi.network.MySubscriber;
 import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
 import com.gzz100.Z100_HuiYi.network.entity.MeetingPost;
+import com.gzz100.Z100_HuiYi.network.entity.StartMeetingPost;
 import com.gzz100.Z100_HuiYi.network.entity.StartPost;
 
 import java.util.List;
@@ -44,28 +47,48 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
     @Override
     public void fetchMeetingList(@NonNull final LoadMeetingListCallback callback,String IMEI) {
         checkNotNull(callback);
-        List<MeetingBean> meetings = FakeDataProvider.getMeetings();
-        if (meetings != null && meetings.size() > 0){
-            callback.onMeetingListLoaded(meetings);
-        }else {
-            callback.onDataNotAvailable();
-        }
+//        List<MeetingBean> meetings = FakeDataProvider.getMeetings();
+//        if (meetings != null && meetings.size() > 0){
+//            callback.onMeetingListLoaded(meetings);
+//        }else {
+//            callback.onDataNotAvailable();
+//        }
 
         //加载服务器数据
-//        MeetingPost meetingPost = new MeetingPost(
-//                new ProgressSubscriber(new HttpRxCallbackListener<List<MeetingBean>>(){
-//                    @Override
-//                    public void onNext(List<MeetingBean> meetings) {
-//                        callback.onMeetingListLoaded(meetings);
-//
-//                    }
-//                }, mContext), IMEI);
-//        HttpManager.getInstance(mContext).doHttpDeal(meetingPost);
+        MeetingPost meetingPost = new MeetingPost(
+                new MySubscriber(new HttpRxCallbackListener<List<MeetingBean>>(){
+                    @Override
+                    public void onNext(List<MeetingBean> meetings) {
+                        callback.onMeetingListLoaded(meetings);
+                    }
+
+                    @Override
+                    public void onError(String errorMsg) {
+                        callback.onDataNotAvailable(errorMsg);
+                    }
+                }, mContext), IMEI);
+        HttpManager.getInstance(mContext).doHttpDeal(meetingPost);
 
     }
 
     @Override
     public void startMeeting(@NonNull final StartMeetingCallback callback, String IMEI, String meetingID) {
+
+//        加载服务器数据
+        StartMeetingPost startMeetingPost = new StartMeetingPost(
+                new ProgressSubscriber(new HttpRxCallbackListener<String>() {
+                    @Override
+                    public void onNext(String o) {
+                        callback.onStartMeetingSuccess();
+                    }
+
+                    @Override
+                    public void onError(String errorMsg) {
+                        callback.onFail(errorMsg);
+                    }
+                }, mContext),IMEI,meetingID);
+        HttpManager.getInstance(mContext).doHttpDeal(startMeetingPost);
+
 //        HttpManager.getInstance(mContext).getApiService().startMeeting(IMEI,meetingID)
 //                .subscribeOn(Schedulers.io())
 //        .observeOn(AndroidSchedulers.mainThread())

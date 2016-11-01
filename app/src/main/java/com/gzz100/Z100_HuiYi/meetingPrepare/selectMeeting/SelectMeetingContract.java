@@ -21,8 +21,9 @@ public interface SelectMeetingContract {
 
         /**
          * 没有会议
+         * @param errorMsg  当该值不为空，则代表取数据失败，该值为失败信息
          */
-        void showNoMeetingList();
+        void showNoMeetingList(String errorMsg);
         /**
          * 跳转到签到界面
          * @param IMEI    设备id

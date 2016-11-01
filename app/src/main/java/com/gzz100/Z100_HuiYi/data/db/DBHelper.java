@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
-    private  static final String DB_NAME = "meeting.db";
+    public  static final String DB_NAME = "meeting.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
     private static final String COMMA_SEP = ",";
@@ -51,7 +51,7 @@ private static final String CREATE_TABLE_DELEGATE =
     private SQLiteDatabase mDatabase;
 
     private DBHelper(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+        super(context, DB_NAME, null, DB_VERSION);;
     }
     private static DBHelper instance;
 
@@ -79,7 +79,7 @@ private static final String CREATE_TABLE_DELEGATE =
     }
 
     /**
-     * 删除表，在有新增议程时调用
+     * 删除表，在有新增议程时调用,退出时调用
      */
     public void deleteTable(){
         mDatabase = instance.getReadableDatabase();

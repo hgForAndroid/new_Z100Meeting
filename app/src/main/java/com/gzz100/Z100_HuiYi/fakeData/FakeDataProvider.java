@@ -3,8 +3,11 @@ package com.gzz100.Z100_HuiYi.fakeData;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.UserBean;
@@ -66,47 +69,47 @@ public class FakeDataProvider {
         return list;
     }
 
-    public static List<Agenda> getAgendas() {
-        List<Agenda> agendas = new ArrayList<>();
-        Agenda agenda1 = new Agenda();
+    public static List<AgendaModel> getAgendas() {
+        List<AgendaModel> agendas = new ArrayList<>();
+        AgendaModel agenda1 = new AgendaModel();
         agenda1.setAgendaIndex(1);
         agenda1.setAgendaName("这是关于议程1的一切标题");
-        agenda1.setAgendaDuration("30:00");
+        agenda1.setAgendaDuration(30);
         agenda1.setAgendaSpeaker("老大");
-        Agenda agenda2 = new Agenda();
+        AgendaModel agenda2 = new AgendaModel();
         agenda2.setAgendaIndex(2);
         agenda2.setAgendaName("关于这个议程2的事有什么");
-        agenda2.setAgendaDuration("29:00");
+        agenda2.setAgendaDuration(29);
         agenda2.setAgendaSpeaker("老二");
-        Agenda agenda3 = new Agenda();
+        AgendaModel agenda3 = new AgendaModel();
         agenda3.setAgendaIndex(3);
         agenda3.setAgendaName("马上就到议程3，还有什么事要处理");
-        agenda3.setAgendaDuration("33:00");
+        agenda3.setAgendaDuration(33);
         agenda3.setAgendaSpeaker("老三");
-        Agenda agenda4 = new Agenda();
+        AgendaModel agenda4 = new AgendaModel();
         agenda4.setAgendaIndex(4);
         agenda4.setAgendaName("到议程4");
-        agenda4.setAgendaDuration("13:00");
+        agenda4.setAgendaDuration(13);
         agenda4.setAgendaSpeaker("老四");
-        Agenda agenda5 = new Agenda();
+        AgendaModel agenda5 = new AgendaModel();
         agenda5.setAgendaIndex(5);
         agenda5.setAgendaName("5议程5");
-        agenda5.setAgendaDuration("15:00");
+        agenda5.setAgendaDuration(15);
         agenda5.setAgendaSpeaker("老五");
-        Agenda agenda6 = new Agenda();
+        AgendaModel agenda6 = new AgendaModel();
         agenda6.setAgendaIndex(6);
         agenda6.setAgendaName("议程66");
-        agenda6.setAgendaDuration("16:00");
+        agenda6.setAgendaDuration(19);
         agenda6.setAgendaSpeaker("老六");
-        Agenda agenda7 = new Agenda();
+        AgendaModel agenda7 = new AgendaModel();
         agenda7.setAgendaIndex(7);
         agenda7.setAgendaName("马上就到议程7");
-        agenda7.setAgendaDuration("17:00");
+        agenda7.setAgendaDuration(16);
         agenda7.setAgendaSpeaker("老七");
-        Agenda agenda8 = new Agenda();
+        AgendaModel agenda8 = new AgendaModel();
         agenda8.setAgendaIndex(8);
         agenda8.setAgendaName("马上就到议程8");
-        agenda8.setAgendaDuration("18:00");
+        agenda8.setAgendaDuration(18);
         agenda8.setAgendaSpeaker("老八");
         agendas.add(agenda1);
         agendas.add(agenda2);
@@ -120,96 +123,88 @@ public class FakeDataProvider {
         return agendas;
     }
 
-    public static List<Document> getFileListByindex(int index) {
-        List<Document> documents = new ArrayList<>();
+    public static List<DocumentModel> getFileListByindex(int index) {
+        List<DocumentModel> documents = new ArrayList<>();
         switch (index) {
             case 1:
                 for (int i = 1; i < 4; i++) {
-                    Document document = new Document();
+                    DocumentModel document = new DocumentModel();
                     document.setDocumentAgendaIndex(1);
                     document.setDocumentIndex(i);
                     document.setDocumentName("agenda_one_fileName"+ i+".txt" );
                     document.setDocumentSize(12 + i);
-                    document.setDocumentSpeaker("老大");
                     documents.add(document);
                 }
 
                 break;
             case 2:
                 for (int i = 1; i < 19; i++) {
-                    Document document = new Document();
+                    DocumentModel document = new DocumentModel();
                     document.setDocumentAgendaIndex(2);
                     document.setDocumentIndex(i);
                     document.setDocumentName("agenda_two_fileName"+i+".doc");
                     document.setDocumentSize(16 + i);
-                    document.setDocumentSpeaker("老二");
                     documents.add(document);
                 }
                 break;
 
             case 3:
                 for (int i = 1; i < 5; i++) {
-                    Document document = new Document();
+                    DocumentModel document = new DocumentModel();
                     document.setDocumentAgendaIndex(3);
                     document.setDocumentIndex(i);
                     document.setDocumentName("agenda_three_fileName"+i+".xlsx");
                     document.setDocumentSize(4 + i);
-                    document.setDocumentSpeaker("老三");
                     documents.add(document);
                 }
                 break;
             case 4:
                 for (int i = 1; i < 6; i++) {
-                    Document document = new Document();
+                    DocumentModel document = new DocumentModel();
                     document.setDocumentAgendaIndex(4);
                     document.setDocumentIndex(i);
                     document.setDocumentName("agenda_four_fileName"+i+".txt");
                     document.setDocumentSize(10 + i);
-                    document.setDocumentSpeaker("老四");
                     documents.add(document);
                 }
                 break;
             case 5:
                 for (int i = 1; i < 7; i++) {
-                    Document document = new Document();
+                    DocumentModel document = new DocumentModel();
                     document.setDocumentAgendaIndex(5);
                     document.setDocumentIndex(i);
                     document.setDocumentName("agenda_five_fileName"+i+".doc");
                     document.setDocumentSize(9 + i);
-                    document.setDocumentSpeaker("老五");
                     documents.add(document);
                 }
                 break;
             case 6:
                 for (int i = 1; i < 5; i++) {
-                    Document document = new Document();
+                    DocumentModel document = new DocumentModel();
                     document.setDocumentAgendaIndex(6);
                     document.setDocumentIndex(i);
                     document.setDocumentName("agenda_six_fileName"+i+".xlsx");
                     document.setDocumentSize(10 + i);
-                    document.setDocumentSpeaker("老刘");
                     documents.add(document);
                 }
                 break;
             case 7:
                 for (int i = 1; i < 5; i++) {
-                    Document document = new Document();
+                    DocumentModel document = new DocumentModel();
                     document.setDocumentAgendaIndex(7);
                     document.setDocumentIndex(i);
                     document.setDocumentName("agenda_seven_fileName"+i+".doc");
                     document.setDocumentSize(7 + i);
-                    document.setDocumentSpeaker("老七");
                     documents.add(document);
                 }
                 break;
             case 8:
                 for (int i = 1; i < 5; i++) {
-                    Document document = new Document();
+                    DocumentModel document = new DocumentModel();
                     document.setDocumentAgendaIndex(8);
                     document.setDocumentIndex(i);
                     document.setDocumentName("agenda_eight_fileName"+i+".xlsx");
                     document.setDocumentSize(14 + i);
-                    document.setDocumentSpeaker("老八");
                     documents.add(document);
                 }
                 break;
@@ -417,19 +412,19 @@ public class FakeDataProvider {
         return vote;
     }
 
-    public static List<DelegateBean> getDelegates(){
-        List<DelegateBean> mUsers = new ArrayList<>();
-        DelegateBean d1 = new DelegateBean();
-        d1.setDelegateId(1);
+    public static List<DelegateModel> getDelegates(){
+        List<DelegateModel> mUsers = new ArrayList<>();
+        DelegateModel d1 = new DelegateModel();
+        d1.setDelegateID(1);
         d1.setDelegateName("张三张三");
         d1.setDelegateDetailInfo("我是张三张三啊");
         d1.setDelegateDepartment("技术部");
         d1.setDelegateJob("android开发");
-        d1.setRole(2);
+        d1.setDelegateRole(2);
         ArrayList<Integer> arrayList1 = new ArrayList<>();
         arrayList1.add(1);
         arrayList1.add(2);
-        d1.setDelegateAgendaList(arrayList1);
+        d1.setDelegateAgendaIndexList(arrayList1);
 
         DelegateBean d2 = new DelegateBean();
         d2.setDelegateId(2);
@@ -525,15 +520,15 @@ public class FakeDataProvider {
         d10.setRole(3);
 
         mUsers.add(d1);
-        mUsers.add(d2);
-        mUsers.add(d3);
-        mUsers.add(d4);
-        mUsers.add(d5);
-        mUsers.add(d6);
-        mUsers.add(d7);
-        mUsers.add(d8);
-        mUsers.add(d9);
-        mUsers.add(d10);
+//        mUsers.add(d2);
+//        mUsers.add(d3);
+//        mUsers.add(d4);
+//        mUsers.add(d5);
+//        mUsers.add(d6);
+//        mUsers.add(d7);
+//        mUsers.add(d8);
+//        mUsers.add(d9);
+//        mUsers.add(d10);
         return mUsers;
     }
 

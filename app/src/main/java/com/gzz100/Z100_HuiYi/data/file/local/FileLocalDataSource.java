@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.file.FileDataSource;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -41,7 +43,7 @@ public class FileLocalDataSource implements FileDataSource {
     public void getFileList(int agendaPos, @NonNull LoadFileListCallback callback) {
         checkNotNull(callback);
         //加载本地数据
-        List<Document> documents = mFileOperate.queryFileList(agendaPos);
+        List<DocumentModel> documents = mFileOperate.queryFileList(agendaPos);
         if (documents != null && documents.size() > 0){
             callback.onFileListLoaded(documents);
         }else {
@@ -53,7 +55,7 @@ public class FileLocalDataSource implements FileDataSource {
     public void getAgendaList(String IMEI, String userId, @NonNull LoadAgendaListCallback callback) {
         checkNotNull(callback);
         //加载本地数据
-        List<Agenda> agendasList = mFileOperate.queryAgendaList(Constant.COLUMNS_AGENDAS);
+        List<AgendaModel> agendasList = mFileOperate.queryAgendaList(Constant.COLUMNS_AGENDAS);
         if (agendasList != null && agendasList.size() > 0){
             callback.onAgendaListLoaded(agendasList);
         }else {

@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.data.meeting;
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public interface MeetingDataSource {
     interface LoadDelegateCallback{
-        void onDelegateLoaded(List<DelegateBean> users);
+        void onDelegateLoaded(List<DelegateModel> users);
         void onDataNotAvailable();
     }
 

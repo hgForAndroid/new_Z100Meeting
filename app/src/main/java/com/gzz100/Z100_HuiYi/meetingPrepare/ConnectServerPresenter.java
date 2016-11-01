@@ -42,6 +42,7 @@ public class ConnectServerPresenter implements ConnectServerContract.Presenter {
 
     @Override
     public void saveIp(String ip) {
+        saveCurrentIP(ip);
         saveHistory(ip);
         mView.showSelectMeeting();
     }

@@ -10,13 +10,13 @@ import android.widget.TextView;
 public class MeetingBean {
     private int meetingID;
     private String meetingName;
-    private String MeetingTime;
+    private String meetingBeginTime;
     private int meetingState;
 
-    public MeetingBean(int meetingID, String meetingName, String meetingTime, int meetingState) {
+    public MeetingBean(int meetingID, String meetingName, String meetingBeginTime, int meetingState) {
         this.meetingID = meetingID;
         this.meetingName = meetingName;
-        MeetingTime = meetingTime;
+        this.meetingBeginTime = meetingBeginTime;
         this.meetingState = meetingState;
     }
 
@@ -36,12 +36,12 @@ public class MeetingBean {
         this.meetingName = meetingName;
     }
 
-    public String getMeetingTime() {
-        return MeetingTime;
+    public String getMeetingBeginTime() {
+        return meetingBeginTime;
     }
 
-    public void setMeetingTime(String meetingTime) {
-        MeetingTime = meetingTime;
+    public void setMeetingBeginTime(String meetingBeginTime) {
+        this.meetingBeginTime = meetingBeginTime;
     }
 
     public int getMeetingState() {

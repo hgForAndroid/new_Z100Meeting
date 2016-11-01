@@ -12,11 +12,16 @@ import java.util.List;
 public interface SelectMeetingDataSource {
     interface LoadMeetingListCallback{
         void onMeetingListLoaded(List<MeetingBean> meetings);
-        void onDataNotAvailable();
+
+        /**
+         * 没有数据，如果errorMsg不为空，则代表取数据失败
+         * @param errorMsg
+         */
+        void onDataNotAvailable(String errorMsg);
     }
     interface StartMeetingCallback{
         void onStartMeetingSuccess();
-        void onFail();
+        void onFail(String errorMsg);
     }
 
     /**

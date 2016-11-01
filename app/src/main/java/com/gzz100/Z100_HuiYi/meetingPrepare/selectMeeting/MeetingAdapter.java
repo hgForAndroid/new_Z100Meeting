@@ -1,19 +1,15 @@
 package com.gzz100.Z100_HuiYi.meetingPrepare.selectMeeting;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
-import com.gzz100.Z100_HuiYi.meetingPrepare.OnIPClickListener;
 
 import java.util.List;
 
@@ -47,7 +43,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingH
     @Override
     public void onBindViewHolder(MeetingHolder holder, final int position) {
         holder.mTvName.setText(meetings.get(position).getMeetingName());
-        holder.mTvTime.setText(meetings.get(position).getMeetingTime());
+        holder.mTvTime.setText(meetings.get(position).getMeetingBeginTime());
         meetings.get(position).setMeetingState(holder.mTvState);
         holder.mLlAll.setOnClickListener(new View.OnClickListener() {
             @Override

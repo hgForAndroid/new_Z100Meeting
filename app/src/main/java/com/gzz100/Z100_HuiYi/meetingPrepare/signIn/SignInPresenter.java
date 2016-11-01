@@ -7,10 +7,14 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.MeetingSummary;
+import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
@@ -52,6 +56,7 @@ public class SignInPresenter implements SignInContract.Presenter {
                 public void onUserBeanLoaded(UserBean userBean) {
                     //保存当前用户角色
                     saveUserRole(userBean.getUserRole());
+                    saveUserName(userBean.getUserName());
                     mView.showDelegate(userBean);
                     //开启下载
                     mView.startDownLoad(userBean.getDocumentURLList());
@@ -64,7 +69,15 @@ public class SignInPresenter implements SignInContract.Presenter {
             });
         }
         //TODO  有服务器后去掉，这里测试用，1主持人，2其他
-        saveUserRole(2);
+//        saveUserRole(1);
+    }
+
+    /**
+     * 保存用户名，用于主场景显示当前参会人员背景不同
+     * @param userName
+     */
+    private void saveUserName(String userName) {
+        SharedPreferencesUtil.getInstance(mContext).putString(Constant.USER_NAME,userName);
     }
 
     /**
@@ -75,11 +88,12 @@ public class SignInPresenter implements SignInContract.Presenter {
         MyAPP.getInstance().setUserRole(role);
     }
 
+
     @Override
     public void signIn(String IMEI,String meetingID) {
         SignInRemoteDataSource.getInstance(mContext).signIn(IMEI, meetingID, new SignInDataSource.LoadMeetingSummaryCallback() {
             @Override
-            public void onMeetingSummaryLoaded(MeetingSummary meetingSummary) {
+            public void onMeetingSummaryLoaded(MeetingSummaryBean meetingSummary) {
                 //分离对象并存储进数据库
                 splitAndSaveDataToDatabase(meetingSummary);
                 mView.showMainActivity();
@@ -90,8 +104,6 @@ public class SignInPresenter implements SignInContract.Presenter {
 
             }
         });
-        //TODO 有接口后去掉
-        mView.showMainActivity();
 
     }
 
@@ -99,7 +111,7 @@ public class SignInPresenter implements SignInContract.Presenter {
      * 拆分数据集合，并将拆分的数据分别存储进数据库中
      * @param meetingSummary    会议的基本数据集合
      */
-    private void splitAndSaveDataToDatabase(MeetingSummary meetingSummary) {
+    private void splitAndSaveDataToDatabase(MeetingSummaryBean meetingSummary) {
         saveMeetingInfo(meetingSummary);
         saveDelegateList(meetingSummary);
         saveAgendaList(meetingSummary);
@@ -110,22 +122,22 @@ public class SignInPresenter implements SignInContract.Presenter {
      * 保存文件列表
      * @param meetingSummary   会议的基本数据集合
      */
-    private void saveDocumentList(MeetingSummary meetingSummary) {
-        if (meetingSummary.getAgendaList() != null && meetingSummary.getAgendaList().size()>0){
-            Map<Integer,List<Document>> documents = new HashMap<>();
+    private void saveDocumentList(MeetingSummaryBean meetingSummary) {
+        if (meetingSummary.getAgendaModelList() != null && meetingSummary.getAgendaModelList().size()>0){
+            Map<Integer,List<DocumentModel>> documents = new HashMap<>();
             //根据议程数创建文件集合
-            for (int i = 0; i < meetingSummary.getAgendaList().size(); i++) {
-                List<Document> documentsList = new ArrayList<>();
-                documents.put(meetingSummary.getAgendaList().get(i).getAgendaIndex(),documentsList);
+            for (int i = 0; i < meetingSummary.getAgendaModelList().size(); i++) {
+                List<DocumentModel> documentsList = new ArrayList<>();
+                documents.put(meetingSummary.getAgendaModelList().get(i).getAgendaIndex(),documentsList);
             }
-            List<Document> documentList = meetingSummary.getDocumentList();
-            for (Document document:documentList){
+            List<DocumentModel> documentList = meetingSummary.getDocumentModelList();
+            for (DocumentModel document:documentList){
                 //根据文件的所属议程获取到对应的文件集合，将文件加入该集合
                 documents.get(document.getDocumentAgendaIndex()).add(document);
             }
             //保存所有的文件集合，这里用议程数跟文件集合数都可以，他们是等量的
-            for (int i = 0; i < meetingSummary.getAgendaList().size(); i++) {
-                int agendaIndex = meetingSummary.getAgendaList().get(i).getAgendaIndex();
+            for (int i = 0; i < meetingSummary.getAgendaModelList().size(); i++) {
+                int agendaIndex = meetingSummary.getAgendaModelList().get(i).getAgendaIndex();
                 FileOperate.getInstance(mContext).insertFileList(agendaIndex,documents.get(agendaIndex));
             }
         }
@@ -135,8 +147,8 @@ public class SignInPresenter implements SignInContract.Presenter {
      * 保存议程列表
      * @param meetingSummary  会议的基本数据集合
      */
-    private void saveAgendaList(MeetingSummary meetingSummary) {
-        List<Agenda> agendaList = meetingSummary.getAgendaList();
+    private void saveAgendaList(MeetingSummaryBean meetingSummary) {
+        List<AgendaModel> agendaList = meetingSummary.getAgendaModelList();
         FileOperate.getInstance(mContext).insertAgendaList(Constant.COLUMNS_AGENDAS,agendaList);
     }
 
@@ -144,8 +156,8 @@ public class SignInPresenter implements SignInContract.Presenter {
      * 保存参会人员列表
      * @param meetingSummary  会议的基本数据集合
      */
-    private void saveDelegateList(MeetingSummary meetingSummary) {
-        List<DelegateBean> delegateList = meetingSummary.getDelegateList();
+    private void saveDelegateList(MeetingSummaryBean meetingSummary) {
+        List<DelegateModel> delegateList = meetingSummary.getDelegateModelList();
         MeetingOperate.getInstance(mContext).insertUserList(Constant.COLUMNS_USER,delegateList);
     }
 
@@ -153,11 +165,11 @@ public class SignInPresenter implements SignInContract.Presenter {
      * 保存会议概况
      * @param meetingSummary   会议的基本数据集合
      */
-    private void saveMeetingInfo(MeetingSummary meetingSummary) {
+    private void saveMeetingInfo(MeetingSummaryBean meetingSummary) {
         MeetingInfo meetingInfo = new MeetingInfo();
-        meetingInfo.setMeetingName(meetingSummary.getMeetingName());
-        meetingInfo.setMeetingBeginTime(meetingSummary.getMeetingBeginTime());
-        meetingInfo.setMeetingDuration(meetingSummary.getMeetingDuration());
+        meetingInfo.setMeetingName(meetingSummary.getMeetingModel().getMeetingName());
+        meetingInfo.setMeetingBeginTime(meetingSummary.getMeetingModel().getMeetingBeginTime());
+        meetingInfo.setMeetingDuration(meetingSummary.getMeetingModel().getMeetingDuration()+"分钟");
         meetingInfo.setDelegateNum(meetingSummary.getDelegateNum());
         meetingInfo.setAgendaNum(meetingSummary.getAgendaNum());
         MeetingOperate.getInstance(mContext).insertMeetingInfo(Constant.COLUMNS_MEETING_INFO,meetingInfo);

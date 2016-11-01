@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateDataSource;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateRepository;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -58,13 +59,13 @@ public class DelegatePresenter implements DelegateContract.Presenter {
 
     }
 
-    private List<DelegateBean> currRoleDelegateBeanList=new ArrayList<>();
+    private List<DelegateModel> currRoleDelegateBeanList=new ArrayList<>();
     @Override
     public void fetchDelegateList(int rolePos) {
 
             mDelegateRepository.getDelegateList(rolePos, new DelegateDataSource.LoadDelegateListCallback() {
                 @Override
-                public void onDelegateListLoaded(List<DelegateBean> delegateBeans) {
+                public void onDelegateListLoaded(List<DelegateModel> delegateBeans) {
                     mDelegateView.showDelegateList(delegateBeans);
                     if(IsFirstLoad){
                         mDelegateView.showDelegateNameGridItemDecoration();
@@ -85,7 +86,7 @@ public class DelegatePresenter implements DelegateContract.Presenter {
         IsFirstLoad=reLoad;
     }
 
-    private List<DelegateBean> allDelegate=new ArrayList<>();
+    private List<DelegateModel> allDelegate=new ArrayList<>();
     @Override
     public void searchByName(String nameInput) {
 
@@ -94,7 +95,7 @@ public class DelegatePresenter implements DelegateContract.Presenter {
         }
         List<String> allDelegateName=new ArrayList<>();
 
-        for(DelegateBean delegateBean:allDelegate)
+        for(DelegateModel delegateBean:allDelegate)
         {
             allDelegateName.add(delegateBean.getDelegateName());
         }
@@ -112,7 +113,7 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     @Override
     public void showDelegateDetail( final int delegateNamePos) {
 
-        DelegateBean delegateBean=currRoleDelegateBeanList.get(delegateNamePos);
+        DelegateModel delegateBean=currRoleDelegateBeanList.get(delegateNamePos);
 
         if(delegateBean!=null)
         {
@@ -128,7 +129,7 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     public void setDelegateSearchAutoCompleteTextViewHint() {
         mDelegateRepository.getDelegateNameHint(new DelegateDataSource.LoadDelegateNameHintCallback() {
             @Override
-            public void onDelegateNameHintLoaded(List<DelegateBean> delegateBeanList) {
+            public void onDelegateNameHintLoaded(List<DelegateModel> delegateBeanList) {
                 mDelegateView.setAutoCompleteTextView(delegateBeanList);
                 allDelegate=delegateBeanList;
             }

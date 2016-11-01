@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -34,7 +35,7 @@ public class MeetingLocalDataSource implements MeetingDataSource {
     }
     @Override
     public void getDelegateList(LoadDelegateCallback callback) {
-        List<DelegateBean> users = mMeetingOperate.queryUserList(Constant.COLUMNS_USER);
+        List<DelegateModel> users = mMeetingOperate.queryUserList(Constant.COLUMNS_USER);
         if (users != null && users.size() > 0){
             callback.onDelegateLoaded(users);
         }else {
@@ -45,5 +46,6 @@ public class MeetingLocalDataSource implements MeetingDataSource {
 
     @Override
     public void getMetingInfo(LoadMeetingInfoCallback callback) {
+
     }
 }

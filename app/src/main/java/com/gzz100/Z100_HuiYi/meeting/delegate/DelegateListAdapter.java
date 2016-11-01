@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  */
 public class DelegateListAdapter extends RecyclerView.Adapter<DelegateNameHolder>{
 
-    List<DelegateBean> mDelegateBean;
+    List<DelegateModel> mDelegateBean;
     OnDelegateNameItemClickListener mListener;
     LayoutInflater mInflate;
 
@@ -31,7 +32,7 @@ public class DelegateListAdapter extends RecyclerView.Adapter<DelegateNameHolder
         this.mListener=listener;
     }
 
-    public DelegateListAdapter(Context context, List<DelegateBean> delegateBean) {
+    public DelegateListAdapter(Context context, List<DelegateModel> delegateBean) {
         mDelegateBean=delegateBean;
         mInflate= LayoutInflater.from(context);
 

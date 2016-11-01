@@ -19,7 +19,9 @@ import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -48,13 +50,13 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     private RecyclerView mSearchResultRecView;
     private FileContract.Presenter mPresenter;
 
-    private List<Agenda> mAgendas;
+    private List<AgendaModel> mAgendas;
     private AgendaListTabAdapter mAgendaAdapter;
     private FileListAdapter mFileListAdapter;
     private SearchResultAdapter mSearchResultAdapter;
 
-    private List<Document> mDocumentBeen;
-    private List<Document> mResultDocumentBeen;
+    private List<DocumentModel> mDocumentBeen;
+    private List<DocumentModel> mResultDocumentBeen;
     private int mAgendasSum;
     private int mAgendaIndex;
     private int mFileIndex;
@@ -127,7 +129,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
 
     @Override
-    public void showAgendaList(List<Agenda> agendas) {
+    public void showAgendaList(List<AgendaModel> agendas) {
         mAgendas = agendas;
         mAgendaAdapter = new AgendaListTabAdapter(getContext(), agendas);
         //横向展示
@@ -140,7 +142,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
 
     @Override
-    public void showFilesList(List<Document> documentBeen) {
+    public void showFilesList(List<DocumentModel> documentBeen) {
         mDocumentBeen = documentBeen;
         mFileListAdapter = new FileListAdapter(getContext(), documentBeen);
         //纵向展示
@@ -151,7 +153,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
 
     @Override
-    public void showSearchResult(List<Document> documentBeen) {
+    public void showSearchResult(List<DocumentModel> documentBeen) {
         mResultDocumentBeen = documentBeen;
         mSearchResultAdapter = new SearchResultAdapter(getActivity(),documentBeen);
 
@@ -205,7 +207,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
 
     @Override
-    public void setFileList(List<Document> documents) {
+    public void setFileList(List<DocumentModel> documents) {
         mDocumentBeen = documents;
     }
 
@@ -222,7 +224,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void onAgendaItemClick(View v, int position) {
-        mPresenter.setAgendaTime(mAgendas.get(position).getAgendaDuration());
+        mPresenter.setAgendaTime(mAgendas.get(position).getAgendaDuration()+"");
         mPresenter.fetchFileList(true, position + 1);
         mAgendaAdapter.setSelectedItem(position);
         mAgendaAdapter.notifyDataSetChanged();
