@@ -21,9 +21,13 @@ import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
+import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
+import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
+import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.meeting.ControllerView;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
+import com.gzz100.Z100_HuiYi.meeting.vote.VoteListDialog;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.meeting.NavBarView;
@@ -329,11 +333,14 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void startVote(View view) {
-        EventBus.getDefault().post(MainActivity.PAGE_SIX);
+        /*EventBus.getDefault().post(MainActivity.PAGE_SIX);
         mRootView.removeView(mControllerView);
         EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
         EventBus.getDefault().post("投票中");
-        ActivityStackManager.pop();
+        ActivityStackManager.pop();*/
+
+        /*VoteListDialog dialog = new VoteListDialog(this, FakeDataProvider.getAllVoteByMeetingID(""));
+        dialog.show();*/
     }
 
     @Override

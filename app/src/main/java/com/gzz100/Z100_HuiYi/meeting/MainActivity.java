@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.meeting.about.AboutFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaPresenter;
@@ -35,6 +36,7 @@ import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingFragment;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingPresenter;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
+import com.gzz100.Z100_HuiYi.meeting.vote.VoteListDialog;
 import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
@@ -483,6 +485,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void startVote(View view) {
+        VoteListDialog dialog = new VoteListDialog(this);
+        dialog.show();
         mControllerView.setVoteAndEndVoteText("结束投票");
     }
 
