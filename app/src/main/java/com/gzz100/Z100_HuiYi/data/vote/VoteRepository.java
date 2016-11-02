@@ -2,6 +2,10 @@ package com.gzz100.Z100_HuiYi.data.vote;
 
 import android.support.annotation.NonNull;
 
+import com.gzz100.Z100_HuiYi.data.Vote;
+
+import java.util.List;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -13,10 +17,6 @@ public class VoteRepository implements VoteDataSource{
     private final VoteDataSource mVoteRemoteDataSource;
 
     private final VoteDataSource mVoteLocalDataSource;
-
-    //投票信息是否已有本地缓存  TODO   测试为true，实际使用应一直为false
-    boolean mHaveVoteCache = true;
-
     private VoteRepository(@NonNull VoteDataSource voteRemoteDataSource,
                            @NonNull VoteDataSource voteLocalDataSource){
         mVoteRemoteDataSource = checkNotNull(voteRemoteDataSource, "DataSource cannot be null");
@@ -31,29 +31,36 @@ public class VoteRepository implements VoteDataSource{
         return INSTANCE;
     }
 
-    public void setHaveVoteCache(boolean mHaveVoteCache) {
-        this.mHaveVoteCache = mHaveVoteCache;
+    @Override
+    public void getVoteDetail(final String IMEI, final String userID, final int voteId, @NonNull final LoadVoteDetailCallback callback) {
+        checkNotNull(callback, "Callback cannot be null");
+        mVoteLocalDataSource.getVoteDetail(IMEI, userID, voteId, new LoadVoteDetailCallback() {
+            @Override
+            public void onVoteDetailLoaded(Vote vote) {
+                callback.onVoteDetailLoaded(vote);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                mVoteRemoteDataSource.getVoteDetail(IMEI,userID,voteId,callback);
+            }
+        });
     }
 
     @Override
-    public void getVoteDetail(String IMEI, String userID, String agendaIndex, @NonNull LoadVoteDetailCallback callback) {
+    public void getAllVoteInf(final String meetingID, @NonNull final LoadAllVoteInfCallBack callback) {
         checkNotNull(callback, "Callback cannot be null");
-        if(mHaveVoteCache){
-            mVoteLocalDataSource.getVoteDetail(IMEI, userID, agendaIndex, callback);
-        } else {
-            mVoteRemoteDataSource.getVoteDetail(IMEI, userID, agendaIndex, callback);
-            setHaveVoteCache(true); //不从本地取数据 实际使用应一直设为false
-        }
-    }
+        mVoteLocalDataSource.getAllVoteInf(meetingID,new LoadAllVoteInfCallBack(){
+            @Override
+            public void onAllVoteLoaded(List<Vote> voteList) {
+                callback.onAllVoteLoaded(voteList);
+            }
 
-    @Override
-    public void getAllVoteInf(String meetingID, @NonNull LoadAllVoteInfCallBack callback) {
-        checkNotNull(callback, "Callback cannot be null");
-        if(mHaveVoteCache){
-            mVoteLocalDataSource.getAllVoteInf(meetingID, callback);
-        } else {
-            mVoteRemoteDataSource.getAllVoteInf(meetingID, callback);
-            setHaveVoteCache(true); //不从本地取数据 实际使用应一直设为false
-        }
+            @Override
+            public void onDataNotAvailable() {
+                mVoteRemoteDataSource.getAllVoteInf(meetingID,callback);
+            }
+        });
+
     }
 }

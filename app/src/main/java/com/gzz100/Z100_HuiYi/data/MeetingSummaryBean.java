@@ -12,6 +12,7 @@ public class MeetingSummaryBean {
     private List<DelegateModel> delegateModelList;
     private List<AgendaModel> agendaModelList;
     private List<DocumentModel> documentModelList;
+    private List<Vote> voteList;
 
     public MeetingModel getMeetingModel() {
         return meetingModel;
@@ -59,5 +60,13 @@ public class MeetingSummaryBean {
 
     public void setDocumentModelList(List<DocumentModel> documentModelList) {
         this.documentModelList = documentModelList;
+    }
+
+    public List<Vote> getVoteList() {
+        return voteList;
+    }
+
+    public void setVoteList(List<Vote> voteList) {
+        this.voteList = voteList;
     }
 }

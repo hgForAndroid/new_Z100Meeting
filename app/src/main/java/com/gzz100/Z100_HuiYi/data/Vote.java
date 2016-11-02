@@ -5,11 +5,11 @@ import java.util.List;
 /**
  * Created by Lee on 2016/9/3.
  */
-public class Vote {
+public class Vote extends BaseBean{
     private int voteID;
     private String voteTitle;
     private String voteContent;
-    private List<String> voteOptionsList;
+    private List<Option> voteOptionsList;
     private int voteNumberNeeded;
 
     public int getVoteID() {
@@ -20,7 +20,7 @@ public class Vote {
         return voteContent;
     }
 
-    public List<String> getVoteOptionsList() {
+    public List<Option> getVoteOptionsList() {
         return voteOptionsList;
     }
 
@@ -40,7 +40,7 @@ public class Vote {
         this.voteContent = voteContent;
     }
 
-    public void setVoteOptionsList(List<String> voteOptionsList) {
+    public void setVoteOptionsList(List<Option> voteOptionsList) {
         this.voteOptionsList = voteOptionsList;
     }
 

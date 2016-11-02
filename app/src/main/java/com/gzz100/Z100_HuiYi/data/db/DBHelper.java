@@ -30,12 +30,6 @@ public class DBHelper extends SQLiteOpenHelper {
                     PersistenceContract.ColumnsName.COLUMN_NAME_AGENDAS + INTEGER_TYPE
                     + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST + TEXT_TYPE
                     + ")";
-/*    private static final String CREATE_TABLE_DELEGATE =
-            "CREATE TABLE " + PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE+ " (" +
-                    PersistenceContract.ColumnsName._ID + TEXT_TYPE + " PRIMARY KEY,"  +
-                    PersistenceContract.ColumnsName.COLUMN_NAME_USERS + INTEGER_TYPE
-                    + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_USERS_LIST + TEXT_TYPE
-                    + ")";*/
 private static final String CREATE_TABLE_DELEGATE =
         "CREATE TABLE " + PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE+ " (" +
                 PersistenceContract.ColumnsName._ID + TEXT_TYPE + " PRIMARY KEY,"  +
@@ -48,6 +42,13 @@ private static final String CREATE_TABLE_DELEGATE =
                     PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO + INTEGER_TYPE
                     + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO_DATA + TEXT_TYPE
                     + ")";
+    private static final String CREATE_TABLE_VOTE =
+            "CREATE TABLE " + PersistenceContract.ColumnsName.TABLE_NAME_VOTE+ " (" +
+                    PersistenceContract.ColumnsName._ID + TEXT_TYPE + " PRIMARY KEY,"  +
+                    PersistenceContract.ColumnsName.COLUMN_NAME_VOTE_INDEX + INTEGER_TYPE
+                    + COMMA_SEP + PersistenceContract.ColumnsName.COLUMN_NAME_VOTE_LIST + TEXT_TYPE
+                    + ")";
+
     private SQLiteDatabase mDatabase;
 
     private DBHelper(Context context) {
@@ -72,6 +73,7 @@ private static final String CREATE_TABLE_DELEGATE =
         db.execSQL(CREATE_TABLE_AGENDA);
         db.execSQL(CREATE_TABLE_DELEGATE);
         db.execSQL(CREATE_TABLE_MEETING_SUMMARY);
+        db.execSQL(CREATE_TABLE_VOTE);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

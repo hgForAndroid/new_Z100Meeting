@@ -78,7 +78,7 @@ public class VotePresenter implements VoteContract.Presenter{
     public void fetchVoteInf(boolean forceUpdate, String IMEI, String userID, String agendaIndex) {
         if(forceUpdate || mFirstLoad){
             mFirstLoad = false;
-            mVoteRepository.getVoteDetail(IMEI, userID, agendaIndex, new VoteDataSource.LoadVoteDetailCallback() {
+            mVoteRepository.getVoteDetail(IMEI, userID, Integer.valueOf(agendaIndex), new VoteDataSource.LoadVoteDetailCallback() {
                 @Override
                 public void onVoteDetailLoaded(Vote vote) {
                     if(!mVoteView.isActive()){

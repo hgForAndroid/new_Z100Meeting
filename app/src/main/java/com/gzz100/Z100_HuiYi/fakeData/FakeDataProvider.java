@@ -6,6 +6,7 @@ import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
+import com.gzz100.Z100_HuiYi.data.Option;
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
@@ -18,48 +19,48 @@ import java.util.List;
 public class FakeDataProvider {
     private  static int currRoleNum=0;
 
-        public static List<Vote> getAllVoteByMeetingID(String meetingID) {
-        List<Vote> list = new ArrayList<Vote>();
-        Vote vote1 = new Vote();
-        vote1.setVoteID(1);
-        vote1.setVoteTitle("议程1投票标题");
-        vote1.setVoteNumberNeeded(1);
-        vote1.setVoteContent("议程1投票问题");
-        List<String> options1 = new ArrayList<String>();
-        options1.add("议程1:选项1");
-        options1.add("议程1:选项2");
-        options1.add("议程1:选项3");
-        vote1.setVoteOptionsList(options1);
-        list.add(vote1);
-
-        Vote vote2 = new Vote();
-        vote2.setVoteID(2);
-        vote2.setVoteTitle("议程2投票标题");
-        vote2.setVoteNumberNeeded(2);
-        vote2.setVoteContent("议程2投票问题");
-        List<String> options2 = new ArrayList<String>();
-        options2.add("议程2:选项1");
-        options2.add("议程2:选项2");
-        options2.add("议程2:选项3");
-        options2.add("议程2:选项4");
-        vote2.setVoteOptionsList(options2);
-        list.add(vote2);
-
-        Vote vote3 = new Vote();
-        vote3.setVoteID(3);
-        vote3.setVoteTitle("议程3投票标题");
-        vote3.setVoteNumberNeeded(1);
-        vote3.setVoteContent("议程3投票问题");
-        List<String> options3 = new ArrayList<String>();
-        options3.add("议程3:选项1");
-        options3.add("议程3:选项2");
-        options3.add("议程3:选项3");
-        options3.add("议程3:选项4");
-        vote3.setVoteOptionsList(options3);
-        list.add(vote3);
-
-        return list;
-    }
+//        public static List<Vote> getAllVoteByMeetingID(String meetingID) {
+//        List<Vote> list = new ArrayList<Vote>();
+//        Vote vote1 = new Vote();
+//        vote1.setVoteID(1);
+//        vote1.setVoteTitle("议程1投票标题");
+//        vote1.setVoteNumberNeeded(1);
+//        vote1.setVoteContent("议程1投票问题");
+//        List<String> options1 = new ArrayList<String>();
+//        options1.add("议程1:选项1");
+//        options1.add("议程1:选项2");
+//        options1.add("议程1:选项3");
+//        vote1.setVoteOptionsList(options1);
+//        list.add(vote1);
+//
+//        Vote vote2 = new Vote();
+//        vote2.setVoteID(2);
+//        vote2.setVoteTitle("议程2投票标题");
+//        vote2.setVoteNumberNeeded(2);
+//        vote2.setVoteContent("议程2投票问题");
+//        List<String> options2 = new ArrayList<String>();
+//        options2.add("议程2:选项1");
+//        options2.add("议程2:选项2");
+//        options2.add("议程2:选项3");
+//        options2.add("议程2:选项4");
+//        vote2.setVoteOptionsList(options2);
+//        list.add(vote2);
+//
+//        Vote vote3 = new Vote();
+//        vote3.setVoteID(3);
+//        vote3.setVoteTitle("议程3投票标题");
+//        vote3.setVoteNumberNeeded(1);
+//        vote3.setVoteContent("议程3投票问题");
+//        List<String> options3 = new ArrayList<String>();
+//        options3.add("议程3:选项1");
+//        options3.add("议程3:选项2");
+//        options3.add("议程3:选项3");
+//        options3.add("议程3:选项4");
+//        vote3.setVoteOptionsList(options3);
+//        list.add(vote3);
+//
+//        return list;
+//    }
 
     public static List<AgendaModel> getAgendas() {
         List<AgendaModel> agendas = new ArrayList<>();
@@ -359,50 +360,50 @@ public class FakeDataProvider {
         delegateBean=delegateBeans.get(delegateNamePos);
         return delegateBean;
     }
-    public static Vote getVoteDetailByIndex(int index){
-        Vote vote = new Vote();
-        switch (index){
-            case 1:
-                vote.setVoteID(1);
-                vote.setVoteTitle("议程1投票标题");
-                vote.setVoteNumberNeeded(1);
-                vote.setVoteContent("议程1投票问题");
-                List<String> options1 = new ArrayList<String>();
-                options1.add("议程1:选项1");
-                options1.add("议程1:选项2");
-                options1.add("议程1:选项3");
-                vote.setVoteOptionsList(options1);
-                break;
-
-            case 2:
-                vote.setVoteID(2);
-                vote.setVoteTitle("议程2投票标题");
-                vote.setVoteNumberNeeded(2);
-                vote.setVoteContent("议程2投票问题");
-                List<String> options2 = new ArrayList<String>();
-                options2.add("议程2:选项1");
-                options2.add("议程2:选项2");
-                options2.add("议程2:选项3");
-                options2.add("议程2:选项4");
-                vote.setVoteOptionsList(options2);
-                break;
-
-            case 3:
-                vote.setVoteID(3);
-                vote.setVoteTitle("议程3投票标题");
-                vote.setVoteNumberNeeded(1);
-                vote.setVoteContent("议程3投票问题");
-                List<String> options3 = new ArrayList<String>();
-                options3.add("议程3:选项1");
-                options3.add("议程3:选项2");
-                options3.add("议程3:选项3");
-                options3.add("议程3:选项4");
-                vote.setVoteOptionsList(options3);
-                break;
-        }
-
-        return vote;
-    }
+//    public static Vote getVoteDetailByIndex(int index){
+//        Vote vote = new Vote();
+//        switch (index){
+//            case 1:
+//                vote.setVoteID(1);
+//                vote.setVoteTitle("议程1投票标题");
+//                vote.setVoteNumberNeeded(1);
+//                vote.setVoteContent("议程1投票问题");
+//                List<String> options1 = new ArrayList<String>();
+//                options1.add("议程1:选项1");
+//                options1.add("议程1:选项2");
+//                options1.add("议程1:选项3");
+//                vote.setVoteOptionsList(options1);
+//                break;
+//
+//            case 2:
+//                vote.setVoteID(2);
+//                vote.setVoteTitle("议程2投票标题");
+//                vote.setVoteNumberNeeded(2);
+//                vote.setVoteContent("议程2投票问题");
+//                List<String> options2 = new ArrayList<String>();
+//                options2.add("议程2:选项1");
+//                options2.add("议程2:选项2");
+//                options2.add("议程2:选项3");
+//                options2.add("议程2:选项4");
+//                vote.setVoteOptionsList(options2);
+//                break;
+//
+//            case 3:
+//                vote.setVoteID(3);
+//                vote.setVoteTitle("议程3投票标题");
+//                vote.setVoteNumberNeeded(1);
+//                vote.setVoteContent("议程3投票问题");
+//                List<String> options3 = new ArrayList<String>();
+//                options3.add("议程3:选项1");
+//                options3.add("议程3:选项2");
+//                options3.add("议程3:选项3");
+//                options3.add("议程3:选项4");
+//                vote.setVoteOptionsList(options3);
+//                break;
+//        }
+//
+//        return vote;
+//    }
 
     public static List<DelegateModel> getDelegates(){
         List<DelegateModel> mUsers = new ArrayList<>();
@@ -537,9 +538,45 @@ public class FakeDataProvider {
     public static List<MeetingBean> getMeetings(){
         List<MeetingBean> meetings = new ArrayList<>();
         for (int i = 1; i < 6; i++) {
-            MeetingBean meetingBean = new MeetingBean(i,"会议"+i,"1"+i+":00",0);
+            MeetingBean meetingBean = new MeetingBean(i,"会议"+i,"1"+i+":00",1);
             meetings.add(meetingBean);
         }
         return meetings;
+    }
+
+    public static List<Vote> getFakeVotes(){
+        List<Vote> votes = new ArrayList<>();
+        Vote vote1 = new Vote();
+        vote1.setVoteID(1);
+        vote1.setVoteContent("这是第1个投票");
+        vote1.setVoteNumberNeeded(3);
+        vote1.setVoteTitle("第1个投票的标题");
+        List<Option> options1 = new ArrayList<>();
+        Option option1 = new Option(1,"选项1");
+        Option option2 = new Option(2,"选项2");
+        Option option3 = new Option(3,"选项3");
+        options1.add(option1);
+        options1.add(option2);
+        options1.add(option3);
+        vote1.setVoteOptionsList(options1);
+
+        Vote vote2 = new Vote();
+        vote2.setVoteID(2);
+        vote2.setVoteContent("这是第2个投票");
+        vote2.setVoteNumberNeeded(2);
+        vote2.setVoteTitle("第2个投票的标题");
+        List<Option> options2 = new ArrayList<>();
+        Option option4 = new Option(1,"选项1");
+        Option option5 = new Option(2,"选项2");
+        Option option6 = new Option(3,"选项3");
+        options2.add(option4);
+        options2.add(option5);
+        options2.add(option6);
+        vote2.setVoteOptionsList(options2);
+
+        votes.add(vote1);
+        votes.add(vote2);
+
+        return votes;
     }
 }

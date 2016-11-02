@@ -172,7 +172,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
         List<String> listSelected = new ArrayList<String>();
         for(int i = 0; i < optionStateList.size(); i++){
             if (optionStateList.get(i).equals(true)){
-                listSelected.add(mVote.getVoteOptionsList().get(i));
+                listSelected.add(mVote.getVoteOptionsList().get(i).getOptionItem());
             }
         }
         //builder.setMessage("您的选择是：\n");

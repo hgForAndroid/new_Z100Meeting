@@ -47,27 +47,23 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
     @Override
     public void fetchMeetingList(@NonNull final LoadMeetingListCallback callback,String IMEI) {
         checkNotNull(callback);
-//        List<MeetingBean> meetings = FakeDataProvider.getMeetings();
-//        if (meetings != null && meetings.size() > 0){
-//            callback.onMeetingListLoaded(meetings);
-//        }else {
-//            callback.onDataNotAvailable();
-//        }
+        List<MeetingBean> meetings = FakeDataProvider.getMeetings();
+        callback.onMeetingListLoaded(meetings);
 
         //加载服务器数据
-        MeetingPost meetingPost = new MeetingPost(
-                new MySubscriber(new HttpRxCallbackListener<List<MeetingBean>>(){
-                    @Override
-                    public void onNext(List<MeetingBean> meetings) {
-                        callback.onMeetingListLoaded(meetings);
-                    }
-
-                    @Override
-                    public void onError(String errorMsg) {
-                        callback.onDataNotAvailable(errorMsg);
-                    }
-                }, mContext), IMEI);
-        HttpManager.getInstance(mContext).doHttpDeal(meetingPost);
+//        MeetingPost meetingPost = new MeetingPost(
+//                new MySubscriber(new HttpRxCallbackListener<List<MeetingBean>>(){
+//                    @Override
+//                    public void onNext(List<MeetingBean> meetings) {
+//                        callback.onMeetingListLoaded(meetings);
+//                    }
+//
+//                    @Override
+//                    public void onError(String errorMsg) {
+//                        callback.onDataNotAvailable(errorMsg);
+//                    }
+//                }, mContext), IMEI);
+//        HttpManager.getInstance(mContext).doHttpDeal(meetingPost);
 
     }
 
@@ -76,7 +72,7 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
 
 //        加载服务器数据
         StartMeetingPost startMeetingPost = new StartMeetingPost(
-                new ProgressSubscriber(new HttpRxCallbackListener<String>() {
+                new MySubscriber(new HttpRxCallbackListener<String>() {
                     @Override
                     public void onNext(String o) {
                         callback.onStartMeetingSuccess();

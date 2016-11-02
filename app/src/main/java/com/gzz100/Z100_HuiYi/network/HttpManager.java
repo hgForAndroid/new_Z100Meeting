@@ -1,14 +1,21 @@
 package com.gzz100.Z100_HuiYi.network;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.gzz100.Z100_HuiYi.network.entity.BaseEntity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
+import okhttp3.CacheControl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -44,7 +51,6 @@ public class HttpManager {
                 .build();
         mApiService = retrofit.create(ApiService.class);
     }
-
     //获取单例
     public static HttpManager getInstance(Context context) {
         if (INSTANCE == null) {

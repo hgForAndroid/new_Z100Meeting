@@ -26,7 +26,7 @@ public class VoteRemoteDataSource implements VoteDataSource{
 
 
     @Override
-    public void getVoteDetail(String IMEI, String userID, String agendaIndex, @NonNull LoadVoteDetailCallback callback) {
+    public void getVoteDetail(String IMEI, String userID, int agendaIndex, @NonNull LoadVoteDetailCallback callback) {
         //从网络取数据
     }
 

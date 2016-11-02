@@ -27,5 +27,5 @@ public interface VoteDataSource {
      */
     void getAllVoteInf(String meetingID, @NonNull LoadAllVoteInfCallBack callback);
 
-    void getVoteDetail(String IMEI, String userID, String agendaIndex, @NonNull LoadVoteDetailCallback callback);
+    void getVoteDetail(String IMEI, String userID, int voteId, @NonNull LoadVoteDetailCallback callback);
 }
