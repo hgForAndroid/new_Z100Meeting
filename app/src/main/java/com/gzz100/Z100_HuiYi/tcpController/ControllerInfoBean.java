@@ -13,7 +13,8 @@ public class ControllerInfoBean implements Serializable,Cloneable{
     private String upLevelTitle;           //上级界面名称
     private int contentType;             //会议当前内容类型  ,文件还投票是
     private int documentIndex;           //文件序号
-    private int voteIndex;               //投票表决序号
+    private boolean isVoteBegin;        //投票是否开始
+    private int voteId;               //投票表决序号
     private int voteState;                  //投票状态 未开始1；已开始 2；已结束 4；
     private int IsUpdate;                //是否更新 未更新0；待更新 1
     private int IsReturnVoteResult;      //是否返回表决结果 不返回0；要返回 1；
@@ -92,12 +93,12 @@ public class ControllerInfoBean implements Serializable,Cloneable{
         this.documentIndex = documentIndex;
     }
 
-    public int getVoteIndex() {
-        return voteIndex;
+    public int getVoteId() {
+        return voteId;
     }
 
-    public void setVoteIndex(int voteIndex) {
-        this.voteIndex = voteIndex;
+    public void setVoteId(int voteId) {
+        this.voteId = voteId;
     }
 
     public int getVoteState() {
@@ -162,4 +163,13 @@ public class ControllerInfoBean implements Serializable,Cloneable{
     public void setCountdingSec(String countdingSec) {
         this.countdingSec = countdingSec;
     }
+
+    public boolean isVoteBegin() {
+        return isVoteBegin;
+    }
+
+    public void setVoteBegin(boolean voteBegin) {
+        isVoteBegin = voteBegin;
+    }
+
 }

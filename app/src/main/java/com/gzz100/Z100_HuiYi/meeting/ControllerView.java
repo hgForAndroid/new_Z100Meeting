@@ -78,6 +78,28 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
         mBtnStartVote.setText(content);
     }
 
+    /**
+     * 获取投票/结束投票的按钮当前显示的文字
+     * @return
+     */
+    public String getVoteAndEndVoteText(){
+        return mBtnStartVote.getText().toString();
+    }
+
+    public void setStartAndEndButtonNotClickable(boolean clickable){
+        mBtnStartMeeting.setClickable(clickable);
+    }
+    public void setPauseAndContinueButtonNotClickable(boolean clickable){
+        mBtnPauseMeeting.setClickable(clickable);
+    }
+    public void setStartVoteButtonNotClickable(boolean clickable){
+        mBtnStartVote.setClickable(clickable);
+    }
+    public void setVoteResultButtonNotClickable(boolean clickable){
+        mBtnVoteResult.setClickable(clickable);
+    }
+
+
 
     //是否已经隐藏
     private boolean isHide = false;

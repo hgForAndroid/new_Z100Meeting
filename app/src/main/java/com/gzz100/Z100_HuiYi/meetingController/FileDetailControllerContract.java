@@ -1,43 +1,15 @@
-package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
-
-import android.view.View;
+package com.gzz100.Z100_HuiYi.meetingController;
 
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 
-import java.io.File;
-
 /**
-* 文件详情的契约接口
-* @author XieQXiong
-* create at 2016/8/30 10:43
-*/
+ * Created by XieQXiong on 2016/11/1.
+ */
 
-public interface FileDetailContract {
-    interface DetailView extends BaseView<Presenter>{
-        /**
-         * 返回
-         */
-        void fallback();
-
-        /**
-         * 侧滑菜单向左滑
-         * @param distanceX
-         */
-        void slideLeft(int distanceX);
-        /**
-         * 侧滑菜单向右滑
-         * @param distanceX
-         */
-        void slideRight(int distanceX);
-
-        /**
-         * 加载文件
-         * @param file
-         */
-        void loadFile(File file);
-
+public interface FileDetailControllerContract {
+    interface View extends BaseView<Presenter>{
         /**
          * 设置会议当前状态,该方法是在继续状态下，支持人点击切换文件操作时调用
          * @param meetingState   会议状态
@@ -143,23 +115,9 @@ public interface FileDetailContract {
          * @param voteId
          */
         void respondVoteBegin(int voteId);
+
     }
-
-    interface Presenter extends BasePresenter{
-        /**
-         * 返回上一页
-         */
-        void fallback();
-
-        /**
-         * 隐藏侧滑菜单
-         * @param v  侧滑菜单
-         */
-        void slideLeft(View v);
-
-        void slideRight(View v);
-        void loadFile(String fileName);
-
+    interface Presenter extends BasePresenter {
         /**
          * 开始的操作
          * @param controllerInfoBean   发送的信息实体
@@ -226,18 +184,6 @@ public interface FileDetailContract {
          * @param agendaIndex      议程序号
          */
         void nextAgendaForHost(ControllerInfoBean controllerInfoBean, int meetingState, int agendaIndex);
-
-        /**
-         * 上一个议程，其他参会人员调用的方法
-         * @param agendaIndex  议程序号
-         */
-        void previousAgenda(int agendaIndex);
-
-        /**
-         * 下一个议程，其他参会人员调用的方法
-         * @param agendaIndex   议程序号
-         */
-        void nextAgenda(int agendaIndex);
 
         /**
          * 处理主持人发送过来的消息

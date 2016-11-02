@@ -20,6 +20,11 @@ public interface VoteDataSource {
         void onDataNotAvailable();
     }
 
+    /**
+     * 获取所有会议列表
+     * @param meetingID    会议id
+     * @param callback
+     */
     void getAllVoteInf(String meetingID, @NonNull LoadAllVoteInfCallBack callback);
 
     void getVoteDetail(String IMEI, String userID, String agendaIndex, @NonNull LoadVoteDetailCallback callback);

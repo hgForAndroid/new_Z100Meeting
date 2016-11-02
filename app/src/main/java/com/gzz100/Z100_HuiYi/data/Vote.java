@@ -6,18 +6,18 @@ import java.util.List;
  * Created by Lee on 2016/9/3.
  */
 public class Vote {
-    private String voteID;
+    private int voteID;
     private String voteTitle;
-    private String voteQuestion;
+    private String voteContent;
     private List<String> voteOptionsList;
     private int voteNumberNeeded;
 
-    public String getVoteID() {
+    public int getVoteID() {
         return voteID;
     }
 
-    public String getVoteQuestion() {
-        return voteQuestion;
+    public String getVoteContent() {
+        return voteContent;
     }
 
     public List<String> getVoteOptionsList() {
@@ -32,12 +32,12 @@ public class Vote {
         return voteNumberNeeded;
     }
 
-    public void setVoteID(String voteID) {
+    public void setVoteID(int voteID) {
         this.voteID = voteID;
     }
 
-    public void setVoteQuestion(String voteQuestion) {
-        this.voteQuestion = voteQuestion;
+    public void setVoteContent(String voteContent) {
+        this.voteContent = voteContent;
     }
 
     public void setVoteOptionsList(List<String> voteOptionsList) {

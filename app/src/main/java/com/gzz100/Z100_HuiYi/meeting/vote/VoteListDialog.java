@@ -23,13 +23,17 @@ public class VoteListDialog extends AlertDialog implements OnAllVoteItemClickLis
     //widget
     private RecyclerView voteListRecyclerView;
     private Context mContext;
+    private OnAllVoteItemClickListener mOnAllVoteItemClickListener;
 
     //data
     private List<Vote> mVoteList;
 
-    public VoteListDialog(Context context){
+    private int voteId;
+
+    public VoteListDialog(Context context,OnAllVoteItemClickListener onAllVoteItemClickListener){
         super(context);
         mContext = context;
+        this.mOnAllVoteItemClickListener = onAllVoteItemClickListener;
     }
 
     @Override
@@ -61,11 +65,19 @@ public class VoteListDialog extends AlertDialog implements OnAllVoteItemClickLis
 
     @Override
     public void onVoteStartStopButtonClick(View view, int position) {
+        voteId = mVoteList.get(position).getVoteID();
         //开启投票
+        mOnAllVoteItemClickListener.onVoteStartStopButtonClick(view,position);
     }
 
     @Override
     public void onCheckResultButtonClick(View view, int position) {
+        voteId = mVoteList.get(position).getVoteID();
         //查看结果
+        mOnAllVoteItemClickListener.onCheckResultButtonClick(view,position);
+    }
+    //获取当前选择的投票id
+    public int getVoteId(){
+        return this.voteId;
     }
 }

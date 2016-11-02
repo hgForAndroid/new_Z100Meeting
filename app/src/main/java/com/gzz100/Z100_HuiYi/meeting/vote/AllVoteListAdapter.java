@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Vote;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,7 +45,7 @@ public class AllVoteListAdapter extends RecyclerView.Adapter<AllVoteListAdapter.
     @Override
     public void onBindViewHolder(AllVoteListHolder holder, final int position) {
         holder.mVoteTitleTextView.setText(mVoteList.get(position).getVoteTitle());
-        holder.mVoteQuestionTextView.setText(mVoteList.get(position).getVoteQuestion());
+        holder.mVoteQuestionTextView.setText(mVoteList.get(position).getVoteContent());
         holder.mVoteStartStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

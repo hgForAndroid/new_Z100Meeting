@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.meeting.about.AboutFragment;
@@ -35,6 +36,7 @@ import com.gzz100.Z100_HuiYi.meeting.file.FilePresenter;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingFragment;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingPresenter;
+import com.gzz100.Z100_HuiYi.meeting.vote.OnAllVoteItemClickListener;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteListDialog;
@@ -61,13 +63,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener,
-        ViewPager.OnPageChangeListener, ICommunicate, ControllerView.IOnControllerListener {
+        ViewPager.OnPageChangeListener, ICommunicate, ControllerView.IOnControllerListener, OnAllVoteItemClickListener {
 
     private ControllerView mControllerView;
     private FrameLayout.LayoutParams mFl;
     private int mMeetingState = Constant.MEETING_STATE_NOT_BEGIN;
     private ControllerInfoBean mControllerInfoBean;
     private Gson mGson;
+    private VoteListDialog mDialog;
 
     public static void toMainActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -149,7 +152,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mFragments.add(mFileFragment);
         mFragments.add(mAboutFragment);
         //测试
-        if (MyAPP.getInstance().getUserRole() == 1){//主持人
+        if (MyAPP.getInstance().getUserRole() == 1) {//主持人
             mFragments.add(mVoteFragment);
             mVoteTab.setVisibility(View.VISIBLE);
             mControllerView = ControllerView.getInstance(this);
@@ -161,7 +164,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mControllerInfoBean = new ControllerInfoBean();
             mGson = new Gson();
 
-        }else {//不是主持人
+        } else {//不是主持人
             mVoteTab.setVisibility(View.GONE);
         }
         //默认选择哪个
@@ -174,7 +177,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         timeCounting();
     }
 
-    private void defaultSelected(){
+    private void defaultSelected() {
         mMainFragmentAdapter = new MainFragmentAdapter(getSupportFragmentManager(), mFragments);
         mViewPager.setAdapter(mMainFragmentAdapter);
         mViewPager.setCurrentItem(PAGE_ONE);
@@ -292,7 +295,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 case PAGE_SIX:
                     mVoteTab.setChecked(true);
                     break;
-                default:break;
+                default:
+                    break;
             }
         }
     }
@@ -309,11 +313,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 重新添加控制条
-     * @param reAdd   值为1l
+     *
+     * @param reAdd 值为1l
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void reAddControllerView(Long reAdd){
-        if (reAdd == TRIGGER_OF_REMOVE_CONTROLLERVIEW){//从文件详情界面发送
+    public void reAddControllerView(Long reAdd) {
+        if (reAdd == TRIGGER_OF_REMOVE_CONTROLLERVIEW) {//从文件详情界面发送
             mRootView.addView(mControllerView, mFl);
             mControllerView.setIOnControllerListener(this);
         }
@@ -336,27 +341,27 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             int documentIndex = data.getDocumentIndex();
             String upLevelTitle = data.getUpLevelTitle();
             //开始
-            if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN ) {
-                FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle,true,
-                        false,false,"","");
+            if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN) {
+                FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle, true,
+                        false, false, "", "");
                 mNavBarView.setMeetingStateOrAgendaState("开会中");
             }
             //继续
-            else if (data.getMeetingState() == Constant.MEETING_STATE_CONTINUE){
-                FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle,true,false,
-                        true,data.getCountdingMin(),data.getCountdingSec());
+            else if (data.getMeetingState() == Constant.MEETING_STATE_CONTINUE) {
+                FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle, true, false,
+                        true, data.getCountdingMin(), data.getCountdingSec());
                 mNavBarView.setMeetingStateOrAgendaState("开会中");
             }
             //暂停
-            else if (data.getMeetingState() == Constant.MEETING_STATE_PAUSE){
+            else if (data.getMeetingState() == Constant.MEETING_STATE_PAUSE) {
                 mNavBarView.setMeetingStateOrAgendaState("暂停中");
             }
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void showVoteFragment(Integer votePage){
-        if (PAGE_SIX == votePage){
+    public void showVoteFragment(Integer votePage) {
+        if (PAGE_SIX == votePage) {
 
             mVoteTab.setChecked(true);
 
@@ -373,8 +378,22 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setCurrentMeetingState(String meetingState){
+    public void setCurrentMeetingState(String meetingState) {
         mNavBarView.setMeetingStateOrAgendaState(meetingState);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void clientShowVoteFragment(Vote vote) {
+        if (vote != null) {
+            mFragments.add(mVoteFragment);
+            mVoteTab.setVisibility(View.VISIBLE);
+            defaultSelected();
+
+            //设置控制条只有结束投票可点击
+            mControllerView.setStartAndEndButtonNotClickable(false);
+            mControllerView.setPauseAndContinueButtonNotClickable(false);
+            mControllerView.setVoteResultButtonNotClickable(false);
+        }
     }
 
     @Override
@@ -385,7 +404,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void startMeeting(View view) {
-        if ("开始".equals(((Button)view).getText().toString())) {
+        if ("开始".equals(((Button) view).getText().toString())) {
             mMeetingState = Constant.MEETING_STATE_BEGIN;
             try {
                 ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
@@ -398,7 +417,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
                 mRootView.removeView(mControllerView);
                 FileDetailActivity.start(this, controllerInfoBean.getAgendaIndex(),
-                        controllerInfoBean.getDocumentIndex(), "文件",true,true,false,"","");
+                        controllerInfoBean.getDocumentIndex(), "文件", true, true, false, "", "");
 
                 ControllerUtil.getInstance().sendMessage(json);
             } catch (CloneNotSupportedException e) {
@@ -433,7 +452,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 //            ToastUtil.showMessage("会议已结束！");
 //            return;
 //        }
-        if ("暂停".equals(((Button)view).getText().toString())) {
+        if ("暂停".equals(((Button) view).getText().toString())) {
             mMeetingState = Constant.MEETING_STATE_PAUSE;
             try {
                 ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
@@ -446,7 +465,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 e.printStackTrace();
             }
             mNavBarView.setMeetingStateOrAgendaState("暂停中");
-        }else {//继续
+        } else {//继续
             mMeetingState = Constant.MEETING_STATE_CONTINUE;
             String tempCountingMin = SharedPreferencesUtil.getInstance(this.getApplicationContext())
                     .getString(Constant.COUNTING_MIN, "");
@@ -471,7 +490,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
                 mRootView.removeView(mControllerView);
                 FileDetailActivity.start(this, pauseAgendaIndex,
-                        pauseDocumentIndex, "文件",true,true,true,tempCountingMin,tempCountingSec);
+                        pauseDocumentIndex, "文件", true, true, true, tempCountingMin, tempCountingSec);
 
                 ControllerUtil.getInstance().sendMessage(json);
 
@@ -486,15 +505,69 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void startVote(View view) {
-        VoteListDialog dialog = new VoteListDialog(this);
-        dialog.show();
-        mControllerView.setVoteAndEndVoteText("结束投票");
+
+        String buttonContent = mControllerView.getVoteAndEndVoteText();
+        if ("投票".equals(buttonContent)){
+            mDialog = new VoteListDialog(this, this);
+            mDialog.show();
+            mControllerView.setVoteAndEndVoteText("结束投票");
+        }else {
+            mMeetingState = Constant.MEETING_STATE_CONTINUE;
+            String tempCountingMin = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                    .getString(Constant.COUNTING_MIN, "");
+            String tempCountingSec = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                    .getString(Constant.COUNTING_SEC, "");
+            int pauseAgendaIndex = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                    .getInt(Constant.PAUSE_AGENDA_INDEX, 0);
+            int pauseDocumentIndex = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                    .getInt(Constant.PAUSE_DOCUMENT_INDEX, 0);
+            try {
+                ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
+                controllerInfoBean.setMeetingState(mMeetingState);
+                controllerInfoBean.setAgendaIndex(pauseAgendaIndex);
+                controllerInfoBean.setDocumentIndex(pauseDocumentIndex);
+                controllerInfoBean.setCountdingMin(tempCountingMin);
+                controllerInfoBean.setCountdingSec(tempCountingSec);
+                controllerInfoBean.setAgendaChange(false);
+                controllerInfoBean.setAgendaTimeCountDown(true);
+                controllerInfoBean.setUpLevelTitle("文件");
+
+                String json = mGson.toJson(controllerInfoBean);
+
+                mRootView.removeView(mControllerView);
+                mControllerView.setVoteAndEndVoteText("投票");
+
+                FileDetailActivity.start(this, pauseAgendaIndex,
+                        pauseDocumentIndex, "文件", true, true, true, tempCountingMin, tempCountingSec);
+
+                ControllerUtil.getInstance().sendMessage(json);
+
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 
     @Override
     public void voteResult(View view) {
 
     }
+
+    @Override
+    public void onVoteStartStopButtonClick(View view, int position) {
+        int voteId = mDialog.getVoteId();
+        mVoteTab.setChecked(true);
+        //让投票界面加载内容
+
+    }
+
+    @Override
+    public void onCheckResultButtonClick(View view, int position) {
+
+    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -521,4 +594,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
 }

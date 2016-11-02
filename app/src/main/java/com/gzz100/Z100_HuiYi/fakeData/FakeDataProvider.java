@@ -1,24 +1,16 @@
 package com.gzz100.Z100_HuiYi.fakeData;
 
-import android.support.annotation.NonNull;
-
-import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
-import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
-import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by XieQXiong on 2016/8/29.
@@ -29,10 +21,10 @@ public class FakeDataProvider {
         public static List<Vote> getAllVoteByMeetingID(String meetingID) {
         List<Vote> list = new ArrayList<Vote>();
         Vote vote1 = new Vote();
-        vote1.setVoteID("1");
+        vote1.setVoteID(1);
         vote1.setVoteTitle("议程1投票标题");
         vote1.setVoteNumberNeeded(1);
-        vote1.setVoteQuestion("议程1投票问题");
+        vote1.setVoteContent("议程1投票问题");
         List<String> options1 = new ArrayList<String>();
         options1.add("议程1:选项1");
         options1.add("议程1:选项2");
@@ -41,10 +33,10 @@ public class FakeDataProvider {
         list.add(vote1);
 
         Vote vote2 = new Vote();
-        vote2.setVoteID("2");
+        vote2.setVoteID(2);
         vote2.setVoteTitle("议程2投票标题");
         vote2.setVoteNumberNeeded(2);
-        vote2.setVoteQuestion("议程2投票问题");
+        vote2.setVoteContent("议程2投票问题");
         List<String> options2 = new ArrayList<String>();
         options2.add("议程2:选项1");
         options2.add("议程2:选项2");
@@ -54,10 +46,10 @@ public class FakeDataProvider {
         list.add(vote2);
 
         Vote vote3 = new Vote();
-        vote3.setVoteID("3");
+        vote3.setVoteID(3);
         vote3.setVoteTitle("议程3投票标题");
         vote3.setVoteNumberNeeded(1);
-        vote3.setVoteQuestion("议程3投票问题");
+        vote3.setVoteContent("议程3投票问题");
         List<String> options3 = new ArrayList<String>();
         options3.add("议程3:选项1");
         options3.add("议程3:选项2");
@@ -371,10 +363,10 @@ public class FakeDataProvider {
         Vote vote = new Vote();
         switch (index){
             case 1:
-                vote.setVoteID("1");
+                vote.setVoteID(1);
                 vote.setVoteTitle("议程1投票标题");
                 vote.setVoteNumberNeeded(1);
-                vote.setVoteQuestion("议程1投票问题");
+                vote.setVoteContent("议程1投票问题");
                 List<String> options1 = new ArrayList<String>();
                 options1.add("议程1:选项1");
                 options1.add("议程1:选项2");
@@ -383,10 +375,10 @@ public class FakeDataProvider {
                 break;
 
             case 2:
-                vote.setVoteID("2");
+                vote.setVoteID(2);
                 vote.setVoteTitle("议程2投票标题");
                 vote.setVoteNumberNeeded(2);
-                vote.setVoteQuestion("议程2投票问题");
+                vote.setVoteContent("议程2投票问题");
                 List<String> options2 = new ArrayList<String>();
                 options2.add("议程2:选项1");
                 options2.add("议程2:选项2");
@@ -396,10 +388,10 @@ public class FakeDataProvider {
                 break;
 
             case 3:
-                vote.setVoteID("3");
+                vote.setVoteID(3);
                 vote.setVoteTitle("议程3投票标题");
                 vote.setVoteNumberNeeded(1);
-                vote.setVoteQuestion("议程3投票问题");
+                vote.setVoteContent("议程3投票问题");
                 List<String> options3 = new ArrayList<String>();
                 options3.add("议程3:选项1");
                 options3.add("议程3:选项2");

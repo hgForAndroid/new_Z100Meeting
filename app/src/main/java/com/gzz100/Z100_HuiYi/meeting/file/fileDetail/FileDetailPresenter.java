@@ -38,7 +38,6 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void slideLeft(View v) {
         mView.slideLeft(0);
-
     }
 
     @Override
@@ -48,7 +47,6 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 
     @Override
     public void start() {
-
     }
 
     @Override
@@ -142,6 +140,29 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
+    public void startVote(ControllerInfoBean controllerInfoBean, int voteId, int meetingState) {
+        try {
+            ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
+            mControllerInfoBean.setMeetingState(meetingState);
+            mControllerInfoBean.setVoteId(voteId);
+            mControllerInfoBean.setVoteBegin(true);
+
+            String json = mGson.toJson(mControllerInfoBean);
+            if (ControllerUtil.getInstance().getIControllerListener() != null)
+                ControllerUtil.getInstance().sendMessage(json);
+            mView.showVote();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void fetchVoteResult(ControllerInfoBean controllerInfoBean, int voteId, int meetingState) {
+
+    }
+
+    @Override
     public void previousAgendaForHost(final ControllerInfoBean controllerInfoBean, final int meetingState, int agendaIndex) {
         agendaIndex -= 1;
         mView.respondAgendaTimeIsCounting(false);
@@ -217,7 +238,9 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             if (data.getDocumentIndex() >= 0) {
                 mView.respondDocumentIndexChange(data.getDocumentIndex());
             }
-
+            if (data.isVoteBegin()){//投票开始
+                mView.respondVoteBegin(data.getVoteId());
+            }
         }
         //会议暂停
         else if (data.getMeetingState() == Constant.MEETING_STATE_PAUSE) {
@@ -243,7 +266,6 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
                 mView.respondAgendaNotChange(data);
             }
         }
-
     }
 
     @Override
@@ -273,5 +295,4 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             e.printStackTrace();
         }
     }
-
 }

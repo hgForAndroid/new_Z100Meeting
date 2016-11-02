@@ -29,6 +29,7 @@ import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
 import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.meeting.ControllerView;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
+import com.gzz100.Z100_HuiYi.meeting.vote.OnAllVoteItemClickListener;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteListDialog;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
@@ -51,7 +52,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class FileDetailActivity extends BaseActivity implements FileDetailContract.DetailView,
-        View.OnClickListener, AdapterView.OnItemClickListener, ControllerView.IOnControllerListener {
+        View.OnClickListener, AdapterView.OnItemClickListener, ControllerView.IOnControllerListener,
+        OnAllVoteItemClickListener {
     public static final String BUNDLE = "bundle";
     public static final String AGENDA_INDEX = "agendaIndex";
     public static final String FILE_INDEX = "fileIndex";
@@ -68,6 +70,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     private String mCountingMin;
     private String mCountingSec;
     private int isAgendaTimeCountDown;
+    private VoteListDialog mDialog;
 
     /**
      * 跳转到文件详情界面
@@ -342,29 +345,59 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
         EventBus.getDefault().post("投票中");
         ActivityStackManager.pop();*/
+        mDialog = new VoteListDialog(this,this);
+        mDialog.show();
+    }
 
-        /*VoteListDialog dialog = new VoteListDialog(this, FakeDataProvider.getAllVoteByMeetingID(""));
-        dialog.show();*/
+    //控制条的投票结果按钮已经去掉
+    @Override
+    public void voteResult(View view) {
+        mDialog = new VoteListDialog(this,this);
+        mDialog.show();
     }
 
     @Override
-    public void voteResult(View view) {
+    public void onVoteStartStopButtonClick(View view, int position) {
+//        String buttonContent = ((Button) view).getText().toString();
+        if ("投票".equals(mControllerView.getVoteAndEndVoteText())){
+            mControllerView.setVoteAndEndVoteText("结束投票");
+        }
+        //发送TCP消息给所有客户端
+        int voteId = mDialog.getVoteId();
+        mPresenter.startVote(mControllerInfoBean,voteId,mMeetingState);
+
+    }
+
+    @Override
+    public void onCheckResultButtonClick(View view, int position) {
+
+    }
+
+    @Override
+    public void showVote() {
+        mDialog.dismiss();
+        EventBus.getDefault().post(MainActivity.PAGE_SIX);
+        mRootView.removeView(mControllerView);
+        EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
+        EventBus.getDefault().post("投票中");
+        ActivityStackManager.pop();
+    }
+
+    @Override
+    public void showVoteResult() {
 
     }
 
     private static class MyHandler extends Handler {
         private WeakReference<FileDetailActivity> activityWeakReference;
-
         public MyHandler(FileDetailActivity activity) {
             activityWeakReference = new WeakReference<FileDetailActivity>(activity);
         }
-
         @Override
         public void handleMessage(Message msg) {
             FileDetailActivity fileDetailActivity = activityWeakReference.get();
             switch (msg.what) {
                 case 0x00:
-
                     if (fileDetailActivity.getMin().equals("00") && fileDetailActivity.getSec(false).equals("00")) {
                         ToastUtil.showMessage("议程已结束");
                     } else {
@@ -653,6 +686,16 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     public void respondMeetingEnd() {
         mNavBarView.setCurrentMeetingState("(已结束)");
         mPassive = false;
+    }
+
+    @Override
+    public void respondVoteBegin(int voteId) {
+        Vote vote = new Vote();
+        vote.setVoteID(voteId);
+        //通知主界面添加投票的Fragment
+        EventBus.getDefault().post(vote);
+        //销毁
+        ActivityStackManager.pop();
     }
 
     //返回

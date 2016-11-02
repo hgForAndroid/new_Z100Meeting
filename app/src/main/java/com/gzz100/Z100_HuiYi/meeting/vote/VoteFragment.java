@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Vote;
@@ -139,7 +138,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
         mVoteTitleTextView.setText(mVote.getVoteTitle());
 
         //显示投票问题
-        mVoteQuestionTextView.setText(mVote.getVoteQuestion());
+        mVoteQuestionTextView.setText(mVote.getVoteContent());
 
         //显示需要选择的数量
         mVoteNumberNeededTextView.setText("请选择" + mVote.getVoteNumberNeeded() + "项:");
