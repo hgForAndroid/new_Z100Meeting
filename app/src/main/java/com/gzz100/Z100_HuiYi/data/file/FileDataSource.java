@@ -28,6 +28,16 @@ public interface FileDataSource {
         void onDataNotAvailable();
     }
 
+    interface LoadFileSearchNameCallback{
+        void onNameHintLoaded(List<String> fileSearchNameHintList);
+
+        void onDataNotAvailable();
+    }
+
+    interface getFileByNameCallback{
+        void fileDidGet(Document document);
+        void fileNotGet();
+    }
     /**
      * 获取文件列表文件
      * @param agendaPos   议程序号，根据该序号获取
@@ -49,4 +59,10 @@ public interface FileDataSource {
      * @param callback     获取结果回调函数
      */
     void getSearchResult(String fileOrName,@NonNull LoadFileListCallback callback);
+
+    void getSearchNameHint(LoadFileSearchNameCallback callback);
+
+    void getFileByName(String fileName, getFileByNameCallback callback);
+
+    boolean isFileName(String inputString);
 }

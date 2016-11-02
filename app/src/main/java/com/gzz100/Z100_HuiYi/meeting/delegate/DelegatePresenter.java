@@ -1,14 +1,12 @@
 package com.gzz100.Z100_HuiYi.meeting.delegate;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateDataSource;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateRepository;
 import com.gzz100.Z100_HuiYi.utils.Constant;
-
 
 import java.util.ArrayList;
 import java.util.List;

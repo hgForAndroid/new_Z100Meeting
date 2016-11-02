@@ -63,6 +63,9 @@ public interface FileContract {
         /**
          * 搜索无结果
          */
+        void setAutoCompleteTextView(List<String>fileSearchNameHintList);
+        void fileListNSearchFileListSwitch();
+
         void showNoSearchResult();
         //以下的参数设置，是跳转到文件详情时所需的参数
         void setAgendasSum(int size);
@@ -106,7 +109,11 @@ public interface FileContract {
          * 根据搜索的议程号搜索对应的所有文件
          * @param agendaIndex 议程序号
          */
+
         void fetchSearchFileList(int agendaIndex);
+
+
+        void setFileSearchAutoCompleteTextViewHint();
 
         /**
          * 设置议程时间
@@ -119,6 +126,8 @@ public interface FileContract {
          * @param reLoad
          */
         void setFirstLoad(boolean reLoad);
+
+        void showAutoCompleteTVSelectionFileDetail(String fileName);
 
 
     }

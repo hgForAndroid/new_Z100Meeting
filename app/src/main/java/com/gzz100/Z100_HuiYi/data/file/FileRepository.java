@@ -3,12 +3,8 @@ package com.gzz100.Z100_HuiYi.data.file;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
-import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
-import com.gzz100.Z100_HuiYi.data.db.DBHelper;
-import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;
 
@@ -79,5 +75,21 @@ public class FileRepository implements FileDataSource {
     @Override
     public void getSearchResult(String fileOrName, @NonNull LoadFileListCallback callback) {
         checkNotNull(callback);
+        mFileLocalDataSource.getSearchResult(fileOrName,callback);
+    }
+
+    @Override
+    public void getSearchNameHint(LoadFileSearchNameCallback callback) {
+        mFileLocalDataSource.getSearchNameHint(callback);
+    }
+
+    @Override
+    public void getFileByName(String fileName, getFileByNameCallback callback) {
+        mFileLocalDataSource.getFileByName(fileName,callback );
+    }
+
+    @Override
+    public boolean isFileName(String inputString) {
+        return mFileLocalDataSource.isFileName(inputString);
     }
 }
