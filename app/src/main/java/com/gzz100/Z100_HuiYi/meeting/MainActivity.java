@@ -362,18 +362,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showVoteFragment(Integer votePage) {
         if (PAGE_SIX == votePage) {
-
             mVoteTab.setChecked(true);
 
-//            if (MyAPP.getInstance().getUserRole() != 1){
-//                //不是主持人
-//                mFragments.add(mVoteFragment);
-//                mVoteTab.setVisibility(View.VISIBLE);
-//                defaultSelected();
-//            }else {
-//                //主持人
-//                mVoteTab.setChecked(true);
-//            }
+            //设置控制条只有结束投票可点击
+            mControllerView.setStartAndEndButtonNotClickable(false);
+            mControllerView.setPauseAndContinueButtonNotClickable(false);
         }
     }
 
@@ -387,12 +380,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (vote != null) {
             mFragments.add(mVoteFragment);
             mVoteTab.setVisibility(View.VISIBLE);
-            defaultSelected();
-
-            //设置控制条只有结束投票可点击
-            mControllerView.setStartAndEndButtonNotClickable(false);
-            mControllerView.setPauseAndContinueButtonNotClickable(false);
-            mControllerView.setVoteResultButtonNotClickable(false);
+            mVoteTab.setChecked(true);
         }
     }
 
@@ -550,9 +538,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     }
 
+    //投票结果  按钮已经去除，不再调用此方法
     @Override
     public void voteResult(View view) {
-
     }
 
     @Override
@@ -561,10 +549,18 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mVoteTab.setChecked(true);
         //让投票界面加载内容
 
+        //隐藏投票列表对话框
+        mDialog.dismiss();
+        mDialog = null;
     }
 
     @Override
     public void onCheckResultButtonClick(View view, int position) {
+        int voteId = mDialog.getVoteId();
+        //显示投票结果
+
+
+        //隐藏投票列表对话框
 
     }
 
