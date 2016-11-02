@@ -53,7 +53,7 @@ public class MeetingBean {
     }
 
     public void setMeetingState(TextView view){
-        if (meetingState == 0){
+        if (meetingState == 1){
             view.setText("未开始");
         }else {
             view.setText("已结束");

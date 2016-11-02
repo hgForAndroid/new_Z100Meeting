@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.Option;
 import com.gzz100.Z100_HuiYi.data.Vote;
 
 import java.util.ArrayList;
@@ -172,7 +173,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
         List<String> listSelected = new ArrayList<String>();
         for(int i = 0; i < optionStateList.size(); i++){
             if (optionStateList.get(i).equals(true)){
-                listSelected.add(mVote.getVoteOptionsList().get(i));
+                listSelected.add(mVote.getVoteOptionsList().get(i).getOptionItem());
             }
         }
         //builder.setMessage("您的选择是：\n");

@@ -1,11 +1,14 @@
 package com.gzz100.Z100_HuiYi.fakeData;
 
+import android.graphics.Path;
+
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
+import com.gzz100.Z100_HuiYi.data.Option;
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
@@ -25,10 +28,10 @@ public class FakeDataProvider {
         vote1.setVoteTitle("议程1投票标题");
         vote1.setVoteNumberNeeded(1);
         vote1.setVoteContent("议程1投票问题");
-        List<String> options1 = new ArrayList<String>();
-        options1.add("议程1:选项1");
-        options1.add("议程1:选项2");
-        options1.add("议程1:选项3");
+        List<Option> options1 = new ArrayList<Option>();
+        options1.add(new Option(1,"议程1:选项1"));
+        options1.add(new Option(2,"议程1:选项2"));
+        options1.add(new Option(3,"议程1:选项3"));
         vote1.setVoteOptionsList(options1);
         list.add(vote1);
 
@@ -37,11 +40,11 @@ public class FakeDataProvider {
         vote2.setVoteTitle("议程2投票标题");
         vote2.setVoteNumberNeeded(2);
         vote2.setVoteContent("议程2投票问题");
-        List<String> options2 = new ArrayList<String>();
-        options2.add("议程2:选项1");
-        options2.add("议程2:选项2");
-        options2.add("议程2:选项3");
-        options2.add("议程2:选项4");
+        List<Option> options2 = new ArrayList<Option>();
+        options2.add(new Option(1,"议程2:选项1"));
+        options2.add(new Option(2,"议程2:选项2"));
+        options2.add(new Option(3,"议程2:选项3"));
+        options2.add(new Option(4,"议程2:选项4"));
         vote2.setVoteOptionsList(options2);
         list.add(vote2);
 
@@ -50,11 +53,11 @@ public class FakeDataProvider {
         vote3.setVoteTitle("议程3投票标题");
         vote3.setVoteNumberNeeded(1);
         vote3.setVoteContent("议程3投票问题");
-        List<String> options3 = new ArrayList<String>();
-        options3.add("议程3:选项1");
-        options3.add("议程3:选项2");
-        options3.add("议程3:选项3");
-        options3.add("议程3:选项4");
+        List<Option> options3 = new ArrayList<Option>();
+        options3.add(new Option(1,"议程3:选项1"));
+        options3.add(new Option(2,"议程3:选项2"));
+        options3.add(new Option(3,"议程3:选项3"));
+        options3.add(new Option(4,"议程3:选项4"));
         vote3.setVoteOptionsList(options3);
         list.add(vote3);
 
@@ -367,10 +370,10 @@ public class FakeDataProvider {
                 vote.setVoteTitle("议程1投票标题");
                 vote.setVoteNumberNeeded(1);
                 vote.setVoteContent("议程1投票问题");
-                List<String> options1 = new ArrayList<String>();
-                options1.add("议程1:选项1");
-                options1.add("议程1:选项2");
-                options1.add("议程1:选项3");
+                List<Option> options1 = new ArrayList<Option>();
+                options1.add(new Option(1,"议程1:选项1"));
+                options1.add(new Option(2,"议程1:选项2"));
+                options1.add(new Option(3,"议程1:选项3"));
                 vote.setVoteOptionsList(options1);
                 break;
 
@@ -379,11 +382,11 @@ public class FakeDataProvider {
                 vote.setVoteTitle("议程2投票标题");
                 vote.setVoteNumberNeeded(2);
                 vote.setVoteContent("议程2投票问题");
-                List<String> options2 = new ArrayList<String>();
-                options2.add("议程2:选项1");
-                options2.add("议程2:选项2");
-                options2.add("议程2:选项3");
-                options2.add("议程2:选项4");
+                List<Option> options2 = new ArrayList<Option>();
+                options2.add(new Option(1,"议程2:选项1"));
+                options2.add(new Option(2,"议程2:选项2"));
+                options2.add(new Option(3,"议程2:选项3"));
+                options2.add(new Option(4,"议程2:选项4"));
                 vote.setVoteOptionsList(options2);
                 break;
 
@@ -392,11 +395,11 @@ public class FakeDataProvider {
                 vote.setVoteTitle("议程3投票标题");
                 vote.setVoteNumberNeeded(1);
                 vote.setVoteContent("议程3投票问题");
-                List<String> options3 = new ArrayList<String>();
-                options3.add("议程3:选项1");
-                options3.add("议程3:选项2");
-                options3.add("议程3:选项3");
-                options3.add("议程3:选项4");
+                List<Option> options3 = new ArrayList<Option>();
+                options3.add(new Option(1,"议程3:选项1"));
+                options3.add(new Option(2,"议程3:选项2"));
+                options3.add(new Option(3,"议程3:选项3"));
+                options3.add(new Option(4,"议程3:选项4"));
                 vote.setVoteOptionsList(options3);
                 break;
         }

@@ -9,8 +9,9 @@ public class Vote {
     private int voteID;
     private String voteTitle;
     private String voteContent;
-    private List<String> voteOptionsList;
+    private List<Option> voteOptionsList;
     private int voteNumberNeeded;
+    private int optionState; //0代表未投，1代表已投
 
     public int getVoteID() {
         return voteID;
@@ -20,7 +21,7 @@ public class Vote {
         return voteContent;
     }
 
-    public List<String> getVoteOptionsList() {
+    public List<Option> getVoteOptionsList() {
         return voteOptionsList;
     }
 
@@ -32,6 +33,10 @@ public class Vote {
         return voteNumberNeeded;
     }
 
+    public int getOptionState() {
+        return optionState;
+    }
+
     public void setVoteID(int voteID) {
         this.voteID = voteID;
     }
@@ -40,7 +45,7 @@ public class Vote {
         this.voteContent = voteContent;
     }
 
-    public void setVoteOptionsList(List<String> voteOptionsList) {
+    public void setVoteOptionsList(List<Option> voteOptionsList) {
         this.voteOptionsList = voteOptionsList;
     }
 
@@ -50,5 +55,9 @@ public class Vote {
 
     public void setVoteNumberNeeded(int voteNumberNeeded) {
         this.voteNumberNeeded = voteNumberNeeded;
+    }
+
+    public void setOptionState(int optionState) {
+        this.optionState = optionState;
     }
 }
