@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.Option;
 import com.gzz100.Z100_HuiYi.data.Vote;
 
 import java.util.ArrayList;

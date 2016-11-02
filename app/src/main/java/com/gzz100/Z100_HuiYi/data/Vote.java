@@ -11,6 +11,7 @@ public class Vote extends BaseBean{
     private String voteContent;
     private List<Option> voteOptionsList;
     private int voteNumberNeeded;
+    private int optionState; //0代表未投，1代表已投
 
     public int getVoteID() {
         return voteID;
@@ -32,6 +33,10 @@ public class Vote extends BaseBean{
         return voteNumberNeeded;
     }
 
+    public int getOptionState() {
+        return optionState;
+    }
+
     public void setVoteID(int voteID) {
         this.voteID = voteID;
     }
@@ -50,5 +55,9 @@ public class Vote extends BaseBean{
 
     public void setVoteNumberNeeded(int voteNumberNeeded) {
         this.voteNumberNeeded = voteNumberNeeded;
+    }
+
+    public void setOptionState(int optionState) {
+        this.optionState = optionState;
     }
 }
