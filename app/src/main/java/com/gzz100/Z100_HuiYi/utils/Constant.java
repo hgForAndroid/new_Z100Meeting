@@ -43,6 +43,10 @@ public class Constant {
     public static final String USER_ROLE = "userRole";
     //存储用户名字  对应的  key
     public static final String USER_NAME = "userName";
+    //存储投票的id  对应的key，在voteFragment中需要根据这个id来取得投票的详细信息
+    public static final String BEGIN_VOTE_ID = "begin_vote_id";
+    //存储正在投票，并且处于开会状态下的  key，在VotePresenter中根据该值是否为真来显示VoteFragment显示的内容
+    public static final String IS_VOTE_BEGIN = "isVoteBegin";
 
     public static final int MEETING_STATE_NOT_BEGIN = 1;
     public static final int MEETING_STATE_BEGIN = 2;
@@ -63,4 +67,5 @@ public class Constant {
     public static final String PAUSE_AGENDA_INDEX = "pause_agenda_index";
     //按下暂停后用于保存当前的议程文件序号
     public static final String PAUSE_DOCUMENT_INDEX = "pause_document_index";
+
 }

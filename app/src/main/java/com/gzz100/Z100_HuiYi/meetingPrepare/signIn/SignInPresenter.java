@@ -51,26 +51,26 @@ public class SignInPresenter implements SignInContract.Presenter {
     private boolean isFirst = true;
     @Override
     public void fetchCurrentUserBean(boolean fourUpdate, String IMEI, String meetingID) {
-//        if (isFirst || fourUpdate){
-//            SignInRemoteDataSource.getInstance(mContext).fetchUserBean(IMEI, meetingID, new SignInDataSource.LoadUserBeanCallback() {
-//                @Override
-//                public void onUserBeanLoaded(UserBean userBean) {
-//                    //保存当前用户角色
-//                    saveUserRole(userBean.getUserRole());
-//                    saveUserName(userBean.getUserName());
-//                    mView.showDelegate(userBean);
-//                    //开启下载
-//                    mView.startDownLoad(userBean.getDocumentURLList());
-//                }
-//
-//                @Override
-//                public void onDataNotAvailable() {
-//                    mView.showNoDelegate();
-//                }
-//            });
-//        }
+        if (isFirst || fourUpdate){
+            SignInRemoteDataSource.getInstance(mContext).fetchUserBean(IMEI, meetingID, new SignInDataSource.LoadUserBeanCallback() {
+                @Override
+                public void onUserBeanLoaded(UserBean userBean) {
+                    //保存当前用户角色
+                    saveUserRole(userBean.getUserRole());
+                    saveUserName(userBean.getUserName());
+                    mView.showDelegate(userBean);
+                    //开启下载
+                    mView.startDownLoad(userBean.getDocumentURLList());
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    mView.showNoDelegate();
+                }
+            });
+        }
         //TODO  有服务器后去掉，这里测试用，1主持人，2其他
-        saveUserRole(1);
+//        saveUserRole(2);
     }
 
     /**
@@ -112,10 +112,10 @@ public class SignInPresenter implements SignInContract.Presenter {
      * @param meetingSummary    会议的基本数据集合
      */
     private void splitAndSaveDataToDatabase(MeetingSummaryBean meetingSummary) {
-//        saveMeetingInfo(meetingSummary);
-//        saveDelegateList(meetingSummary);
-//        saveAgendaList(meetingSummary);
-//        saveDocumentList(meetingSummary);
+        saveMeetingInfo(meetingSummary);
+        saveDelegateList(meetingSummary);
+        saveAgendaList(meetingSummary);
+        saveDocumentList(meetingSummary);
         saveVoteList(meetingSummary);
     }
     /**

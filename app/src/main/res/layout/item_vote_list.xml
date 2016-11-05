@@ -28,21 +28,19 @@
 
         </LinearLayout>
         <LinearLayout
-            android:layout_width="300dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent">
             <Button
                 android:id="@+id/id_btn_vote_start_or_stop"
                 android:text="开始"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_margin="10dp"/>
             <Button
                 android:id="@+id/id_btn_check_result"
                 android:text="查看结果"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_margin="10dp"/>
 
         </LinearLayout>

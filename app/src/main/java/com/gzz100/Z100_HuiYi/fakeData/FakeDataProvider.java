@@ -554,7 +554,7 @@ public class FakeDataProvider {
         vote1.setVoteNumberNeeded(3);
         vote1.setVoteTitle("第1个投票的标题");
         List<Option> options1 = new ArrayList<>();
-        Option option1 = new Option(1,"选项1");
+        Option option1 = new Option(1,"选项1111");
         Option option2 = new Option(2,"选项2");
         Option option3 = new Option(3,"选项3");
         options1.add(option1);
@@ -569,15 +569,34 @@ public class FakeDataProvider {
         vote2.setVoteTitle("第2个投票的标题");
         List<Option> options2 = new ArrayList<>();
         Option option4 = new Option(1,"选项1");
-        Option option5 = new Option(2,"选项2");
+        Option option5 = new Option(2,"选项222");
         Option option6 = new Option(3,"选项3");
         options2.add(option4);
         options2.add(option5);
         options2.add(option6);
         vote2.setVoteOptionsList(options2);
+        vote2.setOptionState(1);
+
+        Vote vote3 = new Vote();
+        vote3.setVoteID(3);
+        vote3.setVoteContent("这是第3个投票");
+        vote3.setVoteNumberNeeded(4);
+        vote3.setVoteTitle("第3个投票的标题");
+        List<Option> options3 = new ArrayList<>();
+        Option option7 = new Option(1,"3  选项1");
+        Option option8 = new Option(2,"3 选项2");
+        Option option9 = new Option(3,"3  选项3");
+        Option option10 = new Option(4,"3  选项444444");
+        options3.add(option7);
+        options3.add(option8);
+        options3.add(option9);
+        options3.add(option10);
+        vote3.setVoteOptionsList(options3);
+        vote3.setOptionState(0);
 
         votes.add(vote1);
         votes.add(vote2);
+        votes.add(vote3);
 
         return votes;
     }

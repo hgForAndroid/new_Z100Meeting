@@ -63,28 +63,28 @@ public class SignInRemoteDataSource implements SignInDataSource {
     @Override
     public void signIn(String IMEI, String meetingID, @NonNull final LoadMeetingSummaryCallback callback) {
         //假数据，测试
-        List<Vote> fakeVotes = FakeDataProvider.getFakeVotes();
-        MeetingSummaryBean meetingSummaryBean = new MeetingSummaryBean();
-        meetingSummaryBean.setVoteList(fakeVotes);
-        callback.onMeetingSummaryLoaded(meetingSummaryBean);
+//        List<Vote> fakeVotes = FakeDataProvider.getFakeVotes();
+//        MeetingSummaryBean meetingSummaryBean = new MeetingSummaryBean();
+//        meetingSummaryBean.setVoteList(fakeVotes);
+//        callback.onMeetingSummaryLoaded(meetingSummaryBean);
 
 
         //加载服务器数据
-//        MeetingSummaryPost meetingSummaryPost1 = new MeetingSummaryPost(
-//                new MySubscriber(new HttpRxCallbackListener<MeetingSummaryBean>(){
-//                    @Override
-//                    public void onNext(MeetingSummaryBean meetingSummary) {
-//                        if (meetingSummary != null){
-//                            callback.onMeetingSummaryLoaded(meetingSummary);
-//                        }else {
-//                            callback.onDataNotAvailable();
-//                        }
-//                    }
-//                    @Override
-//                    public void onError(String errorMsg) {
-//                        callback.onDataNotAvailable();
-//                    }
-//                }, mContext), IMEI,meetingID);
-//        HttpManager.getInstance(mContext).doHttpDeal(meetingSummaryPost1);
+        MeetingSummaryPost meetingSummaryPost1 = new MeetingSummaryPost(
+                new MySubscriber(new HttpRxCallbackListener<MeetingSummaryBean>(){
+                    @Override
+                    public void onNext(MeetingSummaryBean meetingSummary) {
+                        if (meetingSummary != null){
+                            callback.onMeetingSummaryLoaded(meetingSummary);
+                        }else {
+                            callback.onDataNotAvailable();
+                        }
+                    }
+                    @Override
+                    public void onError(String errorMsg) {
+                        callback.onDataNotAvailable();
+                    }
+                }, mContext), IMEI,meetingID);
+        HttpManager.getInstance(mContext).doHttpDeal(meetingSummaryPost1);
     }
 }

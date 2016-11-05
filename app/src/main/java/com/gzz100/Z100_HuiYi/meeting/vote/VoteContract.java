@@ -47,6 +47,12 @@ public interface VoteContract {
          * @param isSuccessful 是否投票成功
          */
         void showVoteFinishedInf(boolean isSuccessful);
+
+        /**
+         * 投票未开始，通知投票界面显示
+         * @param showText     投票未开始时，界面显示的内容，主持人和其他与会显示不同内容
+         */
+        void showVoteNotBegin(String showText);
     }
 
     public interface Presenter extends BasePresenter{
@@ -57,9 +63,9 @@ public interface VoteContract {
          * 获取投票信息
          * @param IMEI 设备编号
          * @param userID 用户ID
-         * @param agendaIndex  议程编号
+         * @param voteId  投票id
          */
-        void fetchVoteInf(boolean forceUpdate, String IMEI,String userID, String agendaIndex);
+        void fetchVoteInf(boolean forceUpdate, String IMEI,String userID, int voteId);
 
         /**
          * 提交投票结果

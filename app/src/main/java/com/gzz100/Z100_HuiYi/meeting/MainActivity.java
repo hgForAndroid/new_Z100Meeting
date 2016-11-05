@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -36,6 +35,7 @@ import com.gzz100.Z100_HuiYi.meeting.file.FilePresenter;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingFragment;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingPresenter;
+import com.gzz100.Z100_HuiYi.meeting.vote.NotifyVote;
 import com.gzz100.Z100_HuiYi.meeting.vote.OnAllVoteItemClickListener;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
@@ -151,10 +151,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mFragments.add(mAgendaFragment);
         mFragments.add(mFileFragment);
         mFragments.add(mAboutFragment);
+        mFragments.add(mVoteFragment);
+
+
         //测试
         if (MyAPP.getInstance().getUserRole() == 1) {//主持人
-            mFragments.add(mVoteFragment);
-            mVoteTab.setVisibility(View.VISIBLE);
+//            mFragments.add(mVoteFragment);
+//            mVoteTab.setVisibility(View.VISIBLE);
             mControllerView = ControllerView.getInstance(this);
             mFl = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             mFl.gravity = Gravity.BOTTOM | Gravity.RIGHT;
@@ -165,7 +168,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mGson = new Gson();
 
         } else {//不是主持人
-            mVoteTab.setVisibility(View.GONE);
+//            mVoteTab.setVisibility(View.GONE);
         }
         //默认选择哪个
         defaultSelected();
@@ -225,7 +228,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         new DelegatePresenter(RepositoryUtil.getDelegateRepository(this.getApplicationContext()),
                 mDelegateFragment);
         new VotePresenter(RepositoryUtil.getVoteRepository(this),
-                mVoteFragment);
+                mVoteFragment, this);
         new MeetingPresenter(RepositoryUtil.getMeetingRepository(this),
                 mMeetingFragment);
     }
@@ -237,6 +240,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+//        if (mMeetingState == Constant.MEETING_STATE_BEGIN || mMeetingState == Constant.MEETING_STATE_CONTINUE){
+//            return;
+//        }
         switch (checkedId) {
             case R.id.id_main_meetingTab:
                 mViewPager.setCurrentItem(PAGE_ONE);
@@ -275,6 +281,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void onPageScrollStateChanged(int state) {
+//        if (mMeetingState == Constant.MEETING_STATE_BEGIN || mMeetingState == Constant.MEETING_STATE_CONTINUE){
+//            return;
+//        }
         if (state == 2) {
             switch (mViewPager.getCurrentItem()) {
                 case PAGE_ONE:
@@ -321,6 +330,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (reAdd == TRIGGER_OF_REMOVE_CONTROLLERVIEW) {//从文件详情界面发送
             mRootView.addView(mControllerView, mFl);
             mControllerView.setIOnControllerListener(this);
+//            EventBus.getDefault().post(new NotifyVote());
         }
     }
 
@@ -335,51 +345,87 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     //接收组播
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMultiCast(ControllerInfoBean data) {
+    public void getControllerInfoBean(ControllerInfoBean data) {
         if (MyAPP.getInstance().getUserRole() != 1) {
             int agendaIndex = data.getAgendaIndex();
             int documentIndex = data.getDocumentIndex();
             String upLevelTitle = data.getUpLevelTitle();
             //开始
             if (data.getMeetingState() == Constant.MEETING_STATE_BEGIN) {
-                FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle, true,
-                        false, false, "", "");
-                mNavBarView.setMeetingStateOrAgendaState("开会中");
+                if (data.isVoteBegin()) {//开会开始，并且发起的是投票
+                    //该值在投票开始时为true
+                    SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_VOTE_BEGIN,true);
+                    //存储投票id
+                    SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, data.getVoteId());
+                    mVoteTab.setChecked(true);
+                    mNavBarView.setMeetingStateOrAgendaState("投票中");
+                    mMeetingState = data.getMeetingState();
+//                    EventBus.getDefault().post(new NotifyVote());
+                } else {
+                    mNavBarView.setMeetingStateOrAgendaState("开会中");
+                    //该值在投票开始时为true
+                    SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_VOTE_BEGIN,false);
+                    SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, -1);
+
+                    mMeetingTab.setChecked(true);
+
+                    FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle, true,
+                            false, false, "", "");
+                }
             }
             //继续
             else if (data.getMeetingState() == Constant.MEETING_STATE_CONTINUE) {
                 FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle, true, false,
                         true, data.getCountdingMin(), data.getCountdingSec());
+                //结束投票，将该值重置为false，该值只有正在投票才为true
+                SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_VOTE_BEGIN,false);
+                SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, -1);
                 mNavBarView.setMeetingStateOrAgendaState("开会中");
+                mMeetingTab.setChecked(true);
             }
             //暂停
             else if (data.getMeetingState() == Constant.MEETING_STATE_PAUSE) {
                 mNavBarView.setMeetingStateOrAgendaState("暂停中");
             }
+            mMeetingState = data.getMeetingState();
         }
     }
 
+    //主持人在文件详情界面开始会议之后，销毁掉文件详情界面，通知主界面显示投票界面
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void showVoteFragment(Integer votePage) {
+    public void hostShowVoteFragment(Integer votePage) {
         if (PAGE_SIX == votePage) {
+            SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_VOTE_BEGIN,true);
             mVoteTab.setChecked(true);
-
             //设置控制条只有结束投票可点击
             mControllerView.setStartAndEndButtonNotClickable(false);
             mControllerView.setPauseAndContinueButtonNotClickable(false);
         }
     }
 
+    //文件详情界面主持人控制会议后，将当前会议状态信息发送过来，这里处理当前会议状态，在右上角显示
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCurrentMeetingState(String meetingState) {
         mNavBarView.setMeetingStateOrAgendaState(meetingState);
+        if ("暂停中".equals(meetingState)) {
+            mMeetingState = Constant.MEETING_STATE_PAUSE;
+        } else if ("开会中".equals(meetingState)) {
+            mMeetingState = Constant.MEETING_STATE_BEGIN;
+        } else if ("投票中".equals(meetingState)) {
+            mMeetingState = Constant.MEETING_STATE_BEGIN;
+        }
     }
 
+    //客户端文件详情接收到投票命令，销毁详情页面后发信息到达此页面，进行处理
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void clientShowVoteFragment(Vote vote) {
         if (vote != null) {
-            mFragments.add(mVoteFragment);
-            mVoteTab.setVisibility(View.VISIBLE);
+            //添加投票界面
+//            mFragments.add(mVoteFragment);
+//            mVoteTab.setVisibility(View.VISIBLE);
+//            mMainFragmentAdapter = new MainFragmentAdapter(getSupportFragmentManager(), mFragments);
+//            mViewPager.setAdapter(mMainFragmentAdapter);
+            SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID,vote.getVoteID());
             mVoteTab.setChecked(true);
         }
     }
@@ -447,7 +493,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 controllerInfoBean.setMeetingState(mMeetingState);
                 String json = mGson.toJson(controllerInfoBean);
                 ControllerUtil.getInstance().sendMessage(json);
-                getMultiCast(controllerInfoBean);
+                getControllerInfoBean(controllerInfoBean);
                 mControllerView.setPauseAndContinueText("继续");
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
@@ -495,47 +541,65 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void startVote(View view) {
 
         String buttonContent = mControllerView.getVoteAndEndVoteText();
-        if ("投票".equals(buttonContent)){
+        if ("投票".equals(buttonContent)) {
             mDialog = new VoteListDialog(this, this);
             mDialog.show();
-            mControllerView.setVoteAndEndVoteText("结束投票");
-        }else {
+
+        } else {
             mMeetingState = Constant.MEETING_STATE_CONTINUE;
             String tempCountingMin = SharedPreferencesUtil.getInstance(this.getApplicationContext())
                     .getString(Constant.COUNTING_MIN, "");
             String tempCountingSec = SharedPreferencesUtil.getInstance(this.getApplicationContext())
                     .getString(Constant.COUNTING_SEC, "");
             int pauseAgendaIndex = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-                    .getInt(Constant.PAUSE_AGENDA_INDEX, 0);
+                    .getInt(Constant.PAUSE_AGENDA_INDEX, -1);
             int pauseDocumentIndex = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-                    .getInt(Constant.PAUSE_DOCUMENT_INDEX, 0);
+                    .getInt(Constant.PAUSE_DOCUMENT_INDEX, -1);
+            String json = null;
             try {
                 ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
-                controllerInfoBean.setMeetingState(mMeetingState);
-                controllerInfoBean.setAgendaIndex(pauseAgendaIndex);
-                controllerInfoBean.setDocumentIndex(pauseDocumentIndex);
-                controllerInfoBean.setCountdingMin(tempCountingMin);
-                controllerInfoBean.setCountdingSec(tempCountingSec);
-                controllerInfoBean.setAgendaChange(false);
-                controllerInfoBean.setAgendaTimeCountDown(true);
-                controllerInfoBean.setUpLevelTitle("文件");
+                if (pauseAgendaIndex == -1) {
+                    //启动后没有先开启过议程，则没有倒计时的时间，结束投票需要从第一个议程开始
+                    controllerInfoBean.setMeetingState(mMeetingState);
+                    controllerInfoBean.setAgendaIndex(1);
+                    controllerInfoBean.setDocumentIndex(0);
+                    controllerInfoBean.setUpLevelTitle("文件");
+                    json = mGson.toJson(controllerInfoBean);
+                    mRootView.removeView(mControllerView);
+                    FileDetailActivity.start(this, controllerInfoBean.getAgendaIndex(),
+                            controllerInfoBean.getDocumentIndex(), "文件", true, true, false, "", "");
+                } else {
+                    controllerInfoBean.setMeetingState(mMeetingState);
+                    controllerInfoBean.setAgendaIndex(pauseAgendaIndex);
+                    controllerInfoBean.setDocumentIndex(pauseDocumentIndex);
+                    controllerInfoBean.setCountdingMin(tempCountingMin);
+                    controllerInfoBean.setCountdingSec(tempCountingSec);
+                    controllerInfoBean.setAgendaChange(false);
+                    controllerInfoBean.setAgendaTimeCountDown(true);
+                    controllerInfoBean.setUpLevelTitle("文件");
+                    controllerInfoBean.setVoteBegin(false);
+                    json = mGson.toJson(controllerInfoBean);
+                    mRootView.removeView(mControllerView);
 
-                String json = mGson.toJson(controllerInfoBean);
-
-                mRootView.removeView(mControllerView);
-                mControllerView.setVoteAndEndVoteText("投票");
-
-                FileDetailActivity.start(this, pauseAgendaIndex,
-                        pauseDocumentIndex, "文件", true, true, true, tempCountingMin, tempCountingSec);
-
-                ControllerUtil.getInstance().sendMessage(json);
-
+                    FileDetailActivity.start(this, pauseAgendaIndex,
+                            pauseDocumentIndex, "文件", true, true, true, tempCountingMin, tempCountingSec);
+                }
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
+            //结束投票，将该值重置为false，该值只有正在投票才为true
+            SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_VOTE_BEGIN,false);
+            SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, -1);
+            ControllerUtil.getInstance().sendMessage(json);
+
+            mControllerView.setVoteAndEndVoteText("投票");
+            mControllerView.setPauseAndContinueText("暂停");
+            mNavBarView.setMeetingStateOrAgendaState("开会中");
+            //结束投票后，能对控制条的其他按钮进行操作
+            mControllerView.setPauseAndContinueButtonNotClickable(true);
+            mControllerView.setStartAndEndButtonNotClickable(true);
+            mMeetingTab.setChecked(true);
         }
-
-
     }
 
     //投票结果  按钮已经去除，不再调用此方法
@@ -545,10 +609,33 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void onVoteStartStopButtonClick(View view, int position) {
+        //该值在投票开始时为true
+        SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_VOTE_BEGIN,true);
         int voteId = mDialog.getVoteId();
-        mVoteTab.setChecked(true);
-        //让投票界面加载内容
+        mNavBarView.setMeetingStateOrAgendaState("开会中");
+        mControllerView.setBeginAndEndText("结束");
+        mControllerView.setVoteAndEndVoteText("结束投票");
+        //启动投票后，只能结束投票之后才能对控制条的其他按钮进行操作
+        mControllerView.setPauseAndContinueButtonNotClickable(false);
+        mControllerView.setStartAndEndButtonNotClickable(false);
+        //存储投票id
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, voteId);
 
+        //让投票界面加载内容
+        mVoteTab.setChecked(true);
+
+        //发送消息给客户端
+        mMeetingState = Constant.MEETING_STATE_BEGIN;
+        try {
+            ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
+            controllerInfoBean.setMeetingState(mMeetingState);
+            controllerInfoBean.setVoteBegin(true);
+            controllerInfoBean.setVoteId(voteId);
+            String json = mGson.toJson(controllerInfoBean);
+            ControllerUtil.getInstance().sendMessage(json);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
         //隐藏投票列表对话框
         mDialog.dismiss();
         mDialog = null;
@@ -559,7 +646,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         int voteId = mDialog.getVoteId();
         //显示投票结果
 
-
         //隐藏投票列表对话框
 
     }
@@ -568,28 +654,32 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Dialog dialog = new AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage("退出系统？")
-                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Server")) {
-                                stopService(new Intent(MainActivity.this, Server.class));
+            if (mMeetingState == Constant.MEETING_STATE_BEGIN || mMeetingState == Constant.MEETING_STATE_CONTINUE) {
+                ToastUtil.showMessage("会议进行中！！");
+                return true;
+            } else {
+                Dialog dialog = new AlertDialog.Builder(this)
+                        .setTitle("提示")
+                        .setMessage("退出系统？")
+                        .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Server")) {
+                                    stopService(new Intent(MainActivity.this, Server.class));
+                                }
+                                if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
+                                    stopService(new Intent(MainActivity.this, Client.class));
+                                }
+                                MainActivity.this.deleteDatabase(DBHelper.DB_NAME);
+                                ActivityStackManager.exit();
                             }
-                            if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
-                                stopService(new Intent(MainActivity.this, Client.class));
-                            }
-                            MainActivity.this.deleteDatabase(DBHelper.DB_NAME);
-                            ActivityStackManager.exit();
-                        }
-                    })
-                    .setNegativeButton("否", null)
-                    .create();
-            dialog.show();
+                        })
+                        .setNegativeButton("否", null)
+                        .create();
+                dialog.show();
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
-
 
 }

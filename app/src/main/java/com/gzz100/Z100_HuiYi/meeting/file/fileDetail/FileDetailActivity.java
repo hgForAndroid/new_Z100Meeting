@@ -352,8 +352,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     //控制条的投票结果按钮已经去掉
     @Override
     public void voteResult(View view) {
-        mDialog = new VoteListDialog(this,this);
-        mDialog.show();
+//        mDialog = new VoteListDialog(this,this);
+//        mDialog.show();
     }
 
     @Override
@@ -362,9 +362,17 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if ("投票".equals(mControllerView.getVoteAndEndVoteText())){
             mControllerView.setVoteAndEndVoteText("结束投票");
         }
+        //需要保存当前停止的时间，分和秒
+        saveCountingMinAndSec(mNavBarView.getTimeHour(), mNavBarView.getTimeMin());
+        //保存当前的议程序号与议程文件序号
+        savePauseAgendaIndexAndDocumentIndex(mAgendaIndex,mFileIndex);
+
         //发送TCP消息给所有客户端
         int voteId = mDialog.getVoteId();
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, voteId);
+
         mPresenter.startVote(mControllerInfoBean,voteId,mMeetingState);
+//        ActivityStackManager.pop();
 
     }
 
@@ -505,7 +513,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     //接收到主持人发送的数据，如果当前设备参会人员不是支持人，则进行处理
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMulticast(ControllerInfoBean data) {
+    public void getControllerInfo(ControllerInfoBean data) {
         if (!isHost) {
             mPresenter.handleMessageFromHost(data);
         }
@@ -836,6 +844,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (mMyHandler != null) {
             mMyHandler.removeCallbacksAndMessages(null);
             mMyHandler = null;
+        }
+        if (mDialog != null){
+            mDialog.dismiss();
+            mDialog = null;
         }
     }
 

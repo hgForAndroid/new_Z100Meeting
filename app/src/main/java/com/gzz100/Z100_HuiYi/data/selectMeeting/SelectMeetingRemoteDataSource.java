@@ -47,23 +47,23 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
     @Override
     public void fetchMeetingList(@NonNull final LoadMeetingListCallback callback,String IMEI) {
         checkNotNull(callback);
-        List<MeetingBean> meetings = FakeDataProvider.getMeetings();
-        callback.onMeetingListLoaded(meetings);
+//        List<MeetingBean> meetings = FakeDataProvider.getMeetings();
+//        callback.onMeetingListLoaded(meetings);
 
         //加载服务器数据
-//        MeetingPost meetingPost = new MeetingPost(
-//                new MySubscriber(new HttpRxCallbackListener<List<MeetingBean>>(){
-//                    @Override
-//                    public void onNext(List<MeetingBean> meetings) {
-//                        callback.onMeetingListLoaded(meetings);
-//                    }
-//
-//                    @Override
-//                    public void onError(String errorMsg) {
-//                        callback.onDataNotAvailable(errorMsg);
-//                    }
-//                }, mContext), IMEI);
-//        HttpManager.getInstance(mContext).doHttpDeal(meetingPost);
+        MeetingPost meetingPost = new MeetingPost(
+                new MySubscriber(new HttpRxCallbackListener<List<MeetingBean>>(){
+                    @Override
+                    public void onNext(List<MeetingBean> meetings) {
+                        callback.onMeetingListLoaded(meetings);
+                    }
+
+                    @Override
+                    public void onError(String errorMsg) {
+                        callback.onDataNotAvailable(errorMsg);
+                    }
+                }, mContext), IMEI);
+        HttpManager.getInstance(mContext).doHttpDeal(meetingPost);
 
     }
 

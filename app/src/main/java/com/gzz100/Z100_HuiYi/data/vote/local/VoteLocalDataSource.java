@@ -68,8 +68,8 @@ public class VoteLocalDataSource implements VoteDataSource{
     public void getAllVoteInf(String meetingID, @NonNull LoadAllVoteInfCallBack callback) {
         checkNotNull(callback, "Callback cannot be null");
         //本地数据
-//        List<Vote> votes = mVoteOperate.queryVoteList();
-        List<Vote> votes = FakeDataProvider.getFakeVotes();
+        List<Vote> votes = mVoteOperate.queryVoteList();
+//        List<Vote> votes = FakeDataProvider.getFakeVotes();
         if (votes != null && votes.size() > 0){
             callback.onAllVoteLoaded(votes);
         }else {

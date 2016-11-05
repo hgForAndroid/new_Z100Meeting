@@ -1,11 +1,14 @@
 package com.gzz100.Z100_HuiYi.meeting.vote;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
 import com.gzz100.Z100_HuiYi.data.vote.VoteRepository;
+import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import java.util.List;
 
@@ -21,31 +24,47 @@ public class VotePresenter implements VoteContract.Presenter{
     private boolean mFirstLoad = true;
     public enum VoteState {HOST_STATE, PEOPLE_STATE}
     private VoteState mVoteState = VoteState.HOST_STATE;
+    private Context mContext;
 
-    public VotePresenter(@NonNull VoteRepository voteRepository, @NonNull VoteContract.VoteView voteView){
+    public VotePresenter(@NonNull VoteRepository voteRepository, @NonNull VoteContract.VoteView voteView, Context context){
         this.mVoteRepository = checkNotNull(voteRepository, "VoteRepository cannot be null");
         this.mVoteView = checkNotNull(voteView, "VoteView cannot be null");
+        this.mContext = context;
         voteView.setPresenter(this);
+
     }
 
     @Override
     public void start() {
-        if(MyAPP.getInstance().getUserRole() == 1){
-            setmVoteState(VoteState.HOST_STATE);
-        } else {
-            setmVoteState(VoteState.PEOPLE_STATE);
-        }
-        switch (mVoteState){
-            case PEOPLE_STATE:
-                fetchVoteInf(false, "", "", "2");
-                break;
-            case HOST_STATE:
-                fetchAllVoteInf(false, "1");
-                break;
-            default:
-                fetchVoteInf(false, "", "", "1");
-                break;
-        }
+//        if (mFirstLoad){
+            int voteId = SharedPreferencesUtil.getInstance(mContext).getInt(Constant.BEGIN_VOTE_ID, -1);
+            boolean isVoteBegin = SharedPreferencesUtil.getInstance(mContext).getBoolean(Constant.IS_VOTE_BEGIN, false);
+            if (isVoteBegin && voteId != -1){//投票开始
+                if(MyAPP.getInstance().getUserRole() == 1){
+                    setmVoteState(VoteState.HOST_STATE);
+                } else {
+                    setmVoteState(VoteState.PEOPLE_STATE);
+                }
+                switch (mVoteState){
+                    case PEOPLE_STATE:
+                        fetchVoteInf(false, "", "", voteId);
+                        break;
+                    case HOST_STATE:
+                        fetchVoteInf(false, "", "", voteId);
+//                fetchAllVoteInf(false, "1");
+                        break;
+                    default:
+                        fetchVoteInf(false, "", "", voteId);
+                        break;
+                }
+            }else {
+                if (MyAPP.getInstance().getUserRole() == 1){
+                    mVoteView.showVoteNotBegin("您还未开启投票");
+                }else {
+                    mVoteView.showVoteNotBegin("等待投票");
+                }
+            }
+//        }
     }
 
     private void setmVoteState(VoteState voteState){
@@ -75,10 +94,10 @@ public class VotePresenter implements VoteContract.Presenter{
     }
 
     @Override
-    public void fetchVoteInf(boolean forceUpdate, String IMEI, String userID, String agendaIndex) {
+    public void fetchVoteInf(boolean forceUpdate, String IMEI, String userID,int voteId) {
         if(forceUpdate || mFirstLoad){
             mFirstLoad = false;
-            mVoteRepository.getVoteDetail(IMEI, userID, Integer.valueOf(agendaIndex), new VoteDataSource.LoadVoteDetailCallback() {
+            mVoteRepository.getVoteDetail(IMEI, userID, voteId, new VoteDataSource.LoadVoteDetailCallback() {
                 @Override
                 public void onVoteDetailLoaded(Vote vote) {
                     if(!mVoteView.isActive()){

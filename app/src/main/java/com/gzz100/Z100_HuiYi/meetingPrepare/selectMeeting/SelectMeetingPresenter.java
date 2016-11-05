@@ -30,38 +30,38 @@ public class SelectMeetingPresenter implements SelectMeetingContract.Presenter {
 
     @Override
     public void fetchMeetingList(boolean forceLoad,String IMEI) {
-//        if (isFirst || forceLoad){
-//            isFirst = false;
-//            SelectMeetingRemoteDataSource.getInstance(mContext).fetchMeetingList(new SelectMeetingDataSource.LoadMeetingListCallback() {
-//                @Override
-//                public void onMeetingListLoaded(List<MeetingBean> meetings) {
-//                    mView.showMeetingList(meetings);
-//                }
-//
-//                @Override
-//                public void onDataNotAvailable(String errorMsg) {
-//                    mView.showNoMeetingList(errorMsg);
-//                }
-//            },IMEI);
-//        }
+        if (isFirst || forceLoad){
+            isFirst = false;
+            SelectMeetingRemoteDataSource.getInstance(mContext).fetchMeetingList(new SelectMeetingDataSource.LoadMeetingListCallback() {
+                @Override
+                public void onMeetingListLoaded(List<MeetingBean> meetings) {
+                    mView.showMeetingList(meetings);
+                }
 
-        mView.showMeetingList(FakeDataProvider.getMeetings());
+                @Override
+                public void onDataNotAvailable(String errorMsg) {
+                    mView.showNoMeetingList(errorMsg);
+                }
+            },IMEI);
+        }
+
+//        mView.showMeetingList(FakeDataProvider.getMeetings());
     }
 
     @Override
     public void selectMeeting(final String IMEI, final String meetingID) {
-//        SelectMeetingRemoteDataSource.getInstance(mContext).startMeeting(new SelectMeetingDataSource.StartMeetingCallback() {
-//            @Override
-//            public void onStartMeetingSuccess() {
-//                mView.showSignIn(IMEI,meetingID);
-//            }
-//
-//            @Override
-//            public void onFail(String errorMsg) {
-//
-//            }
-//        },IMEI,meetingID);
-        mView.showSignIn(IMEI,meetingID);
+        SelectMeetingRemoteDataSource.getInstance(mContext).startMeeting(new SelectMeetingDataSource.StartMeetingCallback() {
+            @Override
+            public void onStartMeetingSuccess() {
+                mView.showSignIn(IMEI,meetingID);
+            }
+
+            @Override
+            public void onFail(String errorMsg) {
+
+            }
+        },IMEI,meetingID);
+//        mView.showSignIn(IMEI,meetingID);
     }
 
     @Override
