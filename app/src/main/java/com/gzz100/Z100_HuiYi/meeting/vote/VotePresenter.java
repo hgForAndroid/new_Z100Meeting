@@ -70,7 +70,6 @@ public class VotePresenter implements VoteContract.Presenter{
     private void setmVoteState(VoteState voteState){
         mVoteState = voteState;
     }
-
     @Override
     public void fetchAllVoteInf(boolean forceUpdate, String meetingID) {
         if(forceUpdate || mFirstLoad){
