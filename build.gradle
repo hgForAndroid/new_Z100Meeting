@@ -17,6 +17,8 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        /*MPAndroidCharts 第三方库需要*/
+        maven { url "https://jitpack.io" }
     }
 }
 

@@ -3,6 +3,7 @@ package com.gzz100.Z100_HuiYi.data.vote;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Vote;
+import com.gzz100.Z100_HuiYi.data.VoteResult;
 
 import java.util.List;
 
@@ -43,6 +44,21 @@ public class VoteRepository implements VoteDataSource{
             @Override
             public void onDataNotAvailable() {
                 mVoteRemoteDataSource.getVoteDetail(IMEI,userID,voteId,callback);
+            }
+        });
+    }
+
+    @Override
+    public void getVoteResult(int voteId, @NonNull final LoadVoteResultCallback callback) {
+        mVoteRemoteDataSource.getVoteResult(voteId, new LoadVoteResultCallback() {
+            @Override
+            public void onVoteResultLoaded(List<VoteResult> voteResults) {
+                callback.onVoteResultLoaded(voteResults);
+            }
+
+            @Override
+            public void onDataNotAvailable(String errorMessage) {
+                callback.onDataNotAvailable(errorMessage);
             }
         });
     }

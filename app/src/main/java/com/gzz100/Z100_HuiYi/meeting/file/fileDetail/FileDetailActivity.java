@@ -31,6 +31,7 @@ import com.gzz100.Z100_HuiYi.meeting.ControllerView;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.meeting.vote.OnAllVoteItemClickListener;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteListDialog;
+import com.gzz100.Z100_HuiYi.meeting.vote.VoteResultDialog;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.meeting.NavBarView;
@@ -378,6 +379,12 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void onCheckResultButtonClick(View view, int position) {
+        int voteId = mDialog.getVoteId();
+        //隐藏投票列表对话框
+        mDialog.dismiss();
+        //显示投票结果
+        VoteResultDialog voteResultDialog = new VoteResultDialog(this,voteId);
+        voteResultDialog.show();
 
     }
 

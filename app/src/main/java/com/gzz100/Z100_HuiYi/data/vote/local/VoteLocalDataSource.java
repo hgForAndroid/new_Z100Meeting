@@ -65,6 +65,11 @@ public class VoteLocalDataSource implements VoteDataSource{
     }
 
     @Override
+    public void getVoteResult(int voteId, @NonNull LoadVoteResultCallback callback) {
+        //不用实现，获取投票结果都是从服务器获取的
+    }
+
+    @Override
     public void getAllVoteInf(String meetingID, @NonNull LoadAllVoteInfCallBack callback) {
         checkNotNull(callback, "Callback cannot be null");
         //本地数据

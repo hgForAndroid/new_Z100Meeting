@@ -41,6 +41,7 @@ import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteListDialog;
 import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
+import com.gzz100.Z100_HuiYi.meeting.vote.VoteResultDialog;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
 import com.gzz100.Z100_HuiYi.tcpController.Client;
@@ -644,10 +645,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void onCheckResultButtonClick(View view, int position) {
         int voteId = mDialog.getVoteId();
-        //显示投票结果
-
         //隐藏投票列表对话框
-
+        mDialog.dismiss();
+        //显示投票结果
+        VoteResultDialog voteResultDialog = new VoteResultDialog(this,voteId);
+        voteResultDialog.show();
     }
 
 

@@ -8,6 +8,7 @@ import com.gzz100.Z100_HuiYi.data.MeetingSummary;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.Update;
 import com.gzz100.Z100_HuiYi.data.UserBean;
+import com.gzz100.Z100_HuiYi.data.VoteResult;
 import com.gzz100.Z100_HuiYi.fakeData.OneTitle;
 import com.gzz100.Z100_HuiYi.network.entity.BaseResultEntity;
 import com.gzz100.Z100_HuiYi.fakeData.TestResultEntity;
@@ -69,6 +70,10 @@ public interface ApiService {
 
     @GET("getMeetingInfo")
     Observable<BaseResultEntity<MeetingInfo>> getMeetingInfo();
+
+
+    @GET("/FetchVoteResult")
+    Observable<BaseResultEntity<List<VoteResult>>> fetchVoteResult(@Query("voteId") int voteId);
 
 
 }
