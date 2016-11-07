@@ -24,7 +24,6 @@ import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
-import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.meeting.about.AboutFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaPresenter;
@@ -35,7 +34,6 @@ import com.gzz100.Z100_HuiYi.meeting.file.FilePresenter;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingFragment;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingPresenter;
-import com.gzz100.Z100_HuiYi.meeting.vote.NotifyVote;
 import com.gzz100.Z100_HuiYi.meeting.vote.OnAllVoteItemClickListener;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteFragment;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
@@ -331,7 +329,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (reAdd == TRIGGER_OF_REMOVE_CONTROLLERVIEW) {//从文件详情界面发送
             mRootView.addView(mControllerView, mFl);
             mControllerView.setIOnControllerListener(this);
-//            EventBus.getDefault().post(new NotifyVote());
         }
     }
 
@@ -361,14 +358,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     mVoteTab.setChecked(true);
                     mNavBarView.setMeetingStateOrAgendaState("投票中");
                     mMeetingState = data.getMeetingState();
-//                    EventBus.getDefault().post(new NotifyVote());
                 } else {
                     mNavBarView.setMeetingStateOrAgendaState("开会中");
                     //该值在投票开始时为true
                     SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_VOTE_BEGIN,false);
-                    SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, -1);
+                    SharedPreferencesUtil.getInstance(this).remove(Constant.BEGIN_VOTE_ID);
 
-                    mMeetingTab.setChecked(true);
+                    mVoteFragment.onDestroyView();
 
                     FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle, true,
                             false, false, "", "");
@@ -590,7 +586,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             }
             //结束投票，将该值重置为false，该值只有正在投票才为true
             SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_VOTE_BEGIN,false);
-            SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, -1);
+            SharedPreferencesUtil.getInstance(this).remove(Constant.BEGIN_VOTE_ID);
             ControllerUtil.getInstance().sendMessage(json);
 
             mControllerView.setVoteAndEndVoteText("投票");
@@ -599,7 +595,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             //结束投票后，能对控制条的其他按钮进行操作
             mControllerView.setPauseAndContinueButtonNotClickable(true);
             mControllerView.setStartAndEndButtonNotClickable(true);
-            mMeetingTab.setChecked(true);
+            mVoteFragment.onDestroyView();
+//            mVoteFragment.onDestroy();
+//            mMeetingTab.setChecked(true);
+//            mViewPager.setCurrentItem(PAGE_ONE);
         }
     }
 
@@ -613,14 +612,18 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         //该值在投票开始时为true
         SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_VOTE_BEGIN,true);
         int voteId = mDialog.getVoteId();
+        //存储投票id
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, voteId);
+
         mNavBarView.setMeetingStateOrAgendaState("开会中");
         mControllerView.setBeginAndEndText("结束");
+        if ("继续".equals(mControllerView.getBeginAndEndText())){
+            mControllerView.setBeginAndEndText("暂停");
+        }
         mControllerView.setVoteAndEndVoteText("结束投票");
         //启动投票后，只能结束投票之后才能对控制条的其他按钮进行操作
         mControllerView.setPauseAndContinueButtonNotClickable(false);
         mControllerView.setStartAndEndButtonNotClickable(false);
-        //存储投票id
-        SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, voteId);
 
         //让投票界面加载内容
         mVoteTab.setChecked(true);

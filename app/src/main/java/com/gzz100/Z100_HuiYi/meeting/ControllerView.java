@@ -85,6 +85,9 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
     public String getVoteAndEndVoteText(){
         return mBtnStartVote.getText().toString();
     }
+    public String getBeginAndEndText(){
+        return mBtnStartMeeting.getText().toString();
+    }
 
     public void setStartAndEndButtonNotClickable(boolean clickable){
         mBtnStartMeeting.setClickable(clickable);

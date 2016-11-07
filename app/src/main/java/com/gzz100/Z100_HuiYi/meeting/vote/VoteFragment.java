@@ -65,22 +65,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
     public void onStart() {
         super.onStart();
         mPresenter.start();
-        EventBus.getDefault().register(this);
     }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getNotifyVote(NotifyVote vote){
-        if (vote != null){
-            mPresenter.start();
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -247,6 +232,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
 
     @Override
     public void showVoteNotBegin(String showText) {
+        mVoteMainLayout.setVisibility(View.GONE);
         mVoteNotBeginInfTextView.setVisibility(View.VISIBLE);
         mVoteNotBeginInfTextView.setText(showText);
     }
