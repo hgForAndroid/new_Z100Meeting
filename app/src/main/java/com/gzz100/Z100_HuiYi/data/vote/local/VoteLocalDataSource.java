@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
 import com.gzz100.Z100_HuiYi.data.vote.VoteOperate;
-import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
+import com.gzz100.Z100_HuiYi.meeting.vote.UpLoadVote;
 
 import java.util.List;
 
@@ -67,6 +67,16 @@ public class VoteLocalDataSource implements VoteDataSource{
     @Override
     public void getVoteResult(int voteId, @NonNull LoadVoteResultCallback callback) {
         //不用实现，获取投票结果都是从服务器获取的
+    }
+
+    @Override
+    public void submitVote(UpLoadVote data, @NonNull SubmitCallback callback) {
+
+    }
+
+    @Override
+    public void startOrEndVote(String IMEI, String meetingID, int voteID, int startOrEnd, @NonNull SubmitCallback callback) {
+
     }
 
     @Override

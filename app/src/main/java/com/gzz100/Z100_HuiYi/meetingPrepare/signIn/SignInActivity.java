@@ -106,7 +106,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
                 MulticastController.getDefault().sendMessage(s);
             }
         }).start();
-
+        SharedPreferencesUtil.getInstance(this).putString(Constant.MEETING_ID,mMeetingID);
     }
 
     @Override

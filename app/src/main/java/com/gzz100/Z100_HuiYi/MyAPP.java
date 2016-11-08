@@ -31,6 +31,15 @@ public class MyAPP extends Application {
         this.userRole = userRole;
     }
 
+    private int userId;
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
     /**
      * 获取当前用户角色类型
      * @return   角色类型  ，  1为主持人，2为听众（普通参会人员）

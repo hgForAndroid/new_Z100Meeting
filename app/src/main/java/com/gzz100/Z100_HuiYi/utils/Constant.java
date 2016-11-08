@@ -47,6 +47,8 @@ public class Constant {
     public static final String BEGIN_VOTE_ID = "begin_vote_id";
     //存储正在投票，并且处于开会状态下的  key，在VotePresenter中根据该值是否为真来显示VoteFragment显示的内容
     public static final String IS_VOTE_BEGIN = "isVoteBegin";
+    //会议是否已结束
+    public static final String IS_MEETING_END = "isMeetingEnd";
 
     public static final int MEETING_STATE_NOT_BEGIN = 1;
     public static final int MEETING_STATE_BEGIN = 2;

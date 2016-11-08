@@ -1,23 +1,29 @@
 package com.gzz100.Z100_HuiYi.network;
 
+import com.google.gson.JsonObject;
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.MeetingSummary;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
+import com.gzz100.Z100_HuiYi.data.Start;
 import com.gzz100.Z100_HuiYi.data.Update;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.VoteResult;
 import com.gzz100.Z100_HuiYi.fakeData.OneTitle;
+import com.gzz100.Z100_HuiYi.meeting.vote.UpLoadVote;
 import com.gzz100.Z100_HuiYi.network.entity.BaseResultEntity;
 import com.gzz100.Z100_HuiYi.fakeData.TestResultEntity;
 
 import java.util.List;
 
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -74,6 +80,16 @@ public interface ApiService {
 
     @GET("/FetchVoteResult")
     Observable<BaseResultEntity<List<VoteResult>>> fetchVoteResult(@Query("voteId") int voteId);
+
+    @Headers("Content-Type: application/json")
+    @POST("api/Common/UploadVoteResult")
+//    @FormUrlEncoded
+    Observable<BaseResultEntity<UpLoadVote>> uploadVoteResult(@Body UpLoadVote data);
+
+
+    @GET("/api/Host/StartOrEndVote")
+    Observable<BaseResultEntity<String>> startOrEndVote(@Query("IMEI")String IMEI,
+              @Query("meetingID") String meetingID, @Query("voteID") int voteID, @Query("startOrEnd") int startOrEnd);
 
 
 }

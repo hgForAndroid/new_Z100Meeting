@@ -91,7 +91,7 @@ public class FileOperate {
     }
     /**
      * 查询议程列表
-     * @param agendas  议程列表标识
+     * @param agendas  议程列表标识，Constant.COLUMNS_AGENDAS
      * @return  议程列表
      */
     public List<AgendaModel> queryAgendaList(int agendas){

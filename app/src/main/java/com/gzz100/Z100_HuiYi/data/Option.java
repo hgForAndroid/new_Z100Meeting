@@ -5,20 +5,20 @@ package com.gzz100.Z100_HuiYi.data;
  */
 
 public class Option extends BaseBean{
-    private int optionId;
+    private int optionID;
     private String optionItem;
 
-    public Option(int optionId, String optionItem) {
-        this.optionId = optionId;
+    public Option(int optionID, String optionItem) {
+        this.optionID = optionID;
         this.optionItem = optionItem;
     }
 
-    public int getOptionId() {
-        return optionId;
+    public int getOptionID() {
+        return optionID;
     }
 
-    public void setOptionId(int optionId) {
-        this.optionId = optionId;
+    public void setOptionID(int optionID) {
+        this.optionID = optionID;
     }
 
     public String getOptionItem() {

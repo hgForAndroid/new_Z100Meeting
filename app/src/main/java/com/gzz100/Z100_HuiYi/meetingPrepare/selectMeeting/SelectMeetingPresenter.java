@@ -53,6 +53,7 @@ public class SelectMeetingPresenter implements SelectMeetingContract.Presenter {
         SelectMeetingRemoteDataSource.getInstance(mContext).startMeeting(new SelectMeetingDataSource.StartMeetingCallback() {
             @Override
             public void onStartMeetingSuccess() {
+                SharedPreferencesUtil.getInstance(mContext).putString(Constant.MEETING_ID,meetingID);
                 mView.showSignIn(IMEI,meetingID);
             }
 

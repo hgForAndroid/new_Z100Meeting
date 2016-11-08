@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
+import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -46,6 +47,11 @@ public class MeetingLocalDataSource implements MeetingDataSource {
 
     @Override
     public void getMetingInfo(LoadMeetingInfoCallback callback) {
-
+        MeetingInfo meetingInfo = mMeetingOperate.queryMeetingInfo(Constant.COLUMNS_MEETING_INFO);
+        if (meetingInfo != null){
+            callback.onMeetingInfoLoaded(meetingInfo);
+        }else {
+            callback.onDataNotAvailable();
+        }
     }
 }

@@ -62,13 +62,6 @@ public class SignInRemoteDataSource implements SignInDataSource {
 
     @Override
     public void signIn(String IMEI, String meetingID, @NonNull final LoadMeetingSummaryCallback callback) {
-        //假数据，测试
-//        List<Vote> fakeVotes = FakeDataProvider.getFakeVotes();
-//        MeetingSummaryBean meetingSummaryBean = new MeetingSummaryBean();
-//        meetingSummaryBean.setVoteList(fakeVotes);
-//        callback.onMeetingSummaryLoaded(meetingSummaryBean);
-
-
         //加载服务器数据
         MeetingSummaryPost meetingSummaryPost1 = new MeetingSummaryPost(
                 new MySubscriber(new HttpRxCallbackListener<MeetingSummaryBean>(){

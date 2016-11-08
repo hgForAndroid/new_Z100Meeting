@@ -70,7 +70,7 @@ public interface VoteContract {
         /**
          * 提交投票结果
          */
-        void submitVoteResult();
+        void submitVoteResult(List<Integer> resultMap);
 
         /**
          * 设置页面重新加载

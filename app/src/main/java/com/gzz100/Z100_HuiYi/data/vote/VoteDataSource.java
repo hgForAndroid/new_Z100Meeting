@@ -1,10 +1,10 @@
 package com.gzz100.Z100_HuiYi.data.vote;
 
 import android.support.annotation.NonNull;
-import android.test.InstrumentationTestRunner;
 
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.VoteResult;
+import com.gzz100.Z100_HuiYi.meeting.vote.UpLoadVote;
 
 import java.util.List;
 
@@ -25,6 +25,10 @@ public interface VoteDataSource {
         void onVoteResultLoaded(List<VoteResult> voteResults);
         void onDataNotAvailable(String errorString);
     }
+    interface SubmitCallback {
+        void onSuccess();
+        void onFail();
+    }
 
     /**
      * 获取所有会议列表
@@ -36,4 +40,8 @@ public interface VoteDataSource {
     void getVoteDetail(String IMEI, String userID, int voteId, @NonNull LoadVoteDetailCallback callback);
 
     void getVoteResult(int voteId,@NonNull LoadVoteResultCallback callback);
+
+    void submitVote(UpLoadVote data, @NonNull SubmitCallback callback);
+
+    void startOrEndVote(String IMEI,String meetingID, int voteID,int startOrEnd,@NonNull SubmitCallback callback);
 }

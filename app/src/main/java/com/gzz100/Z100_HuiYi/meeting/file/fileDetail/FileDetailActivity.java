@@ -29,6 +29,7 @@ import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
 import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.meeting.ControllerView;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
+import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingEnd;
 import com.gzz100.Z100_HuiYi.meeting.vote.OnAllVoteItemClickListener;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteListDialog;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteResultDialog;
@@ -341,12 +342,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void startVote(View view) {
-        /*EventBus.getDefault().post(MainActivity.PAGE_SIX);
-        mRootView.removeView(mControllerView);
-        EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
-        EventBus.getDefault().post("投票中");
-        ActivityStackManager.pop();*/
-        mDialog = new VoteListDialog(this,this);
+        mDialog = new VoteListDialog(this);
+        mDialog.setOnAllVoteItemClickListener(this);
         mDialog.show();
     }
 
@@ -415,6 +412,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 case 0x00:
                     if (fileDetailActivity.getMin().equals("00") && fileDetailActivity.getSec(false).equals("00")) {
                         ToastUtil.showMessage("议程已结束");
+                        fileDetailActivity.mNavBarView.setTimeHour("00");
+                        fileDetailActivity.mNavBarView.setTimeMin("00");
                     } else {
                         fileDetailActivity.mNavBarView.setTimeHour(fileDetailActivity.getMin());
                         fileDetailActivity.mNavBarView.setTimeMin(fileDetailActivity.getSec(false));
@@ -558,7 +557,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mMyHandler.sendMessage(message);
 
         //设置内容
-//        agendaContentChange(controllerInfoBean);
         agendaContentChange(controllerInfoBean.getAgendaIndex(),controllerInfoBean.getDocumentIndex());
     }
 
@@ -591,8 +589,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 //取议程时传入的是mAgendaIndex-1，因为存储议程时，是从0开始的
                 int agendaDuration = FileOperate.getInstance(FileDetailActivity.this)
                         .queryAgendaList(Constant.COLUMNS_AGENDAS).get(mAgendaIndex - 1).getAgendaDuration();
-//                mMin = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[0]);
-//                mSec = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[1]);
                 mMin = agendaDuration;
                 mSec = 0;
                 mNavBarView.setTimeHour(getMin());
@@ -797,6 +793,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mPassive = false;
         if (!mPassive)
             mMyHandler.removeCallbacksAndMessages(null);
+        EventBus.getDefault().post(new MeetingEnd(1));
     }
 
     @Override
@@ -838,7 +835,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
             }
         }
-
         mControllerView.setPauseAndContinueText("暂停");
         mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;

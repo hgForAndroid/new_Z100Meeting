@@ -6,7 +6,15 @@
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/id_vote_result_chart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="0dp"
+        android:layout_weight="8"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:id="@+id/id_tv_vote_result_show_result"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

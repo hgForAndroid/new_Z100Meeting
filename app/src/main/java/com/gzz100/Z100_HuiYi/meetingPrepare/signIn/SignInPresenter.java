@@ -57,6 +57,7 @@ public class SignInPresenter implements SignInContract.Presenter {
                 public void onUserBeanLoaded(UserBean userBean) {
                     //保存当前用户角色
                     saveUserRole(userBean.getUserRole());
+                    saveUserId(userBean.getUserID());
                     saveUserName(userBean.getUserName());
                     mView.showDelegate(userBean);
                     //开启下载
@@ -87,6 +88,9 @@ public class SignInPresenter implements SignInContract.Presenter {
      */
     private void saveUserRole(int role){
         MyAPP.getInstance().setUserRole(role);
+    }
+    private void saveUserId(int userId){
+        MyAPP.getInstance().setUserId(userId);
     }
 
     @Override
@@ -190,6 +194,7 @@ public class SignInPresenter implements SignInContract.Presenter {
         //这里开始取数据需要传递参数，所以这个方法先不采用，直接调用  fetchCurrentUserBean
     }
 
+    //已经没用
     @Override
     public void sendMeetingIdAndServerIP(String meetingId,String tcpServerIP) {
         String serverIP = SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP, "");

@@ -30,15 +30,14 @@ import java.util.List;
 public class VoteResultDialog extends AlertDialog{
     //widget
     private Context mContext;
-    private BarChart mBarChart;
-    private TextView mTvShowError;
+    private BarChart mBarChart;//柱状图
+    private TextView mTvShowError;//错误提示
+    private TextView mTvShowResult;//投票结果
 
-    //data
-    private List<VoteResult> mVoteResults;
-
-    private int voteId;
-    private List<BarDataSet> mBarDataSets;
-    private List<String> mOptionNames;
+    private int voteId;//投票id
+    private List<BarDataSet> mBarDataSets;//柱状图数据集
+    private List<String> mOptionNames;//每个选项的名称，放于柱状图的下边
+    private StringBuilder mStringBuilder;//所有的选项与得到的票数的字符串
 
     public VoteResultDialog(Context context, int voteId){
         super(context);
@@ -52,6 +51,8 @@ public class VoteResultDialog extends AlertDialog{
         setContentView(R.layout.dialog_vote_result);
         //取得柱状图
         mBarChart = (BarChart) findViewById(R.id.id_vote_result_chart);
+        mTvShowError = (TextView) findViewById(R.id.id_tv_vote_result_show_error);
+        mTvShowResult = (TextView) findViewById(R.id.id_tv_vote_result_show_result);
         RepositoryUtil.getVoteRepository(mContext).getVoteResult(voteId, new VoteDataSource.LoadVoteResultCallback() {
             @Override
             public void onVoteResultLoaded(List<VoteResult> voteResults) {
@@ -66,6 +67,7 @@ public class VoteResultDialog extends AlertDialog{
     }
 
     private void handleVoteResult(List<VoteResult> voteResults) {
+        mStringBuilder = new StringBuilder();
         //提取选项的名称，之后放置于柱状图的下方
         mOptionNames = new ArrayList<>();
         //将票数赋值给柱状图
@@ -73,6 +75,7 @@ public class VoteResultDialog extends AlertDialog{
         for (int i = 0;i < voteResults.size();i++){
             mOptionNames.add(voteResults.get(i).getOptionItem());
             barEntries.add(new BarEntry(i,voteResults.get(i).getVoteNum()));
+            mStringBuilder.append(voteResults.get(i).getOptionItem()+":"+voteResults.get(i).getVoteNum()+"票    ，");
         }
         mBarDataSets = new ArrayList<>();
         BarDataSet barDataSet = new BarDataSet(barEntries,"voteResult");
@@ -91,6 +94,8 @@ public class VoteResultDialog extends AlertDialog{
     private void showVoteResult() {
         if (mTvShowError.getVisibility() == View.VISIBLE){
             mTvShowError.setVisibility(View.GONE);
+            mBarChart.setVisibility(View.VISIBLE);
+            mTvShowResult.setVisibility(View.VISIBLE);
         }
         BarData barData = new BarData(mOptionNames,mBarDataSets);
         //给柱状图赋值
@@ -110,9 +115,13 @@ public class VoteResultDialog extends AlertDialog{
         mBarChart.animateXY(2000, 2000);
         //刷新
         mBarChart.invalidate();
+        //显示投票结果
+        mTvShowResult.setText("投票结果："+mStringBuilder.toString());
     }
 
     private void showErrorMessage(String errorMessage){
+        mBarChart.setVisibility(View.GONE);
+        mTvShowResult.setVisibility(View.GONE);
         mTvShowError.setVisibility(View.VISIBLE);
         mTvShowError.setText(errorMessage);
     }

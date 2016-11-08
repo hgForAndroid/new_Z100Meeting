@@ -16,12 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
-import com.gzz100.Z100_HuiYi.data.Option;
 import com.gzz100.Z100_HuiYi.data.Vote;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,9 +184,11 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("您的选择是");
         List<String> listSelected = new ArrayList<String>();
+        final List<Integer> ids = new ArrayList<>();
         for(int i = 0; i < optionStateList.size(); i++){
             if (optionStateList.get(i).equals(true)){
                 listSelected.add(mVote.getVoteOptionsList().get(i).getOptionItem());
+                ids.add(mVote.getVoteOptionsList().get(i).getOptionID());
             }
         }
         //builder.setMessage("您的选择是：\n");
@@ -205,7 +202,8 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
                 switch(which){
                     case Dialog.BUTTON_POSITIVE:
                         dialog.dismiss();
-                        mPresenter.submitVoteResult();
+                        //
+                        mPresenter.submitVoteResult(ids);
                         break;
                     case Dialog.BUTTON_NEGATIVE:
                         dialog.dismiss();
@@ -232,6 +230,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
 
     @Override
     public void showVoteNotBegin(String showText) {
+        mVoteFinishedInfTextView.setVisibility(View.GONE);
         mVoteMainLayout.setVisibility(View.GONE);
         mVoteNotBeginInfTextView.setVisibility(View.VISIBLE);
         mVoteNotBeginInfTextView.setText(showText);

@@ -120,7 +120,6 @@ public class ConnectServerPresenter implements ConnectServerContract.Presenter {
             DatagramPacket packet = new DatagramPacket(rev, rev.length);
 
             while (true){
-                Log.e("等待组播 ====","=======================================");
                 multicastSocket.receive(packet);
                 if (MyAPP.getInstance().getUserRole() == 1){//主持人不做接收处理
                     return;
@@ -137,6 +136,7 @@ public class ConnectServerPresenter implements ConnectServerContract.Presenter {
                             //保存服务器地址
                             SharedPreferencesUtil.getInstance(mContext).putString(Constant.CURRENT_IP,keyInfoBean.getServerIP());
                             SharedPreferencesUtil.getInstance(mContext).putString(Constant.TCP_SERVER_IP,keyInfoBean.getTcpServerIP());
+                            SharedPreferencesUtil.getInstance(mContext).putString(Constant.MEETING_ID,keyInfoBean.getMeetingId());
                             mView.showSignInActivity(keyInfoBean);
                         }
 

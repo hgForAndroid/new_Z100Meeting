@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.VoteResult;
+import com.gzz100.Z100_HuiYi.meeting.vote.UpLoadVote;
 
 import java.util.List;
 
@@ -59,6 +60,36 @@ public class VoteRepository implements VoteDataSource{
             @Override
             public void onDataNotAvailable(String errorMessage) {
                 callback.onDataNotAvailable(errorMessage);
+            }
+        });
+    }
+
+    @Override
+    public void submitVote(UpLoadVote data, @NonNull final SubmitCallback callback) {
+        mVoteRemoteDataSource.submitVote(data,new SubmitCallback() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess();
+            }
+
+            @Override
+            public void onFail() {
+                callback.onFail();
+            }
+        });
+    }
+
+    @Override
+    public void startOrEndVote(String IMEI, String meetingID, int voteID, int startOrEnd, @NonNull final SubmitCallback callback) {
+        mVoteRemoteDataSource.startOrEndVote(IMEI, meetingID, voteID, startOrEnd, new SubmitCallback() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess();
+            }
+
+            @Override
+            public void onFail() {
+                callback.onFail();
             }
         });
     }
