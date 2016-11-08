@@ -24,6 +24,8 @@ import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +95,26 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showEnd(MeetingEnd meetingEnd){
+        if (meetingEnd.getFlag() == 2)
+        mTopLayout.setVisibility(View.VISIBLE);
+        mBottomLayout.setVisibility(View.GONE);
+
+    }
+
+    @Override
     public void onDestroyView() {
         if (Constant.DEBUG)
         Log.e("MeetingFragment -->","onDestroyView");
@@ -119,7 +141,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
         ((TextView)contentView.findViewById(R.id.id_tv_dialog_begin_time)).setText(
                 meetingInfo.getMeetingBeginTime());
         ((TextView)contentView.findViewById(R.id.id_tv_dialog_time)).setText(
-                meetingInfo.getMeetingDuration() + "分钟");
+                meetingInfo.getMeetingDuration());
         ((TextView)contentView.findViewById(R.id.id_tv_dialog_delegate)).setText("计划参会"
                 + meetingInfo.getDelegateNum() + "人，实际参会"
                 + meetingInfo.getSignDelegate() + "人");

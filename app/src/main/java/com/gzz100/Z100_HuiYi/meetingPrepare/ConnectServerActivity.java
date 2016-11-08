@@ -102,6 +102,8 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
     public void showSelectMeeting() {
 //        mPresenter.saveCurrentIP(mIp);
         SelectMeetingActivity.toSelectMeetingActivity(this);
+
+        Log.e("当前的服务器ip === ",SharedPreferencesUtil.getInstance(this).getString(Constant.CURRENT_IP,""));
     }
 
     @Override

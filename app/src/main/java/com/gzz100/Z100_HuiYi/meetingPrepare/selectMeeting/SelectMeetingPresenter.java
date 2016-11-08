@@ -6,6 +6,7 @@ import android.util.Log;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.data.selectMeeting.SelectMeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.selectMeeting.SelectMeetingRemoteDataSource;
+import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
@@ -43,6 +44,8 @@ public class SelectMeetingPresenter implements SelectMeetingContract.Presenter {
                 }
             },IMEI);
         }
+
+//        mView.showMeetingList(FakeDataProvider.getMeetings());
     }
 
     @Override
@@ -50,6 +53,7 @@ public class SelectMeetingPresenter implements SelectMeetingContract.Presenter {
         SelectMeetingRemoteDataSource.getInstance(mContext).startMeeting(new SelectMeetingDataSource.StartMeetingCallback() {
             @Override
             public void onStartMeetingSuccess() {
+                SharedPreferencesUtil.getInstance(mContext).putString(Constant.MEETING_ID,meetingID);
                 mView.showSignIn(IMEI,meetingID);
             }
 
@@ -58,6 +62,7 @@ public class SelectMeetingPresenter implements SelectMeetingContract.Presenter {
 
             }
         },IMEI,meetingID);
+//        mView.showSignIn(IMEI,meetingID);
     }
 
     @Override

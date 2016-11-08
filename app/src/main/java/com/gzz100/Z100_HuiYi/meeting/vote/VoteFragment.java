@@ -27,7 +27,8 @@ import java.util.List;
 * create at 2016/8/23 17:01
 */
 
-public class VoteFragment extends Fragment implements VoteContract.VoteView, OnVoteOptionClickListener, OnAllVoteItemClickListener{
+public class VoteFragment extends Fragment implements VoteContract.VoteView,
+        OnVoteOptionClickListener, OnAllVoteItemClickListener{
     private VoteContract.Presenter mPresenter;
 
     private List<Vote> mAllVoteList;
@@ -42,6 +43,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
     private Button mVoteSubmitButton;
     private LinearLayout mVoteMainLayout;
     private TextView mVoteFinishedInfTextView;
+    private TextView mVoteNotBeginInfTextView;
 
     private int optionNeededNumber = 0;
     private int optionSelectedNumber = 0;
@@ -55,9 +57,14 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        mPresenter.start();
+    }
+    @Override
     public void onResume() {
         super.onResume();
-        mPresenter.start();
+//        mPresenter.start();
     }
 
     @Override
@@ -78,6 +85,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
         mVoteSubmitButton = (Button) view.findViewById(R.id.id_btn_submit_vote);
         mVoteMainLayout = (LinearLayout) view.findViewById(R.id.id_layout_vote_main);
         mVoteFinishedInfTextView = (TextView) view.findViewById(R.id.id_text_view_vote_finished_inf);
+        mVoteNotBeginInfTextView = (TextView) view.findViewById(R.id.id_iv_vote_fragment_not_begin);
         initViews();
 //        ButterKnife.bind(getActivity(),view);
         return view;
@@ -117,6 +125,9 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
     @Override
     public void showAllVoteInf() {
         mAllVoteInfRecyclerView.setVisibility(View.VISIBLE);
+        //隐藏掉两个在最下面布局的控件，避免已经显示而覆盖掉主布局
+        mVoteFinishedInfTextView.setVisibility(View.GONE);
+        mVoteNotBeginInfTextView.setVisibility(View.GONE);
         mVoteMainLayout.setVisibility(View.INVISIBLE);
         AllVoteListAdapter adapter = new AllVoteListAdapter(getContext(), mAllVoteList);
         adapter.setmOnAllVoteItemClickListener(this);
@@ -128,6 +139,9 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
     @Override
     public void showVoteInf() {
         mAllVoteInfRecyclerView.setVisibility(View.INVISIBLE);
+        //隐藏掉两个在最下面布局的控件，避免已经显示而覆盖掉主布局
+        mVoteFinishedInfTextView.setVisibility(View.GONE);
+        mVoteNotBeginInfTextView.setVisibility(View.GONE);
         mVoteMainLayout.setVisibility(View.VISIBLE);
         optionStateList = new ArrayList<Boolean>();
         for(int i = 0; i < mVote.getVoteOptionsList().size(); i++){
@@ -170,9 +184,11 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("您的选择是");
         List<String> listSelected = new ArrayList<String>();
+        final List<Integer> ids = new ArrayList<>();
         for(int i = 0; i < optionStateList.size(); i++){
             if (optionStateList.get(i).equals(true)){
-                listSelected.add(mVote.getVoteOptionsList().get(i));
+                listSelected.add(mVote.getVoteOptionsList().get(i).getOptionItem());
+                ids.add(mVote.getVoteOptionsList().get(i).getOptionID());
             }
         }
         //builder.setMessage("您的选择是：\n");
@@ -186,7 +202,8 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
                 switch(which){
                     case Dialog.BUTTON_POSITIVE:
                         dialog.dismiss();
-                        mPresenter.submitVoteResult();
+                        //
+                        mPresenter.submitVoteResult(ids);
                         break;
                     case Dialog.BUTTON_NEGATIVE:
                         dialog.dismiss();
@@ -202,12 +219,21 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView, OnV
     @Override
     public void showVoteFinishedInf(boolean isSuccessful) {
         mVoteMainLayout.setVisibility(View.INVISIBLE);
+        mVoteNotBeginInfTextView.setVisibility(View.GONE);
         if(isSuccessful){
             mVoteFinishedInfTextView.setText("投票成功，等待主持人下一步操作");
         } else {
             mVoteFinishedInfTextView.setText("投票失败，请确认网络环境是否正常");
         }
         mVoteFinishedInfTextView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showVoteNotBegin(String showText) {
+        mVoteFinishedInfTextView.setVisibility(View.GONE);
+        mVoteMainLayout.setVisibility(View.GONE);
+        mVoteNotBeginInfTextView.setVisibility(View.VISIBLE);
+        mVoteNotBeginInfTextView.setText(showText);
     }
 
     @Override

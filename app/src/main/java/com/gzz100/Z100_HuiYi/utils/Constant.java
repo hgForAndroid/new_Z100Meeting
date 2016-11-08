@@ -29,6 +29,8 @@ public class Constant {
     public static final int COLUMNS_USER = 5;
     //会议概况存储数据库的对应字段值，用于查询数据库中是否有会议概况
     public static final int COLUMNS_MEETING_INFO = 6;
+    //投票列表存储数据库的对应字段值，用于查询数据库中是否有投票列表
+    public static final int COLUMNS_VOTE_INDEX = 7;
     //存储输入的IP地址  对应的  key
     public static final String IP_HISTORY = "ipHistory";
     //存储确认的IP地址  对应的  key
@@ -41,6 +43,12 @@ public class Constant {
     public static final String USER_ROLE = "userRole";
     //存储用户名字  对应的  key
     public static final String USER_NAME = "userName";
+    //存储投票的id  对应的key，在voteFragment中需要根据这个id来取得投票的详细信息
+    public static final String BEGIN_VOTE_ID = "begin_vote_id";
+    //存储正在投票，并且处于开会状态下的  key，在VotePresenter中根据该值是否为真来显示VoteFragment显示的内容
+    public static final String IS_VOTE_BEGIN = "isVoteBegin";
+    //会议是否已结束
+    public static final String IS_MEETING_END = "isMeetingEnd";
 
     public static final int MEETING_STATE_NOT_BEGIN = 1;
     public static final int MEETING_STATE_BEGIN = 2;
@@ -61,4 +69,5 @@ public class Constant {
     public static final String PAUSE_AGENDA_INDEX = "pause_agenda_index";
     //按下暂停后用于保存当前的议程文件序号
     public static final String PAUSE_DOCUMENT_INDEX = "pause_document_index";
+
 }

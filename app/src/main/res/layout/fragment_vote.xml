@@ -94,5 +94,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="投票成功，请等待主持人下一步操作"/>
+    <TextView
+        android:id="@+id/id_iv_vote_fragment_not_begin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="25sp"
+        android:gravity="center"/>
 
 </FrameLayout>

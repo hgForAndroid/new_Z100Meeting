@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.network;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
@@ -52,14 +53,14 @@ public class MySubscriber<T> extends Subscriber<T> {
         String errorMsg;
         if (context == null) return;
         if (e instanceof SocketTimeoutException) {
-            Toast.makeText(context, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
-            errorMsg = "网络中断，请检查您的网络状态";
+            Toast.makeText(context, "连接超时", Toast.LENGTH_SHORT).show();
+            errorMsg = "连接超时，请检查网络";
         } else if (e instanceof ConnectException) {
             Toast.makeText(context, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
             errorMsg = "网络中断，请检查您的网络状态";
         } else {
             Toast.makeText(context, "错误 ====== " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//            Log.i("tag", "error----------->" + e.toString());
+            Log.e("tag", "error----------->" + e.toString());
             errorMsg = e.getMessage();
 //            errorMsg = "服务器出错，请检查服务器ip是否正确！";
         }
@@ -77,6 +78,9 @@ public class MySubscriber<T> extends Subscriber<T> {
     public void onNext(T t) {
         if (mSubscriberOnNextListener != null && t != null) {
             mSubscriberOnNextListener.onNext(t);
+        }else {
+            Log.e("onNext中的T  ==== ","null");
+            mSubscriberOnNextListener.onError("返回为null,请联系服务器人员");
         }
     }
 }

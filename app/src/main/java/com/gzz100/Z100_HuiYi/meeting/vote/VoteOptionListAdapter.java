@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.meeting.vote;
 
 import android.content.Context;
+import android.graphics.Path;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.Option;
 
 import java.util.List;
 
@@ -25,10 +27,10 @@ public class VoteOptionListAdapter extends RecyclerView.Adapter<VoteOptionHolder
     }
 
     private Context mContext;
-    private List<String> mOptions;
+    private List<Option> mOptions;
     private LayoutInflater mLayoutInflater;
 
-    public VoteOptionListAdapter(Context context, List<String> options){
+    public VoteOptionListAdapter(Context context, List<Option> options){
         this.mContext = context;
         this.mOptions = options;
         mLayoutInflater = LayoutInflater.from(context);
@@ -44,7 +46,7 @@ public class VoteOptionListAdapter extends RecyclerView.Adapter<VoteOptionHolder
     @Override
     public void onBindViewHolder(VoteOptionHolder holder, final int position) {
         holder.mOptionNumberTextView.setText(position + 1 + ":");
-        holder.mOptionTextTextView.setText(mOptions.get(position));
+        holder.mOptionTextTextView.setText(mOptions.get(position).getOptionItem());
         holder.mOptionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

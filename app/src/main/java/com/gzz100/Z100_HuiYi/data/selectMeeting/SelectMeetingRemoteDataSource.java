@@ -48,11 +48,7 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
     public void fetchMeetingList(@NonNull final LoadMeetingListCallback callback,String IMEI) {
         checkNotNull(callback);
 //        List<MeetingBean> meetings = FakeDataProvider.getMeetings();
-//        if (meetings != null && meetings.size() > 0){
-//            callback.onMeetingListLoaded(meetings);
-//        }else {
-//            callback.onDataNotAvailable();
-//        }
+//        callback.onMeetingListLoaded(meetings);
 
         //加载服务器数据
         MeetingPost meetingPost = new MeetingPost(
@@ -76,7 +72,7 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
 
 //        加载服务器数据
         StartMeetingPost startMeetingPost = new StartMeetingPost(
-                new ProgressSubscriber(new HttpRxCallbackListener<String>() {
+                new MySubscriber(new HttpRxCallbackListener<String>() {
                     @Override
                     public void onNext(String o) {
                         callback.onStartMeetingSuccess();

@@ -29,5 +29,9 @@ public class PersistenceContract {
         public static final String TABLE_NAME_MEETING_INFO = "meetingInfo";
         public static final String COLUMN_NAME_MEETING_INFO = "info";
         public static final String COLUMN_NAME_MEETING_INFO_DATA = "meeting_info";
+        //议程
+        public static final String TABLE_NAME_VOTE = "vote";
+        public static final String COLUMN_NAME_VOTE_INDEX = "vote_index";
+        public static final String COLUMN_NAME_VOTE_LIST= "voteList";
     }
 }

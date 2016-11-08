@@ -94,22 +94,19 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
 
     @OnClick(R.id.id_btn_sign_in_send_multiCast)
     public void sendMultiCast(View view){
-
         String serverIP = SharedPreferencesUtil.getInstance(this.getApplicationContext())
                 .getString(Constant.CURRENT_IP, "");
         String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
         final KeyInfoBean keyInfoBean = new KeyInfoBean(serverIP,mMeetingID,localIpAddress);
         final Gson gson = new Gson();
-
         new Thread(new Runnable() {
             @Override
             public void run() {
                 String s = gson.toJson(keyInfoBean);
                 MulticastController.getDefault().sendMessage(s);
-                Log.e("发送的组播信息"," =========== "+s);
             }
         }).start();
-
+        SharedPreferencesUtil.getInstance(this).putString(Constant.MEETING_ID,mMeetingID);
     }
 
     @Override
@@ -172,9 +169,6 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         //里面取完值就已经赋值
         if (MyAPP.getInstance().getUserRole() == 1){//主持人才发送组播,启动TCP服务器端服务
             mPresenter.startTCPService();
-            //获取当前平板在局域网内的ip地址
-            String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
-//            mPresenter.sendMeetingIdAndServerIP(mMeetingID,localIpAddress);
         }
     }
 

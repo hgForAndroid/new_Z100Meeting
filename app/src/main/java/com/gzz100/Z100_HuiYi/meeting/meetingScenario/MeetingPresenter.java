@@ -56,7 +56,6 @@ public class MeetingPresenter implements MeetingContract.Presenter {
 
             }
         });
-
     }
 
     //关闭弹窗
@@ -85,12 +84,9 @@ public class MeetingPresenter implements MeetingContract.Presenter {
         }else {
             mView.showNoUser();
         }
-
-
     }
 
     boolean firstLoad = true;
-
     @Override
     public void fetchMainUsers() {
         if (firstLoad) {
@@ -104,7 +100,6 @@ public class MeetingPresenter implements MeetingContract.Presenter {
                     int othersNum = users.size() - 10;
                     if (othersNum > 0)
                         mView.setOthersNum(true,othersNum);
-
                 }
 
                 @Override

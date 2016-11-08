@@ -20,6 +20,7 @@ import com.gzz100.Z100_HuiYi.data.file.FileOperate;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
 import com.gzz100.Z100_HuiYi.data.signIn.SignInDataSource;
 import com.gzz100.Z100_HuiYi.data.signIn.SignInRemoteDataSource;
+import com.gzz100.Z100_HuiYi.data.vote.VoteOperate;
 import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
 import com.gzz100.Z100_HuiYi.multicast.MulticastController;
 import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
@@ -56,6 +57,7 @@ public class SignInPresenter implements SignInContract.Presenter {
                 public void onUserBeanLoaded(UserBean userBean) {
                     //保存当前用户角色
                     saveUserRole(userBean.getUserRole());
+                    saveUserId(userBean.getUserID());
                     saveUserName(userBean.getUserName());
                     mView.showDelegate(userBean);
                     //开启下载
@@ -69,7 +71,7 @@ public class SignInPresenter implements SignInContract.Presenter {
             });
         }
         //TODO  有服务器后去掉，这里测试用，1主持人，2其他
-//        saveUserRole(1);
+//        saveUserRole(2);
     }
 
     /**
@@ -86,6 +88,9 @@ public class SignInPresenter implements SignInContract.Presenter {
      */
     private void saveUserRole(int role){
         MyAPP.getInstance().setUserRole(role);
+    }
+    private void saveUserId(int userId){
+        MyAPP.getInstance().setUserId(userId);
     }
 
     @Override
@@ -115,6 +120,16 @@ public class SignInPresenter implements SignInContract.Presenter {
         saveDelegateList(meetingSummary);
         saveAgendaList(meetingSummary);
         saveDocumentList(meetingSummary);
+        saveVoteList(meetingSummary);
+    }
+    /**
+     * 保存投票列表
+     * @param meetingSummary   会议的基本数据集合
+     */
+    private void saveVoteList(MeetingSummaryBean meetingSummary) {
+        if (meetingSummary.getVoteList() != null && meetingSummary.getVoteList().size()>0){
+            VoteOperate.getInstance(mContext).insertVoteList(meetingSummary.getVoteList());
+        }
     }
 
     /**
@@ -179,6 +194,7 @@ public class SignInPresenter implements SignInContract.Presenter {
         //这里开始取数据需要传递参数，所以这个方法先不采用，直接调用  fetchCurrentUserBean
     }
 
+    //已经没用
     @Override
     public void sendMeetingIdAndServerIP(String meetingId,String tcpServerIP) {
         String serverIP = SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP, "");

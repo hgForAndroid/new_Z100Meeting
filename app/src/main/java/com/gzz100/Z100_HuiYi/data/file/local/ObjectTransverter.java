@@ -32,8 +32,8 @@ public class ObjectTransverter {
             return data ;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     /**

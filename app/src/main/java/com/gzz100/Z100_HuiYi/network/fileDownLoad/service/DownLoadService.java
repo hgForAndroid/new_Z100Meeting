@@ -49,7 +49,7 @@ public class DownLoadService extends IntentService {
         apkUrl = intent.getStringExtra("url");
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_download)
+                .setSmallIcon(R.drawable.ic_down_load)
                 .setContentTitle("文件下载")
                 .setContentText(name+"等待下载")
         .setAutoCancel(true);

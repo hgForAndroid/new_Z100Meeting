@@ -1,11 +1,16 @@
 package com.gzz100.Z100_HuiYi.meeting.vote;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
+import com.gzz100.Z100_HuiYi.data.vote.VoteOperate;
 import com.gzz100.Z100_HuiYi.data.vote.VoteRepository;
+import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.MPhone;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import java.util.List;
 
@@ -19,39 +24,56 @@ public class VotePresenter implements VoteContract.Presenter{
     private VoteContract.VoteView mVoteView;
 
     private boolean mFirstLoad = true;
+    private int mVoteId;
+
     public enum VoteState {HOST_STATE, PEOPLE_STATE}
     private VoteState mVoteState = VoteState.HOST_STATE;
+    private Context mContext;
 
-    public VotePresenter(@NonNull VoteRepository voteRepository, @NonNull VoteContract.VoteView voteView){
+    public VotePresenter(@NonNull VoteRepository voteRepository, @NonNull VoteContract.VoteView voteView, Context context){
         this.mVoteRepository = checkNotNull(voteRepository, "VoteRepository cannot be null");
         this.mVoteView = checkNotNull(voteView, "VoteView cannot be null");
+        this.mContext = context;
         voteView.setPresenter(this);
+
     }
 
     @Override
     public void start() {
-        if(MyAPP.getInstance().getUserRole() == 1){
-            setmVoteState(VoteState.HOST_STATE);
-        } else {
-            setmVoteState(VoteState.PEOPLE_STATE);
-        }
-        switch (mVoteState){
-            case PEOPLE_STATE:
-                fetchVoteInf(false, "", "", "2");
-                break;
-            case HOST_STATE:
-                fetchAllVoteInf(false, "1");
-                break;
-            default:
-                fetchVoteInf(false, "", "", "1");
-                break;
-        }
+//        if (mFirstLoad){
+        mVoteId = SharedPreferencesUtil.getInstance(mContext).getInt(Constant.BEGIN_VOTE_ID, -1);
+            boolean isVoteBegin = SharedPreferencesUtil.getInstance(mContext).getBoolean(Constant.IS_VOTE_BEGIN, false);
+            if (isVoteBegin && mVoteId != -1){//投票开始
+                if(MyAPP.getInstance().getUserRole() == 1){
+                    setmVoteState(VoteState.HOST_STATE);
+                } else {
+                    setmVoteState(VoteState.PEOPLE_STATE);
+                }
+                switch (mVoteState){
+                    case PEOPLE_STATE:
+                        fetchVoteInf(false, "", "", mVoteId);
+                        break;
+                    case HOST_STATE:
+                        fetchVoteInf(false, "", "", mVoteId);
+//                fetchAllVoteInf(false, "1");
+                        break;
+                    default:
+                        fetchVoteInf(false, "", "", mVoteId);
+                        break;
+                }
+            }else {
+                if (MyAPP.getInstance().getUserRole() == 1){
+                    mVoteView.showVoteNotBegin("您还未开启投票");
+                }else {
+                    mVoteView.showVoteNotBegin("等待投票");
+                }
+            }
+//        }
     }
 
     private void setmVoteState(VoteState voteState){
         mVoteState = voteState;
     }
-
     @Override
     public void fetchAllVoteInf(boolean forceUpdate, String meetingID) {
         if(forceUpdate || mFirstLoad){
@@ -75,10 +97,10 @@ public class VotePresenter implements VoteContract.Presenter{
     }
 
     @Override
-    public void fetchVoteInf(boolean forceUpdate, String IMEI, String userID, String agendaIndex) {
+    public void fetchVoteInf(boolean forceUpdate, String IMEI, String userID,int voteId) {
         if(forceUpdate || mFirstLoad){
             mFirstLoad = false;
-            mVoteRepository.getVoteDetail(IMEI, userID, agendaIndex, new VoteDataSource.LoadVoteDetailCallback() {
+            mVoteRepository.getVoteDetail(IMEI, userID, voteId, new VoteDataSource.LoadVoteDetailCallback() {
                 @Override
                 public void onVoteDetailLoaded(Vote vote) {
                     if(!mVoteView.isActive()){
@@ -107,9 +129,44 @@ public class VotePresenter implements VoteContract.Presenter{
     }
 
     @Override
-    public void submitVoteResult() {
+    public void submitVoteResult(List<Integer> resultMap) {
         //提交投票结果（通过网络层）
-        mVoteView.showVoteFinishedInf(true);
+        int userId = MyAPP.getInstance().getUserId();
+        String deviceIMEI = MPhone.getDeviceIMEI(mContext);
+        UpLoadVote upLoadVote = new UpLoadVote();
+        upLoadVote.setVoteID(mVoteId);
+        upLoadVote.setUserID(userId);
+        upLoadVote.setIMEI(deviceIMEI);
+        upLoadVote.setResultMap(resultMap);
+        mVoteRepository.submitVote(upLoadVote, new VoteDataSource.SubmitCallback() {
+            @Override
+            public void onSuccess() {
+                mVoteView.showVoteFinishedInf(true);
+                //更新数据库中投票的状态
+                updateVoteList(mVoteId);
+            }
+
+            @Override
+            public void onFail() {
+                mVoteView.showVoteFinishedInf(false);
+            }
+        });
+    }
+
+    /**
+     * 将数据库中保存的投票列表中，投票id为voteId的投票文件的状态设置为已投
+     * @param voteId
+     */
+    private void updateVoteList(int voteId){
+        List<Vote> votes = VoteOperate.getInstance(mContext).queryVoteList();
+        if (votes != null && votes.size() > 0){
+            for (int i = 0; i < votes.size(); i++) {
+                if (votes.get(i).getVoteID() == voteId){
+                    votes.get(i).setOptionState(1);
+                    break;
+                }
+            }
+        }
     }
 
     @Override

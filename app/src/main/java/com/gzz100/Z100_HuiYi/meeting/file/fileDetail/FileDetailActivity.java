@@ -29,8 +29,10 @@ import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
 import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.meeting.ControllerView;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
+import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingEnd;
 import com.gzz100.Z100_HuiYi.meeting.vote.OnAllVoteItemClickListener;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteListDialog;
+import com.gzz100.Z100_HuiYi.meeting.vote.VoteResultDialog;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.meeting.NavBarView;
@@ -340,20 +342,16 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void startVote(View view) {
-        /*EventBus.getDefault().post(MainActivity.PAGE_SIX);
-        mRootView.removeView(mControllerView);
-        EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
-        EventBus.getDefault().post("投票中");
-        ActivityStackManager.pop();*/
-        mDialog = new VoteListDialog(this,this);
+        mDialog = new VoteListDialog(this);
+        mDialog.setOnAllVoteItemClickListener(this);
         mDialog.show();
     }
 
     //控制条的投票结果按钮已经去掉
     @Override
     public void voteResult(View view) {
-        mDialog = new VoteListDialog(this,this);
-        mDialog.show();
+//        mDialog = new VoteListDialog(this,this);
+//        mDialog.show();
     }
 
     @Override
@@ -362,14 +360,28 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if ("投票".equals(mControllerView.getVoteAndEndVoteText())){
             mControllerView.setVoteAndEndVoteText("结束投票");
         }
+        //需要保存当前停止的时间，分和秒
+        saveCountingMinAndSec(mNavBarView.getTimeHour(), mNavBarView.getTimeMin());
+        //保存当前的议程序号与议程文件序号
+        savePauseAgendaIndexAndDocumentIndex(mAgendaIndex,mFileIndex);
+
         //发送TCP消息给所有客户端
         int voteId = mDialog.getVoteId();
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, voteId);
+
         mPresenter.startVote(mControllerInfoBean,voteId,mMeetingState);
+//        ActivityStackManager.pop();
 
     }
 
     @Override
     public void onCheckResultButtonClick(View view, int position) {
+        int voteId = mDialog.getVoteId();
+        //隐藏投票列表对话框
+        mDialog.dismiss();
+        //显示投票结果
+        VoteResultDialog voteResultDialog = new VoteResultDialog(this,voteId);
+        voteResultDialog.show();
 
     }
 
@@ -400,6 +412,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 case 0x00:
                     if (fileDetailActivity.getMin().equals("00") && fileDetailActivity.getSec(false).equals("00")) {
                         ToastUtil.showMessage("议程已结束");
+                        fileDetailActivity.mNavBarView.setTimeHour("00");
+                        fileDetailActivity.mNavBarView.setTimeMin("00");
                     } else {
                         fileDetailActivity.mNavBarView.setTimeHour(fileDetailActivity.getMin());
                         fileDetailActivity.mNavBarView.setTimeMin(fileDetailActivity.getSec(false));
@@ -505,7 +519,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     //接收到主持人发送的数据，如果当前设备参会人员不是支持人，则进行处理
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMulticast(ControllerInfoBean data) {
+    public void getControllerInfo(ControllerInfoBean data) {
         if (!isHost) {
             mPresenter.handleMessageFromHost(data);
         }
@@ -543,7 +557,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mMyHandler.sendMessage(message);
 
         //设置内容
-//        agendaContentChange(controllerInfoBean);
         agendaContentChange(controllerInfoBean.getAgendaIndex(),controllerInfoBean.getDocumentIndex());
     }
 
@@ -576,8 +589,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 //取议程时传入的是mAgendaIndex-1，因为存储议程时，是从0开始的
                 int agendaDuration = FileOperate.getInstance(FileDetailActivity.this)
                         .queryAgendaList(Constant.COLUMNS_AGENDAS).get(mAgendaIndex - 1).getAgendaDuration();
-//                mMin = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[0]);
-//                mSec = Integer.valueOf(StringUtils.splitDuration(agendaDuration)[1]);
                 mMin = agendaDuration;
                 mSec = 0;
                 mNavBarView.setTimeHour(getMin());
@@ -782,6 +793,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mPassive = false;
         if (!mPassive)
             mMyHandler.removeCallbacksAndMessages(null);
+        EventBus.getDefault().post(new MeetingEnd(1));
     }
 
     @Override
@@ -823,7 +835,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
             }
         }
-
         mControllerView.setPauseAndContinueText("暂停");
         mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;
@@ -836,6 +847,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (mMyHandler != null) {
             mMyHandler.removeCallbacksAndMessages(null);
             mMyHandler = null;
+        }
+        if (mDialog != null){
+            mDialog.dismiss();
+            mDialog = null;
         }
     }
 

@@ -116,7 +116,6 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
         int meetingID = mMeetings.get(position).getMeetingID();
         String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
         mPresenter.selectMeeting(deviceIMEI, meetingID + "");
-        Log.e("会议ID ===== ",meetingID+"");
     }
 
     @Override
