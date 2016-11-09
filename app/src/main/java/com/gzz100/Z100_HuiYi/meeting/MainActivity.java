@@ -471,7 +471,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             String meetingID = SharedPreferencesUtil.getInstance(this).getString(Constant.MEETING_ID, "");
             //关闭会议成功，这里不需要传消息实体以及会议状态，在关闭成功后再传，
             // 在下面的方法hostResponseCloseVoteSuccess中处理结束投票的操作
-            mMainPresenter.hostLaunchOrCloseVote(deviceIMEI,meetingID,mVoteId,-1,null,0);
+            int voteId = SharedPreferencesUtil.getInstance(this).getInt(Constant.BEGIN_VOTE_ID, -1);
+            mMainPresenter.hostLaunchOrCloseVote(deviceIMEI,meetingID,voteId,-1,null,0);
         }
     }
 
@@ -487,8 +488,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         String deviceIMEI = MPhone.getDeviceIMEI(this);
         String meetingID = SharedPreferencesUtil.getInstance(this).getString(Constant.MEETING_ID, "");
         mVoteId = mDialog.getVoteId();
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID,mVoteId);
         mMainPresenter.hostLaunchOrCloseVote(deviceIMEI,meetingID,mVoteId,0,mControllerInfoBean,mMeetingState);
-
 
     }
 
@@ -611,6 +612,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END,true);
         mMeetingTab.setChecked(true);
         EventBus.getDefault().post(new MeetingEnd(2));
+
+        //将控制条全部设置为不能点击
+        mControllerView.setStartAndEndButtonNotClickable(false);
+        mControllerView.setPauseAndContinueButtonNotClickable(false);
+        mControllerView.setVoteResultButtonNotClickable(false);
     }
 
     @Override

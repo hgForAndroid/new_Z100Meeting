@@ -794,6 +794,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (!mPassive)
             mMyHandler.removeCallbacksAndMessages(null);
         EventBus.getDefault().post(new MeetingEnd(1));
+        //将控制条全部设置为不能点击
+        mControllerView.setStartAndEndButtonNotClickable(false);
+        mControllerView.setPauseAndContinueButtonNotClickable(false);
+        mControllerView.setVoteResultButtonNotClickable(false);
     }
 
     @Override

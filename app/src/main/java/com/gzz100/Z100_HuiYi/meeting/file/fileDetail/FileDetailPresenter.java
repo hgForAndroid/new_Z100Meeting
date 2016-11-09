@@ -10,6 +10,7 @@ import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -150,6 +151,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
                 ControllerUtil.getInstance().sendMessage(json);
+            //主持人保存开启投票的id
+            SharedPreferencesUtil.getInstance(mContext).putInt(Constant.BEGIN_VOTE_ID,voteId);
             mView.showVote();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
