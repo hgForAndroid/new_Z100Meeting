@@ -29,6 +29,7 @@ import com.gzz100.Z100_HuiYi.data.vote.VoteRepository;
 import com.gzz100.Z100_HuiYi.meeting.about.AboutFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaPresenter;
+import com.gzz100.Z100_HuiYi.meeting.agenda.RemoveControlViewEvent;
 import com.gzz100.Z100_HuiYi.meeting.delegate.DelegateFragment;
 import com.gzz100.Z100_HuiYi.meeting.delegate.DelegatePresenter;
 import com.gzz100.Z100_HuiYi.meeting.file.FileFragment;
@@ -385,6 +386,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID,vote.getVoteID());
             mVoteTab.setChecked(true);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void removeControlView(RemoveControlViewEvent removeControlViewEvent){
+        mRootView.removeView(mControllerView);
     }
 
     @Override

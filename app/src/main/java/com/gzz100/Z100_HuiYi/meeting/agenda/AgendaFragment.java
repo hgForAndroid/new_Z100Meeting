@@ -18,9 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
-import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
-import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
@@ -217,6 +215,7 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
     @Override
     public void showFileDetail() {
         String currentTitle = mMainActivity.getCurrentTitle();
+        org.greenrobot.eventbus.EventBus.getDefault().post(new RemoveControlViewEvent());
         FileDetailActivity.start(getActivity(),currentAgendaPositon + 1,0,currentTitle,false,false,false,"","");
     }
 
