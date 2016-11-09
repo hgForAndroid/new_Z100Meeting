@@ -146,7 +146,7 @@ public class VotePresenter implements VoteContract.Presenter {
                 updateVoteList(mVoteId);
                 //上传投票结果成功，将是否已经上传结果的标识设为true
                 SharedPreferencesUtil.getInstance(mContext).
-                        getBoolean(Constant.IS_VOTE_COMMIT, true);
+                        putBoolean(Constant.IS_VOTE_COMMIT, true);
             }
             @Override
             public void onFail() {
