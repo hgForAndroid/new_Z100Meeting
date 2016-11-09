@@ -43,7 +43,6 @@ import com.gzz100.Z100_HuiYi.meeting.vote.VoteListDialog;
 import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteResultDialog;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
-import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
 import com.gzz100.Z100_HuiYi.tcpController.Client;
 import com.gzz100.Z100_HuiYi.tcpController.Server;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
@@ -139,12 +138,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 //        int screenWidthDp = config.screenWidthDp;
 //        Log.e("screenHeightDp=","====       "+screenHeightDp+"\n    screenWidthDp=====     "+screenWidthDp);
     }
-
-    private void initMulticastService() {
-        Intent intent = new Intent(MainActivity.this, ReceivedMulticastService.class);
-        startService(intent);
-    }
-
     private void init() {
         mMeetingFragment = MeetingFragment.newInstance();
         mDelegateFragment = DelegateFragment.newInstance();
@@ -545,6 +538,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.COUNTING_SEC);
         SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.PAUSE_AGENDA_INDEX);
         SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.PAUSE_DOCUMENT_INDEX);
+        SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.ENDING_CURRENT_TIME);
+        SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.IS_VOTE_BEGIN);
     }
 
     @Override
@@ -612,11 +607,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END,true);
         mMeetingTab.setChecked(true);
         EventBus.getDefault().post(new MeetingEnd(2));
-
         //将控制条全部设置为不能点击
         mControllerView.setStartAndEndButtonNotClickable(false);
         mControllerView.setPauseAndContinueButtonNotClickable(false);
-        mControllerView.setVoteResultButtonNotClickable(false);
+        mControllerView.setStartVoteButtonNotClickable(false);
     }
 
     @Override

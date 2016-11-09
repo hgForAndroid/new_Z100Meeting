@@ -136,13 +136,13 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
      *                   Constant.NORMAL_DELEGATE  其他参会代表
      */
     private void setRoleByType(int roleType){
-        if (roleType == Constant.KEYNOTE_SPEAKER){//主讲人
+        if (roleType == Constant.DEFAULT_SPEAKER){//主讲人
             mIvRole.setImageResource(R.drawable.ic_delagate_detail_key_note_speaker);
             mTvDelegateRole.setText("主讲人");
-        }else if (roleType == Constant.HOST){//主持人
+        }else if (roleType == Constant.HOSTS){//主持人
             mIvRole.setImageResource(R.drawable.ic_dalegate_detail_host);
             mTvDelegateRole.setText("主持人");
-        }else {//普通参会人员
+        }else if (roleType == Constant.OTHER_DELEGATE){//普通参会人员
             mIvRole.setImageResource(R.drawable.ic_delegate_detail_normal);
             mTvDelegateRole.setText("其他参会代表");
         }

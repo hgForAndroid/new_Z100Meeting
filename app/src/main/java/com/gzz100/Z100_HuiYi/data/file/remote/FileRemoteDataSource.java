@@ -60,15 +60,6 @@ public class FileRemoteDataSource implements FileDataSource {
         }else {
             callback.onDataNotAvailable();
         }
-
-        //正式
-//        AgendasPost agendasPost = new AgendasPost(new ProgressSubscriber(new HttpRxCallbackListener<List<Agenda>>(){
-//            @Override
-//            public void onNext(List<Agenda> agendas) {
-//                callback.onAgendaListLoaded(agendas);
-//                mDbHelper.insertAgendaList(Constant.COLUMNS_AGENDAS,agendas);
-//            }
-//        },mContext),IMEI,userId);
     }
 
     @Override

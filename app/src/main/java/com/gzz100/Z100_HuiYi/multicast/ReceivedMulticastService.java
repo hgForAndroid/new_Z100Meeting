@@ -20,8 +20,13 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-
-public class ReceivedMulticastService extends Service {
+/**
+* 接收组播的服务类，目前接收组播的服务，在ConnectServerPresenter中使用线程来接收
+* 所以这个服务类没有使用到，之后如要使用这种方式，则不删除该类，如不使用，可以考虑删除
+* @author XieQXiong
+* create at 2016/11/9 15:29
+*/
+public class ReceivedMultiCastService extends Service {
     private Handler mHandler;
     private Runnable mRunnable = new Runnable() {
         public void run() {
@@ -60,13 +65,10 @@ public class ReceivedMulticastService extends Service {
             MulticastSocket multicastSocket = new MulticastSocket(Constant.MULTI_PORT);
             InetAddress inetAddress = InetAddress.getByName(Constant.MULTI_IP);
             multicastSocket.joinGroup(inetAddress);
-
             DatagramPacket packet;
-
             // 接收数据
             byte[] rev = new byte[512];
             packet = new DatagramPacket(rev, rev.length);
-
             while (true){
                 if (MyAPP.getInstance().getUserRole() == 1){
                     return;
@@ -87,9 +89,6 @@ public class ReceivedMulticastService extends Service {
                             //保存服务器地址
                             SharedPreferencesUtil.getInstance(this).putString(Constant.CURRENT_IP,string);
                         }
-
-//                        SignInActivity.toSignInActivity(this,"",keyInfoBean.getMeetingId());
-
                         break;
                     }
 

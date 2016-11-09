@@ -31,7 +31,6 @@ import java.util.List;
 public class VoteFragment extends Fragment implements VoteContract.VoteView,
         OnVoteOptionClickListener, OnAllVoteItemClickListener{
     private VoteContract.Presenter mPresenter;
-
     private List<Vote> mAllVoteList;
     private Vote mVote;
 
@@ -61,11 +60,6 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
     public void onStart() {
         super.onStart();
         mPresenter.start();
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-//        mPresenter.start();
     }
 
     @Override
@@ -177,7 +171,6 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    Log.e("什么鬼  ===========","");
                 }
             });
             builder.create().show();
@@ -204,13 +197,10 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
                 switch(which){
                     case Dialog.BUTTON_POSITIVE:
                         dialog.dismiss();
-                        Log.e("确定  ===========","");
-                        //
                         mPresenter.submitVoteResult(ids);
                         break;
                     case Dialog.BUTTON_NEGATIVE:
                         dialog.dismiss();
-                        Log.e("取消  ===========","");
                         break;
                 }
             }

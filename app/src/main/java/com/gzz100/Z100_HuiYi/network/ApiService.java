@@ -1,17 +1,12 @@
 package com.gzz100.Z100_HuiYi.network;
 
-import com.gzz100.Z100_HuiYi.data.Agenda;
-import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
-import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.Update;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.VoteResult;
-import com.gzz100.Z100_HuiYi.fakeData.OneTitle;
 import com.gzz100.Z100_HuiYi.meeting.vote.UpLoadVote;
 import com.gzz100.Z100_HuiYi.network.entity.BaseResultEntity;
-import com.gzz100.Z100_HuiYi.fakeData.TestResultEntity;
 
 import java.util.List;
 

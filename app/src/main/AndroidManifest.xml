@@ -58,26 +58,15 @@
         </activity>
 
         <service
-            android:name=".multicast.ReceivedMulticastService"
+            android:name=".multicast.ReceivedMultiCastService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="action.GET_MULYICAST"/>
             </intent-filter>
         </service>
-        <service android:name=".multicast.SendMulticastService"/>
         <!-- 下载文件的服务 -->
         <service android:name=".network.fileDownLoad.service.DownLoadService"/>
-        <service
-            android:name=".tcpController.TcpClient"
-            android:enabled="true"
-            android:exported="true">
-        </service>
-        <service
-            android:name=".tcpController.TcpService"
-            android:enabled="true"
-            android:exported="true">
-        </service>
         <service
             android:name=".tcpController.Server"
             android:enabled="true"

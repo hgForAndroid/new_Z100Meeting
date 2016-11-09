@@ -19,14 +19,10 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
-import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
-import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
-import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
-import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.meeting.ControllerView;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingEnd;
@@ -696,51 +692,16 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     @Override
     public void respondMeetingEnd() {
         mNavBarView.setCurrentMeetingState("(已结束)");
-        mPassive = false;
+        mPassive = false;//客户端不再受控
     }
 
     @Override
     public void respondVoteBegin(int voteId) {
         Vote vote = new Vote();
         vote.setVoteID(voteId);
-        //通知主界面添加投票的Fragment
+        //客户端接收到投票开始信号，通知主界面，存储投票id，显示投票界面
         EventBus.getDefault().post(vote);
-        //销毁
-        ActivityStackManager.pop();
-    }
-
-    //返回
-    @Override
-    public void fallback() {
-        //由主持人点击或继续，mPassive为true，暂停、结束为false
-        if (mPassive) {
-            //无操作
-        } else {
-            if (isHost){
-                mRootView.removeView(mControllerView);
-                EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
-            }
-            ActivityStackManager.pop();
-        }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            //由主持人点击或继续，mPassive为true，暂停、结束为false
-            if (mPassive) {
-                //无操作
-            } else {
-                if (mControllerView != null) {
-                    mRootView.removeView(mControllerView);//本界面先移除控制View
-                    //通知主界面添加控制View,只有这个界面先移除后，主界面才能添加
-                    EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
-                }
-                ActivityStackManager.pop();
-            }
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
+        ActivityStackManager.pop();//销毁
     }
 
     @Override
@@ -793,11 +754,11 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mPassive = false;
         if (!mPassive)
             mMyHandler.removeCallbacksAndMessages(null);
-        EventBus.getDefault().post(new MeetingEnd(1));
-        //将控制条全部设置为不能点击
+        EventBus.getDefault().post(new MeetingEnd(1));//通知主界面当前会议已结束，让其做出相应的处理
+        //将控制条全部设置为不能点击，主持人不再控制会议
         mControllerView.setStartAndEndButtonNotClickable(false);
         mControllerView.setPauseAndContinueButtonNotClickable(false);
-        mControllerView.setVoteResultButtonNotClickable(false);
+        mControllerView.setStartVoteButtonNotClickable(false);
     }
 
     @Override
@@ -818,13 +779,13 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         int pauseDocumentIndex = SharedPreferencesUtil.getInstance(this.getApplicationContext())
                 .getInt(Constant.PAUSE_DOCUMENT_INDEX, 0);
         if (mAgendaIndex != pauseAgendaIndex){
+            //当前显示的议程，不是暂停前的议程，则需要重新切换回原来的议程
             agendaContentChange(pauseAgendaIndex,pauseDocumentIndex);
-
             String tempCountingMin = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-                    .getString(Constant.COUNTING_MIN, "");
+                    .getString(Constant.COUNTING_MIN, "");//暂停后保存的议程时间倒计时的  分钟
             String tempCountingSec = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-                    .getString(Constant.COUNTING_SEC, "");
-
+                    .getString(Constant.COUNTING_SEC, "");//暂停后保存的议程时间倒计时的  秒钟
+            //将右上角显示的时间切换回暂停前的时间
             mMin = Integer.valueOf(tempCountingMin);
             mSec = Integer.valueOf(tempCountingSec);
             mNavBarView.setTimeHour(tempCountingMin);
@@ -836,26 +797,12 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 mNavBarView.setTitle(mFileList.get(mFileIndex).getDocumentName());
                 mFileDetailAdapter.setSelectedItem(mFileIndex);
                 mFileDetailAdapter.notifyDataSetInvalidated();
-
             }
         }
         mControllerView.setPauseAndContinueText("暂停");
         mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;
-        countingTime();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mMyHandler != null) {
-            mMyHandler.removeCallbacksAndMessages(null);
-            mMyHandler = null;
-        }
-        if (mDialog != null){
-            mDialog.dismiss();
-            mDialog = null;
-        }
+        countingTime();//继续倒计时
     }
 
     @Override
@@ -874,6 +821,51 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         }
         if (isHost) {//主持人操作后发送消息通知全部客户端
             mPresenter.handleFileClickFromHost(mControllerInfoBean, mMeetingState, mAgendaIndex, position);
+        }
+    }
+
+    //返回
+    @Override
+    public void fallback() {
+        //由主持人点击或继续，mPassive为true，暂停、结束为false
+        if (mPassive) {
+            //无操作
+        } else {
+            if (isHost){
+                mRootView.removeView(mControllerView);
+                EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
+            }
+            ActivityStackManager.pop();
+        }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //由主持人点击或继续，mPassive为true，暂停、结束为false
+            if (mPassive) {
+                //无操作
+            } else {
+                if (mControllerView != null) {
+                    mRootView.removeView(mControllerView);//本界面先移除控制View
+                    //通知主界面添加控制View,只有这个界面先移除后，主界面才能添加
+                    EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
+                }
+                ActivityStackManager.pop();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mMyHandler != null) {
+            mMyHandler.removeCallbacksAndMessages(null);
+            mMyHandler = null;
+        }
+        if (mDialog != null){
+            mDialog.dismiss();
+            mDialog = null;
         }
     }
 }

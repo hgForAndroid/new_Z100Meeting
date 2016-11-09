@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -20,14 +19,8 @@ import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
 import com.gzz100.Z100_HuiYi.multicast.MulticastController;
-import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
-import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
-import com.gzz100.Z100_HuiYi.tcpController.Client;
-import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
-import com.gzz100.Z100_HuiYi.tcpController.TcpClient;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
-import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
@@ -193,10 +186,10 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     public void showMainActivity() {
         MainActivity.toMainActivity(this);
         if (MyAPP.getInstance().getUserRole() == 1){
-//            if (AppUtil.isServiceRun(this.getApplicationContext(),"com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService")){
+//            if (AppUtil.isServiceRun(this.getApplicationContext(),"com.gzz100.Z100_HuiYi.multicast.ReceivedMultiCastService")){
 //                Log.e("服务在运行","=============================================================================");
 //            }
-//            stopService(new Intent(this, ReceivedMulticastService.class));
+//            stopService(new Intent(this, ReceivedMultiCastService.class));
         }
         ActivityStackManager.pop();
     }

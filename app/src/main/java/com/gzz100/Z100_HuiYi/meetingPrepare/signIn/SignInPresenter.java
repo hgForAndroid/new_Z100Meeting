@@ -2,38 +2,20 @@ package com.gzz100.Z100_HuiYi.meetingPrepare.signIn;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.MyAPP;
-import com.gzz100.Z100_HuiYi.data.Agenda;
-import com.gzz100.Z100_HuiYi.data.AgendaModel;
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
-import com.gzz100.Z100_HuiYi.data.Document;
-import com.gzz100.Z100_HuiYi.data.DocumentModel;
-import com.gzz100.Z100_HuiYi.data.MeetingInfo;
-import com.gzz100.Z100_HuiYi.data.MeetingSummary;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.UserBean;
-import com.gzz100.Z100_HuiYi.data.file.FileOperate;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
 import com.gzz100.Z100_HuiYi.data.signIn.SignInDataSource;
 import com.gzz100.Z100_HuiYi.data.signIn.SignInRemoteDataSource;
-import com.gzz100.Z100_HuiYi.data.vote.VoteOperate;
-import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
-import com.gzz100.Z100_HuiYi.multicast.MulticastController;
-import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
 import com.gzz100.Z100_HuiYi.tcpController.Server;
-import com.gzz100.Z100_HuiYi.tcpController.TcpService;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by XieQXiong on 2016/9/23.
@@ -71,8 +53,6 @@ public class SignInPresenter implements SignInContract.Presenter {
                 }
             });
         }
-        //TODO  有服务器后去掉，这里测试用，1主持人，2其他
-//        saveUserRole(2);
     }
 
     /**
@@ -127,28 +107,9 @@ public class SignInPresenter implements SignInContract.Presenter {
         //这里开始取数据需要传递参数，所以这个方法先不采用，直接调用  fetchCurrentUserBean
     }
 
-    //已经没用
+    //这个本来是循环发送组播的，因为跟tcp有冲突，现已没用
     @Override
     public void sendMeetingIdAndServerIP(String meetingId,String tcpServerIP) {
-        String serverIP = SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP, "");
-        Intent intent = new Intent(mContext, SendMulticastService.class);
-        intent.putExtra(Constant.MEETING_ID,meetingId);
-        intent.putExtra(Constant.CURRENT_IP,serverIP);
-        intent.putExtra(Constant.TCP_SERVER_IP,tcpServerIP);
-        mContext.startService(intent);
-
-//        KeyInfoBean keyInfoBean = new KeyInfoBean(serverIP,meetingId,tcpServerIP);
-//        mGson = new Gson();
-//        final String keyInfoJson = mGson.toJson(keyInfoBean);
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (true){
-//                    //因为是udp组播发送，循环发送这些值到客户端，确保接收到
-//                    MulticastController.getDefault().sendMessage(keyInfoJson);
-//                }
-//            }
-//        }).start();
     }
 
     @Override

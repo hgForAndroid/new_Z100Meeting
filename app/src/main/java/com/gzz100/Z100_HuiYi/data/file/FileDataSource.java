@@ -2,9 +2,7 @@ package com.gzz100.Z100_HuiYi.data.file;
 
 import android.support.annotation.NonNull;
 
-import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
-import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 
 import java.util.List;
@@ -16,13 +14,11 @@ import java.util.List;
 
 public interface FileDataSource {
     interface LoadFileListCallback {
-//        void onFileListLoaded(List<Document> documents);
         void onFileListLoaded(List<DocumentModel> documents);
 
         void onDataNotAvailable();
     }
     interface LoadAgendaListCallback {
-//        void onAgendaListLoaded(List<Agenda> files);
         void onAgendaListLoaded(List<AgendaModel> files);
 
         void onDataNotAvailable();

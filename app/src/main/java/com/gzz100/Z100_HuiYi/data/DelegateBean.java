@@ -89,10 +89,10 @@ public class DelegateBean extends BaseBean{
      */
     public void setPicForUser(Context context, TextView textView){
         Drawable drawable = null;
-        if (getRole() == Constant.HOST){//主持人
+        if (getRole() == Constant.HOSTS){//主持人
             drawable = context.getResources().getDrawable(R.drawable.ic_host);
 
-        }else if(getRole() == Constant.KEYNOTE_SPEAKER){//主讲人
+        }else if(getRole() == Constant.DEFAULT_SPEAKER){//主讲人
             drawable = context.getResources().getDrawable(R.drawable.ic_keynote_speaker);
 
         }else {//普通参会人员
@@ -112,10 +112,10 @@ public class DelegateBean extends BaseBean{
      */
     public void setCurrentDelegate(Context context, TextView textView){
         Drawable drawable = null;
-        if (getRole() == Constant.HOST){//主持人
+        if (getRole() == Constant.HOSTS){//主持人
             drawable = context.getResources().getDrawable(R.drawable.ic_host_selected);
 
-        }else if(getRole() == Constant.KEYNOTE_SPEAKER){//主讲人
+        }else if(getRole() == Constant.DEFAULT_SPEAKER){//主讲人
             drawable = context.getResources().getDrawable(R.drawable.ic_keynote_speaker_selected);
 
         }else {//普通参会人员
@@ -127,5 +127,4 @@ public class DelegateBean extends BaseBean{
         textView.setCompoundDrawables(null,drawable,null,null);
 
     }
-
 }

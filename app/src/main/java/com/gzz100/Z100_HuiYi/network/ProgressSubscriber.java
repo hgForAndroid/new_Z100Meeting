@@ -61,7 +61,6 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         }
     }
 
-
     /**
      * 显示加载框
      */
@@ -72,7 +71,6 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
             pd.show();
         }
     }
-
 
     /**
      * 隐藏
@@ -86,7 +84,6 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
             pd = null;
         }
     }
-
 
     /**
      * 订阅开始时调用
