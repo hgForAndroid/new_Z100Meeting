@@ -53,11 +53,11 @@ public class MySubscriber<T> extends Subscriber<T> {
         String errorMsg;
         if (context == null) return;
         if (e instanceof SocketTimeoutException) {
-            Toast.makeText(context, "连接超时", Toast.LENGTH_SHORT).show();
-            errorMsg = "连接超时，请检查网络";
+//            Toast.makeText(context, "连接超时", Toast.LENGTH_SHORT).show();
+            errorMsg = "连接超时，请检查网络或服务器IP是否输入正确";
         } else if (e instanceof ConnectException) {
-            Toast.makeText(context, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
-            errorMsg = "网络中断，请检查您的网络状态";
+//            Toast.makeText(context, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
+            errorMsg = "网络中断，请检查您的网络状态或服务器IP是否输入正确";
         } else {
             Toast.makeText(context, "错误 ====== " + e.getMessage(), Toast.LENGTH_SHORT).show();
             Log.e("tag", "error----------->" + e.toString());

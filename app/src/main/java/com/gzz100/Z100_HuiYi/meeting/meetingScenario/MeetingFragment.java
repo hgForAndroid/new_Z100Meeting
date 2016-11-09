@@ -25,6 +25,7 @@ import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
+import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
 import com.gzz100.Z100_HuiYi.tcpController.Client;
 import com.gzz100.Z100_HuiYi.tcpController.Server;
@@ -201,6 +202,8 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
         SharedPreferencesUtil.getInstance(getContext()).remove(Constant.PAUSE_AGENDA_INDEX);
         SharedPreferencesUtil.getInstance(getContext()).remove(Constant.PAUSE_DOCUMENT_INDEX);
         SharedPreferencesUtil.getInstance(getContext()).remove(Constant.ENDING_CURRENT_TIME);
+        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.IS_VOTE_BEGIN);
+        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.IS_VOTE_COMMIT);
     }
 
     @OnClick(R.id.id_tv_meeting_fragment_others)

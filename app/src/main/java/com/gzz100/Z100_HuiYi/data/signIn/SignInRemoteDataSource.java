@@ -8,6 +8,7 @@ import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
 import com.gzz100.Z100_HuiYi.network.MySubscriber;
+import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
 import com.gzz100.Z100_HuiYi.network.entity.MeetingSummaryPost;
 import com.gzz100.Z100_HuiYi.network.entity.UserBeanPost;
 
@@ -38,7 +39,7 @@ public class SignInRemoteDataSource implements SignInDataSource {
         checkNotNull(callback);
         //加载服务器数据
         UserBeanPost userBeanPost = new UserBeanPost(
-                new MySubscriber(new HttpRxCallbackListener<UserBean>(){
+                new ProgressSubscriber(new HttpRxCallbackListener<UserBean>(){
                     @Override
                     public void onNext(UserBean userBean) {
                         if (userBean != null){
@@ -59,7 +60,7 @@ public class SignInRemoteDataSource implements SignInDataSource {
     public void signIn(String IMEI, String meetingID, @NonNull final LoadMeetingSummaryCallback callback) {
         //加载服务器数据
         MeetingSummaryPost meetingSummaryPost1 = new MeetingSummaryPost(
-                new MySubscriber(new HttpRxCallbackListener<MeetingSummaryBean>(){
+                new ProgressSubscriber(new HttpRxCallbackListener<MeetingSummaryBean>(){
                     @Override
                     public void onNext(MeetingSummaryBean meetingSummary) {
                         if (meetingSummary != null){

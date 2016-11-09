@@ -2,9 +2,14 @@ package com.gzz100.Z100_HuiYi.data;
 
 import android.content.Context;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.file.FileOperate;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 /**
  * Created by XieQXiong on 2016/8/24.
@@ -67,15 +72,22 @@ public class DocumentModel extends BaseBean {
 
     public void setImageForFile(Context context, ImageView imageView){
         if (!this.documentName.isEmpty() && this.documentName.contains(".txt")){
-            //"http://p3.so.qhmsg.com/bdr/_240_/t0146723952b5d73a1d.png"
             Picasso.with(context).load(R.mipmap.txt).into(imageView);
         }else if (!this.documentName.isEmpty() &&
                 (this.documentName.contains(".doc") || this.documentName.contains(".docx"))){
-            //"http://p1.so.qhmsg.com/bdr/_240_/t01b16d40e4a51d6241.png"
             Picasso.with(context).load(R.mipmap.doc).into(imageView);
         }else if (!this.documentName.isEmpty() && this.documentName.contains(".xlsx")){
-            //"http://p0.so.qhmsg.com/bdr/_240_/t01d509fc4c1cb60a9a.png"
             Picasso.with(context).load(R.mipmap.xlsx).into(imageView);
+        }
+    }
+
+    public void setDocumentSpeaker(Context context, TextView textView){
+        int documentAgendaIndex = this.documentAgendaIndex;
+        List<AgendaModel> agendaModels = FileOperate.getInstance(context).queryAgendaList(Constant.COLUMNS_AGENDAS);
+        for (AgendaModel agenda : agendaModels) {
+            if (agenda.getAgendaIndex() == documentAgendaIndex){
+                textView.setText(agenda.getAgendaSpeaker());
+            }
         }
     }
 

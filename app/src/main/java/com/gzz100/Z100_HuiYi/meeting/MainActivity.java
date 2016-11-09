@@ -540,6 +540,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.PAUSE_DOCUMENT_INDEX);
         SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.ENDING_CURRENT_TIME);
         SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.IS_VOTE_BEGIN);
+        SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.IS_VOTE_COMMIT);
     }
 
     @Override

@@ -27,10 +27,6 @@ import rx.schedulers.Schedulers;
  * Created by XieQXiong on 2016/9/1.
  */
 public class HttpManager {
-
-    //测试用
-    public static final String BASE_URL = "https://api.douban.com/v2/book/";
-
     private static final int DEFAULT_TIMEOUT = 6;
     private ApiService mApiService;
     private volatile static HttpManager INSTANCE;
@@ -38,7 +34,7 @@ public class HttpManager {
     private Context mContext;
 
     //构造方法私有
-    private HttpManager(Context context) {
+    public HttpManager(Context context) {
         mContext = context;
         //手动创建一个OkHttpClient并设置超时时间
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -83,7 +79,6 @@ public class HttpManager {
 
     private String api;
     private String getServerIP(){
-//        if ()
         return "http://"+SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP,"");
     }
 

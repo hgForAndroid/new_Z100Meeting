@@ -9,6 +9,7 @@ import com.gzz100.Z100_HuiYi.meeting.vote.UpLoadVote;
 import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
 import com.gzz100.Z100_HuiYi.network.MySubscriber;
+import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
 import com.gzz100.Z100_HuiYi.network.entity.StartOrEndVotePost;
 import com.gzz100.Z100_HuiYi.network.entity.UpLoadVotePost;
 import com.gzz100.Z100_HuiYi.network.entity.VoteResultPost;
@@ -45,7 +46,7 @@ public class VoteRemoteDataSource implements VoteDataSource{
     @Override
     public void getVoteResult(int voteId, @NonNull final LoadVoteResultCallback callback) {
         VoteResultPost voteResultPost = new VoteResultPost(
-                new MySubscriber(new HttpRxCallbackListener<List<VoteResult>>() {
+                new ProgressSubscriber(new HttpRxCallbackListener<List<VoteResult>>() {
             @Override
             public void onNext(List<VoteResult> voteResults) {
                 callback.onVoteResultLoaded(voteResults);
@@ -62,7 +63,7 @@ public class VoteRemoteDataSource implements VoteDataSource{
     @Override
     public void submitVote(UpLoadVote data, @NonNull final SubmitCallback callback) {
         UpLoadVotePost upLoadVotePost = new UpLoadVotePost(
-                new MySubscriber(new HttpRxCallbackListener<UpLoadVote>(){
+                new ProgressSubscriber(new HttpRxCallbackListener<UpLoadVote>(){
                     @Override
                     public void onNext(UpLoadVote s) {
                         callback.onSuccess();
@@ -81,7 +82,7 @@ public class VoteRemoteDataSource implements VoteDataSource{
     public void startOrEndVote(String IMEI, String meetingID, int voteID, int startOrEnd,
                                @NonNull final SubmitCallback callback) {
         StartOrEndVotePost startOrEndVotePost = new StartOrEndVotePost(
-                new MySubscriber(new HttpRxCallbackListener<String>(){
+                new ProgressSubscriber(new HttpRxCallbackListener<String>(){
 
                     @Override
                     public void onNext(String s) {

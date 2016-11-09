@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!--ProgressSubscriber中的方法showProgressDialog中，添加了这句：
+    pd.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+    需要在配置文件中添加该权限-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".MyAPP"

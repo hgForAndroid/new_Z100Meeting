@@ -98,7 +98,6 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_file, container, false);
-//        Log.e("FileFragment -->","onCreateView");
         mEdtSearchContent = (EditText) view.findViewById(R.id.id_edt_fgm_file);
         mBtnSearch = (Button) view.findViewById(R.id.id_btn_fgm_file);
         mAgendaListRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_tab);
@@ -109,7 +108,6 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         mLlSearchResult = (LinearLayout) view.findViewById(R.id.id_ll_fgm_file_search_result);
 
         mBtnSearch.setOnClickListener(this);
-
 //        mUnbinder = ButterKnife.bind(this, view);
         return view;
     }
