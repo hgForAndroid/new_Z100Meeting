@@ -78,7 +78,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
-            ControllerUtil.getInstance().sendMessage(json);
+                ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -93,7 +93,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
-            ControllerUtil.getInstance().sendMessage(json);
+                ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -108,7 +108,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
-            ControllerUtil.getInstance().sendMessage(json);
+                ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -132,7 +132,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
-            ControllerUtil.getInstance().sendMessage(json);
+                ControllerUtil.getInstance().sendMessage(json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -179,7 +179,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
-            ControllerUtil.getInstance().sendMessage(json);
+                ControllerUtil.getInstance().sendMessage(json);
 
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -202,7 +202,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
-            ControllerUtil.getInstance().sendMessage(json);
+                ControllerUtil.getInstance().sendMessage(json);
 
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -238,7 +238,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             if (data.getDocumentIndex() >= 0) {
                 mView.respondDocumentIndexChange(data.getDocumentIndex());
             }
-            if (data.isVoteBegin()){//投票开始
+            if (data.isVoteBegin()) {//投票开始
                 mView.respondVoteBegin(data.getVoteId());
             }
         }

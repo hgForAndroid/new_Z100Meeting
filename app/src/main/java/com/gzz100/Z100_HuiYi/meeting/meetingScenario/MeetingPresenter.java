@@ -14,7 +14,11 @@ import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingRepository;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -122,8 +126,11 @@ public class MeetingPresenter implements MeetingContract.Presenter {
     }
 
     @Override
-    public void setOtherNum(int otherNum) {
-
+    public void fetchMeetingEndData(String hour, String min, String meetingBeginTime,String currentTime) {
+        mView.setEndBegin(meetingBeginTime);
+        mView.setEndDuration(Integer.valueOf(hour) +"小时"+min+"分钟");
+        mView.setEndEnding(currentTime);
+        mView.setEndRecord("会议纪要");
     }
 
     @Override

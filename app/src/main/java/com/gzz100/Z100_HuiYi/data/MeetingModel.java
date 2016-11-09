@@ -4,7 +4,7 @@ package com.gzz100.Z100_HuiYi.data;
  * Created by XieQXiong on 2016/10/31.
  */
 
-public class MeetingModel {
+public class MeetingModel  extends BaseBean{
     private String meetingSummary;
     private String meetingName;
     private String meetingBeginTime;

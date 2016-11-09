@@ -24,8 +24,6 @@ import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
-import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
-import com.gzz100.Z100_HuiYi.data.vote.VoteRepository;
 import com.gzz100.Z100_HuiYi.meeting.about.AboutFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaPresenter;
@@ -46,7 +44,6 @@ import com.gzz100.Z100_HuiYi.meeting.vote.VoteResultDialog;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
 import com.gzz100.Z100_HuiYi.tcpController.Client;
-import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
 import com.gzz100.Z100_HuiYi.tcpController.Server;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
@@ -403,6 +400,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mMeetingState = Constant.MEETING_STATE_BEGIN;
             mMainPresenter.hostStartMeeting(mControllerInfoBean,mMeetingState);
         } else {//结束
+            if (mMeetingState == Constant.MEETING_STATE_NOT_BEGIN){
+                ToastUtil.showMessage("会议未开始！");
+                return;
+            }
+            if (mMeetingState == Constant.MEETING_STATE_ENDING){
+                ToastUtil.showMessage("会议已结束！");
+                return;
+            }
             mMeetingState = Constant.MEETING_STATE_ENDING;
             mMainPresenter.hostEndMeeting(mControllerInfoBean,mMeetingState);
         }
@@ -411,6 +416,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleMeetingEnd(MeetingEnd meetingEnd){
         if (meetingEnd.getFlag() == 1){
+            mMeetingState = Constant.MEETING_STATE_ENDING;
+            //存储会议结束的时间，时  分
+            SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_HOUR,mNavBarView.getTimeHour());
+            SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_MIN,mNavBarView.getTimeMin());
+            //停止时间
+            mHandler.removeCallbacksAndMessages(null);
             mNavBarView.setMeetingStateOrAgendaState("已结束");
             SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END,true);
             mMeetingTab.setChecked(true);
@@ -441,6 +452,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void startVote(View view) {
         String buttonContent = mControllerView.getVoteAndEndVoteText();
         if ("投票".equals(buttonContent)) {
+            if (mMeetingState == Constant.MEETING_STATE_ENDING){
+                ToastUtil.showMessage("会议已结束！");
+                return;
+            }
             //点击投票只是显示投票列表，不用发送消息给客户端
             mDialog = new VoteListDialog(this);
             mDialog.setOnAllVoteItemClickListener(this);
@@ -501,6 +516,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                                 if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
                                     stopService(new Intent(MainActivity.this, Client.class));
                                 }
+                                clearCache();
                                 MainActivity.this.deleteDatabase(DBHelper.DB_NAME);
                                 ActivityStackManager.exit();
                             }
@@ -511,6 +527,17 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 清除sharedPreference中，对显示有影响的缓存
+     */
+    private void clearCache() {
+        SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.IS_MEETING_END);
+        SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.COUNTING_MIN);
+        SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.COUNTING_SEC);
+        SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.PAUSE_AGENDA_INDEX);
+        SharedPreferencesUtil.getInstance(MainActivity.this).remove(Constant.PAUSE_DOCUMENT_INDEX);
     }
 
     @Override
@@ -544,7 +571,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void clientResponseMeetingEnd() {
         mNavBarView.setMeetingStateOrAgendaState("已结束");
+        SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END,true);
         EventBus.getDefault().post(new MeetingEnd(2));
+        //存储会议结束的时间，时  分
+        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_HOUR,mNavBarView.getTimeHour());
+        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_MIN,mNavBarView.getTimeMin());
+        //停止时间
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -563,6 +596,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void hostResponseMeetingEnd() {
+        //存储会议结束的时间，时  分
+        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_HOUR,mNavBarView.getTimeHour());
+        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_MIN,mNavBarView.getTimeMin());
+        //停止时间
+        mHandler.removeCallbacksAndMessages(null);
         mNavBarView.setMeetingStateOrAgendaState("已结束");
         SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END,true);
         mMeetingTab.setChecked(true);
@@ -592,6 +630,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mControllerView.setPauseAndContinueButtonNotClickable(true);
         mControllerView.setStartAndEndButtonNotClickable(true);
         mVoteFragment.onDestroyView();
+
+        //存储会议结束的时间，时  分
+        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_HOUR,mNavBarView.getTimeHour());
+        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_MIN,mNavBarView.getTimeMin());
     }
 
     @Override

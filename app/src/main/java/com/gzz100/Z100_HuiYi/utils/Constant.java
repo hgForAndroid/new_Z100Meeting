@@ -49,6 +49,12 @@ public class Constant {
     public static final String IS_VOTE_BEGIN = "isVoteBegin";
     //会议是否已结束
     public static final String IS_MEETING_END = "isMeetingEnd";
+    //会议结束时的   时
+    public static final String ENDING_HOUR = "endHour";
+    //会议结束时的   分
+    public static final String ENDING_MIN = "endMin";
+    //当前结束的系统时间
+    public static final String ENDING_CURRENT_TIME = "endCurrentTime";
 
     public static final int MEETING_STATE_NOT_BEGIN = 1;
     public static final int MEETING_STATE_BEGIN = 2;

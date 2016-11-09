@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -176,6 +177,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    Log.e("什么鬼  ===========","");
                 }
             });
             builder.create().show();
@@ -202,11 +204,13 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
                 switch(which){
                     case Dialog.BUTTON_POSITIVE:
                         dialog.dismiss();
+                        Log.e("确定  ===========","");
                         //
                         mPresenter.submitVoteResult(ids);
                         break;
                     case Dialog.BUTTON_NEGATIVE:
                         dialog.dismiss();
+                        Log.e("取消  ===========","");
                         break;
                 }
             }
