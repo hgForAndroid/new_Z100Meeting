@@ -3,7 +3,6 @@ package com.gzz100.Z100_HuiYi.data.vote.remote;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.gzz100.Z100_HuiYi.data.Start;
 import com.gzz100.Z100_HuiYi.data.VoteResult;
 import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
 import com.gzz100.Z100_HuiYi.meeting.vote.UpLoadVote;

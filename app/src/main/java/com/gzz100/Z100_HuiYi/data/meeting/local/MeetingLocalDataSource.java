@@ -42,7 +42,6 @@ public class MeetingLocalDataSource implements MeetingDataSource {
         }else {
             callback.onDataNotAvailable();
         }
-
     }
 
     @Override

@@ -90,6 +90,7 @@
                 android:text="您可以继续浏览会议内容或退出"/>
             <Button
                 style="@style/ending_meeting_text_view_attr"
+                android:id="@+id/id_btn_exit"
                 android:text="退出"/>
         </LinearLayout>
     </RelativeLayout>

@@ -74,18 +74,21 @@ public class VoteResultDialog extends AlertDialog{
         List<BarEntry> barEntries = new ArrayList<>();
         for (int i = 0;i < voteResults.size();i++){
             mOptionNames.add(voteResults.get(i).getOptionItem());
-            barEntries.add(new BarEntry(i,voteResults.get(i).getVoteNum()));
-            mStringBuilder.append(voteResults.get(i).getOptionItem()+":"+voteResults.get(i).getVoteNum()+"票    ，");
+            //BarEntry  前面放的是值，后面数索引
+            BarEntry barEntry = new BarEntry(9, 1);
+            barEntries.add(new BarEntry(voteResults.get(i).getVoteNum(),i));
+            mStringBuilder.append(voteResults.get(i).getOptionItem()+":"+voteResults.get(i).getVoteNum()+"票    ");
         }
         mBarDataSets = new ArrayList<>();
-        BarDataSet barDataSet = new BarDataSet(barEntries,"voteResult");
+        BarDataSet barDataSet = new BarDataSet(barEntries,"");
         //转换柱状图的值格式
         barDataSet.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return value+"票";
+                return (int) value+"票";
             }
         });
+        barDataSet.setValueTextSize(20);
         //设置柱状图的值显示，如该值不设置为true，则不会显示
         barDataSet.setDrawValues(true);
         mBarDataSets.add(barDataSet);
@@ -108,11 +111,13 @@ public class VoteResultDialog extends AlertDialog{
         mBarChart.setScaleEnabled(false);
         //将选项的名称放置于柱状图的下方
         mBarChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        mBarChart.getXAxis().setTextSize(20);
         //去掉左右两边的Y轴值
         mBarChart.getAxisLeft().setEnabled(false);
         mBarChart.getAxisRight().setEnabled(false);
         //设置XY轴初始化的动画时间
         mBarChart.animateXY(2000, 2000);
+
         //刷新
         mBarChart.invalidate();
         //显示投票结果

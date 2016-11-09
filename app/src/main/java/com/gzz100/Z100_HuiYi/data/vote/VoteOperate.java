@@ -51,6 +51,23 @@ public class VoteOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_VOTE_LIST,data);
         mDatabase = mDBHelper.getReadableDatabase();
         mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_VOTE,null,values);
+
+        mDatabase.update(PersistenceContract.ColumnsName.TABLE_NAME_VOTE,values,
+                PersistenceContract.ColumnsName.COLUMN_NAME_VOTE_INDEX+"=?",new String[]{Constant.COLUMNS_VOTE_INDEX+""});
+    }
+
+    /**
+     * 向数据库中更新 投票列表的索引以及投票列表
+     * @param voteList 投票列表
+     */
+    public void updateVoteList(List<Vote> voteList){
+        byte[] data = ObjectTransverter.ListToByteArr(voteList);
+        ContentValues values =new ContentValues();
+        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_VOTE_INDEX, Constant.COLUMNS_VOTE_INDEX);
+        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_VOTE_LIST,data);
+        mDatabase = mDBHelper.getReadableDatabase();
+        mDatabase.update(PersistenceContract.ColumnsName.TABLE_NAME_VOTE,values,
+                PersistenceContract.ColumnsName.COLUMN_NAME_VOTE_INDEX+"=?",new String[]{Constant.COLUMNS_VOTE_INDEX+""});
     }
 
     /**

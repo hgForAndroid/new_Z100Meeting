@@ -113,11 +113,13 @@ public interface MeetingContract {
         void showDelegate();
 
         /**
-         * 取得其他参会人数后调用 MeetingContract.View 的  setOthersNum
-         * 人数为0 的话，设置setOtherNum中的第一个参数为false
-         * @param otherNum
+         * 获取会议结束后，会议的各种时间
+         * @param hour                  时
+         * @param min                   分
+         * @param meetingBeginTime      开始时间
+         * @param currentTime           当前系统时间
          */
-        void setOtherNum(int otherNum);
+        void fetchMeetingEndData(String hour,String min,String meetingBeginTime,String currentTime);
 
     }
 }

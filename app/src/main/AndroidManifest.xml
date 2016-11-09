@@ -78,7 +78,6 @@
             android:enabled="true"
             android:exported="true">
         </service>
-
         <service
             android:name=".tcpController.Server"
             android:enabled="true"
@@ -88,6 +87,10 @@
             android:name=".tcpController.Client"
             android:enabled="true"
             android:exported="true">
+        </service>
+        <service
+            android:name=".meetingPrepare.signIn.WriteDatabaseService"
+            android:exported="false">
         </service>
     </application>
 

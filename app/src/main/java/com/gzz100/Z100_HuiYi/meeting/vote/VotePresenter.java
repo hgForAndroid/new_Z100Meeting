@@ -163,10 +163,12 @@ public class VotePresenter implements VoteContract.Presenter{
             for (int i = 0; i < votes.size(); i++) {
                 if (votes.get(i).getVoteID() == voteId){
                     votes.get(i).setOptionState(1);
-                    break;
+//                    break;
                 }
             }
         }
+        //当前投票的状态改变了，更新数据库中的投票列表
+        VoteOperate.getInstance(mContext).updateVoteList(votes);
     }
 
     @Override

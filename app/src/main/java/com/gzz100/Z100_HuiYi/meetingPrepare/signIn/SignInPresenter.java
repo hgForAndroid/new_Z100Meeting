@@ -2,6 +2,7 @@ package com.gzz100.Z100_HuiYi.meetingPrepare.signIn;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -99,8 +100,11 @@ public class SignInPresenter implements SignInContract.Presenter {
             @Override
             public void onMeetingSummaryLoaded(MeetingSummaryBean meetingSummary) {
                 //分离对象并存储进数据库
-                splitAndSaveDataToDatabase(meetingSummary);
+                //保存用户列表不放在WriteDatabaseService，
+                //是为了避免刚进入主场景界面，用户列表还未写入
+                saveDelegateList(meetingSummary);
                 mView.showMainActivity();
+                WriteDatabaseService.startWriteDatabaseService(mContext,meetingSummary);
             }
 
             @Override
@@ -110,62 +114,6 @@ public class SignInPresenter implements SignInContract.Presenter {
         });
 
     }
-
-    /**
-     * 拆分数据集合，并将拆分的数据分别存储进数据库中
-     * @param meetingSummary    会议的基本数据集合
-     */
-    private void splitAndSaveDataToDatabase(MeetingSummaryBean meetingSummary) {
-        saveMeetingInfo(meetingSummary);
-        saveDelegateList(meetingSummary);
-        saveAgendaList(meetingSummary);
-        saveDocumentList(meetingSummary);
-        saveVoteList(meetingSummary);
-    }
-    /**
-     * 保存投票列表
-     * @param meetingSummary   会议的基本数据集合
-     */
-    private void saveVoteList(MeetingSummaryBean meetingSummary) {
-        if (meetingSummary.getVoteList() != null && meetingSummary.getVoteList().size()>0){
-            VoteOperate.getInstance(mContext).insertVoteList(meetingSummary.getVoteList());
-        }
-    }
-
-    /**
-     * 保存文件列表
-     * @param meetingSummary   会议的基本数据集合
-     */
-    private void saveDocumentList(MeetingSummaryBean meetingSummary) {
-        if (meetingSummary.getAgendaModelList() != null && meetingSummary.getAgendaModelList().size()>0){
-            Map<Integer,List<DocumentModel>> documents = new HashMap<>();
-            //根据议程数创建文件集合
-            for (int i = 0; i < meetingSummary.getAgendaModelList().size(); i++) {
-                List<DocumentModel> documentsList = new ArrayList<>();
-                documents.put(meetingSummary.getAgendaModelList().get(i).getAgendaIndex(),documentsList);
-            }
-            List<DocumentModel> documentList = meetingSummary.getDocumentModelList();
-            for (DocumentModel document:documentList){
-                //根据文件的所属议程获取到对应的文件集合，将文件加入该集合
-                documents.get(document.getDocumentAgendaIndex()).add(document);
-            }
-            //保存所有的文件集合，这里用议程数跟文件集合数都可以，他们是等量的
-            for (int i = 0; i < meetingSummary.getAgendaModelList().size(); i++) {
-                int agendaIndex = meetingSummary.getAgendaModelList().get(i).getAgendaIndex();
-                FileOperate.getInstance(mContext).insertFileList(agendaIndex,documents.get(agendaIndex));
-            }
-        }
-    }
-
-    /**
-     * 保存议程列表
-     * @param meetingSummary  会议的基本数据集合
-     */
-    private void saveAgendaList(MeetingSummaryBean meetingSummary) {
-        List<AgendaModel> agendaList = meetingSummary.getAgendaModelList();
-        FileOperate.getInstance(mContext).insertAgendaList(Constant.COLUMNS_AGENDAS,agendaList);
-    }
-
     /**
      * 保存参会人员列表
      * @param meetingSummary  会议的基本数据集合
@@ -174,21 +122,6 @@ public class SignInPresenter implements SignInContract.Presenter {
         List<DelegateModel> delegateList = meetingSummary.getDelegateModelList();
         MeetingOperate.getInstance(mContext).insertUserList(Constant.COLUMNS_USER,delegateList);
     }
-
-    /**
-     * 保存会议概况
-     * @param meetingSummary   会议的基本数据集合
-     */
-    private void saveMeetingInfo(MeetingSummaryBean meetingSummary) {
-        MeetingInfo meetingInfo = new MeetingInfo();
-        meetingInfo.setMeetingName(meetingSummary.getMeetingModel().getMeetingName());
-        meetingInfo.setMeetingBeginTime(meetingSummary.getMeetingModel().getMeetingBeginTime());
-        meetingInfo.setMeetingDuration(meetingSummary.getMeetingModel().getMeetingDuration()+"分钟");
-        meetingInfo.setDelegateNum(meetingSummary.getDelegateNum());
-        meetingInfo.setAgendaNum(meetingSummary.getAgendaNum());
-        MeetingOperate.getInstance(mContext).insertMeetingInfo(Constant.COLUMNS_MEETING_INFO,meetingInfo);
-    }
-
     @Override
     public void start() {
         //这里开始取数据需要传递参数，所以这个方法先不采用，直接调用  fetchCurrentUserBean

@@ -1,13 +1,10 @@
 package com.gzz100.Z100_HuiYi.network;
 
-import com.google.gson.JsonObject;
 import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
-import com.gzz100.Z100_HuiYi.data.MeetingSummary;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
-import com.gzz100.Z100_HuiYi.data.Start;
 import com.gzz100.Z100_HuiYi.data.Update;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.data.VoteResult;
@@ -19,10 +16,7 @@ import com.gzz100.Z100_HuiYi.fakeData.TestResultEntity;
 import java.util.List;
 
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -32,18 +26,6 @@ import rx.Observable;
  * Created by XieQXiong on 2016/9/1.
  */
 public interface ApiService {
-    /**
-     * 获取文件列表
-     * @param agendaIndex  议程序号
-     * @return   文件列表
-     */
-    @GET("fileList")
-    Observable<BaseResultEntity<List<Document>>> getFileList(@Query("agendaIndex")int agendaIndex);
-
-    //测试用
-    @GET("search")
-    Observable<TestResultEntity<List<OneTitle>>> getTitles(@Query("q") String q,@Query("fields") String fields);
-
     /**
      * 获取会议列表
      * @param IMEI    设备id
@@ -71,15 +53,8 @@ public interface ApiService {
     @GET("/api/Common/SignIn")
     Observable<BaseResultEntity<MeetingSummaryBean>> signIn(@Query("IMEI") String IMEI, @Query("meetingID") String meetingID);
 
-    @GET("login")
-    Observable<BaseResultEntity<List<Agenda>>> login(@Query("IMEI") String IMEI, @Query("userId") String userId);
-
-    @GET("getMeetingInfo")
-    Observable<BaseResultEntity<MeetingInfo>> getMeetingInfo();
-
-
-    @GET("/FetchVoteResult")
-    Observable<BaseResultEntity<List<VoteResult>>> fetchVoteResult(@Query("voteId") int voteId);
+    @GET("/api/Common/FetchVoteResult")
+    Observable<BaseResultEntity<List<VoteResult>>> fetchVoteResult(@Query("voteID") int voteId);
 
     @Headers("Content-Type: application/json")
     @POST("api/Common/UploadVoteResult")

@@ -90,12 +90,5 @@ public class VoteLocalDataSource implements VoteDataSource{
         }else {
             callback.onDataNotAvailable();
         }
-//fake data
-//        List<Vote> list = FakeDataProvider.getAllVoteByMeetingID(meetingID);
-//        if(list.size() == 0){
-//            callback.onDataNotAvailable();
-//        } else {
-//            callback.onAllVoteLoaded(list);
-//        }
     }
 }

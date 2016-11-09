@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by XieQXiong on 2016/9/28.
  */
-public class MeetingSummaryBean {
+public class MeetingSummaryBean extends BaseBean{
     private MeetingModel meetingModel;
     private int delegateNum;
     private int agendaNum;
