@@ -73,7 +73,7 @@ public class FileRemoteDataSource implements FileDataSource {
     @Override
     public void getAgendaList(String IMEI, String userId, @NonNull final LoadAgendaListCallback callback) {
         checkNotNull(callback);
-        List<AgendaModel> agendas = FakeDataProvider.getAgendas();
+        List<AgendaModel> agendas = FileOperate.getInstance(mContext).queryAgendaList(Constant.COLUMNS_AGENDAS);
         if (agendas != null && agendas.size() > 0){
             callback.onAgendaListLoaded(agendas);
             mFileOperate.insertAgendaList(Constant.COLUMNS_AGENDAS,agendas);
