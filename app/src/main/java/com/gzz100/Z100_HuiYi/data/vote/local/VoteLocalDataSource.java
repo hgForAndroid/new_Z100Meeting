@@ -75,7 +75,7 @@ public class VoteLocalDataSource implements VoteDataSource{
     }
 
     @Override
-    public void startOrEndVote(String IMEI, String meetingID, int voteID, int startOrEnd, @NonNull SubmitCallback callback) {
+    public void startOrEndVote(String IMEI, int meetingID, int voteID, int startOrEnd, @NonNull SubmitCallback callback) {
 
     }
 

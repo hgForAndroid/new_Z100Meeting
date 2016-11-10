@@ -43,5 +43,5 @@ public interface VoteDataSource {
 
     void submitVote(UpLoadVote data, @NonNull SubmitCallback callback);
 
-    void startOrEndVote(String IMEI,String meetingID, int voteID,int startOrEnd,@NonNull SubmitCallback callback);
+    void startOrEndVote(String IMEI,int meetingID, int voteID,int startOrEnd,@NonNull SubmitCallback callback);
 }

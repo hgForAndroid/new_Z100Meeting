@@ -80,7 +80,7 @@ public class VoteRepository implements VoteDataSource{
     }
 
     @Override
-    public void startOrEndVote(String IMEI, String meetingID, int voteID, int startOrEnd, @NonNull final SubmitCallback callback) {
+    public void startOrEndVote(String IMEI, int meetingID, int voteID, int startOrEnd, @NonNull final SubmitCallback callback) {
         mVoteRemoteDataSource.startOrEndVote(IMEI, meetingID, voteID, startOrEnd, new SubmitCallback() {
             @Override
             public void onSuccess() {

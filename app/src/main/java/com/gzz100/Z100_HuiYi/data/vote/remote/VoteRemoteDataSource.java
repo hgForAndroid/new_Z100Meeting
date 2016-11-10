@@ -79,7 +79,7 @@ public class VoteRemoteDataSource implements VoteDataSource{
     }
 
     @Override
-    public void startOrEndVote(String IMEI, String meetingID, int voteID, int startOrEnd,
+    public void startOrEndVote(String IMEI, int meetingID, int voteID, int startOrEnd,
                                @NonNull final SubmitCallback callback) {
         StartOrEndVotePost startOrEndVotePost = new StartOrEndVotePost(
                 new ProgressSubscriber(new HttpRxCallbackListener<String>(){
