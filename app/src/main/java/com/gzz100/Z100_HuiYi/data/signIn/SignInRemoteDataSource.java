@@ -35,7 +35,7 @@ public class SignInRemoteDataSource implements SignInDataSource {
         return mInstance;
     }
     @Override
-    public void fetchUserBean(String IMEI, String meetingID, @NonNull final LoadUserBeanCallback callback) {
+    public void fetchUserBean(String IMEI, int meetingID, @NonNull final LoadUserBeanCallback callback) {
         checkNotNull(callback);
         //加载服务器数据
         UserBeanPost userBeanPost = new UserBeanPost(
@@ -57,7 +57,7 @@ public class SignInRemoteDataSource implements SignInDataSource {
     }
 
     @Override
-    public void signIn(String IMEI, String meetingID, @NonNull final LoadMeetingSummaryCallback callback) {
+    public void signIn(String IMEI, int meetingID, @NonNull final LoadMeetingSummaryCallback callback) {
         //加载服务器数据
         MeetingSummaryPost meetingSummaryPost1 = new MeetingSummaryPost(
                 new ProgressSubscriber(new HttpRxCallbackListener<MeetingSummaryBean>(){
