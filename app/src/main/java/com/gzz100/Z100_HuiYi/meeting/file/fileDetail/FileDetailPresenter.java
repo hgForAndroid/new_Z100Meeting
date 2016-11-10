@@ -5,7 +5,9 @@ import android.os.Environment;
 import android.view.View;
 
 import com.google.gson.Gson;
+import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.data.file.FileDetailRepository;
+import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
@@ -76,7 +78,6 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setAgendaIndex(agendaIndex);
             mControllerInfoBean.setDocumentIndex(DocumentIndex);
             mControllerInfoBean.setUpLevelTitle(upLevelText);
-
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
                 ControllerUtil.getInstance().sendMessage(json);
@@ -138,6 +139,22 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             e.printStackTrace();
         }
         mView.meetingContinue();
+    }
+
+    @Override
+    public void launchVote(String IMEI, String meetingId, final int voteId, final int startOrEnd){
+        RepositoryUtil.getVoteRepository(mContext).startOrEndVote(IMEI, meetingId, voteId, startOrEnd,
+                new VoteDataSource.SubmitCallback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onFail() {
+
+                    }
+                });
     }
 
     @Override
