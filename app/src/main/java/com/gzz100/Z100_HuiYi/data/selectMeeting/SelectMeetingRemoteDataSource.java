@@ -73,7 +73,7 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
     }
 
     @Override
-    public void startMeeting(@NonNull final StartMeetingCallback callback, String IMEI, String meetingID) {
+    public void startMeeting(@NonNull final StartMeetingCallback callback, String IMEI, int meetingID) {
 
 //        加载服务器数据
         StartMeetingPost startMeetingPost = new StartMeetingPost(
