@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.Context;
 
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
-import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
@@ -24,8 +23,6 @@ import java.util.Map;
 * @author XieQXiong
 * create at 2016/11/9 9:00
 */
-
-
 public class WriteDatabaseService extends IntentService {
 
     private static final String KEY_MEETINGSUMMARYBEAN = "meetingSummaryBean";
@@ -103,7 +100,7 @@ public class WriteDatabaseService extends IntentService {
     private void saveAgendaList(MeetingSummaryBean meetingSummary) {
         List<AgendaModel> agendaList = meetingSummary.getAgendaModelList();
         FileOperate.getInstance(this.getApplicationContext()).
-                insertAgendaList(Constant.COLUMNS_AGENDAS,agendaList);
+                insertAgendaList(agendaList);
     }
     /**
      * 保存会议概况
@@ -113,7 +110,7 @@ public class WriteDatabaseService extends IntentService {
         MeetingInfo meetingInfo = new MeetingInfo();
         meetingInfo.setMeetingName(meetingSummary.getMeetingModel().getMeetingName());
         meetingInfo.setMeetingBeginTime(meetingSummary.getMeetingModel().getMeetingBeginTime());
-        meetingInfo.setMeetingDuration(meetingSummary.getMeetingModel().getMeetingDuration()+"分钟");
+        meetingInfo.setMeetingDuration(meetingSummary.getMeetingModel().getMeetingDuration()+"");
         meetingInfo.setDelegateNum(meetingSummary.getDelegateNum());
         meetingInfo.setAgendaNum(meetingSummary.getAgendaNum());
         MeetingOperate.getInstance(this.getApplicationContext()).
