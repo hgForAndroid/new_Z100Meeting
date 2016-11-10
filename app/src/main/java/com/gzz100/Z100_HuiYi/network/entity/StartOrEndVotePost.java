@@ -11,11 +11,11 @@ import rx.Subscriber;
 public class StartOrEndVotePost extends BaseEntity {
     private Subscriber mSubscriber;
     private String IMEI;
-    private String meetingID;
+    private int meetingID;
     private int voteID;
     private int startOrEnd;
 
-    public StartOrEndVotePost(Subscriber subscriber, String imei, String meetingID, int voteID, int startOrEnd) {
+    public StartOrEndVotePost(Subscriber subscriber, String imei, int meetingID, int voteID, int startOrEnd) {
         mSubscriber = subscriber;
         IMEI = imei;
         this.meetingID = meetingID;

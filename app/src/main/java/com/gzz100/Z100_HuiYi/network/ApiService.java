@@ -35,7 +35,7 @@ public interface ApiService {
      * @return
      */
     @GET("/api/Host/StartMeeting")
-    Observable<BaseResultEntity<String>> startMeeting(@Query("meetingID") String meetingID,@Query("IMEI") String IMEI);
+    Observable<BaseResultEntity<String>> startMeeting(@Query("meetingID") int meetingID,@Query("IMEI") String IMEI);
 
     /**
      * 验证用户，当前设备对应的用户
@@ -44,7 +44,7 @@ public interface ApiService {
      * @return
      */
     @GET("/api/Common/CheckUser")
-    Observable<BaseResultEntity<UserBean>> checkUser(@Query("IMEI") String IMEI,@Query("meetingID") String meetingID);
+    Observable<BaseResultEntity<UserBean>> checkUser(@Query("IMEI") String IMEI,@Query("meetingID") int meetingID);
 
     /**
      * 签到
@@ -53,7 +53,7 @@ public interface ApiService {
      * @return
      */
     @GET("/api/Common/SignIn")
-    Observable<BaseResultEntity<MeetingSummaryBean>> signIn(@Query("IMEI") String IMEI, @Query("meetingID") String meetingID);
+    Observable<BaseResultEntity<MeetingSummaryBean>> signIn(@Query("IMEI") String IMEI, @Query("meetingID") int meetingID);
 
     /**
      * 获取投票结果
@@ -83,7 +83,7 @@ public interface ApiService {
      */
     @GET("/api/Host/StartOrEndVote")
     Observable<BaseResultEntity<String>> startOrEndVote(@Query("IMEI")String IMEI,
-              @Query("meetingID") String meetingID, @Query("voteID") int voteID, @Query("startOrEnd") int startOrEnd);
+              @Query("meetingID") int meetingID, @Query("voteID") int voteID, @Query("startOrEnd") int startOrEnd);
 
     /**
      * 检查更新

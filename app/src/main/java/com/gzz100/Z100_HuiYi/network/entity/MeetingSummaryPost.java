@@ -10,10 +10,10 @@ import rx.Subscriber;
  */
 public class MeetingSummaryPost extends BaseEntity {
     private String IMEI;
-    private String meetingID;
+    private int meetingID;
     private Subscriber mSubscriber;
 
-    public MeetingSummaryPost(Subscriber subscriber,String IMEI, String meetingID) {
+    public MeetingSummaryPost(Subscriber subscriber,String IMEI, int meetingID) {
         this.IMEI = IMEI;
         this.meetingID = meetingID;
         mSubscriber = subscriber;

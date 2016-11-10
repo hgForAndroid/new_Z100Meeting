@@ -10,10 +10,10 @@ import rx.Subscriber;
  */
 public class StartPost extends BaseEntity {
     private Subscriber mSubscriber;
-    private String meetingID;
+    private int meetingID;
     private String IMEI;
 
-    public StartPost(Subscriber subscriber, String meetingID, String imei) {
+    public StartPost(Subscriber subscriber, int meetingID, String imei) {
         mSubscriber = subscriber;
         this.meetingID = meetingID;
         IMEI = imei;

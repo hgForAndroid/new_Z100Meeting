@@ -10,10 +10,10 @@ import rx.Subscriber;
  */
 public class UserBeanPost extends BaseEntity {
     private String IMEI;
-    private String meetingID;
+    private int meetingID;
     private Subscriber mSubscriber;
 
-    public UserBeanPost(Subscriber subscriber,String imei, String meetingID) {
+    public UserBeanPost(Subscriber subscriber,String imei, int meetingID) {
         IMEI = imei;
         this.meetingID = meetingID;
         mSubscriber = subscriber;
