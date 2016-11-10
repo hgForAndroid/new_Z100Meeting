@@ -483,7 +483,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mVoteId = mDialog.getVoteId();
         SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID,mVoteId);
         mMainPresenter.hostLaunchOrCloseVote(deviceIMEI,meetingID,mVoteId,0,mControllerInfoBean,mMeetingState);
-
     }
 
     @Override
@@ -517,6 +516,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                                     stopService(new Intent(MainActivity.this, Client.class));
                                 }
                                 clearCache();
+                                //删除会议前预下载的所有文件
+                                AppUtil.DeleteFolder(AppUtil.getCacheDir(MainActivity.this));
                                 MainActivity.this.deleteDatabase(DBHelper.DB_NAME);
                                 ActivityStackManager.exit();
                             }
