@@ -75,7 +75,7 @@ public class VoteListDialog extends AlertDialog implements OnAllVoteItemClickLis
     public void onVoteStartStopButtonClick(final View view, final int position) {
         voteId = mVoteList.get(position).getVoteID();
         String deviceIMEI = MPhone.getDeviceIMEI(mContext);
-        String meetingID = SharedPreferencesUtil.getInstance(mContext).getString(Constant.MEETING_ID, "");
+        int meetingID = SharedPreferencesUtil.getInstance(mContext).getInt(Constant.MEETING_ID, -1);
         RepositoryUtil.getVoteRepository(mContext).startOrEndVote(deviceIMEI, meetingID, voteId, 0,
                 new VoteDataSource.SubmitCallback() {
                     @Override
