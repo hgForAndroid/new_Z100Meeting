@@ -38,7 +38,6 @@ public class DelegatePresenter implements DelegateContract.Presenter {
 
     @Override
     public void fetchRoleList() {
-
             mDelegateRepository.getRoleList(new DelegateDataSource.LoadRoleListCallback() {
                 @Override
                 public void onRoleListLoaded(List<String> roleList) {

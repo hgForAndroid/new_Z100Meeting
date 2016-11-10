@@ -7,7 +7,6 @@ import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.file.FileDataSource;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
-import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;
 
@@ -52,7 +51,7 @@ public class FileLocalDataSource implements FileDataSource {
     public void getAgendaList(String IMEI, String userId, @NonNull LoadAgendaListCallback callback) {
         checkNotNull(callback);
         //加载本地数据
-        List<AgendaModel> agendasList = mFileOperate.queryAgendaList(Constant.COLUMNS_AGENDAS);
+        List<AgendaModel> agendasList = mFileOperate.queryAgendaList();
         if (agendasList != null && agendasList.size() > 0){
             callback.onAgendaListLoaded(agendasList);
         }else {

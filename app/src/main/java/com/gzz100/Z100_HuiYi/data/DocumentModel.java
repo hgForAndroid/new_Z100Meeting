@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
-import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -83,7 +82,7 @@ public class DocumentModel extends BaseBean {
 
     public void setDocumentSpeaker(Context context, TextView textView){
         int documentAgendaIndex = this.documentAgendaIndex;
-        List<AgendaModel> agendaModels = FileOperate.getInstance(context).queryAgendaList(Constant.COLUMNS_AGENDAS);
+        List<AgendaModel> agendaModels = FileOperate.getInstance(context).queryAgendaList();
         for (AgendaModel agenda : agendaModels) {
             if (agenda.getAgendaIndex() == documentAgendaIndex){
                 textView.setText(agenda.getAgendaSpeaker());

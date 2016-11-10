@@ -77,7 +77,7 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
 
 //        加载服务器数据
         StartMeetingPost startMeetingPost = new StartMeetingPost(
-                new MySubscriber(new HttpRxCallbackListener<String>() {
+                new ProgressSubscriber(new HttpRxCallbackListener<String>() {
                     @Override
                     public void onNext(String o) {
                         callback.onStartMeetingSuccess();
