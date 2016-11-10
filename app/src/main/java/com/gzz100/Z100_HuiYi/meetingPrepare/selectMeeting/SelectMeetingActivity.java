@@ -102,7 +102,7 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
     }
 
     @Override
-    public void showSignIn(String IMEI, String meetingID) {
+    public void showSignIn(String IMEI, int meetingID) {
         SignInActivity.toSignInActivity(this, IMEI, meetingID);
     }
 
@@ -115,7 +115,7 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
     public void onMeetingClick(int position) {
         int meetingID = mMeetings.get(position).getMeetingID();
         String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
-        mPresenter.selectMeeting(deviceIMEI, meetingID + "");
+        mPresenter.selectMeeting(deviceIMEI, meetingID);
     }
 
     @Override

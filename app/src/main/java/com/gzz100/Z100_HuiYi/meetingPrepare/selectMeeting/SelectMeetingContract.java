@@ -29,7 +29,7 @@ public interface SelectMeetingContract {
          * @param IMEI    设备id
          * @param meetingID   会议id
          */
-        void showSignIn(String IMEI, String meetingID);
+        void showSignIn(String IMEI, int meetingID);
 
     }
 
@@ -45,7 +45,7 @@ public interface SelectMeetingContract {
          * @param IMEI     设备标识码
          * @param  meetingID  会议id
          */
-        void selectMeeting(String IMEI,String meetingID);
+        void selectMeeting(String IMEI,int meetingID);
 
         /**
          * 保存设备标志码，之后都在本地取
