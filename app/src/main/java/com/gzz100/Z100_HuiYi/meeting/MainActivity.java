@@ -461,7 +461,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mDialog.show();
         } else {
             String deviceIMEI = MPhone.getDeviceIMEI(this);
-            String meetingID = SharedPreferencesUtil.getInstance(this).getString(Constant.MEETING_ID, "");
+            int meetingID = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
             //关闭会议成功，这里不需要传消息实体以及会议状态，在关闭成功后再传，
             // 在下面的方法hostResponseCloseVoteSuccess中处理结束投票的操作
             int voteId = SharedPreferencesUtil.getInstance(this).getInt(Constant.BEGIN_VOTE_ID, -1);
@@ -479,7 +479,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mMeetingState = Constant.MEETING_STATE_BEGIN;
 
         String deviceIMEI = MPhone.getDeviceIMEI(this);
-        String meetingID = SharedPreferencesUtil.getInstance(this).getString(Constant.MEETING_ID, "");
+        int meetingID = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
         mVoteId = mDialog.getVoteId();
         SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID,mVoteId);
         mMainPresenter.hostLaunchOrCloseVote(deviceIMEI,meetingID,mVoteId,0,mControllerInfoBean,mMeetingState);

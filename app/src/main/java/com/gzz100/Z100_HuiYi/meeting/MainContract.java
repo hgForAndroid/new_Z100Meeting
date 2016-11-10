@@ -155,7 +155,7 @@ public interface MainContract {
          * @param mControllerInfoBean      消息实体，成功开启投票后，发送消息给所有客户端
          * @param meetingState     会议状态
          */
-        void hostLaunchOrCloseVote(String IMEI,String meetingId,int voteId,int startOrEnd,
+        void hostLaunchOrCloseVote(String IMEI,int meetingId,int voteId,int startOrEnd,
                                    ControllerInfoBean mControllerInfoBean,int meetingState);
 
     }

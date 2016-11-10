@@ -197,7 +197,7 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void hostLaunchOrCloseVote(String IMEI, String meetingId, final int voteId, final int startOrEnd,
+    public void hostLaunchOrCloseVote(String IMEI, int meetingId, final int voteId, final int startOrEnd,
                                       final ControllerInfoBean mControllerInfoBean, final int meetingState) {
         RepositoryUtil.getVoteRepository(mContext).startOrEndVote(IMEI, meetingId, voteId, startOrEnd,
                 new VoteDataSource.SubmitCallback() {
