@@ -131,7 +131,7 @@ public class ConnectServerPresenter implements ConnectServerContract.Presenter {
                             //保存服务器地址
                             SharedPreferencesUtil.getInstance(mContext).putString(Constant.CURRENT_IP, keyInfoBean.getServerIP());
                             SharedPreferencesUtil.getInstance(mContext).putString(Constant.TCP_SERVER_IP, keyInfoBean.getTcpServerIP());
-                            SharedPreferencesUtil.getInstance(mContext).putString(Constant.MEETING_ID, keyInfoBean.getMeetingId());
+                            SharedPreferencesUtil.getInstance(mContext).putInt(Constant.MEETING_ID, keyInfoBean.getMeetingId());
                             mView.showSignInActivity(keyInfoBean);
                         }
 
