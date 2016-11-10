@@ -346,8 +346,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     @Override
     public void onVoteStartStopButtonClick(View view, int position) {
         String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
-        String meetingId = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-                .getString(Constant.MEETING_ID, "");
+        int meetingId = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                .getInt(Constant.MEETING_ID, -1);
         mVoteId = mDialog.getVoteId();
         SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, mVoteId);
         //启动投票，成功则调用本类方法   launchVoteSuccess

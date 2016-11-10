@@ -142,7 +142,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void launchVote(String IMEI, String meetingId, final int voteId, final int startOrEnd){
+    public void launchVote(String IMEI, int meetingId, final int voteId, final int startOrEnd){
         RepositoryUtil.getVoteRepository(mContext).startOrEndVote(IMEI, meetingId, voteId, startOrEnd,
                 new VoteDataSource.SubmitCallback() {
                     @Override

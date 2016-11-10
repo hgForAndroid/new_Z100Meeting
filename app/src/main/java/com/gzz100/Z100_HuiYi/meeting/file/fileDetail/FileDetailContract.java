@@ -209,7 +209,7 @@ public interface FileDetailContract {
          * @param voteId        投票id
          * @param startOrEnd    0：表示开启投票，  -1：表示关闭投票
          */
-        void launchVote(String IMEI, String meetingId, final int voteId, final int startOrEnd);
+        void launchVote(String IMEI, int meetingId, final int voteId, final int startOrEnd);
 
         /**
          * 开始投票
