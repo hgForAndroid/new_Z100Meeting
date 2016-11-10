@@ -43,18 +43,18 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     private static final String MEETING_ID = "meetingID";
     private static final String DEVICE_IMEI = "deviceIMEI";
     private String mDeviceIMEI;
-    private String mMeetingID;
+    private int mMeetingID;
     private Dialog mDialog;
     private Intent mIntent;
     private String mUrlPrefix;
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mNotificationBuilder;
 
-    public static void toSignInActivity(Context context,String IMEI,String meetingID){
+    public static void toSignInActivity(Context context,String IMEI,int meetingID){
         Intent intent = new Intent(context,SignInActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(DEVICE_IMEI,IMEI);
-        bundle.putString(MEETING_ID,meetingID);
+        bundle.putInt(MEETING_ID,meetingID);
         intent.putExtra(BUNDLE,bundle);
         context.startActivity(intent);
     }
@@ -86,7 +86,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     private void initGetIntent() {
         if (getIntent().getBundleExtra(BUNDLE) != null){
             mDeviceIMEI = getIntent().getBundleExtra(BUNDLE).getString(DEVICE_IMEI);
-            mMeetingID = getIntent().getBundleExtra(BUNDLE).getString(MEETING_ID);
+            mMeetingID = getIntent().getBundleExtra(BUNDLE).getInt(MEETING_ID);
         }
     }
 
@@ -104,7 +104,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
                 MulticastController.getDefault().sendMessage(s);
             }
         }).start();
-        SharedPreferencesUtil.getInstance(this).putString(Constant.MEETING_ID,mMeetingID);
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_ID,mMeetingID);
     }
 
     @Override

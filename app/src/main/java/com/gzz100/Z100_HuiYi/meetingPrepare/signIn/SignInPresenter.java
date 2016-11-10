@@ -33,7 +33,7 @@ public class SignInPresenter implements SignInContract.Presenter {
 
     private boolean isFirst = true;
     @Override
-    public void fetchCurrentUserBean(boolean fourUpdate, String IMEI, String meetingID) {
+    public void fetchCurrentUserBean(boolean fourUpdate, String IMEI, int meetingID) {
         if (isFirst || fourUpdate){
             isFirst = false;
             SignInRemoteDataSource.getInstance(mContext).fetchUserBean(IMEI, meetingID, new SignInDataSource.LoadUserBeanCallback() {
@@ -76,7 +76,7 @@ public class SignInPresenter implements SignInContract.Presenter {
     }
 
     @Override
-    public void signIn(String IMEI,String meetingID) {
+    public void signIn(String IMEI,int meetingID) {
         SignInRemoteDataSource.getInstance(mContext).signIn(IMEI, meetingID, new SignInDataSource.LoadMeetingSummaryCallback() {
             @Override
             public void onMeetingSummaryLoaded(MeetingSummaryBean meetingSummary) {
