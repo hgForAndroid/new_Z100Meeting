@@ -181,6 +181,8 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
                                     getActivity().stopService(new Intent(getActivity(), Client.class));
                                 }
                                 clearCache();
+                                //删除会议前预下载的所有文件
+                                AppUtil.DeleteFolder(AppUtil.getCacheDir(getContext()));
                                 getActivity().deleteDatabase(DBHelper.DB_NAME);
                                 ActivityStackManager.exit();
                             }
