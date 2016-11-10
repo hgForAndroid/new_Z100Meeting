@@ -1,10 +1,13 @@
 package com.gzz100.Z100_HuiYi.meetingPrepare.signIn;
 
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +47,8 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     private Dialog mDialog;
     private Intent mIntent;
     private String mUrlPrefix;
+    private NotificationManager mNotificationManager;
+    private NotificationCompat.Builder mNotificationBuilder;
 
     public static void toSignInActivity(Context context,String IMEI,String meetingID){
         Intent intent = new Intent(context,SignInActivity.class);
@@ -130,6 +135,13 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
                 mIntent.putExtra("id",position);
                 mIntent.putExtra("name",mFileIDs.get(position));
                 startService(mIntent);
+            }else {
+                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationBuilder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_completed)
+                        .setContentTitle("文件下载")
+                        .setContentText("文件已全部下载完成");
+                mNotificationManager.notify(mFileIDs.size(),mNotificationBuilder.build());
             }
         }
     }
