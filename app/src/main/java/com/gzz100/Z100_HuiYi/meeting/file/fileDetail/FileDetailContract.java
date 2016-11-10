@@ -74,6 +74,11 @@ public interface FileDetailContract {
         void showVoteResult();
 
         /**
+         * 启动投票成功，需要去投票界面进行投票，并且通知所有客户端
+         */
+        void launchVoteSuccess();
+
+        /**
          * 重设议程时间，
          * 如果是主持人端的，controllerInfoBean应该设为null,只传入agendaIndex
          * 如果是客户端的，则需要处理controllerInfoBean，而不处理agendaIndex
@@ -196,6 +201,15 @@ public interface FileDetailContract {
         void meetingContinue(ControllerInfoBean controllerInfoBean, int meetingState, int agendaIndex,
                              int DocumentIndex, String upLevelText, boolean isAgendaChange,
                              boolean isAgendaTimeCountDown,String min,String sec);
+
+        /**
+         * 启动投票，只有启动成功，才能开始去投票界面投票
+         * @param IMEI          设备id
+         * @param meetingId     会议id
+         * @param voteId        投票id
+         * @param startOrEnd    0：表示开启投票，  -1：表示关闭投票
+         */
+        void launchVote(String IMEI, String meetingId, final int voteId, final int startOrEnd);
 
         /**
          * 开始投票
