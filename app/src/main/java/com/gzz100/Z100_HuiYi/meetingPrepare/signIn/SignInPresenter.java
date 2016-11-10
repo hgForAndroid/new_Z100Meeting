@@ -35,6 +35,7 @@ public class SignInPresenter implements SignInContract.Presenter {
     @Override
     public void fetchCurrentUserBean(boolean fourUpdate, String IMEI, String meetingID) {
         if (isFirst || fourUpdate){
+            isFirst = false;
             SignInRemoteDataSource.getInstance(mContext).fetchUserBean(IMEI, meetingID, new SignInDataSource.LoadUserBeanCallback() {
                 @Override
                 public void onUserBeanLoaded(UserBean userBean) {
