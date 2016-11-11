@@ -4,11 +4,13 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
+import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
+import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 /**
  * Created by XieQXiong on 2016/11/7.
@@ -87,6 +89,21 @@ public class MainPresenter implements MainContract.Presenter {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void hostStartEndMeeting(String IMEI, int meetingId) {
+        RepositoryUtil.getMeetingRepository(mContext).endMeeting(IMEI, meetingId,
+                new MeetingDataSource.EndMeetingCallback() {
+                    @Override
+                    public void onEndMeetingSuccess() {
+                        mMainView.hostEndMeetingSuccess();
+                    }
+                    @Override
+                    public void onEndMeetingFail(String errorMsg) {
+                        ToastUtil.showMessage(errorMsg);
+                    }
+                });
     }
 
     @Override
@@ -209,7 +226,7 @@ public class MainPresenter implements MainContract.Presenter {
                             SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_VOTE_BEGIN,true);
                             //存储投票id
                             SharedPreferencesUtil.getInstance(mContext).putInt(Constant.BEGIN_VOTE_ID, voteId);
-                            mMainView.hostResponseLaunchVoteSuccess();
+                            mMainView.hostResponseLaunchVoteSuccess();//开启投票成功
 
                             //发送消息给客户端
                             try {
