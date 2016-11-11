@@ -3,9 +3,9 @@ package com.gzz100.Z100_HuiYi.meeting.vote;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -16,9 +16,9 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ValueFormatter;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
-import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.VoteResult;
 import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
+import com.gzz100.Z100_HuiYi.utils.ScreenSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +38,7 @@ public class VoteResultDialog extends AlertDialog{
     private List<BarDataSet> mBarDataSets;//柱状图数据集
     private List<String> mOptionNames;//每个选项的名称，放于柱状图的下边
     private StringBuilder mStringBuilder;//所有的选项与得到的票数的字符串
+    private LinearLayout mRootLayout;
 
     public VoteResultDialog(Context context, int voteId){
         super(context);
@@ -49,6 +50,10 @@ public class VoteResultDialog extends AlertDialog{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_vote_result);
+        mRootLayout = (LinearLayout) findViewById(R.id.id_vote_result_root_layout);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ScreenSize.getScreenWidth(mContext)*4/5,ScreenSize.getScreenHeight(mContext)*3/4);
+        mRootLayout.setLayoutParams(params);
         //取得柱状图
         mBarChart = (BarChart) findViewById(R.id.id_vote_result_chart);
         mTvShowError = (TextView) findViewById(R.id.id_tv_vote_result_show_error);
