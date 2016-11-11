@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
+import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import java.util.List;
 
@@ -67,6 +69,10 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
     @OnClick(R.id.id_btn_connect_server)
     void onClick() {
         mIp = mEdtIP.getText().toString().trim();
+        if (TextUtils.isEmpty(mIp)){
+            ToastUtil.showMessage("请输入服务器IP");
+            return;
+        }
         mPresenter.saveIp(mIp);
     }
 
