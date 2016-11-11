@@ -5,9 +5,11 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Download;
+import com.gzz100.Z100_HuiYi.data.eventBean.DownLoadComplete;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.DownloadManager;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.downLoad.DownloadProgressListener;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
@@ -24,6 +26,10 @@ import rx.Subscriber;
  * Created by XieQXiong on 2016/9/27.
  */
 public class DownLoadService extends IntentService {
+    /**
+     * 下载完该文件，是否需要下载下一个文件
+     */
+    private boolean flag;
     //id,消息的唯一标识
     private int id;
     //文件名
@@ -39,6 +45,7 @@ public class DownLoadService extends IntentService {
     }
     @Override
     protected void onHandleIntent(Intent intent) {
+        flag = intent.getBooleanExtra("flag",true);
         id = intent.getIntExtra("id",0);
         name = intent.getStringExtra("name");
         apkUrl = intent.getStringExtra("url");
@@ -99,8 +106,14 @@ public class DownLoadService extends IntentService {
         mNotificationBuilder.setProgress(0, 0, false);
         mNotificationBuilder.setContentText(name+downLoadString);
         mNotificationManager.notify(id, mNotificationBuilder.build());
-        //一个文件下载完成，马上通知签到页面进行下一个文件的下载
-        EventBus.getDefault().post(id+1);
+        if (flag){
+            //一个文件下载完成，马上通知签到页面进行下一个文件的下载
+            EventBus.getDefault().post(id+1);
+        }else {
+            //flag为false时，是接收从FileDetailPresenter加载文件中发过来的
+            //下载完这个文件，需要提醒FileDetailActivity已经下载完成，让其重新加载显示文件
+            EventBus.getDefault().post(new DownLoadComplete(true, name));
+        }
     }
 
     private void sendNotification(Download download) {
