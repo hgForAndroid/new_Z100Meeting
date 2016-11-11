@@ -131,6 +131,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         if (mFileIDs != null && mFileIDs.size() > 0){
             if (position < mFileIDs.size()){
                 mIntent = new Intent(SignInActivity.this, DownLoadService.class);
+                mIntent.putExtra("flag",true);
                 mIntent.putExtra("url",mUrlPrefix+mFileIDs.get(position));
                 mIntent.putExtra("id",position);
                 mIntent.putExtra("name",mFileIDs.get(position));
