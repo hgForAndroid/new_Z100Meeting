@@ -6,8 +6,10 @@ import android.support.annotation.NonNull;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
+import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
 import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
+import com.gzz100.Z100_HuiYi.network.entity.EndMeetingPost;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -57,5 +59,22 @@ public class MeetingRemoteDataSource implements MeetingDataSource {
 //            callback.onDataNotAvailable();
 //        }
 
+    }
+
+    @Override
+    public void endMeeting(String IMEI, int meetingId, final EndMeetingCallback callback) {
+        EndMeetingPost endMeetingPost = new EndMeetingPost(
+                new ProgressSubscriber(new HttpRxCallbackListener<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        callback.onEndMeetingSuccess();
+                    }
+
+                    @Override
+                    public void onError(String errorMsg) {
+                        callback.onEndMeetingFail(errorMsg);
+                    }
+                }, mContext),IMEI,meetingId);
+        HttpManager.getInstance(mContext).doHttpDeal(endMeetingPost);
     }
 }
