@@ -37,6 +37,9 @@ public interface ApiService {
     @GET("/api/Host/StartMeeting")
     Observable<BaseResultEntity<String>> startMeeting(@Query("meetingID") int meetingID,@Query("IMEI") String IMEI);
 
+    @GET("api/Host/EndMeeting")
+    Observable<BaseResultEntity<String>> endMeeting(@Query("IMEI") String IMEI,@Query("meetingID") int meetingID);
+
     /**
      * 验证用户，当前设备对应的用户
      * @param IMEI          设备id
