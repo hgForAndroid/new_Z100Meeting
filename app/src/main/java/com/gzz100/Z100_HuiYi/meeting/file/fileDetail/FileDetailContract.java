@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 
 import java.io.File;
@@ -39,6 +40,12 @@ public interface FileDetailContract {
         void loadFile(File file);
 
         /**
+         * 提示文件正在下载中
+         * @param tip
+         */
+        void showFileIsDownLoading(String tip);
+
+        /**
          * 设置会议当前状态,该方法是在继续状态下，支持人点击切换文件操作时调用
          * @param meetingState   会议状态
          */
@@ -53,6 +60,11 @@ public interface FileDetailContract {
          * 结束
          */
         void meetingEnding();
+
+        /**
+         * 结束会议成功，调用该方法
+         */
+        void endMeetingSuccess();
 
         /**
          * 暂停
@@ -163,7 +175,19 @@ public interface FileDetailContract {
         void slideLeft(View v);
 
         void slideRight(View v);
-        void loadFile(String fileName);
+
+        /**
+         * 加载文件
+         * @param documentModel  文件实体
+         */
+        void loadFile(DocumentModel documentModel);
+
+        /**
+         * 主持人点击结束，立即发起结束会议的请求，成功后调用 endMeetingSuccess
+         * @param IMEI
+         * @param meetingId
+         */
+        void startEndMeeting(String IMEI,int meetingId);
 
         /**
          * 开始的操作
