@@ -21,7 +21,6 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
     private Button mBtnStartMeeting;
     private Button mBtnPauseMeeting;
     private Button mBtnStartVote;
-    private Button mBtnVoteResult;
     private View mController_view;
 
     public ControllerView(Context context) {
@@ -47,13 +46,11 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
         mBtnStartMeeting = (Button) findViewById(R.id.id_btn_start_meeting);
         mBtnPauseMeeting = (Button) findViewById(R.id.id_btn_pause_meeting);
         mBtnStartVote = (Button) findViewById(R.id.id_btn_start_vote);
-        mBtnVoteResult = (Button) findViewById(R.id.id_btn_vote_result);
 
         mIvSlideToRight.setOnClickListener(this);
         mBtnStartMeeting.setOnClickListener(this);
         mBtnPauseMeeting.setOnClickListener(this);
         mBtnStartVote.setOnClickListener(this);
-        mBtnVoteResult.setOnClickListener(this);
     }
 
     /**
@@ -98,9 +95,6 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
     public void setStartVoteButtonNotClickable(boolean clickable){
         mBtnStartVote.setClickable(clickable);
     }
-    public void setVoteResultButtonNotClickable(boolean clickable){
-        mBtnVoteResult.setClickable(clickable);
-    }
 
 
 
@@ -130,9 +124,6 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
                 break;
             case R.id.id_btn_start_vote://投票
                 mIOnControllerListener.startVote(v);
-                break;
-            case R.id.id_btn_vote_result://投票结果
-                mIOnControllerListener.voteResult(v);
                 break;
 
         }
