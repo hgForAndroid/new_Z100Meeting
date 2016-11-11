@@ -180,7 +180,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
                                 if (AppUtil.isServiceRun(getActivity(), "com.gzz100.Z100_HuiYi.tcpController.Client")) {
                                     getActivity().stopService(new Intent(getActivity(), Client.class));
                                 }
-                                clearCache();
+                                SharedPreferencesUtil.getInstance(getContext()).clearKeyInfo();
                                 //删除会议前预下载的所有文件
                                 AppUtil.DeleteFolder(AppUtil.getCacheDir(getContext()));
                                 getActivity().deleteDatabase(DBHelper.DB_NAME);
@@ -193,21 +193,6 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
                 break;
         }
     }
-
-    /**
-     * 清除sharedPreference中，对显示有影响的缓存
-     */
-    private void clearCache() {
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.IS_MEETING_END);
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.COUNTING_MIN);
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.COUNTING_SEC);
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.PAUSE_AGENDA_INDEX);
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.PAUSE_DOCUMENT_INDEX);
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.ENDING_CURRENT_TIME);
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.IS_VOTE_BEGIN);
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.IS_VOTE_COMMIT);
-    }
-
     @OnClick(R.id.id_tv_meeting_fragment_others)
     void onOthersClick() {
         mPresenter.showDelegate();
