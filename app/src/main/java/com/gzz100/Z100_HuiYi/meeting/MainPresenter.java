@@ -32,6 +32,11 @@ public class MainPresenter implements MainContract.Presenter {
     public void handleControllerInfoBean(ControllerInfoBean controllerInfoBean) {
         int agendaIndex = controllerInfoBean.getAgendaIndex();
         int documentIndex = controllerInfoBean.getDocumentIndex();
+        if (documentIndex == -1){
+            //在中途有人进来，主持人点击了下一个议程时，会将documentIndex置为-1，
+            // 这里需要把documentIndex置为0
+            documentIndex = 0;
+        }
         String upLevelTitle = controllerInfoBean.getUpLevelTitle();
         //开始
         if (controllerInfoBean.getMeetingState() == Constant.MEETING_STATE_BEGIN) {

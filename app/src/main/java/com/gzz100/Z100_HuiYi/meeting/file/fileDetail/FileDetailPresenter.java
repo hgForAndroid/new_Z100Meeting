@@ -317,19 +317,23 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
         try {
             ControllerInfoBean controllerInfoBean = mControllerInfoBean.clone();
             ///如果是继续状态，将状态改为开始，为了重新开始计时不混乱
-            if (meetingState == Constant.MEETING_STATE_CONTINUE) {
-                mView.setMeetingState(Constant.MEETING_STATE_BEGIN);
-                controllerInfoBean.setMeetingState(Constant.MEETING_STATE_BEGIN);
-                //这里设置议程序号为0.切换文件时，忽略切换议程
-                controllerInfoBean.setAgendaIndex(agendaIndex);
-                controllerInfoBean.setDocumentIndex(documentPosition);
-            } else {
-                mView.setMeetingState(meetingState);
-                controllerInfoBean.setMeetingState(meetingState);
-                //这里设置议程序号为0.切换文件时，忽略切换议程
-                controllerInfoBean.setAgendaIndex(0);
-                controllerInfoBean.setDocumentIndex(documentPosition);
-            }
+//            if (meetingState == Constant.MEETING_STATE_CONTINUE) {
+//                mView.setMeetingState(Constant.MEETING_STATE_BEGIN);
+//                controllerInfoBean.setMeetingState(Constant.MEETING_STATE_BEGIN);
+//                controllerInfoBean.setAgendaIndex(agendaIndex);
+//                controllerInfoBean.setDocumentIndex(documentPosition);
+//            } else {
+//                mView.setMeetingState(meetingState);
+//                controllerInfoBean.setMeetingState(meetingState);
+//                //这里设置议程序号为0.切换文件时，忽略切换议程
+//                controllerInfoBean.setAgendaIndex(0);
+//                controllerInfoBean.setDocumentIndex(documentPosition);
+//            }
+
+            mView.setMeetingState(Constant.MEETING_STATE_BEGIN);
+            controllerInfoBean.setMeetingState(Constant.MEETING_STATE_BEGIN);
+            controllerInfoBean.setAgendaIndex(agendaIndex);
+            controllerInfoBean.setDocumentIndex(documentPosition);
 
             String json = mGson.toJson(controllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)

@@ -647,8 +647,12 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             if (isHost && mMeetingState != Constant.MEETING_STATE_PAUSE)
                 saveCountingMinAndSec(getMin(), getSec(true));
 
+            mPassive = true;
             mMyHandler.removeCallbacksAndMessages(null);
-            countingTime();
+            //减低时间延迟
+            Message message = Message.obtain();
+            message.what = 0x00;
+            mMyHandler.sendMessage(message);
         }
     }
 
