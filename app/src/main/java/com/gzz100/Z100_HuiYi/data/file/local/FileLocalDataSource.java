@@ -14,10 +14,11 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
-* 加载本地数据
-* @author XieQXiong
-* create at 2016/8/25 14:43
-*/
+ * 加载本地数据
+ *
+ * @author XieQXiong
+ *         create at 2016/8/25 14:43
+ */
 
 public class FileLocalDataSource implements FileDataSource {
     private static FileLocalDataSource INSTANCE;
@@ -36,12 +37,13 @@ public class FileLocalDataSource implements FileDataSource {
         }
         return INSTANCE;
     }
+
     @Override
     public void getFileList(int agendaPos, @NonNull LoadFileListCallback callback) {
         checkNotNull(callback);
         //加载本地数据
         List<DocumentModel> documents = mFileOperate.queryFileList(agendaPos);
-        if (documents != null && documents.size() > 0){
+        if (documents != null && documents.size() > 0) {
             callback.onFileListLoaded(documents);
         } else {
             callback.onDataNotAvailable();
@@ -53,7 +55,7 @@ public class FileLocalDataSource implements FileDataSource {
         checkNotNull(callback);
         //加载本地数据
         List<AgendaModel> agendasList = mFileOperate.queryAgendaList();
-        if (agendasList != null && agendasList.size() > 0){
+        if (agendasList != null && agendasList.size() > 0) {
             callback.onAgendaListLoaded(agendasList);
         } else {
             callback.onDataNotAvailable();
@@ -65,7 +67,7 @@ public class FileLocalDataSource implements FileDataSource {
     @Override
     public void getSearchResult(String fileOrName, @NonNull LoadFileListCallback callback) {
         List<DocumentModel> documentList = new ArrayList<>();
-        List<AgendaModel> agendasList = mFileOperate.queryAgendaList(Constant.COLUMNS_AGENDAS);
+        List<AgendaModel> agendasList = mFileOperate.queryAgendaList();
 
         for (int i = 0; i < agendasList.size(); i++) {
             List<DocumentModel> documents = mFileOperate.queryFileList(i);
@@ -74,7 +76,7 @@ public class FileLocalDataSource implements FileDataSource {
                     if (document.getDocumentName().contains(fileOrName)) {
                         documentList.add(document);
                     }
-                    if (agendasList.get(document.getDocumentAgendaIndex()-1).getAgendaSpeaker().contains(fileOrName)) {
+                    if (agendasList.get(document.getDocumentAgendaIndex() - 1).getAgendaSpeaker().contains(fileOrName)) {
                         documentList.add(document);
                     }
                 }
@@ -90,26 +92,25 @@ public class FileLocalDataSource implements FileDataSource {
     @Override
     public void getSearchNameHint(LoadFileSearchNameCallback callback) {
         List<String> nameHintList = new ArrayList<>();
-        List<AgendaModel> agendasList = mFileOperate.queryAgendaList(Constant.COLUMNS_AGENDAS);
-            for (AgendaModel agenda : agendasList) {
-                nameHintList.add(agenda.getAgendaSpeaker());
+        List<AgendaModel> agendasList = mFileOperate.queryAgendaList();
+        for (AgendaModel agenda : agendasList) {
+            nameHintList.add(agenda.getAgendaSpeaker());
         }
         for (int i = 0; i < agendasList.size(); i++) {
-            List<DocumentModel> documents = mFileOperate.queryFileList(i);
+            List<DocumentModel> documents = mFileOperate.queryFileList(i+1);
             if (documents != null && documents.size() > 0) {
                 for (DocumentModel document : documents) {
                     nameHintList.add(document.getDocumentName());
                 }
             }
-            callback.onNameHintLoaded(nameHintList);
         }
-
+        callback.onNameHintLoaded(nameHintList);
 
     }
 
     @Override
     public void getFileByName(String fileName, getFileByNameCallback callback) {
-        List<AgendaModel> agendasList = mFileOperate.queryAgendaList(Constant.COLUMNS_AGENDAS);
+        List<AgendaModel> agendasList = mFileOperate.queryAgendaList();
         for (int i = 0; i < agendasList.size(); i++) {
             List<DocumentModel> documents = mFileOperate.queryFileList(i);
             if (documents != null && documents.size() > 0) {
@@ -126,12 +127,12 @@ public class FileLocalDataSource implements FileDataSource {
 
     @Override
     public boolean isFileName(String inputString) {
-        List<AgendaModel> agendasList = mFileOperate.queryAgendaList(Constant.COLUMNS_AGENDAS);
+        List<AgendaModel> agendasList = mFileOperate.queryAgendaList();
         for (int i = 0; i < agendasList.size(); i++) {
             List<DocumentModel> documents = mFileOperate.queryFileList(i);
             if (documents != null && documents.size() > 0) {
                 for (DocumentModel document : documents) {
-                    if(document.getDocumentName().equals(inputString)){
+                    if (document.getDocumentName().equals(inputString)) {
                         return true;
                     }
                 }

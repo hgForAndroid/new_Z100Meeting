@@ -174,7 +174,7 @@ public class FilePresenter implements FileContract.Presenter {
         if (mFileRepository.isFileName(inputString)) {
             mFileRepository.getFileByName(inputString, new FileDataSource.getFileByNameCallback() {
                 @Override
-                public void fileDidGet(Document document) {
+                public void fileDidGet(DocumentModel document) {
                     showFileDetail(document.getDocumentIndex() - 1);
                 }
 

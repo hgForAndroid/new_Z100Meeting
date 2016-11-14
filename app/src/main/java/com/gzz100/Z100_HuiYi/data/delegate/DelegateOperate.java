@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.data.db.PersistenceContract;
 import com.gzz100.Z100_HuiYi.data.file.local.ObjectTransverter;
@@ -21,68 +22,66 @@ public class DelegateOperate {
     private DBHelper mDBHelper;
     private SQLiteDatabase mDataBase;
 
-    public static DelegateOperate getInstance(Context context){
-        if(INSTANCE==null)
-            return INSTANCE=new DelegateOperate(context);
+    public static DelegateOperate getInstance(Context context) {
+        if (INSTANCE == null)
+            return INSTANCE = new DelegateOperate(context);
         return INSTANCE;
     }
 
     private DelegateOperate(Context context) {
-        mDBHelper=DBHelper.getInstance(context);
+        mDBHelper = DBHelper.getInstance(context);
     }
 
     /**
-     *
      * @param role
      * @param delegateBeanList
      */
-    public void insertDelegateList(int role,List<DelegateBean> delegateBeanList){
-        byte[] data=ObjectTransverter.ListToByteArr(delegateBeanList);
-        ContentValues values =new ContentValues();
-        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_ROLE,role);
-        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE,data);
-        mDataBase=mDBHelper.getReadableDatabase();
-        mDataBase.insert(PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE,null,values);
+    public void insertDelegateList(int role, List<DelegateBean> delegateBeanList) {
+        byte[] data = ObjectTransverter.ListToByteArr(delegateBeanList);
+        ContentValues values = new ContentValues();
+        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_ROLE, role);
+        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE, data);
+        mDataBase = mDBHelper.getReadableDatabase();
+        mDataBase.insert(PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE, null, values);
     }
-
-
 
 
     /**
-     *
      * @param rolePos 根据角色返回delegateBean对象列表
      * @return
      */
-    public   List<DelegateBean> queryDelelgateListByRole(int rolePos){
-        List<DelegateBean> delegateBeanList=new ArrayList<>();
-        mDataBase=mDBHelper.getReadableDatabase();
-        String sql="select "+ PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE+" from "+PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE
-                +" where "+PersistenceContract.ColumnsName.COLUMN_NAME_ROLE+" = ?";
-        String [] selectionArgs={rolePos+""};
-        Cursor cursor=mDataBase.rawQuery(sql,selectionArgs);
-        if(cursor.moveToFirst()){
-            byte[] data=cursor.getBlob(cursor.getColumnIndex(PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE));
-            delegateBeanList=(List<DelegateBean>) ObjectTransverter.byteArrToList(data);
+    public List<DelegateModel> queryDelelgateListByRole(int rolePos) {
+
+        //TODO 这个方法 性能较低
+        List<DelegateModel> delegateBeanList = new ArrayList<>();
+        mDataBase = mDBHelper.getReadableDatabase();
+        String sql = "select " + PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE + " from " + PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE;
+
+        Cursor cursor = mDataBase.rawQuery(sql, null);
+        if (cursor.moveToFirst()) {
+            byte[] data = cursor.getBlob(cursor.getColumnIndex(PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE));
+            delegateBeanList = (List<DelegateModel>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();
-        return delegateBeanList;
+
+        List<DelegateModel> returnList = new ArrayList<>();
+        for (DelegateModel delegateModel : delegateBeanList) {
+            if (delegateModel.getDelegateRole() == rolePos)
+                returnList.add(delegateModel);
+        }
+        return returnList;
     }
 
-    public List<DelegateBean> queryAllDelegate(){
-        List<DelegateBean> allDelegate=new ArrayList<>();
-        mDataBase=mDBHelper.getReadableDatabase();
-        String sql="select "+PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE+" from "+PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE;
+    public List<DelegateModel> queryAllDelegate() {
+        List<DelegateModel> allDelegate = new ArrayList<>();
+        mDataBase = mDBHelper.getReadableDatabase();
+        String sql = "select " + PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE + " from " + PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE;
 
-        Cursor cursor=mDataBase.rawQuery(sql,null);
-        if(cursor.moveToFirst()){
-               do{
-                    byte[] data = cursor.getBlob(cursor.getColumnIndex(PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE));
-                    for (DelegateBean delegateBean : (List<DelegateBean>) ObjectTransverter.byteArrToList(data)) {
-                        allDelegate.add(delegateBean);
-                    }
-                    cursor.moveToNext();
-                } while(!cursor.isAfterLast());
+        Cursor cursor = mDataBase.rawQuery(sql, null);
+        if (cursor.moveToFirst()) {
 
+            byte[] data = cursor.getBlob(cursor.getColumnIndex(PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE));
+            allDelegate = (List<DelegateModel>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();
         return allDelegate;

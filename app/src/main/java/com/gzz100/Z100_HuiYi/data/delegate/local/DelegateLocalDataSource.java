@@ -2,12 +2,10 @@ package com.gzz100.Z100_HuiYi.data.delegate.local;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
+import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateDataSource;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateOperate;
-import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,15 +62,15 @@ public class DelegateLocalDataSource implements DelegateDataSource {
 //        }
 //        //留给DB
 //        else
-//        {
-//            List<DelegateBean> delegateBeanList = DelegateOperate.getInstance(mContext).queryDelelgateListByRole(rolePos);
-//
-//            if(delegateBeanList!=null&&delegateBeanList.size()>0){
-//                callback.onDelegateListLoaded(delegateBeanList);
-//            }
-//            else
-//                callback.onDataNotAvailable();
-//        }
+        {
+            List<DelegateModel> delegateBeanList = DelegateOperate.getInstance(mContext).queryDelelgateListByRole(rolePos);
+
+            if(delegateBeanList!=null&&delegateBeanList.size()>0){
+                callback.onDelegateListLoaded(delegateBeanList);
+            }
+            else
+                callback.onDataNotAvailable();
+        }
 
     }
 
@@ -96,14 +94,14 @@ public class DelegateLocalDataSource implements DelegateDataSource {
 //            }
 //        }
 //        else
-//        {
-//            List<DelegateBean> allDelegate = DelegateOperate.getInstance(mContext).queryAllDelegate();
-//
-//            if (allDelegate != null && allDelegate.size() > 0) {
-//                callback.onDelegateNameHintLoaded(allDelegate);
-//            } else {
-//                callback.onDataNotAvailable();
-//            }
-//        }
+        {
+            List<DelegateModel> allDelegate = DelegateOperate.getInstance(mContext).queryAllDelegate();
+
+            if (allDelegate != null && allDelegate.size() > 0) {
+                callback.onDelegateNameHintLoaded(allDelegate);
+            } else {
+                callback.onDataNotAvailable();
+            }
+        }
     }
 }

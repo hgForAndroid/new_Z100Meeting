@@ -31,7 +31,7 @@ public interface FileDataSource {
     }
 
     interface getFileByNameCallback{
-        void fileDidGet(Document document);
+        void fileDidGet(DocumentModel document);
         void fileNotGet();
     }
     /**
