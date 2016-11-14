@@ -64,16 +64,16 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
                 + "/" + documentModel.getDocumentName());
         if (!file.exists()) {
             //下载路径前缀
-            String urlPrefix = "http://"+SharedPreferencesUtil.getInstance(mContext)
+            String urlPrefix = "http://" + SharedPreferencesUtil.getInstance(mContext)
                     .getString(Constant.CURRENT_IP, "") + "/api/Common/DownloadDocument?documentPath=";
             Intent intent = new Intent(mContext, DownLoadService.class);
-            intent.putExtra("flag",false);
-            intent.putExtra("url",urlPrefix+documentModel.getDocumentPath());
-            intent.putExtra("id",documentModel.getDocumentID());
-            intent.putExtra("name",documentModel.getDocumentName());
+            intent.putExtra("flag", false);
+            intent.putExtra("url", urlPrefix + documentModel.getDocumentPath());
+            intent.putExtra("id", documentModel.getDocumentID());
+            intent.putExtra("name", documentModel.getDocumentName());
             mContext.startService(intent);
             mView.showFileIsDownLoading("文件正在下载中，请稍等...");
-        }else {
+        } else {
             mView.loadFile(file);
         }
     }
@@ -104,6 +104,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
                     public void onEndMeetingSuccess() {
                         mView.endMeetingSuccess();
                     }
+
                     @Override
                     public void onEndMeetingFail(String errorMsg) {
                         ToastUtil.showMessage(errorMsg);
@@ -166,7 +167,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void launchVote(String IMEI, int meetingId, final int voteId, final int startOrEnd){
+    public void launchVote(String IMEI, int meetingId, final int voteId, final int startOrEnd) {
         RepositoryUtil.getVoteRepository(mContext).startOrEndVote(IMEI, meetingId, voteId, startOrEnd,
                 new VoteDataSource.SubmitCallback() {
                     @Override
@@ -193,7 +194,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             if (ControllerUtil.getInstance().getIControllerListener() != null)
                 ControllerUtil.getInstance().sendMessage(json);
             //主持人保存开启投票的id
-            SharedPreferencesUtil.getInstance(mContext).putInt(Constant.BEGIN_VOTE_ID,voteId);
+            SharedPreferencesUtil.getInstance(mContext).putInt(Constant.BEGIN_VOTE_ID, voteId);
             mView.showVote();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -301,15 +302,9 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 //            mView.respondMeetingContinue(data.isAgendaChange());
             //上面这句不再调用，因为继续时，有没有变化，由下面的判断分支决定
             if (data.isAgendaChange()) {//议程已改变
-                if (data.getAgendaIndex() > 0) {
-                    //客户端只需要判断，继续时的议程序号是否跟当前的一致，文件序号是否一致，
-                    // 如果不一致，则需要重新还原，如一致，则只需要继续倒计时，其他均不变
-                    mView.respondAgendaTimeIsCounting(data.isAgendaTimeCountDown());
-                    mView.respondAgendaIndexChange(data);
-                }
-                if (data.getDocumentIndex() >= 0) {
-                    mView.respondDocumentIndexChange(data.getDocumentIndex());
-                }
+                //客户端只需要判断，继续时的议程序号是否跟当前的一致，文件序号是否一致，
+                // 如果不一致，则需要重新还原，如一致，则只需要继续倒计时，其他均不变
+                mView.respondAgendaHasChange(data);
             } else {//议程无变化
                 mView.respondAgendaNotChange(data);
             }

@@ -106,7 +106,14 @@ public interface FileDetailContract {
         void resetAgendaContent(int agendaIndex);
 
         /**
-         * 该方法是客户端在会议继续时，并且议程无变化时调用
+         * 该方法是客户端在会议继续时，并且主持人端的议程已经变化时调用
+         * 主持人发送过来的消息中，议程已经变化，进行响应
+         * @param controllerInfoBean    消息实体
+         */
+        void respondAgendaHasChange(ControllerInfoBean controllerInfoBean);
+
+        /**
+         * 该方法是客户端在会议继续时，并且主持人端的议程无变化时调用
          * 主持人发送过来的消息中，议程无变化，进行响应
          * @param controllerInfoBean    消息实体
          */

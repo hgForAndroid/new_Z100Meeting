@@ -312,7 +312,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                     .getInt(Constant.PAUSE_AGENDA_INDEX, 0);
             int pauseDocumentIndex = SharedPreferencesUtil.getInstance(this.getApplicationContext())
                     .getInt(Constant.PAUSE_DOCUMENT_INDEX, 0);
-            //通知全部客户端：如果继续时，议程显示跟之前不一样，调用本类方法  respondAgendaTimeIsCounting和respondAgendaIndexChange，
+            //通知全部客户端：如果继续时，议程显示跟之前不一样，调用本类方法
+            // respondAgendaTimeIsCounting和respondAgendaIndexChange，
             //客户端：如果文件显示跟之前不一样，调用本类方法  respondDocumentIndexChange。
             //客户端：如果继续时，全部显示无变化，调用   respondAgendaNotChange
             //主持人端调用了本类的方法  meetingContinue
@@ -525,6 +526,43 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     public void getControllerInfo(ControllerInfoBean data) {
         if (!isHost) {
             mPresenter.handleMessageFromHost(data);
+        }
+    }
+
+
+
+    @Override
+    public void respondAgendaHasChange(ControllerInfoBean controllerInfoBean) {
+        if (mAgendaIndex != controllerInfoBean.getAgendaIndex()){
+            //客户端当前的议程跟暂停前的不一致，需要还原
+            respondAgendaTimeIsCounting(controllerInfoBean.isAgendaTimeCountDown());
+            respondAgendaIndexChange(controllerInfoBean);
+
+        }else {
+            //在议程跟暂停前的一致时，客户端当前的文件序号跟暂停前的不一致，需要还原
+            if (mFileIndex != controllerInfoBean.getDocumentIndex()){
+                respondDocumentIndexChange(controllerInfoBean.getDocumentIndex());
+            }
+            //设置文件标题与开会状态
+            String name = mFileList.get(mFileIndex).getDocumentName().
+                    substring(0,mFileList.get(mFileIndex).getDocumentName().indexOf("."));
+            mNavBarView.setTitle(name);
+            mNavBarView.setCurrentMeetingState("(开会中)");
+
+            //时间显示与暂停前的时间显示有不一致的地方，需要重新设置回来，之后再进行时间倒计时
+            if (!mNavBarView.getTimeHour().equals(controllerInfoBean.getCountdingMin()) ||
+                    !mNavBarView.getTimeMin().equals(controllerInfoBean.getCountdingSec())){
+                //设置时间
+                mMin = Integer.valueOf(controllerInfoBean.getCountdingMin());
+                mSec = Integer.valueOf(controllerInfoBean.getCountdingSec());
+                mNavBarView.setTimeHour(getMin());
+                mNavBarView.setTimeMin(getSec(true));
+            }
+            mMyHandler.removeCallbacksAndMessages(null);
+            //减低时间延迟
+            Message message = Message.obtain();
+            message.what = 0x00;
+            mMyHandler.sendMessage(message);
         }
     }
 
@@ -824,9 +862,9 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     @Override
     public void meetingContinue() {
         String tempCountingMin = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-                .getString(Constant.COUNTING_MIN, "");//暂停后保存的议程时间倒计时的  分钟
+                .getString(Constant.COUNTING_MIN, "0");//暂停后保存的议程时间倒计时的  分钟
         String tempCountingSec = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-                .getString(Constant.COUNTING_SEC, "");//暂停后保存的议程时间倒计时的  秒钟
+                .getString(Constant.COUNTING_SEC, "0");//暂停后保存的议程时间倒计时的  秒钟
         //如果暂停后，主持人是有切换过议程的，需要还原到上次暂停的界面
         int pauseAgendaIndex = SharedPreferencesUtil.getInstance(this.getApplicationContext())
                 .getInt(Constant.PAUSE_AGENDA_INDEX, 0);
