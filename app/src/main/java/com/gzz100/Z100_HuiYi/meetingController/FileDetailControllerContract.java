@@ -126,7 +126,8 @@ public interface FileDetailControllerContract {
          * @param DocumentIndex   文件序号
          * @param upLevelText     上一级标题
          */
-        void begin(ControllerInfoBean controllerInfoBean, int meetingState, int agendaIndex, int DocumentIndex, String upLevelText);
+        void begin(ControllerInfoBean controllerInfoBean, int meetingState, int agendaIndex,
+                   int DocumentIndex, String upLevelText);
         /**
          * 结束的操作
          * @param controllerInfoBean    发送的信息实体

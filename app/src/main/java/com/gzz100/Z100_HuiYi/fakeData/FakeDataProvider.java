@@ -241,7 +241,7 @@ public class FakeDataProvider {
                     DelegateBean delegateBean = new DelegateBean();
                     delegateBean.setDelegateName(speakerNames.get(a));
                     delegateBean.setDelegateDepartment(departmentNames.get(a));
-                    delegateBean.setRole(Constant.KEYNOTE_SPEAKER);
+                    delegateBean.setRole(Constant.DEFAULT_SPEAKER);
                     ArrayList agendaIndexList = new ArrayList();
                     agendaIndexList.add(a+1);
                     delegateBean.setDelegateAgendaList(agendaIndexList);
@@ -255,7 +255,7 @@ public class FakeDataProvider {
                     DelegateBean delegateBean = new DelegateBean();
                     delegateBean.setDelegateName(hostNames.get(a));
                     delegateBean.setDelegateDepartment(departmentNames.get(a));
-                    delegateBean.setRole(Constant.HOST);
+                    delegateBean.setRole(Constant.HOSTS);
                     ArrayList agendaIndexList = new ArrayList();
                     delegateBean.setDelegateAgendaList(agendaIndexList);
                     delegateBean.setDelegateDetailInfo("他是好人");
@@ -268,7 +268,7 @@ public class FakeDataProvider {
                     DelegateBean delegateBean = new DelegateBean();
                     delegateBean.setDelegateName(otherDelegateNames.get(a));
                     delegateBean.setDelegateDepartment(departmentNames.get(a%4));
-                    delegateBean.setRole(Constant.NORMAL_DELEGATE);
+                    delegateBean.setRole(Constant.DEFAULT_SPEAKER);
                     delegateBean.setDelegateDetailInfo("他不是好人");
                     delegateBeans.add(delegateBean);
                     currRoleNum=2;
@@ -322,7 +322,7 @@ public class FakeDataProvider {
                     delegateBean1.setDelegateName(speakerNames.get(a));
                     delegateBean1.setDelegateDepartment(departmentNames.get(a));
                     delegateBean1.setDelegateJob(jobName.get(a%3));
-                    delegateBean1.setRole(Constant.KEYNOTE_SPEAKER);
+                    delegateBean1.setRole(Constant.DEFAULT_SPEAKER);
                     ArrayList agendaIndex1 = new ArrayList();
                     agendaIndex1.add(a+1);
                     delegateBean1.setDelegateAgendaList(agendaIndex1);
@@ -336,7 +336,7 @@ public class FakeDataProvider {
                     delegateBean1.setDelegateName(hostNames.get(a));
                     delegateBean1.setDelegateDepartment(departmentNames.get(a));
                     delegateBean1.setDelegateJob(jobName.get(a%3));
-                    delegateBean1.setRole(Constant.HOST);
+                    delegateBean1.setRole(Constant.HOSTS);
                     ArrayList agendaIndex1 = new ArrayList();
                     delegateBean1.setDelegateAgendaList(agendaIndex1);
                     delegateBean1.setDelegateDetailInfo("他是好人");
@@ -350,7 +350,7 @@ public class FakeDataProvider {
                     delegateBean1.setDelegateName(otherDelegateNames.get(a));
                     delegateBean1.setDelegateDepartment(departmentNames.get(a%4));
                     delegateBean1.setDelegateJob(jobName.get(a%3));
-                    delegateBean1.setRole(Constant.NORMAL_DELEGATE);
+                    delegateBean1.setRole(Constant.DEFAULT_SPEAKER);
                     delegateBean1.setDelegateDetailInfo("他不是好人");
                     delegateBeans.add(delegateBean1);
 

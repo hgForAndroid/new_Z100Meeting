@@ -10,16 +10,18 @@ import rx.Subscriber;
  */
 public class UpdatePost extends BaseEntity {
     private Subscriber mSubscriber;
+    private String IMEI;
     private String meetingID;
 
-    public UpdatePost(Subscriber subscriber, String meetingID) {
+    public UpdatePost(Subscriber subscriber, String imei, String meetingID) {
         this.mSubscriber = subscriber;
+        IMEI = imei;
         this.meetingID = meetingID;
     }
 
     @Override
     public Observable getObservable(ApiService methods) {
-        return methods.checkUpdate(meetingID);
+        return methods.checkUpdate(IMEI,meetingID);
     }
 
     @Override

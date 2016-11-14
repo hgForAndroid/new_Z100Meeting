@@ -3,9 +3,7 @@ package com.gzz100.Z100_HuiYi.network.entity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.gzz100.Z100_HuiYi.fakeData.TestResultEntity;
 import com.gzz100.Z100_HuiYi.network.ApiService;
-import com.gzz100.Z100_HuiYi.network.HttpTimeException;
 import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import rx.Observable;
@@ -48,14 +46,5 @@ public abstract class BaseEntity<T> implements Func1<BaseResultEntity<T>, T> {
             return httpResult.getResult();
         }
     }
-
-//
-//    @Override
-//    public T call(TestResultEntity<T> httpResult) {
-//        if (httpResult.getCount() == 0) {
-//            throw new HttpTimeException(httpResult.getCount());
-//        }
-//        return httpResult.getBooks();
-//    }
 
 }

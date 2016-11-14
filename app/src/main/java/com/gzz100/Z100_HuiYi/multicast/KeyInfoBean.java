@@ -9,10 +9,10 @@ package com.gzz100.Z100_HuiYi.multicast;
 
 public class KeyInfoBean {
     private String serverIP;
-    private String meetingId;
+    private int meetingId;
     private String tcpServerIP;
 
-    public KeyInfoBean(String serverIP, String meetingId, String tcpServerIP) {
+    public KeyInfoBean(String serverIP, int meetingId, String tcpServerIP) {
         this.serverIP = serverIP;
         this.meetingId = meetingId;
         this.tcpServerIP = tcpServerIP;
@@ -26,11 +26,11 @@ public class KeyInfoBean {
         this.serverIP = serverIP;
     }
 
-    public String getMeetingId() {
+    public int getMeetingId() {
         return meetingId;
     }
 
-    public void setMeetingId(String meetingId) {
+    public void setMeetingId(int meetingId) {
         this.meetingId = meetingId;
     }
 

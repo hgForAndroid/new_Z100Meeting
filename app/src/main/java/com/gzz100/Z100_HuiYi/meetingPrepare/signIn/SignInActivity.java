@@ -1,12 +1,14 @@
 package com.gzz100.Z100_HuiYi.meetingPrepare.signIn;
 
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -20,14 +22,8 @@ import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
 import com.gzz100.Z100_HuiYi.multicast.MulticastController;
-import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
-import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
-import com.gzz100.Z100_HuiYi.tcpController.Client;
-import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
-import com.gzz100.Z100_HuiYi.tcpController.TcpClient;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
-import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
@@ -47,16 +43,18 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     private static final String MEETING_ID = "meetingID";
     private static final String DEVICE_IMEI = "deviceIMEI";
     private String mDeviceIMEI;
-    private String mMeetingID;
+    private int mMeetingID;
     private Dialog mDialog;
     private Intent mIntent;
     private String mUrlPrefix;
+    private NotificationManager mNotificationManager;
+    private NotificationCompat.Builder mNotificationBuilder;
 
-    public static void toSignInActivity(Context context,String IMEI,String meetingID){
+    public static void toSignInActivity(Context context,String IMEI,int meetingID){
         Intent intent = new Intent(context,SignInActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(DEVICE_IMEI,IMEI);
-        bundle.putString(MEETING_ID,meetingID);
+        bundle.putInt(MEETING_ID,meetingID);
         intent.putExtra(BUNDLE,bundle);
         context.startActivity(intent);
     }
@@ -88,7 +86,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     private void initGetIntent() {
         if (getIntent().getBundleExtra(BUNDLE) != null){
             mDeviceIMEI = getIntent().getBundleExtra(BUNDLE).getString(DEVICE_IMEI);
-            mMeetingID = getIntent().getBundleExtra(BUNDLE).getString(MEETING_ID);
+            mMeetingID = getIntent().getBundleExtra(BUNDLE).getInt(MEETING_ID);
         }
     }
 
@@ -106,7 +104,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
                 MulticastController.getDefault().sendMessage(s);
             }
         }).start();
-        SharedPreferencesUtil.getInstance(this).putString(Constant.MEETING_ID,mMeetingID);
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_ID,mMeetingID);
     }
 
     @Override
@@ -133,10 +131,18 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         if (mFileIDs != null && mFileIDs.size() > 0){
             if (position < mFileIDs.size()){
                 mIntent = new Intent(SignInActivity.this, DownLoadService.class);
+                mIntent.putExtra("flag",true);
                 mIntent.putExtra("url",mUrlPrefix+mFileIDs.get(position));
                 mIntent.putExtra("id",position);
                 mIntent.putExtra("name",mFileIDs.get(position));
                 startService(mIntent);
+            }else {
+                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationBuilder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_completed)
+                        .setContentTitle("文件下载")
+                        .setContentText("文件已全部下载完成");
+                mNotificationManager.notify(mFileIDs.size(),mNotificationBuilder.build());
             }
         }
     }
@@ -193,10 +199,10 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     public void showMainActivity() {
         MainActivity.toMainActivity(this);
         if (MyAPP.getInstance().getUserRole() == 1){
-//            if (AppUtil.isServiceRun(this.getApplicationContext(),"com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService")){
+//            if (AppUtil.isServiceRun(this.getApplicationContext(),"com.gzz100.Z100_HuiYi.multicast.ReceivedMultiCastService")){
 //                Log.e("服务在运行","=============================================================================");
 //            }
-//            stopService(new Intent(this, ReceivedMulticastService.class));
+//            stopService(new Intent(this, ReceivedMultiCastService.class));
         }
         ActivityStackManager.pop();
     }

@@ -4,13 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
-import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.file.FileDataSource;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
-import com.gzz100.Z100_HuiYi.network.HttpManager;
-import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
-import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
-import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;
 
@@ -53,22 +48,13 @@ public class FileRemoteDataSource implements FileDataSource {
     @Override
     public void getAgendaList(String IMEI, String userId, @NonNull final LoadAgendaListCallback callback) {
         checkNotNull(callback);
-        List<AgendaModel> agendas = FileOperate.getInstance(mContext).queryAgendaList(Constant.COLUMNS_AGENDAS);
+        List<AgendaModel> agendas = FileOperate.getInstance(mContext).queryAgendaList();
         if (agendas != null && agendas.size() > 0){
             callback.onAgendaListLoaded(agendas);
-            mFileOperate.insertAgendaList(Constant.COLUMNS_AGENDAS,agendas);
+            mFileOperate.insertAgendaList(agendas);
         }else {
             callback.onDataNotAvailable();
         }
-
-        //正式
-//        AgendasPost agendasPost = new AgendasPost(new ProgressSubscriber(new HttpRxCallbackListener<List<Agenda>>(){
-//            @Override
-//            public void onNext(List<Agenda> agendas) {
-//                callback.onAgendaListLoaded(agendas);
-//                mDbHelper.insertAgendaList(Constant.COLUMNS_AGENDAS,agendas);
-//            }
-//        },mContext),IMEI,userId);
     }
 
     @Override

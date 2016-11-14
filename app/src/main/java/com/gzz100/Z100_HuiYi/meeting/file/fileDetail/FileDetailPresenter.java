@@ -1,15 +1,24 @@
 package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Environment;
 import android.view.View;
 
 import com.google.gson.Gson;
+import com.gzz100.Z100_HuiYi.data.DocumentModel;
+import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.data.file.FileDetailRepository;
+import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
+import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
+import com.gzz100.Z100_HuiYi.meetingPrepare.signIn.SignInActivity;
+import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
+import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -50,20 +59,23 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void loadFile(String fileName) {
-//        java.io.File file = new java.io.File(Environment.getExternalStorageDirectory().getPath()
-//                + "/" +  fileName + ".pdf");
+    public void loadFile(DocumentModel documentModel) {
         java.io.File file = new java.io.File(AppUtil.getCacheDir(mContext)
-                + "/" + fileName);
+                + "/" + documentModel.getDocumentName());
         if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+            //下载路径前缀
+            String urlPrefix = "http://"+SharedPreferencesUtil.getInstance(mContext)
+                    .getString(Constant.CURRENT_IP, "") + "/api/Common/DownloadDocument?documentPath=";
+            Intent intent = new Intent(mContext, DownLoadService.class);
+            intent.putExtra("flag",false);
+            intent.putExtra("url",urlPrefix+documentModel.getDocumentPath());
+            intent.putExtra("id",documentModel.getDocumentID());
+            intent.putExtra("name",documentModel.getDocumentName());
+            mContext.startService(intent);
+            mView.showFileIsDownLoading("文件正在下载中，请稍等...");
+        }else {
+            mView.loadFile(file);
         }
-        mView.loadFile(file);
     }
 
     @Override
@@ -75,7 +87,6 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setAgendaIndex(agendaIndex);
             mControllerInfoBean.setDocumentIndex(DocumentIndex);
             mControllerInfoBean.setUpLevelTitle(upLevelText);
-
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
                 ControllerUtil.getInstance().sendMessage(json);
@@ -83,6 +94,21 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             e.printStackTrace();
         }
         mView.meetingBegin();
+    }
+
+    @Override
+    public void startEndMeeting(String IMEI, int meetingId) {
+        RepositoryUtil.getMeetingRepository(mContext).endMeeting(IMEI, meetingId,
+                new MeetingDataSource.EndMeetingCallback() {
+                    @Override
+                    public void onEndMeetingSuccess() {
+                        mView.endMeetingSuccess();
+                    }
+                    @Override
+                    public void onEndMeetingFail(String errorMsg) {
+                        ToastUtil.showMessage(errorMsg);
+                    }
+                });
     }
 
     @Override
@@ -140,6 +166,22 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
+    public void launchVote(String IMEI, int meetingId, final int voteId, final int startOrEnd){
+        RepositoryUtil.getVoteRepository(mContext).startOrEndVote(IMEI, meetingId, voteId, startOrEnd,
+                new VoteDataSource.SubmitCallback() {
+                    @Override
+                    public void onSuccess() {
+                        mView.launchVoteSuccess();
+                    }
+
+                    @Override
+                    public void onFail() {
+                        ToastUtil.showMessage("启动会议失败");
+                    }
+                });
+    }
+
+    @Override
     public void startVote(ControllerInfoBean controllerInfoBean, int voteId, int meetingState) {
         try {
             ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
@@ -150,6 +192,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
                 ControllerUtil.getInstance().sendMessage(json);
+            //主持人保存开启投票的id
+            SharedPreferencesUtil.getInstance(mContext).putInt(Constant.BEGIN_VOTE_ID,voteId);
             mView.showVote();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -252,8 +296,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
         }
         //会议继续
         else if (data.getMeetingState() == Constant.MEETING_STATE_CONTINUE) {
-            mView.respondMeetingContinue(data.isAgendaChange());
-
+//            mView.respondMeetingContinue(data.isAgendaChange());
+            //上面这句不再调用，因为继续时，有没有变化，由下面的判断分支决定
             if (data.isAgendaChange()) {//议程已改变
                 if (data.getAgendaIndex() > 0) {
                     mView.respondAgendaTimeIsCounting(data.isAgendaTimeCountDown());

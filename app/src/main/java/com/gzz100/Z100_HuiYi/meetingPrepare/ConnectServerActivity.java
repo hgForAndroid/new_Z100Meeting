@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,19 +19,12 @@ import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.meetingPrepare.selectMeeting.SelectMeetingActivity;
 import com.gzz100.Z100_HuiYi.meetingPrepare.signIn.SignInActivity;
 import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
-import com.gzz100.Z100_HuiYi.multicast.ReceivedMulticastService;
 import com.gzz100.Z100_HuiYi.tcpController.Client;
-import com.gzz100.Z100_HuiYi.tcpController.Server;
-import com.gzz100.Z100_HuiYi.tcpController.TcpClient;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 import com.gzz100.Z100_HuiYi.utils.ToastUtil;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -76,6 +69,10 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
     @OnClick(R.id.id_btn_connect_server)
     void onClick() {
         mIp = mEdtIP.getText().toString().trim();
+        if (TextUtils.isEmpty(mIp)){
+            ToastUtil.showMessage("请输入服务器IP");
+            return;
+        }
         mPresenter.saveIp(mIp);
     }
 
@@ -113,12 +110,6 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
 
     @Override
     public void showSignInActivity(KeyInfoBean keyInfoBean) {
-//        SharedPreferencesUtil.getInstance(this.getApplicationContext()).putString(Constant.TCP_SERVER_IP,keyInfoBean.getTcpServerIP());
-//        //开启tcp客户端服务，连接到作为tcp服务器端的主持人使用的平板，一直循环监听tcp服务器端发送的数据
-////        Intent tcpClientIntent = new Intent(this, TcpClient.class);
-////        tcpClientIntent.putExtra(Constant.TCP_SERVER_IP,keyInfoBean.getTcpServerIP());
-////        startService(tcpClientIntent);
-
         //启动请求连接TCP的服务
         startService(new Intent(this, Client.class));
         //获取到后台服务器的ip，以及开启的会议id后，跳转到签到界面
@@ -165,7 +156,6 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
                     .setPositiveButton("是", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            stopService(new Intent(ConnectServerActivity.this,ReceivedMulticastService.class));
                             ActivityStackManager.exit();
                         }
                     })

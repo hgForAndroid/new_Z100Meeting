@@ -3,11 +3,8 @@ package com.gzz100.Z100_HuiYi.data.signIn;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.gzz100.Z100_HuiYi.data.MeetingSummary;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.UserBean;
-import com.gzz100.Z100_HuiYi.data.Vote;
-import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
 import com.gzz100.Z100_HuiYi.network.MySubscriber;
@@ -15,7 +12,6 @@ import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
 import com.gzz100.Z100_HuiYi.network.entity.MeetingSummaryPost;
 import com.gzz100.Z100_HuiYi.network.entity.UserBeanPost;
 
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -39,11 +35,11 @@ public class SignInRemoteDataSource implements SignInDataSource {
         return mInstance;
     }
     @Override
-    public void fetchUserBean(String IMEI, String meetingID, @NonNull final LoadUserBeanCallback callback) {
+    public void fetchUserBean(String IMEI, int meetingID, @NonNull final LoadUserBeanCallback callback) {
         checkNotNull(callback);
         //加载服务器数据
         UserBeanPost userBeanPost = new UserBeanPost(
-                new MySubscriber(new HttpRxCallbackListener<UserBean>(){
+                new ProgressSubscriber(new HttpRxCallbackListener<UserBean>(){
                     @Override
                     public void onNext(UserBean userBean) {
                         if (userBean != null){
@@ -61,10 +57,10 @@ public class SignInRemoteDataSource implements SignInDataSource {
     }
 
     @Override
-    public void signIn(String IMEI, String meetingID, @NonNull final LoadMeetingSummaryCallback callback) {
+    public void signIn(String IMEI, int meetingID, @NonNull final LoadMeetingSummaryCallback callback) {
         //加载服务器数据
         MeetingSummaryPost meetingSummaryPost1 = new MeetingSummaryPost(
-                new MySubscriber(new HttpRxCallbackListener<MeetingSummaryBean>(){
+                new ProgressSubscriber(new HttpRxCallbackListener<MeetingSummaryBean>(){
                     @Override
                     public void onNext(MeetingSummaryBean meetingSummary) {
                         if (meetingSummary != null){

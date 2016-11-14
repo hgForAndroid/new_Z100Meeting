@@ -53,4 +53,9 @@ public class MeetingLocalDataSource implements MeetingDataSource {
             callback.onDataNotAvailable();
         }
     }
+
+    @Override
+    public void endMeeting(String IMEI, int meetingId, EndMeetingCallback callback) {
+
+    }
 }

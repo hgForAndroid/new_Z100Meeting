@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
@@ -49,6 +50,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         Context context = mActivity.get();
         if (pd == null && context != null) {
             pd = new ProgressDialog(context);
+            pd.setMessage("加载中...");
             pd.setCancelable(cancel);
             if (cancel) {
                 pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -61,7 +63,6 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         }
     }
 
-
     /**
      * 显示加载框
      */
@@ -69,10 +70,10 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         Context context = mActivity.get();
         if (pd == null || context == null) return;
         if (!pd.isShowing()) {
+            pd.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             pd.show();
         }
     }
-
 
     /**
      * 隐藏
@@ -86,7 +87,6 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
             pd = null;
         }
     }
-
 
     /**
      * 订阅开始时调用
@@ -117,15 +117,16 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         String errorMsg;
         if (context == null) return;
         if (e instanceof SocketTimeoutException) {
-            Toast.makeText(context, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
-            errorMsg = "网络中断，请检查您的网络状态";
+//            Toast.makeText(context, "连接超时", Toast.LENGTH_SHORT).show();
+            errorMsg = "连接超时，请检查网络或服务器IP是否输入正确";
         } else if (e instanceof ConnectException) {
-            Toast.makeText(context, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
-            errorMsg = "网络中断，请检查您的网络状态";
+//            Toast.makeText(context, "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
+            errorMsg = "网络中断，请检查您的网络状态或服务器IP是否输入正确";
         } else {
             Toast.makeText(context, "错误 ====== " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//            Log.i("tag", "error----------->" + e.toString());
+            Log.e("tag", "error----------->" + e.toString());
             errorMsg = e.getMessage();
+//            errorMsg = "服务器出错，请检查服务器ip是否正确！";
         }
         dismissProgressDialog();
         if (mSubscriberOnNextListener != null) {

@@ -3,7 +3,6 @@ package com.gzz100.Z100_HuiYi.meeting.file;
 import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
-import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.file.FileDataSource;
 import com.gzz100.Z100_HuiYi.data.file.FileRepository;

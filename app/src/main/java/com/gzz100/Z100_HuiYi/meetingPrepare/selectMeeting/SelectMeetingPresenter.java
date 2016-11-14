@@ -49,11 +49,11 @@ public class SelectMeetingPresenter implements SelectMeetingContract.Presenter {
     }
 
     @Override
-    public void selectMeeting(final String IMEI, final String meetingID) {
+    public void selectMeeting(final String IMEI, final int meetingID) {
         SelectMeetingRemoteDataSource.getInstance(mContext).startMeeting(new SelectMeetingDataSource.StartMeetingCallback() {
             @Override
             public void onStartMeetingSuccess() {
-                SharedPreferencesUtil.getInstance(mContext).putString(Constant.MEETING_ID,meetingID);
+                SharedPreferencesUtil.getInstance(mContext).putInt(Constant.MEETING_ID,meetingID);
                 mView.showSignIn(IMEI,meetingID);
             }
 

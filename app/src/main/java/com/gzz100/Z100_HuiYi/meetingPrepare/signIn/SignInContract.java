@@ -38,7 +38,7 @@ public interface SignInContract {
          * @param IMEI        设备id
          * @param meetingID   会议id
          */
-        void fetchCurrentUserBean(boolean forceUpdate, String IMEI, String meetingID);
+        void fetchCurrentUserBean(boolean forceUpdate, String IMEI, int meetingID);
 
         /**
          * 调用   SignInContract.View  的  showMainActivity
@@ -46,7 +46,7 @@ public interface SignInContract {
          * @param IMEI        设备id
          * @param meetingID   会议id
          */
-        void signIn(String IMEI,String meetingID);
+        void signIn(String IMEI,int meetingID);
 
 
         /**

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.R;
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
@@ -35,7 +33,6 @@ import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
-import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -58,7 +55,6 @@ import butterknife.OnClick;
 public class MeetingFragment extends Fragment implements MeetingContract.View, OnUserClickListener {
 
     private MeetingRoomView mMeetingRoomView;
-
     private List<DelegateModel> mUsers = new ArrayList<>();
     //会议结束后显示的布局
     private RelativeLayout mTopLayout;
@@ -73,12 +69,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     private TextView mOthers;
     private Button mBtnExit;
 
-    public static MeetingFragment newInstance() {
-        return new MeetingFragment();
-    }
-
     private MeetingContract.Presenter mPresenter;
-
     private ICommunicate mainActivity;
 
     @Override
@@ -87,12 +78,8 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
         mainActivity = (ICommunicate) context;
     }
 
-    @Override
-    public void onResume() {
-        if (Constant.DEBUG)
-            Log.e("MeetingFragment -->", "onResume");
-        super.onResume();
-        mPresenter.start();
+    public static MeetingFragment newInstance() {
+        return new MeetingFragment();
     }
 
     @Nullable
@@ -119,14 +106,17 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        setMeetingEndShoeResult();
+        setMeetingShowResult();
     }
 
     /**
-     * 会议结束后显示会议的开始，结束等信息
+     * 设置主场景界面的显示
+     * 如果已经结束了，显示会议结束等信息
+     * 否则显示座位的界面
      */
-    private void setMeetingEndShoeResult() {
-        if (SharedPreferencesUtil.getInstance(getContext()).getBoolean(Constant.IS_MEETING_END, false)) {
+    private void setMeetingShowResult() {
+        if (SharedPreferencesUtil.getInstance(getContext()).
+                getBoolean(Constant.IS_MEETING_END, false)) {//会议结束
             mTopLayout.setVisibility(View.VISIBLE);
             mBottomLayout.setVisibility(View.GONE);
             String meetingDuration = MeetingOperate.getInstance(getContext()).
@@ -143,6 +133,8 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
             }else {
                 mPresenter.fetchMeetingEndData(hour,min,meetingDuration,currentTime);
             }
+        }else {//会议未结束
+            mPresenter.start();
         }
     }
 
@@ -155,7 +147,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showEnd(MeetingEnd meetingEnd) {
         if (meetingEnd.getFlag() == 2) {
-            setMeetingEndShoeResult();
+            setMeetingShowResult();
         }
     }
 
@@ -188,7 +180,9 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
                                 if (AppUtil.isServiceRun(getActivity(), "com.gzz100.Z100_HuiYi.tcpController.Client")) {
                                     getActivity().stopService(new Intent(getActivity(), Client.class));
                                 }
-                                clearCache();
+                                SharedPreferencesUtil.getInstance(getContext()).clearKeyInfo();
+                                //删除会议前预下载的所有文件
+                                AppUtil.DeleteFolder(AppUtil.getCacheDir(getContext()));
                                 getActivity().deleteDatabase(DBHelper.DB_NAME);
                                 ActivityStackManager.exit();
                             }
@@ -199,18 +193,6 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
                 break;
         }
     }
-
-    /**
-     * 清除sharedPreference中，对显示有影响的缓存
-     */
-    private void clearCache() {
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.IS_MEETING_END);
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.COUNTING_MIN);
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.COUNTING_SEC);
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.PAUSE_AGENDA_INDEX);
-        SharedPreferencesUtil.getInstance(getContext()).remove(Constant.PAUSE_DOCUMENT_INDEX);
-    }
-
     @OnClick(R.id.id_tv_meeting_fragment_others)
     void onOthersClick() {
         mPresenter.showDelegate();

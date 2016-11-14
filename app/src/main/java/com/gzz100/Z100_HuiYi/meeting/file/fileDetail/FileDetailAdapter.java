@@ -2,8 +2,6 @@ package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
-import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by XieQXiong on 2016/8/30.
  */

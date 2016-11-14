@@ -8,20 +8,19 @@ import rx.Subscriber;
 /**
  * Created by XieQXiong on 2016/9/28.
  */
-public class StartPost extends BaseEntity {
+public class EndMeetingPost extends BaseEntity {
     private Subscriber mSubscriber;
-    private int meetingID;
     private String IMEI;
-
-    public StartPost(Subscriber subscriber, int meetingID, String imei) {
+    private int meetingId;
+    public EndMeetingPost(Subscriber subscriber, String imei, int meetingId) {
         mSubscriber = subscriber;
-        this.meetingID = meetingID;
         IMEI = imei;
+        this.meetingId = meetingId;
     }
 
     @Override
     public Observable getObservable(ApiService methods) {
-        return methods.startMeeting(meetingID,IMEI);
+        return methods.endMeeting(IMEI,meetingId);
     }
 
     @Override

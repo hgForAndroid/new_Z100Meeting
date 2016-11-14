@@ -215,5 +215,18 @@ public class SharedPreferencesUtil {
         return editor.commit();
     }
 
+    /**
+     * 清除sharedPreference中，对显示有影响的缓存
+     */
+    public void clearKeyInfo(){
+        remove(Constant.IS_MEETING_END);
+        remove(Constant.COUNTING_MIN);
+        remove(Constant.COUNTING_SEC);
+        remove(Constant.PAUSE_AGENDA_INDEX);
+        remove(Constant.PAUSE_DOCUMENT_INDEX);
+        remove(Constant.ENDING_CURRENT_TIME);
+        remove(Constant.IS_VOTE_BEGIN);
+        remove(Constant.IS_VOTE_COMMIT);
+    }
 
 }

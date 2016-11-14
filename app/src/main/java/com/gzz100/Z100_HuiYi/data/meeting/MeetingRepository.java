@@ -78,4 +78,9 @@ public class MeetingRepository implements MeetingDataSource {
         });
 
     }
+
+    @Override
+    public void endMeeting(String IMEI, int meetingId, EndMeetingCallback callback) {
+        mMeetingRemoteDataSource.endMeeting(IMEI,meetingId,callback);
+    }
 }

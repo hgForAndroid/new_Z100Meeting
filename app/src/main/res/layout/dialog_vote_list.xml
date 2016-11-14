@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="800dp"
-    android:layout_height="500dp">
-
+              android:id="@+id/id_vote_list_root_layout"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+        android:background="@color/color_navBar_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_bar_height"
+        android:text="选择投票"
+        android:textSize="@dimen/dialog_meeting_info_text_size"
+        android:gravity="center"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/id_rev_vote_list"
         android:layout_width="match_parent"

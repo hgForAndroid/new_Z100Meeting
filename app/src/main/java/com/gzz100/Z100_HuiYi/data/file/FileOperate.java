@@ -5,13 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.gzz100.Z100_HuiYi.data.Agenda;
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
-import com.gzz100.Z100_HuiYi.data.Document;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.data.db.PersistenceContract;
 import com.gzz100.Z100_HuiYi.data.file.local.ObjectTransverter;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;
 /**
@@ -77,29 +76,41 @@ public class FileOperate {
 
 
     /**
-     * 箱数据库中插入 议程序号对应的文件列表
-     * @param agendas      数据库中唯一标识议程列表的字段对应的值,Constant.COLUMNS_AGENDAS
+     * 向数据库中插入 议程序号对应的文件列表
+     * 在数据库中插入对应的字段的值为 ： Constant.COLUMNS_AGENDAS
      * @param agendaList  议程列表
      */
-    public void insertAgendaList(int agendas, List<AgendaModel> agendaList){
+    public void insertAgendaList( List<AgendaModel> agendaList){
         byte[] data = ObjectTransverter.ListToByteArr(agendaList);
         ContentValues values =new ContentValues();
-        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDAS,agendas);
+        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDAS,Constant.COLUMNS_AGENDAS);
+        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST,data);
+        mDatabase = mDBHelper.getReadableDatabase();
+        mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_AGENDA,null,values);
+    }
+    /**
+     * 向数据库中更新 议程序号对应的文件列表
+     * 在数据库中更新对应的字段的值为 ： Constant.COLUMNS_AGENDAS
+     * @param agendaList  议程列表
+     */
+    public void updateAgendaList(List<AgendaModel> agendaList){
+        byte[] data = ObjectTransverter.ListToByteArr(agendaList);
+        ContentValues values =new ContentValues();
+        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDAS,Constant.COLUMNS_AGENDAS);
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST,data);
         mDatabase = mDBHelper.getReadableDatabase();
         mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_AGENDA,null,values);
     }
     /**
      * 查询议程列表
-     * @param agendas  议程列表标识，Constant.COLUMNS_AGENDAS
-     * @return  议程列表
+     * @return  议程列表，在数据苦衷对应查询的列的值是 Constant.COLUMNS_AGENDAS
      */
-    public List<AgendaModel> queryAgendaList(int agendas){
+    public List<AgendaModel> queryAgendaList(){
         List<AgendaModel> baseBeen = null;
         mDatabase = mDBHelper.getReadableDatabase();
         String sql = "select * from " + PersistenceContract.ColumnsName.TABLE_NAME_AGENDA + " where " +
                 PersistenceContract.ColumnsName.COLUMN_NAME_AGENDAS + " = ?";
-        Cursor cursor = mDatabase.rawQuery(sql, new String[]{agendas + ""});
+        Cursor cursor = mDatabase.rawQuery(sql, new String[]{Constant.COLUMNS_AGENDAS + ""});
         if ( cursor.moveToFirst()){
             byte[] data = cursor.getBlob(cursor.getColumnIndex(
                     PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST));

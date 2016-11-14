@@ -20,6 +20,11 @@ public interface MeetingDataSource {
         void onDataNotAvailable();
     }
 
+    interface EndMeetingCallback{
+        void onEndMeetingSuccess();
+        void onEndMeetingFail(String errorMsg);
+    }
+
     /**
      * 获取所有参会人员列表
      * @param callback  获取结果回调接口
@@ -31,4 +36,6 @@ public interface MeetingDataSource {
      * @param callback  获取结果接口回调
      */
     void getMetingInfo(LoadMeetingInfoCallback callback);
+
+    void endMeeting(String IMEI,int meetingId,EndMeetingCallback callback);
 }

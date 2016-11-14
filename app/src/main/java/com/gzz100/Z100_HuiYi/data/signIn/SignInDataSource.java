@@ -2,8 +2,6 @@ package com.gzz100.Z100_HuiYi.data.signIn;
 
 import android.support.annotation.NonNull;
 
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
-import com.gzz100.Z100_HuiYi.data.MeetingSummary;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 
@@ -16,7 +14,6 @@ public interface SignInDataSource {
         void onDataNotAvailable();
     }
     interface LoadMeetingSummaryCallback{
-//        void onMeetingSummaryLoaded(MeetingSummary meetingSummary);
         void onMeetingSummaryLoaded(MeetingSummaryBean meetingSummary);
         void onDataNotAvailable();
     }
@@ -27,7 +24,7 @@ public interface SignInDataSource {
      * @param meetingID   会议id
      * @param callback    获取结果回调函数
      */
-    void fetchUserBean(String IMEI, String meetingID, @NonNull LoadUserBeanCallback callback);
+    void fetchUserBean(String IMEI, int meetingID, @NonNull LoadUserBeanCallback callback);
 
     /**
      * 签到
@@ -35,5 +32,5 @@ public interface SignInDataSource {
      * @param meetingID   会议id
      * @param callback    结果回调
      */
-    void signIn(String IMEI, String meetingID, @NonNull LoadMeetingSummaryCallback callback);
+    void signIn(String IMEI, int meetingID, @NonNull LoadMeetingSummaryCallback callback);
 }

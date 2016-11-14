@@ -11,8 +11,8 @@ import rx.Subscriber;
 public class StartMeetingPost extends BaseEntity {
     private Subscriber mSubscriber;
     private String IMEI;
-    private String meetingId;
-    public StartMeetingPost(Subscriber subscriber, String imei,String meetingId) {
+    private int meetingId;
+    public StartMeetingPost(Subscriber subscriber, String imei,int meetingId) {
         mSubscriber = subscriber;
         IMEI = imei;
         this.meetingId = meetingId;

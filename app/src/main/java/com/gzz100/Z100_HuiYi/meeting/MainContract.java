@@ -71,6 +71,11 @@ public interface MainContract {
         void hostResponseMeetingPause();
 
         /**
+         * 结束会议成功
+         */
+        void hostEndMeetingSuccess();
+
+        /**
          * 主持人端响应结束
          */
         void hostResponseMeetingEnd();
@@ -128,6 +133,13 @@ public interface MainContract {
          * 主持人点击开始会议
          */
         void hostStartMeeting(ControllerInfoBean controllerInfoBean,int meetingState);
+
+        /**
+         * 访问服务器，请求结束会议，结束成功，调用hostEndMeetingSuccess
+         * @param IMEI
+         * @param meetingId
+         */
+        void hostStartEndMeeting(String IMEI,int meetingId);
         /**
          * 主持人点击结束会议
          */
@@ -155,7 +167,7 @@ public interface MainContract {
          * @param mControllerInfoBean      消息实体，成功开启投票后，发送消息给所有客户端
          * @param meetingState     会议状态
          */
-        void hostLaunchOrCloseVote(String IMEI,String meetingId,int voteId,int startOrEnd,
+        void hostLaunchOrCloseVote(String IMEI,int meetingId,int voteId,int startOrEnd,
                                    ControllerInfoBean mControllerInfoBean,int meetingState);
 
     }
