@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
+import com.gzz100.Z100_HuiYi.data.delegate.DelegateRepository;
 import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
@@ -79,7 +80,7 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
         Log.e("DelegateFragment -->","onDestroyView");
         super.onDestroyView();
         mPresenter.setFirstLoad(true);
-        mLastClickedRoleItemPositon=Constant.DEFAULT_SPEAKER;
+        mLastClickedRoleItemPositon= DelegateRepository.rolePosConvertToRoleNum(Constant.DEFAULT_SPEAKER);
     }
 
     @Override
@@ -217,10 +218,13 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
         mDelegateListRecView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         mDelegateListRecView.setAdapter(mDelegateListAdapter);
         mDelegateListAdapter.setDelegateBeanItemClickListener(this);
+
+        mDelegateListRecView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showNoDelegateList() {
+        mDelegateListRecView.setVisibility(View.INVISIBLE);
 
     }
 

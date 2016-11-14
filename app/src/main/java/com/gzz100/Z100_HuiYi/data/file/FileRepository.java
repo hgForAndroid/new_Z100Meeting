@@ -75,5 +75,21 @@ public class FileRepository implements FileDataSource {
     @Override
     public void getSearchResult(String fileOrName, @NonNull LoadFileListCallback callback) {
         checkNotNull(callback);
+        mFileLocalDataSource.getSearchResult(fileOrName,callback);
+    }
+
+    @Override
+    public void getSearchNameHint(LoadFileSearchNameCallback callback) {
+        mFileLocalDataSource.getSearchNameHint(callback);
+    }
+
+    @Override
+    public void getFileByName(String fileName, getFileByNameCallback callback) {
+        mFileLocalDataSource.getFileByName(fileName,callback );
+    }
+
+    @Override
+    public boolean isFileName(String inputString) {
+        return mFileLocalDataSource.isFileName(inputString);
     }
 }

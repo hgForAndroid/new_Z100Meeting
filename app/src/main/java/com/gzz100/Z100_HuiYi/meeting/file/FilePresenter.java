@@ -21,8 +21,8 @@ public class FilePresenter implements FileContract.Presenter {
     private boolean mFirstLoad = true;
 
     public FilePresenter(@NonNull FileRepository fileRepository, @NonNull FileContract.View fileView) {
-        this.mFileRepository = checkNotNull(fileRepository,"fileRepository cannot be null");
-        this.mFileView = checkNotNull(fileView,"fileView cannot be null");
+        this.mFileRepository = checkNotNull(fileRepository, "fileRepository cannot be null");
+        this.mFileView = checkNotNull(fileView, "fileView cannot be null");
         this.mFileView.setPresenter(this);
     }
 
@@ -35,8 +35,7 @@ public class FilePresenter implements FileContract.Presenter {
                 if (!mFileView.isActive()) {
                     return;
                 }
-                mFileView.showFilesList(documents);
-
+                mFileView.showSearchResult(documents);
             }
 
             @Override
@@ -46,12 +45,11 @@ public class FilePresenter implements FileContract.Presenter {
         });
 
 
-        mFileView.showSearchResult(null);
     }
 
     @Override
     public void fetchAgendaList(boolean forceUpdate, String IMEI, String userId) {
-        if (forceUpdate || mFirstLoad){
+        if (forceUpdate || mFirstLoad) {
 //            mFirstLoad = false;
             mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.LoadAgendaListCallback() {
                 @Override
@@ -82,7 +80,7 @@ public class FilePresenter implements FileContract.Presenter {
 
     @Override
     public void fetchFileList(boolean forceUpdate, final int agendaPos) {
-        if (forceUpdate || mFirstLoad){
+        if (forceUpdate || mFirstLoad) {
             mFirstLoad = false;
 //            fileModel.getFileListByAgendaPos(agendaPos);
             mFileRepository.getFileList(agendaPos, new FileDataSource.LoadFileListCallback() {
@@ -116,9 +114,26 @@ public class FilePresenter implements FileContract.Presenter {
     }
 
     @Override
-    public void showSearchFileDetail(int fileIndex,int agendaIndex) {
+    public void showSearchFileDetail(int fileIndex, int agendaIndex) {
         mFileView.setFileIndex(fileIndex);
         fetchSearchFileList(agendaIndex);
+    }
+
+    @Override
+    public void setFileSearchAutoCompleteTextViewHint() {
+
+        mFileRepository.getSearchNameHint(new FileDataSource.LoadFileSearchNameCallback() {
+            @Override
+            public void onNameHintLoaded(List<String> fileSearchNameHintList) {
+                mFileView.setAutoCompleteTextView(fileSearchNameHintList);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
+
     }
 
     @Override
@@ -157,10 +172,31 @@ public class FilePresenter implements FileContract.Presenter {
         mFirstLoad = reLoad;
     }
 
+    @Override
+    public void showAutoCompleteTVSelectionFileDetail(String inputString) {
+        if (mFileRepository.isFileName(inputString)) {
+            mFileRepository.getFileByName(inputString, new FileDataSource.getFileByNameCallback() {
+                @Override
+                public void fileDidGet(DocumentModel document) {
+                    showFileDetail(document.getDocumentIndex() - 1);
+                }
+
+                @Override
+                public void fileNotGet() {
+
+                }
+            });
+        }
+        else{
+            searchFileOrName(inputString);
+        }
+    }
+
 
     @Override
     public void start() {
         fetchAgendaList(false,"","");
+        setFileSearchAutoCompleteTextViewHint();
     }
 
 }

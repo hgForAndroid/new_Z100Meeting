@@ -10,11 +10,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.MyAPP;
-import com.gzz100.Z100_HuiYi.meetingPrepare.signIn.SignInActivity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

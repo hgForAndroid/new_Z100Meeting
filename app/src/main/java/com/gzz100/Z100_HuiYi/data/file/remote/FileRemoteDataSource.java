@@ -62,4 +62,19 @@ public class FileRemoteDataSource implements FileDataSource {
     public void getSearchResult(String fileOrName, @NonNull LoadFileListCallback callback) {
 
     }
+
+    @Override
+    public void getSearchNameHint(LoadFileSearchNameCallback callback) {
+
+    }
+
+    @Override
+    public void getFileByName(String fileName, getFileByNameCallback callback) {
+
+    }
+
+    @Override
+    public boolean isFileName(String inputString) {
+        return false;
+    }
 }

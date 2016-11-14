@@ -6,13 +6,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -38,15 +42,17 @@ import butterknife.OnClick;
 public class FileFragment extends Fragment implements FileContract.View, OnAgendaTabClickListener,
         OnFileItemClickListener, OnSearchItemClickListener, View.OnClickListener {
     //    @BindView(R.id.id_edt_fgm_file)
-    private EditText mEdtSearchContent;
+    private AutoCompleteTextView mEdtSearchContent;
     //    @BindView(R.id.id_btn_fgm_file)
     private Button mBtnSearch;
+    private Button mBtnSearchClear;
     //    @BindView(R.id.id_rev_fgm_tab)
     private RecyclerView mAgendaListRecView;
     //    @BindView(R.id.id_rev_fgm_file_list)
     private RecyclerView mFileListRecView;
     private RecyclerView mSearchResultRecView;
     private FileContract.Presenter mPresenter;
+    private RelativeLayout mFileAttrListView;
 
     private List<AgendaModel> mAgendas;
     private AgendaListTabAdapter mAgendaAdapter;
@@ -96,16 +102,22 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_file, container, false);
-        mEdtSearchContent = (EditText) view.findViewById(R.id.id_edt_fgm_file);
+//        Log.e("FileFragment -->","onCreateView");
+        mEdtSearchContent = (AutoCompleteTextView) view.findViewById(R.id.id_edt_fgm_file);
         mBtnSearch = (Button) view.findViewById(R.id.id_btn_fgm_file);
+        mBtnSearchClear = (Button) view.findViewById(R.id.id_btn_fgm_file_clear);
         mAgendaListRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_tab);
         mFileListRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_file_list);
         mSearchResultRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_file_search_result);
+        mFileAttrListView = (RelativeLayout) view.findViewById(R.id.id_rl_fgm_file);
 
         mRlNormal = (RelativeLayout) view.findViewById(R.id.id_rl_fgm_file_normal);
         mLlSearchResult = (LinearLayout) view.findViewById(R.id.id_ll_fgm_file_search_result);
 
         mBtnSearch.setOnClickListener(this);
+        mBtnSearchClear.setOnClickListener(this);
+
+        mPresenter.start();
 //        mUnbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -117,9 +129,22 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         mPresenter.setFirstLoad(true);
     }
 
-    @OnClick(R.id.id_btn_fgm_file)
-    void onClick() {
-        mPresenter.searchFileOrName(mEdtSearchContent.getText().toString().trim());
+    @OnClick({R.id.id_btn_fgm_file, R.id.id_btn_fgm_file_clear})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.id_btn_fgm_file:
+                String content = mEdtSearchContent.getText().toString().trim();
+                if (TextUtils.isEmpty(content))
+                    Toast.makeText(getActivity(), "请输入搜索关键字", Toast.LENGTH_SHORT).show();
+
+                else
+                    mPresenter.searchFileOrName(content);
+                break;
+            case R.id.id_btn_fgm_file_clear:
+                mEdtSearchContent.setText(null);
+                mEdtSearchContent.clearFocus();
+                break;
+        }
     }
 
     @Override
@@ -149,11 +174,17 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public void showSearchResult(List<DocumentModel> documentBeen) {
         mResultDocumentBeen = documentBeen;
-        mSearchResultAdapter = new SearchResultAdapter(getActivity(),documentBeen);
-
-        mSearchResultRecView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+        mSearchResultAdapter = new SearchResultAdapter(getActivity(), documentBeen);
+        mSearchResultRecView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mSearchResultRecView.setAdapter(mSearchResultAdapter);
         mSearchResultAdapter.setOnSearchItemClickListener(this);
+
+
+        mAgendaListRecView.setVisibility(View.GONE);
+        mFileListRecView.setVisibility(View.GONE);
+        mFileAttrListView.setVisibility(View.GONE);
+
+        mLlSearchResult.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -161,13 +192,13 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
         mMainActivity.removeControllerView();
         String currentTitle = mMainActivity.getCurrentTitle();
-        FileDetailActivity.start(getActivity(),mAgendaIndex,mFileIndex,currentTitle,false,false,false,"","");
+        FileDetailActivity.start(getActivity(), mAgendaIndex, mFileIndex, currentTitle, false, false, false, "", "");
     }
 
     @Override
     public void showSearchFileDetail() {
         String currentTitle = mMainActivity.getCurrentTitle();
-        FileDetailActivity.start(getActivity(),mSearchAgendaIndex,mSearchFileIndex1,currentTitle,false,false,false,"","");
+        FileDetailActivity.start(getActivity(), mSearchAgendaIndex, mSearchFileIndex1, currentTitle, false, false, false, "", "");
     }
 
     @Override
@@ -186,7 +217,67 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
 
     @Override
+    public void setAutoCompleteTextView(List<String> fileSearchNameHintList) {
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), R.layout.item_delegate_search_list, fileSearchNameHintList);
+        mEdtSearchContent.setAdapter(arrayAdapter);
+        mEdtSearchContent.setDropDownHeight(100);
+        mEdtSearchContent.setThreshold(1);
+        mEdtSearchContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mPresenter.showAutoCompleteTVSelectionFileDetail(parent.getItemAtPosition(position).toString());
+            }
+        });
+        mEdtSearchContent.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mEdtSearchContent.showDropDown();
+                }
+            }
+        });
+        mEdtSearchContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!(mEdtSearchContent.getText().toString().isEmpty())) {
+                    mBtnSearchClear.setVisibility(View.VISIBLE);
+                } else {
+                   fileListNSearchFileListSwitch();
+                    mBtnSearchClear.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
+    }
+
+    @Override
+    public void fileListNSearchFileListSwitch() {
+        mAgendaListRecView.setVisibility(View.VISIBLE);
+        mFileListRecView.setVisibility(View.VISIBLE);
+        mFileAttrListView.setVisibility(View.VISIBLE);
+        mLlSearchResult.setVisibility(View.GONE);
+
+    }
+
+
+    @Override
     public void showNoSearchResult() {
+
+        Toast hintToast = Toast.makeText(getContext(), "不存在该文件或该主讲人", Toast.LENGTH_SHORT);
+        hintToast.show();
 
     }
 
@@ -229,17 +320,11 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
     @Override
     public void onSearchClick(int position) {
-        if (mResultDocumentBeen != null && mResultDocumentBeen.size() > 0){
+        if (mResultDocumentBeen != null && mResultDocumentBeen.size() > 0) {
             mSearchFileIndex1 = Integer.valueOf(mResultDocumentBeen.get(position).getDocumentIndex());
             mSearchAgendaIndex = Integer.valueOf(mResultDocumentBeen.get(position).getDocumentAgendaIndex());
-            mPresenter.showSearchFileDetail(mSearchFileIndex1,mSearchAgendaIndex);
+            mPresenter.showSearchFileDetail(mSearchFileIndex1, mSearchAgendaIndex);
         }
     }
-    //搜索
-    @Override
-    public void onClick(View v) {
-        String content = mEdtSearchContent.getText().toString();
-        if (TextUtils.isEmpty(content))
-            Toast.makeText(getActivity(), "请输入搜索关键字", Toast.LENGTH_SHORT).show();
-    }
+
 }

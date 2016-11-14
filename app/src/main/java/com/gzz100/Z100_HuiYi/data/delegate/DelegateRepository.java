@@ -2,11 +2,10 @@ package com.gzz100.Z100_HuiYi.data.delegate;
 
 import android.support.annotation.NonNull;
 
-
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.delegate.local.DelegateLocalDataSource;
 import com.gzz100.Z100_HuiYi.data.delegate.remote.DelegateRemoteDataSource;
+import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;
 
@@ -42,7 +41,10 @@ public class DelegateRepository implements DelegateDataSource {
     @Override
     public void getDelegateList(final int rolePos, @NonNull final LoadDelegateListCallback callback) {
         checkNotNull(callback);
-            mDelegateLocalDataSource.getDelegateList(rolePos, new LoadDelegateListCallback() {
+
+        int roleNum=rolePosConvertToRoleNum(rolePos);
+
+            mDelegateLocalDataSource.getDelegateList(roleNum, new LoadDelegateListCallback() {
                 @Override
                 public void onDelegateListLoaded(List<DelegateModel> delegateBeans) {
                     callback.onDelegateListLoaded(delegateBeans);
@@ -50,10 +52,31 @@ public class DelegateRepository implements DelegateDataSource {
 
                 @Override
                 public void onDataNotAvailable() {
-                    mDelegateRemoteDataSource.getDelegateList(rolePos,callback);
+                    callback.onDataNotAvailable();
                 }
             });
     }
+
+    public static int rolePosConvertToRoleNum(int rolePos){
+        int roleNum;
+        switch (rolePos)
+        {
+            case 0:
+                roleNum= Constant.DEFAULT_SPEAKER;
+                break;
+            case 1:
+                roleNum= Constant.HOSTS;
+                break;
+            case 2:
+                roleNum= Constant.OTHER_DELEGATE;
+                break;
+            default:
+                roleNum=-1;
+                break;
+        }
+        return roleNum;
+    }
+
 
     @Override
     public void getDelegateNameHint(LoadDelegateNameHintCallback callback) {
