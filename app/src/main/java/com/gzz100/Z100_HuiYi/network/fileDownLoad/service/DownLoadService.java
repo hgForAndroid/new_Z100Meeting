@@ -75,10 +75,8 @@ public class DownLoadService extends IntentService {
                 }
             }
         };
-//        File outputFile = new File(Environment.getExternalStoragePublicDirectory
-//                (Environment.DIRECTORY_DOWNLOADS), name+".apk");
         if (name.contains("/")){
-            //如果路劲包含“/”，取最后的名字
+            //如果路径包含“/”，取最后的名字
             name = name.substring(name.lastIndexOf("/"),name.length());
         }
         File outputFile = new File(AppUtil.getCacheDir(this.getApplicationContext()), name);
@@ -91,8 +89,8 @@ public class DownLoadService extends IntentService {
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
-                downloadCompleted(" 下载失败");
                 EventBus.getDefault().post(new DownLoadComplete(false, "下载失败"));
+                DownLoadService.this.onDestroy();
             }
             @Override
             public void onNext(Object o) {

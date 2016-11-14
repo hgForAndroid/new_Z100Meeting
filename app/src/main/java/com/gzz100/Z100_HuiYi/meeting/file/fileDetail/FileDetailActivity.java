@@ -2,10 +2,12 @@ package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -549,14 +551,16 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             agendaContentChange(controllerInfoBean.getAgendaIndex(),controllerInfoBean.getDocumentIndex());
 
         }else {
-            //在当前界面，但是，已经切换了议程内的文件
-            mFileIndex = controllerInfoBean.getDocumentIndex();
-            String name = mDocuments.get(mFileIndex).getDocumentName().
-                    substring(0,mDocuments.get(mFileIndex).getDocumentName().indexOf("."));
-            mNavBarView.setTitle(name);//设置文件标题
-            mFileDetailAdapter.setSelectedItem(mFileIndex);
-            mPresenter.loadFile(mDocuments.get(mFileIndex));//加载文件
-            mFileDetailAdapter.notifyDataSetInvalidated();
+            if (mFileIndex != controllerInfoBean.getDocumentIndex()){
+                //在当前界面，但是，已经切换了议程内的文件
+                mFileIndex = controllerInfoBean.getDocumentIndex();
+                String name = mDocuments.get(mFileIndex).getDocumentName().
+                        substring(0,mDocuments.get(mFileIndex).getDocumentName().indexOf("."));
+                mNavBarView.setTitle(name);//设置文件标题
+                mFileDetailAdapter.setSelectedItem(mFileIndex);
+                mPresenter.loadFile(mDocuments.get(mFileIndex));//加载文件
+                mFileDetailAdapter.notifyDataSetInvalidated();
+            }
         }
     }
 
@@ -755,16 +759,29 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fileDownLoadComplete(DownLoadComplete downLoadComplete){
+        if (mProgressDialog != null && mProgressDialog.isShowing()){
+            mProgressDialog.dismiss();
+        }
         if (downLoadComplete.isDone()){
             //下载完成，重新加载文件
             DocumentModel documentModel = new DocumentModel();
             documentModel.setDocumentName(downLoadComplete.getFileName());
             mPresenter.loadFile(documentModel);
         }else {
-            ToastUtil.showMessage(downLoadComplete.getFileName());
-        }
-        if (mProgressDialog != null && mProgressDialog.isShowing()){
-            mProgressDialog.dismiss();
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(downLoadComplete.getFileName());
+            dialog.setMessage("是否重新下载");
+            dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mPresenter.loadFile(mFileList.get(mFileIndex));
+                }
+            }).setNegativeButton("否", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
         }
     }
 

@@ -218,7 +218,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             //已开始  2
             mControllerInfoBean.setMeetingState(meetingState);
             mControllerInfoBean.setAgendaIndex(finalAgendaIndex);
-            mControllerInfoBean.setDocumentIndex(0);
+            //这里讲文件序号设置为-1，为了不让切换议程时加载两次文件
+            mControllerInfoBean.setDocumentIndex(-1);
             mControllerInfoBean.setAgendaChange(true);
 
             String json = mGson.toJson(mControllerInfoBean);
@@ -241,7 +242,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
             mControllerInfoBean.setMeetingState(meetingState);
             mControllerInfoBean.setAgendaIndex(finalAgendaIndex);
-            mControllerInfoBean.setDocumentIndex(0);
+            //这里讲文件序号设置为-1，为了不让切换议程时加载两次文件
+            mControllerInfoBean.setDocumentIndex(-1);
             mControllerInfoBean.setAgendaChange(true);
 
             String json = mGson.toJson(mControllerInfoBean);
@@ -300,6 +302,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             //上面这句不再调用，因为继续时，有没有变化，由下面的判断分支决定
             if (data.isAgendaChange()) {//议程已改变
                 if (data.getAgendaIndex() > 0) {
+                    //客户端只需要判断，继续时的议程序号是否跟当前的一致，文件序号是否一致，
+                    // 如果不一致，则需要重新还原，如一致，则只需要继续倒计时，其他均不变
                     mView.respondAgendaTimeIsCounting(data.isAgendaTimeCountDown());
                     mView.respondAgendaIndexChange(data);
                 }

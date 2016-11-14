@@ -184,6 +184,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mViewPager.setAdapter(mMainFragmentAdapter);
         mViewPager.setCurrentItem(PAGE_ONE);
         mNavBarView.mTvTitle.setText(mMeetingTab.getText());
+        mNavBarView.setMeetingStateOrAgendaState("未开始");
         mMeetingTab.setChecked(true);
     }
 

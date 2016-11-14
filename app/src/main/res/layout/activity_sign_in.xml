@@ -12,80 +12,47 @@
         android:layout_height="0dp"
         android:layout_weight="7"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/id_tv_position_sign_in"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="7"
+            android:gravity="center"
             android:text="职位名称"
-            android:textSize="50sp"
-            android:gravity="center"/>
+            android:textSize="50sp"/>
+
         <TextView
             android:id="@+id/id_tv_name_sign_in"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
+            android:gravity="center"
             android:text="名字"
-            android:textSize="45sp"
-            android:gravity="center"/>
+            android:textSize="45sp"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#000"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
         android:gravity="center">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <Button
-                android:layout_centerInParent="true"
-                android:id="@+id/id_btn_sign_in"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="45sp"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="签到"/>
-            <LinearLayout
-                android:id="@+id/id_ll_connect_layout"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingRight="10dp">
-                <TextView
-                    android:id="@+id/id_tv_show_connected_count"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="已连接："
-                    android:textSize="20sp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"/>
-                <Button
-                    android:id="@+id/id_btn_sign_in_send_multiCast"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="连接"
-                    android:textSize="20sp"
-                    android:paddingLeft="50dp"
-                    android:paddingRight="50dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"/>
 
-            </LinearLayout>
-
-        </RelativeLayout>
+        <Button
+            android:id="@+id/id_btn_sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:paddingTop="10dp"
+            android:text="签到"
+            android:textSize="45sp"/>
     </LinearLayout>
 
 </LinearLayout>

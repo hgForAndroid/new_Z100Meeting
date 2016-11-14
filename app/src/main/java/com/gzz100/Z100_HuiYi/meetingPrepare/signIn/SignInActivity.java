@@ -64,12 +64,6 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     TextView mTvPosition;
     @BindView(R.id.id_tv_name_sign_in)
     TextView mTvName;
-    @BindView(R.id.id_ll_connect_layout)//连接以及显示连接数的布局，设备位主持人则显示，反之不显示
-    LinearLayout mLlConnectLayout;
-    @BindView(R.id.id_btn_sign_in_send_multiCast)//发送组播
-    Button mTvSendMultiCast;
-    @BindView(R.id.id_tv_show_connected_count)//发送组播
-    TextView mTvShowConnectedCount;
 
     private SignInContract.Presenter mPresenter;
 
@@ -91,38 +85,12 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         }
     }
 
-    @OnClick(R.id.id_btn_sign_in_send_multiCast)
-    public void sendMultiCast(View view){
-//        String serverIP = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-//                .getString(Constant.CURRENT_IP, "");
-//        String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
-//        final KeyInfoBean keyInfoBean = new KeyInfoBean(serverIP,mMeetingID,localIpAddress);
-//        final Gson gson = new Gson();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                String s = gson.toJson(keyInfoBean);
-//                MulticastController.getDefault().sendMessage(s);
-//            }
-//        }).start();
-//
-        String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
-        SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_ID,mMeetingID);
-
-        Intent intent = new Intent(this,SendMulticastService.class);
-        intent.putExtra("localIpAddress",localIpAddress);
-        startService(intent);
-
-
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
 
         mPresenter.fetchCurrentUserBean(false,mDeviceIMEI,mMeetingID);
-        sendKeyMessageToClients();
     }
 
     @Override
@@ -155,10 +123,6 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
             }
         }
     }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void showConnectedCount(String count){
-        mTvShowConnectedCount.setText("已连接："+count);
-    }
 
     @OnClick(R.id.id_btn_sign_in)
     void signIn(){
@@ -169,22 +133,8 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     public void showDelegate(UserBean userBean) {
         mTvPosition.setText(userBean.getUserJob());
         mTvName.setText(userBean.getUserName());
-        if (userBean.getUserRole() == 1){
-            sendKeyMessageToClients();
-            //显示连接的布局
-            mLlConnectLayout.setVisibility(View.VISIBLE);
-        }else {
-            //不显示连接的布局
-            mLlConnectLayout.setVisibility(View.GONE);
-        }
 
-        //开启组播
-        String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
-        SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_ID,mMeetingID);
-
-        Intent intent = new Intent(this,SendMulticastService.class);
-        intent.putExtra("localIpAddress",localIpAddress);
-        startService(intent);
+        sendKeyMessageToClients();
 
     }
     //使用组播发送信息给全部客户端，信息包括 会议id，服务器ip，当前主持人平板设备在局域网内的ip
@@ -192,6 +142,14 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         //该角色在进入该Activity时，在onStart方法中调用mPresenter.fetchCurrentUserBean(false,mDeviceIMEI,mMeetingID);
         //里面取完值就已经赋值
         if (MyAPP.getInstance().getUserRole() == 1){//主持人才发送组播,启动TCP服务器端服务
+            //开启组播
+            String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
+            SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_ID,mMeetingID);
+
+            Intent intent = new Intent(this,SendMulticastService.class);
+            intent.putExtra("localIpAddress",localIpAddress);
+            startService(intent);
+
             mPresenter.startTCPService();
         }
     }
