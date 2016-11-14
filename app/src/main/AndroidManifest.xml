@@ -69,6 +69,7 @@
                 <action android:name="action.GET_MULYICAST"/>
             </intent-filter>
         </service>
+        <service android:name=".multicast.SendMulticastService"/>
         <!-- 下载文件的服务 -->
         <service android:name=".network.fileDownLoad.service.DownLoadService"/>
         <service

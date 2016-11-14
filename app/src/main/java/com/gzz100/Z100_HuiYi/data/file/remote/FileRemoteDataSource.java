@@ -48,13 +48,14 @@ public class FileRemoteDataSource implements FileDataSource {
     @Override
     public void getAgendaList(String IMEI, String userId, @NonNull final LoadAgendaListCallback callback) {
         checkNotNull(callback);
-        List<AgendaModel> agendas = FileOperate.getInstance(mContext).queryAgendaList();
-        if (agendas != null && agendas.size() > 0){
-            callback.onAgendaListLoaded(agendas);
-            mFileOperate.insertAgendaList(agendas);
-        }else {
-            callback.onDataNotAvailable();
-        }
+        //应该是访问服务器
+//        List<AgendaModel> agendas = FileOperate.getInstance(mContext).queryAgendaList();
+//        if (agendas != null && agendas.size() > 0){
+//            callback.onAgendaListLoaded(agendas);
+//            mFileOperate.insertAgendaList(agendas);
+//        }else {
+//            callback.onDataNotAvailable();
+//        }
     }
 
     @Override

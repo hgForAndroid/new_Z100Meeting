@@ -22,6 +22,7 @@ import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
 import com.gzz100.Z100_HuiYi.multicast.MulticastController;
+import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -92,19 +93,27 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
 
     @OnClick(R.id.id_btn_sign_in_send_multiCast)
     public void sendMultiCast(View view){
-        String serverIP = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-                .getString(Constant.CURRENT_IP, "");
+//        String serverIP = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+//                .getString(Constant.CURRENT_IP, "");
+//        String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
+//        final KeyInfoBean keyInfoBean = new KeyInfoBean(serverIP,mMeetingID,localIpAddress);
+//        final Gson gson = new Gson();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String s = gson.toJson(keyInfoBean);
+//                MulticastController.getDefault().sendMessage(s);
+//            }
+//        }).start();
+//
         String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
-        final KeyInfoBean keyInfoBean = new KeyInfoBean(serverIP,mMeetingID,localIpAddress);
-        final Gson gson = new Gson();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String s = gson.toJson(keyInfoBean);
-                MulticastController.getDefault().sendMessage(s);
-            }
-        }).start();
         SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_ID,mMeetingID);
+
+        Intent intent = new Intent(this,SendMulticastService.class);
+        intent.putExtra("localIpAddress",localIpAddress);
+        startService(intent);
+
+
     }
 
     @Override
@@ -168,6 +177,15 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
             //不显示连接的布局
             mLlConnectLayout.setVisibility(View.GONE);
         }
+
+        //开启组播
+        String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_ID,mMeetingID);
+
+        Intent intent = new Intent(this,SendMulticastService.class);
+        intent.putExtra("localIpAddress",localIpAddress);
+        startService(intent);
+
     }
     //使用组播发送信息给全部客户端，信息包括 会议id，服务器ip，当前主持人平板设备在局域网内的ip
     private void sendKeyMessageToClients() {

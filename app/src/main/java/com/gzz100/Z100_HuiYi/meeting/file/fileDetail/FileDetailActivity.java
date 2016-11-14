@@ -590,7 +590,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             if (!mIsAgendaTimeCountDown){
                 //取议程时传入的是mAgendaIndex-1，因为存储议程时，是从0开始的
                 int agendaDuration = FileOperate.getInstance(FileDetailActivity.this)
-                        .queryAgendaList().get(mAgendaIndex - 1).getAgendaDuration();
+                        .queryAgendaList().get(agendaIndex - 1).getAgendaDuration();
                 mMin = agendaDuration;
                 mSec = 0;
                 mNavBarView.setTimeHour(getMin());
@@ -737,9 +737,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void loadFile(File file) {
-        if (mProgressDialog != null && mProgressDialog.isShowing()){
-            mProgressDialog.dismiss();
-        }
         mPDFView.fromFile(file)
                 .enableSwipe(true)
                 .swipeHorizontal(false)
@@ -753,7 +750,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage(tip);
         mProgressDialog.show();
-        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setCanceledOnTouchOutside(true);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -763,6 +760,11 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             DocumentModel documentModel = new DocumentModel();
             documentModel.setDocumentName(downLoadComplete.getFileName());
             mPresenter.loadFile(documentModel);
+        }else {
+            ToastUtil.showMessage(downLoadComplete.getFileName());
+        }
+        if (mProgressDialog != null && mProgressDialog.isShowing()){
+            mProgressDialog.dismiss();
         }
     }
 
@@ -804,6 +806,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void meetingContinue() {
+        String tempCountingMin = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                .getString(Constant.COUNTING_MIN, "");//暂停后保存的议程时间倒计时的  分钟
+        String tempCountingSec = SharedPreferencesUtil.getInstance(this.getApplicationContext())
+                .getString(Constant.COUNTING_SEC, "");//暂停后保存的议程时间倒计时的  秒钟
         //如果暂停后，主持人是有切换过议程的，需要还原到上次暂停的界面
         int pauseAgendaIndex = SharedPreferencesUtil.getInstance(this.getApplicationContext())
                 .getInt(Constant.PAUSE_AGENDA_INDEX, 0);
@@ -812,16 +818,21 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (mAgendaIndex != pauseAgendaIndex){
             //当前显示的议程，不是暂停前的议程，则需要重新切换回原来的议程
             agendaContentChange(pauseAgendaIndex,pauseDocumentIndex);
-            String tempCountingMin = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-                    .getString(Constant.COUNTING_MIN, "");//暂停后保存的议程时间倒计时的  分钟
-            String tempCountingSec = SharedPreferencesUtil.getInstance(this.getApplicationContext())
-                    .getString(Constant.COUNTING_SEC, "");//暂停后保存的议程时间倒计时的  秒钟
             //将右上角显示的时间切换回暂停前的时间
             mMin = Integer.valueOf(tempCountingMin);
             mSec = Integer.valueOf(tempCountingSec);
             mNavBarView.setTimeHour(tempCountingMin);
             mNavBarView.setTimeMin(tempCountingSec);
         }else {
+            //在本界面，如果是已经是暂停后退出过，再次进入
+            if (!mNavBarView.getTimeHour().equals(tempCountingMin)
+                    && !mNavBarView.getTimeMin().equals(tempCountingSec)){
+                //将右上角显示的时间切换回暂停前的时间
+                mMin = Integer.valueOf(tempCountingMin);
+                mSec = Integer.valueOf(tempCountingSec);
+                mNavBarView.setTimeHour(tempCountingMin);
+                mNavBarView.setTimeMin(tempCountingSec);
+            }
             //还在本界面，但是当前显示的文件序号跟暂停前的不一样，需要切换到暂停前的议程文件序号
             if (mFileIndex != pauseDocumentIndex){
                 mFileIndex = pauseDocumentIndex;

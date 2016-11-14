@@ -513,6 +513,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                                 if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
                                     stopService(new Intent(MainActivity.this, Client.class));
                                 }
+                                if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.multicast.SendMulticastService")) {
+                                    stopService(new Intent(MainActivity.this, Client.class));
+                                }
                                 SharedPreferencesUtil.getInstance(MainActivity.this).clearKeyInfo();
                                 //删除会议前预下载的所有文件
                                 AppUtil.DeleteFolder(AppUtil.getCacheDir(MainActivity.this));

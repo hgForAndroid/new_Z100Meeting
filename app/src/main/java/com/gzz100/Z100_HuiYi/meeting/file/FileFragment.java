@@ -87,10 +87,8 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (Constant.DEBUG)
-            Log.e("FileFragment -->", "onResume");
+    public void onStart() {
+        super.onStart();
         mPresenter.start();
     }
 

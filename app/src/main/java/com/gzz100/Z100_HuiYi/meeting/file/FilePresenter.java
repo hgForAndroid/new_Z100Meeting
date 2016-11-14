@@ -64,6 +64,9 @@ public class FilePresenter implements FileContract.Presenter {
                     if (mFirstLoad){
                         mFileView.setAgendaTime(agendas.get(0).getAgendaDuration()+"");
                     }
+
+                    fetchFileList(false,1);
+
                 }
 
                 @Override
@@ -158,7 +161,6 @@ public class FilePresenter implements FileContract.Presenter {
     @Override
     public void start() {
         fetchAgendaList(false,"","");
-        fetchFileList(false,1);
     }
 
 }

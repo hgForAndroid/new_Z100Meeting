@@ -92,6 +92,7 @@ public class DownLoadService extends IntentService {
             public void onError(Throwable e) {
                 e.printStackTrace();
                 downloadCompleted(" 下载失败");
+                EventBus.getDefault().post(new DownLoadComplete(false, "下载失败"));
             }
             @Override
             public void onNext(Object o) {

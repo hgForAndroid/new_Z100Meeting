@@ -325,6 +325,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
                 controllerInfoBean.setAgendaIndex(agendaIndex);
                 controllerInfoBean.setDocumentIndex(documentPosition);
             } else {
+                mView.setMeetingState(meetingState);
                 controllerInfoBean.setMeetingState(meetingState);
                 //这里设置议程序号为0.切换文件时，忽略切换议程
                 controllerInfoBean.setAgendaIndex(0);
