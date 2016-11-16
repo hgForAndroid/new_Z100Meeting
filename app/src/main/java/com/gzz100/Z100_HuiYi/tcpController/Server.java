@@ -31,7 +31,6 @@ public class Server extends Service implements IControllerListener{
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
@@ -49,14 +48,17 @@ public class Server extends Service implements IControllerListener{
                 ServerSocket ss = new ServerSocket(Constant.TCP_PORT);
                 while (!endFlag) {
                     // 等待客户端连接
-                    Log.e(TAG,"等待请求发来");
                     Socket s = ss.accept();
-                    Log.e(TAG,"请求已到，连接客户端");
-                    addClientSocketToList(s);
                     //读取客户端发来的消息
                     BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()));
                     String message = input.readLine();
                     Log.e("来自客户端的消息 ： ", message);
+                    if (message.equals("exit")){
+                        removeClientSocket(s);
+                    }else {
+                        addClientSocketToList(s);
+                    }
+
                     //向客户端发送消息
                     //注意第二个参数据为true将会自动flush，否则需要需要手动操作output.flush()
                     mOutput = new PrintWriter(s.getOutputStream(), true);
@@ -74,6 +76,25 @@ public class Server extends Service implements IControllerListener{
 
         }
     };
+
+    /**
+     * 当客户端发出消息请求断开，将该客户端的socket移除集合
+     * @param socket
+     */
+    private void removeClientSocket(Socket socket) {
+        Log.e("准备移除","==========================");
+        if (clientSockets != null && clientSockets.size() > 0){
+            boolean hasSocket = false;
+            for (int i = 0; i < clientSockets.size(); i++) {
+                String address = clientSockets.get(i).getInetAddress().getHostAddress();
+                if (socket.getInetAddress().getHostAddress().equals(address)){
+                    //设备ip与存储的Socket有相同的ip
+                    clientSockets.remove(socket);
+                    Log.e("已经移除","==========================");
+                }
+            }
+        }
+    }
 
     private List<Socket> clientSockets = new ArrayList<>();
 
@@ -94,7 +115,7 @@ public class Server extends Service implements IControllerListener{
             clientSockets.add(socket);
         }
         //更新连接数
-        EventBus.getDefault().post(clientSockets.size()+"");
+//        EventBus.getDefault().post(clientSockets.size()+"");
 
     }
 
@@ -113,7 +134,6 @@ public class Server extends Service implements IControllerListener{
                     e.printStackTrace();
                 }
             }
-
         }
     }
 }

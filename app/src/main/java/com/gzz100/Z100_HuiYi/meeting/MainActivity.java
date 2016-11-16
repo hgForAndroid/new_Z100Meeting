@@ -225,7 +225,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 mFileFragment);
         new AgendaPresenter(RepositoryUtil.getFileRepository(this),
                 mAgendaFragment);
-        new DelegatePresenter(RepositoryUtil.getDelegateRepository(this.getApplicationContext()),
+        new DelegatePresenter(RepositoryUtil.getDelegateRepository(this),
                 mDelegateFragment);
         new VotePresenter(RepositoryUtil.getVoteRepository(this),
                 mVoteFragment, this);
@@ -508,15 +508,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                         .setPositiveButton("是", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Server")) {
-                                    stopService(new Intent(MainActivity.this, Server.class));
-                                }
-                                if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
-                                    stopService(new Intent(MainActivity.this, Client.class));
-                                }
-                                if (AppUtil.isServiceRun(MainActivity.this, "com.gzz100.Z100_HuiYi.multicast.SendMulticastService")) {
-                                    stopService(new Intent(MainActivity.this, Client.class));
-                                }
+                                SharedPreferencesUtil.getInstance(MainActivity.this).killAllRunningService();
                                 SharedPreferencesUtil.getInstance(MainActivity.this).clearKeyInfo();
                                 //删除会议前预下载的所有文件
                                 AppUtil.DeleteFolder(AppUtil.getCacheDir(MainActivity.this));

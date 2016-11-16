@@ -61,4 +61,14 @@ public class StringUtils {
     public static String resetNum(int num) {
         return num > 9 ? num + "" : "0" + num;
     }
+
+    // 获取手机系统版本
+    public static String getLocalSystemVersion() {
+        String version = android.os.Build.VERSION.RELEASE;
+        if (version == null) {
+            version = "";
+        }
+        return version;
+
+    }
 }

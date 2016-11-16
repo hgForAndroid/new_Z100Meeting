@@ -95,6 +95,8 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public void onStart() {
         super.onStart();
+        if (Constant.DEBUG)
+            Log.e("文件界面 == ","start");
         mPresenter.start();
     }
 
@@ -116,8 +118,6 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
         mBtnSearch.setOnClickListener(this);
         mBtnSearchClear.setOnClickListener(this);
-
-        mPresenter.start();
 //        mUnbinder = ButterKnife.bind(this, view);
         return view;
     }

@@ -98,12 +98,17 @@ public class MeetingPresenter implements MeetingContract.Presenter {
             mMeetingRepository.getDelegateList(new MeetingDataSource.LoadDelegateCallback() {
                 @Override
                 public void onDelegateLoaded(List<DelegateModel> users) {
-                    mDelegateBeen = users;
-                    mView.showMeetingRoom(users);
-                    //参会人数大于10个人
-                    int othersNum = users.size() - 10;
-                    if (othersNum > 0)
+                    if (users != null && users.size()>0){
+                        mDelegateBeen = users;
+                        mView.showMeetingRoom(users);
+                        //参会人数大于10个人、
+                        int othersNum = 0;
+                        if (users.size() > 10){
+                            othersNum = users.size() - 10;
+                        }
                         mView.setOthersNum(true,othersNum);
+                    }
+
                 }
 
                 @Override
@@ -112,7 +117,6 @@ public class MeetingPresenter implements MeetingContract.Presenter {
                 }
             });
         }
-
     }
 
     @Override

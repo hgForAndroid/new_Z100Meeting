@@ -38,16 +38,9 @@
             android:screenOrientation="landscape">
         </activity>
         <activity
-            android:name=".meeting.MainActivity"
+            android:name="com.gzz100.Z100_HuiYi.meeting.MainActivity"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan">
-
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN"/>-->
-
-
-             <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-             <!--</intent-filter>-->
         </activity>
         <activity android:name=".BaseActivity">
         </activity>

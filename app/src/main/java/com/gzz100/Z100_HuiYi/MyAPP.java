@@ -2,6 +2,7 @@ package com.gzz100.Z100_HuiYi;
 
 import android.app.Application;
 
+import com.gzz100.Z100_HuiYi.utils.AppCrashCaughtUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
@@ -21,6 +22,9 @@ public class MyAPP extends Application {
         super.onCreate();
         mInstance = this;
 //        saveDefaultUserRole();
+
+        //初始化崩溃日志收集器
+        AppCrashCaughtUtil.getInstance().setAppCrashCaughtUtilInfo(this);
     }
 
     //默认角色为普通参会人员

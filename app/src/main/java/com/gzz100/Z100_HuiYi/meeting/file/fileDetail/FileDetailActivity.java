@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -68,6 +71,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     public static final String SEC = "sec";
     private int mVoteId;
     private ProgressDialog mProgressDialog;
+    private long mLoadFileBeginTime;
 
     /**
      * 跳转到文件详情界面
@@ -647,12 +651,15 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             if (isHost && mMeetingState != Constant.MEETING_STATE_PAUSE)
                 saveCountingMinAndSec(getMin(), getSec(true));
 
-            mPassive = true;
-            mMyHandler.removeCallbacksAndMessages(null);
-            //减低时间延迟
-            Message message = Message.obtain();
-            message.what = 0x00;
-            mMyHandler.sendMessage(message);
+            if (mMeetingState == Constant.MEETING_STATE_BEGIN){
+                //切换议程时，当状态为开始时，才会开始倒计时
+                mPassive = true;
+                mMyHandler.removeCallbacksAndMessages(null);
+                //减低时间延迟
+                Message message = Message.obtain();
+                message.what = 0x00;
+                mMyHandler.sendMessage(message);
+            }
         }
     }
 
@@ -781,14 +788,20 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mPresenter.fallback();
     }
 
+    boolean il = false;
     @Override
     public void loadFile(File file) {
+
         mPDFView.fromFile(file)
                 .enableSwipe(true)
                 .swipeHorizontal(false)
                 .enableDoubletap(true)
                 .defaultPage(1)
                 .load();
+//        if (!il){
+//            mLoadFileBeginTime = System.currentTimeMillis();
+//            il = true;
+//        }
     }
 
     @Override
@@ -911,23 +924,33 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-        //由主持人点击开始或继续，mPassive为true，暂停、结束为false
-        //mPassive为true，代表是主持人控制会议中，isHost为true代表当前设备的用户是主持人
-        if (mPassive && !isHost) {
-            //无操作
-        } else {
-            mFileDetailAdapter.setSelectedItem(position);
-            mFileDetailAdapter.notifyDataSetInvalidated();
+//        long currentTime = System.currentTimeMillis();
+//        long l = currentTime - mLoadFileBeginTime;
+//        Log.e("时间 ==== ",l+"");
+//        if (currentTime - mLoadFileBeginTime > 2000){
+//            mLoadFileBeginTime = System.currentTimeMillis();
+
+            //由主持人点击开始或继续，mPassive为true，暂停、结束为false
+            //mPassive为true，代表是主持人控制会议中，isHost为true代表当前设备的用户是主持人
+            if (mPassive && !isHost) {
+                //无操作
+            } else {
+                mFileDetailAdapter.setSelectedItem(position);
+                mFileDetailAdapter.notifyDataSetInvalidated();
 //        mFileNameRcv.setSelection(position);
-            mFileIndex = position;
-            mPresenter.loadFile(mFileList.get(position));
-            String name = mFileList.get(position).getDocumentName().
-                    substring(0,mFileList.get(position).getDocumentName().indexOf("."));
-            mNavBarView.setTitle(name);
-        }
-        if (isHost) {//主持人操作后发送消息通知全部客户端
-            mPresenter.handleFileClickFromHost(mControllerInfoBean, mMeetingState, mAgendaIndex, position);
-        }
+                mFileIndex = position;
+                mPresenter.loadFile(mFileList.get(position));
+                String name = mFileList.get(position).getDocumentName().
+                        substring(0,mFileList.get(position).getDocumentName().indexOf("."));
+                mNavBarView.setTitle(name);
+            }
+            if (isHost) {//主持人操作后发送消息通知全部客户端
+                mPresenter.handleFileClickFromHost(mControllerInfoBean, mMeetingState, mAgendaIndex, position);
+            }
+//        }else {
+//            ToastUtil.showMessage("文件正在加载中，请稍等。");
+//        }
+
     }
 
     //返回

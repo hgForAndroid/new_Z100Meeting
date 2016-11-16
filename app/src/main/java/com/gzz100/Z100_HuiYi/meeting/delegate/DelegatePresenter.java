@@ -30,7 +30,7 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     public void start() {
         fetchRoleList();
         fetchDelegateList(DelegateRepository.rolePosConvertToRoleNum(Constant.DEFAULT_SPEAKER));
-        setDelegateSearchAutoCompleteTextViewHint();
+//        setDelegateSearchAutoCompleteTextViewHint();
     }
 
     @Override

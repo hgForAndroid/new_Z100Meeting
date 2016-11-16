@@ -174,12 +174,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
                         .setPositiveButton("是", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (AppUtil.isServiceRun(getActivity(), "com.gzz100.Z100_HuiYi.tcpController.Server")) {
-                                    getActivity().stopService(new Intent(getActivity(), Server.class));
-                                }
-                                if (AppUtil.isServiceRun(getActivity(), "com.gzz100.Z100_HuiYi.tcpController.Client")) {
-                                    getActivity().stopService(new Intent(getActivity(), Client.class));
-                                }
+                                SharedPreferencesUtil.getInstance(getContext()).killAllRunningService();
                                 SharedPreferencesUtil.getInstance(getContext()).clearKeyInfo();
                                 //删除会议前预下载的所有文件
                                 AppUtil.DeleteFolder(AppUtil.getCacheDir(getContext()));
@@ -248,8 +243,12 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
     @Override
     public void setOthersNum(boolean isShow, int othersNum) {
-        if (isShow)
+        if (isShow && othersNum > 0){
             mOthers.setText("其他参会人员（" + othersNum + ")");
+        }else {
+            mOthers.setVisibility(View.GONE);
+        }
+
     }
 
     @Override

@@ -3,9 +3,14 @@ package com.gzz100.Z100_HuiYi.utils;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Base64;
+
+import com.gzz100.Z100_HuiYi.meeting.MainActivity;
+import com.gzz100.Z100_HuiYi.tcpController.Client;
+import com.gzz100.Z100_HuiYi.tcpController.Server;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -29,12 +34,15 @@ public class SharedPreferencesUtil {
     private static SharedPreferences sp;
     private static SharedPreferences.Editor editor;
 
-    private SharedPreferencesUtil() {
+    private Context mContext;
+
+    private SharedPreferencesUtil(Context context) {
+        mContext = context;
     }
 
     public static SharedPreferencesUtil getInstance(Context context) {
         if (null == mInstance) {
-            mInstance = new SharedPreferencesUtil();
+            mInstance = new SharedPreferencesUtil(context);
             sp = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
             editor = sp.edit();
         }
@@ -227,6 +235,21 @@ public class SharedPreferencesUtil {
         remove(Constant.ENDING_CURRENT_TIME);
         remove(Constant.IS_VOTE_BEGIN);
         remove(Constant.IS_VOTE_COMMIT);
+    }
+
+    /**
+     * kill掉正在运行的服务
+     */
+    public void killAllRunningService(){
+        if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.tcpController.Server")) {
+            mContext.stopService(new Intent(mContext, Server.class));
+        }
+        if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
+            mContext.stopService(new Intent(mContext, Client.class));
+        }
+        if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.multicast.SendMulticastService")) {
+            mContext.stopService(new Intent(mContext, Client.class));
+        }
     }
 
 }

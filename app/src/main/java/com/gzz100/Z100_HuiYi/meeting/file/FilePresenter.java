@@ -23,7 +23,7 @@ public class FilePresenter implements FileContract.Presenter {
     public FilePresenter(@NonNull FileRepository fileRepository, @NonNull FileContract.View fileView) {
         this.mFileRepository = checkNotNull(fileRepository, "fileRepository cannot be null");
         this.mFileView = checkNotNull(fileView, "fileView cannot be null");
-        this.mFileView.setPresenter(this);
+        fileView.setPresenter(this);
     }
 
     @Override
@@ -196,7 +196,7 @@ public class FilePresenter implements FileContract.Presenter {
     @Override
     public void start() {
         fetchAgendaList(false,"","");
-        setFileSearchAutoCompleteTextViewHint();
+//        setFileSearchAutoCompleteTextViewHint();
     }
 
 }

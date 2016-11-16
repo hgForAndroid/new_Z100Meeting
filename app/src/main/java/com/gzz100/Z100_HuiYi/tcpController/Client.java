@@ -20,7 +20,7 @@ import java.net.Socket;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
 
-public class Client extends Service {
+public class Client extends Service implements IControllerListener{
     private static final String TAG = "Client";
     private BufferedReader mInput;
     private PrintWriter mOutput;
@@ -58,6 +58,7 @@ public class Client extends Service {
                 // 注意第二个参数据为true将会自动flush，否则需要需要手动操作out.flush()
                 mOutput = new PrintWriter(out, true);
                 mOutput.println("我是客户端，已接收到！");
+                ClientSendMessageUtil.getInstance().setIControllerListener(Client.this);
                 mInput = new BufferedReader(new InputStreamReader(mS
                         .getInputStream(), "UTF-8"));
                 String mMessage;
@@ -117,4 +118,20 @@ public class Client extends Service {
 
         }
     };
+
+    @Override
+    public void sendMessage(String message){
+        // outgoing stream redirect to socket
+        OutputStream out = null;
+        try {
+            out = mS.getOutputStream();
+            // 注意第二个参数据为true将会自动flush，否则需要需要手动操作out.flush()
+            mOutput = new PrintWriter(out, true);
+            mOutput.println("exit");
+            Log.e("=========","客户端发消息给服务器端，exit");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
