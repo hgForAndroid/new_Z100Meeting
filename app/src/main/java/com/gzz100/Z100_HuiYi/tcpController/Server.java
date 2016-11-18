@@ -5,7 +5,11 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.gzz100.Z100_HuiYi.MyAPP;
+import com.gzz100.Z100_HuiYi.data.eventBean.PeopleIn;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
+import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -25,6 +29,7 @@ public class Server extends Service implements IControllerListener{
     public static final String TAG = "Server";
     private PrintWriter mOutput;
     private PrintWriter mOut;
+    private ServerSocket mServerSocket;
 
     public Server() {
     }
@@ -39,16 +44,17 @@ public class Server extends Service implements IControllerListener{
         super.onCreate();
         new Thread(mRunnable).start();
 
+
     }
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
             try {
                 Boolean endFlag = false;
-                ServerSocket ss = new ServerSocket(Constant.TCP_PORT);
+                mServerSocket = new ServerSocket(Constant.TCP_PORT);
                 while (!endFlag) {
                     // 等待客户端连接
-                    Socket s = ss.accept();
+                    Socket s = mServerSocket.accept();
                     //读取客户端发来的消息
                     BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()));
                     String message = input.readLine();
@@ -58,15 +64,21 @@ public class Server extends Service implements IControllerListener{
                     }else {
                         addClientSocketToList(s);
                     }
-
                     //向客户端发送消息
                     //注意第二个参数据为true将会自动flush，否则需要需要手动操作output.flush()
                     mOutput = new PrintWriter(s.getOutputStream(), true);
-                    mOutput.println("已连接到服务器！！！");
+                    if (message.equals("haha")){
+                        if (MyAPP.getInstance().isMeetingIsProgress()){//会议进行中
+                            EventBus.getDefault().post(new PeopleIn(true));
+                        }
+                    }else {
+                        mOutput.println("已连接到服务器！！！");
+                    }
+
                     //发送消息需要先调用该方法
                     ControllerUtil.getInstance().setIControllerListener(Server.this);
                 }
-                ss.close();
+                mServerSocket.close();
 
             } catch (UnknownHostException e) {
                 e.printStackTrace();
@@ -82,7 +94,6 @@ public class Server extends Service implements IControllerListener{
      * @param socket
      */
     private void removeClientSocket(Socket socket) {
-        Log.e("准备移除","==========================");
         if (clientSockets != null && clientSockets.size() > 0){
             boolean hasSocket = false;
             for (int i = 0; i < clientSockets.size(); i++) {
@@ -134,6 +145,22 @@ public class Server extends Service implements IControllerListener{
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    @Override
+    public void sendLastSocketMessage(String message) {
+        if (clientSockets != null && clientSockets.size() > 0) {
+            try {
+                Socket socket = clientSockets.get(clientSockets.size() - 1);
+                mOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(),"UTF-8")),true);
+//                    mOut = new PrintWriter(next.getOutputStream(),true);
+                mOut.println(message);
+//                    mOut.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

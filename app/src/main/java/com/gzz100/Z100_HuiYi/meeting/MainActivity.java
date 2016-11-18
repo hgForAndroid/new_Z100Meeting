@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -42,6 +43,7 @@ import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteListDialog;
 import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteResultDialog;
+import com.gzz100.Z100_HuiYi.tcpController.ClientSendMessageUtil;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.tcpController.Client;
 import com.gzz100.Z100_HuiYi.tcpController.Server;
@@ -131,6 +133,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mMainPresenter = new MainPresenter(this,this);
         EventBus.getDefault().register(this);
         init();
+
+        if (MyAPP.getInstance().getUserRole() != 1){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ClientSendMessageUtil.getInstance().sendMessage("haha");
+                }
+            }).start();
+
+        }
 
 //        Configuration config = getResources().getConfiguration();
 //        int  smallestScreenWidth = config.smallestScreenWidthDp;
@@ -571,9 +583,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 documentIndex, upLevelTitle, true, true, false, "", "");
         mNavBarView.setMeetingStateOrAgendaState("开会中");
         mControllerView.setBeginAndEndText("结束");
+        MyAPP.getInstance().setMeetingIsProgress(true);
     }
     @Override
     public void hostResponseMeetingPause() {
+        MyAPP.getInstance().setMeetingIsProgress(false);
         mControllerView.setPauseAndContinueText("继续");
         mNavBarView.setMeetingStateOrAgendaState("暂停中");
     }
@@ -597,6 +611,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void hostResponseMeetingEnd() {
+        MyAPP.getInstance().setMeetingIsProgress(false);
         String deviceIMEI = MPhone.getDeviceIMEI(this);
         int meetingId = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
         mMainPresenter.hostStartEndMeeting(deviceIMEI,meetingId);
@@ -676,6 +691,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 documentIndex, "文件", true, true, true, countingMin, countingSec);
         mControllerView.setPauseAndContinueText("暂停");
         mNavBarView.setMeetingStateOrAgendaState("开会中");
+        MyAPP.getInstance().setMeetingIsProgress(true);
     }
 
     @Override

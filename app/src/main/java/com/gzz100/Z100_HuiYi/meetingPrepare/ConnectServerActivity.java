@@ -143,11 +143,6 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK){
             Dialog dialog = new AlertDialog.Builder(this)

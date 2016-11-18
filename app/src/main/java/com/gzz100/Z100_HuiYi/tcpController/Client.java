@@ -3,6 +3,7 @@ package com.gzz100.Z100_HuiYi.tcpController;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -20,12 +21,12 @@ import java.net.Socket;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
 
-public class Client extends Service implements IControllerListener{
+public class Client extends Service implements IControllerListener {
     private static final String TAG = "Client";
     private BufferedReader mInput;
     private PrintWriter mOutput;
     private Socket mS;
-//    private String ip = "192.168.1.37" ;
+    //    private String ip = "192.168.1.37" ;
     private String ip;
 
     public Client() {
@@ -41,11 +42,9 @@ public class Client extends Service implements IControllerListener{
     public void onCreate() {
         super.onCreate();
         ip = SharedPreferencesUtil.getInstance(this.getApplicationContext()).getString(Constant.TCP_SERVER_IP, "");
-        Log.e(TAG,"存本地的平板ip是 ："+ip);
+        Log.e(TAG, "存本地的平板ip是 ：" + ip);
         new Thread(mRunnable).start();
-
 //        new Thread(received).start();
-
     }
 
     private Runnable mRunnable = new Runnable() {
@@ -57,7 +56,8 @@ public class Client extends Service implements IControllerListener{
                 OutputStream out = mS.getOutputStream();
                 // 注意第二个参数据为true将会自动flush，否则需要需要手动操作out.flush()
                 mOutput = new PrintWriter(out, true);
-                mOutput.println("我是客户端，已接收到！");
+                if (Constant.DEBUG)
+                    mOutput.println("我是客户端，已接收到！");
                 ClientSendMessageUtil.getInstance().setIControllerListener(Client.this);
                 mInput = new BufferedReader(new InputStreamReader(mS
                         .getInputStream(), "UTF-8"));
@@ -73,15 +73,13 @@ public class Client extends Service implements IControllerListener{
                             //截取整个对象的json字符串
                             decode = decode.substring(i, j + 1);
                             Gson gson = new Gson();
-                            ControllerInfoBean bean = gson.fromJson(decode,ControllerInfoBean.class);
+                            ControllerInfoBean bean = gson.fromJson(decode, ControllerInfoBean.class);
                             EventBus.getDefault().post(bean);
                         }
-                        Log.e("客户端的服务接收到  === ", decode);
-
-//                        break;
+                        if (Constant.DEBUG)
+                            Log.e("客户端的服务接收到  === ", decode);
                     }
                 }
-
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -95,7 +93,6 @@ public class Client extends Service implements IControllerListener{
         @Override
         public void run() {
             try {
-
                 String mMessage;
                 while (true) {
                     if ((mMessage = mInput.readLine()) != null) {
@@ -112,7 +109,7 @@ public class Client extends Service implements IControllerListener{
                     }
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -120,18 +117,24 @@ public class Client extends Service implements IControllerListener{
     };
 
     @Override
-    public void sendMessage(String message){
-        // outgoing stream redirect to socket
+    public void sendMessage(String message) {
         OutputStream out = null;
         try {
-            out = mS.getOutputStream();
+            Socket socket = new Socket(ip, Constant.TCP_PORT);
+            out = socket.getOutputStream();
             // 注意第二个参数据为true将会自动flush，否则需要需要手动操作out.flush()
             mOutput = new PrintWriter(out, true);
-            mOutput.println("exit");
-            Log.e("=========","客户端发消息给服务器端，exit");
+            mOutput.println(message);
+            if (Constant.DEBUG)
+                Log.e("=========", "客户端发消息给服务器端，"+message);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    @Override
+    public void sendLastSocketMessage(String message) {
 
     }
 }

@@ -21,8 +21,6 @@ public class MyAPP extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-//        saveDefaultUserRole();
-
         //初始化崩溃日志收集器
         AppCrashCaughtUtil.getInstance().setAppCrashCaughtUtilInfo(this);
     }
@@ -52,4 +50,13 @@ public class MyAPP extends Application {
         return userRole;
     }
 
+    private boolean meetingIsProgress;
+
+    public boolean isMeetingIsProgress() {
+        return meetingIsProgress;
+    }
+
+    public void setMeetingIsProgress(boolean meetingIsProgress) {
+        this.meetingIsProgress = meetingIsProgress;
+    }
 }

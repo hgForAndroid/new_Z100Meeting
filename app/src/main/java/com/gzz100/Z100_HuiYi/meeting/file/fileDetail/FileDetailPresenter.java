@@ -2,7 +2,6 @@ package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -11,7 +10,6 @@ import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.data.file.FileDetailRepository;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
-import com.gzz100.Z100_HuiYi.meetingPrepare.signIn.SignInActivity;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
@@ -74,6 +72,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mContext.startService(intent);
             mView.showFileIsDownLoading("文件正在下载中，请稍等...");
         } else {
+//            mView.removePDFView();
             mView.loadFile(file);
         }
     }
@@ -154,8 +153,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setUpLevelTitle(upLevelText);
             mControllerInfoBean.setAgendaChange(isAgendaChange);
             mControllerInfoBean.setAgendaTimeCountDown(isAgendaTimeCountDown);
-            mControllerInfoBean.setCountdingMin(min);
-            mControllerInfoBean.setCountdingSec(sec);
+            mControllerInfoBean.setCountingMin(min);
+            mControllerInfoBean.setCountingSec(sec);
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
@@ -164,6 +163,31 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             e.printStackTrace();
         }
         mView.meetingContinue();
+    }
+
+    @Override
+    public void controlTempPeopleIn(ControllerInfoBean controllerInfoBean, int meetingState,
+                                    int agendaIndex, int DocumentIndex, String upLevelText,
+                                    boolean isAgendaChange, boolean isAgendaTimeCountDown,
+                                    String min, String sec) {
+        try {
+            ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
+            mControllerInfoBean.setMeetingState(meetingState);
+            mControllerInfoBean.setControlTempPeople(true);//有临时人员进来，让他受控
+            mControllerInfoBean.setAgendaIndex(agendaIndex);
+            mControllerInfoBean.setDocumentIndex(DocumentIndex);
+            mControllerInfoBean.setUpLevelTitle(upLevelText);
+            mControllerInfoBean.setAgendaChange(isAgendaChange);
+            mControllerInfoBean.setAgendaTimeCountDown(isAgendaTimeCountDown);
+            mControllerInfoBean.setCountingMin(min);
+            mControllerInfoBean.setCountingSec(sec);
+
+            String json = mGson.toJson(mControllerInfoBean);
+            if (ControllerUtil.getInstance().getIControllerListener() != null)
+                ControllerUtil.getInstance().sendLastSocketMessage(json);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -11,4 +11,6 @@ public interface IControllerListener {
      * @param message   发送的实体类json字符串
      */
     void sendMessage(String message);
+
+    void sendLastSocketMessage(String message);
 }

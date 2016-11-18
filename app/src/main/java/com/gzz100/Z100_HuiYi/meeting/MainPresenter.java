@@ -45,15 +45,18 @@ public class MainPresenter implements MainContract.Presenter {
                 SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_VOTE_BEGIN, true);
                 //存储投票id
                 SharedPreferencesUtil.getInstance(mContext).putInt(Constant.BEGIN_VOTE_ID, controllerInfoBean.getVoteId());
-
                 mMainView.clientResponseMeetingVote(controllerInfoBean.getVoteId());
 
             } else {
-
                 //该值在投票开始时为true
                 SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_VOTE_BEGIN, false);
                 SharedPreferencesUtil.getInstance(mContext).remove(Constant.BEGIN_VOTE_ID);
-                mMainView.clientResponseMeetingBegin(agendaIndex, documentIndex, "文件");
+                if (controllerInfoBean.isControlTempPeople()){
+                    mMainView.clientResponseMeetingContinue(agendaIndex, documentIndex, "文件",
+                            controllerInfoBean.getCountingMin(),controllerInfoBean.getCountingSec());
+                }else {
+                    mMainView.clientResponseMeetingBegin(agendaIndex, documentIndex, "文件");
+                }
             }
         }
         //继续
@@ -63,8 +66,8 @@ public class MainPresenter implements MainContract.Presenter {
             SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_VOTE_BEGIN, false);
             SharedPreferencesUtil.getInstance(mContext).putInt(Constant.BEGIN_VOTE_ID, -1);
 
-            mMainView.clientResponseMeetingContinue(agendaIndex, documentIndex, "文件", controllerInfoBean.getCountdingMin(),
-                    controllerInfoBean.getCountdingSec());
+            mMainView.clientResponseMeetingContinue(agendaIndex, documentIndex, "文件",
+                    controllerInfoBean.getCountingMin(),controllerInfoBean.getCountingSec());
 
         }
         //暂停
@@ -152,8 +155,8 @@ public class MainPresenter implements MainContract.Presenter {
             controllerInfoBean.setMeetingState(meetingState);
             controllerInfoBean.setAgendaIndex(pauseAgendaIndex);
             controllerInfoBean.setDocumentIndex(pauseDocumentIndex);
-            controllerInfoBean.setCountdingMin(tempCountingMin);
-            controllerInfoBean.setCountdingSec(tempCountingSec);
+            controllerInfoBean.setCountingMin(tempCountingMin);
+            controllerInfoBean.setCountingSec(tempCountingSec);
             controllerInfoBean.setAgendaChange(false);
             controllerInfoBean.setAgendaTimeCountDown(true);
             controllerInfoBean.setUpLevelTitle("文件");
@@ -196,8 +199,8 @@ public class MainPresenter implements MainContract.Presenter {
                 controllerInfoBean.setMeetingState(meetingState);
                 controllerInfoBean.setAgendaIndex(pauseAgendaIndex);
                 controllerInfoBean.setDocumentIndex(pauseDocumentIndex);
-                controllerInfoBean.setCountdingMin(tempCountingMin);
-                controllerInfoBean.setCountdingSec(tempCountingSec);
+                controllerInfoBean.setCountingMin(tempCountingMin);
+                controllerInfoBean.setCountingSec(tempCountingSec);
                 controllerInfoBean.setAgendaChange(false);
                 controllerInfoBean.setAgendaTimeCountDown(true);
                 controllerInfoBean.setUpLevelTitle("文件");
@@ -206,7 +209,7 @@ public class MainPresenter implements MainContract.Presenter {
 
                 mMainView.hostResponseEndVoteAlreadyStart(controllerInfoBean.getAgendaIndex(),
                         controllerInfoBean.getDocumentIndex(), controllerInfoBean.getUpLevelTitle(),
-                        controllerInfoBean.getCountdingMin(), controllerInfoBean.getCountdingSec());
+                        controllerInfoBean.getCountingMin(), controllerInfoBean.getCountingSec());
             }
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();

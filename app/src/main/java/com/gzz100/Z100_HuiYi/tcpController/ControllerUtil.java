@@ -50,4 +50,14 @@ public class ControllerUtil {
         if (mIControllerListener != null)
             mIControllerListener.sendMessage(jsonBean);
     }
+    /**
+     * 向最近加入的设备发送消息发送数据，数据类型为json字符串
+     *
+     * @param jsonBean json字符串
+     */
+    public void sendLastSocketMessage(String jsonBean) {
+        if (mIControllerListener != null)
+            mIControllerListener.sendLastSocketMessage(jsonBean);
+    }
+
 }

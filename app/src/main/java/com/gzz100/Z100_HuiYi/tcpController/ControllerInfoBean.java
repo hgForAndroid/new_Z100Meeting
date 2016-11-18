@@ -6,8 +6,6 @@ import java.io.Serializable;
  * Created by XieQXiong on 2016/10/1.
  */
 public class ControllerInfoBean implements Serializable,Cloneable{
-    private String serverIP;            //服务器IP
-    private String meetingID;            //会议ID
     private int meetingState;            //会议状态 未开始1；已开始 2；已暂停 4；已结束 8；
     private int agendaIndex;               //议程序号
     private String upLevelTitle;           //上级界面名称
@@ -27,8 +25,10 @@ public class ControllerInfoBean implements Serializable,Cloneable{
      * 议程已经开始，已经倒计时过
      */
     private boolean isAgendaTimeCountDown;
-    private String countdingMin;
-    private String countdingSec;
+    private String countingMin;
+    private String countingSec;
+
+    private boolean controlTempPeople;
 
     public ControllerInfoBean() {
     }
@@ -43,22 +43,6 @@ public class ControllerInfoBean implements Serializable,Cloneable{
         }
 
         return controllerInfoBean;
-    }
-
-    public String getServerIP() {
-        return serverIP;
-    }
-
-    public void setServerIP(String serverIP) {
-        this.serverIP = serverIP;
-    }
-
-    public String getMeetingID() {
-        return meetingID;
-    }
-
-    public void setMeetingID(String meetingID) {
-        this.meetingID = meetingID;
     }
 
     public int getMeetingState() {
@@ -148,20 +132,20 @@ public class ControllerInfoBean implements Serializable,Cloneable{
         isAgendaTimeCountDown = agendaTimeCountDown;
     }
 
-    public String getCountdingMin() {
-        return countdingMin;
+    public String getCountingMin() {
+        return countingMin;
     }
 
-    public void setCountdingMin(String countdingMin) {
-        this.countdingMin = countdingMin;
+    public void setCountingMin(String countingMin) {
+        this.countingMin = countingMin;
     }
 
-    public String getCountdingSec() {
-        return countdingSec;
+    public String getCountingSec() {
+        return countingSec;
     }
 
-    public void setCountdingSec(String countdingSec) {
-        this.countdingSec = countdingSec;
+    public void setCountingSec(String countingSec) {
+        this.countingSec = countingSec;
     }
 
     public boolean isVoteBegin() {
@@ -172,4 +156,11 @@ public class ControllerInfoBean implements Serializable,Cloneable{
         isVoteBegin = voteBegin;
     }
 
+    public boolean isControlTempPeople() {
+        return controlTempPeople;
+    }
+
+    public void setControlTempPeople(boolean controlTempPeople) {
+        this.controlTempPeople = controlTempPeople;
+    }
 }
