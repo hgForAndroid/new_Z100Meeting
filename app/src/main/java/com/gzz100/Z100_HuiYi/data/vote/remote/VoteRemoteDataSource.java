@@ -63,9 +63,9 @@ public class VoteRemoteDataSource implements VoteDataSource{
     @Override
     public void submitVote(UpLoadVote data, @NonNull final SubmitCallback callback) {
         UpLoadVotePost upLoadVotePost = new UpLoadVotePost(
-                new ProgressSubscriber(new HttpRxCallbackListener<UpLoadVote>(){
+                new ProgressSubscriber(new HttpRxCallbackListener<String>(){
                     @Override
-                    public void onNext(UpLoadVote s) {
+                    public void onNext(String s) {
                         callback.onSuccess();
                     }
 

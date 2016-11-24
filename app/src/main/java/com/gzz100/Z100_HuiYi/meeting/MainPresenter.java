@@ -44,30 +44,33 @@ public class MainPresenter implements MainContract.Presenter {
                 //该值在投票开始时为true
                 SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_VOTE_BEGIN, true);
                 //存储投票id
-                SharedPreferencesUtil.getInstance(mContext).putInt(Constant.BEGIN_VOTE_ID, controllerInfoBean.getVoteId());
+                SharedPreferencesUtil.getInstance(mContext).putInt(Constant.BEGIN_VOTE_ID,
+                        controllerInfoBean.getVoteId());
                 mMainView.clientResponseMeetingVote(controllerInfoBean.getVoteId());
-
             } else {
                 //该值在投票开始时为true
                 SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_VOTE_BEGIN, false);
                 SharedPreferencesUtil.getInstance(mContext).remove(Constant.BEGIN_VOTE_ID);
                 if (controllerInfoBean.isControlTempPeople()){
-                    mMainView.clientResponseMeetingContinue(agendaIndex, documentIndex, "文件",
-                            controllerInfoBean.getCountingMin(),controllerInfoBean.getCountingSec());
+                    mMainView.tempClientResponseMeetingContinue(agendaIndex, documentIndex, upLevelTitle,
+                            controllerInfoBean.getCountingMin(),controllerInfoBean.getCountingSec(),
+                            controllerInfoBean.getMeetingBeginTimeHour(),
+                            controllerInfoBean.getMeetingBeginTimeMin());
                 }else {
-                    mMainView.clientResponseMeetingBegin(agendaIndex, documentIndex, "文件");
+                    mMainView.clientResponseMeetingBegin(agendaIndex, documentIndex, upLevelTitle);
                 }
             }
         }
         //继续
         else if (controllerInfoBean.getMeetingState() == Constant.MEETING_STATE_CONTINUE) {
-
             //结束投票，将该值重置为false，该值只有正在投票才为true
             SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_VOTE_BEGIN, false);
             SharedPreferencesUtil.getInstance(mContext).putInt(Constant.BEGIN_VOTE_ID, -1);
 
-            mMainView.clientResponseMeetingContinue(agendaIndex, documentIndex, "文件",
-                    controllerInfoBean.getCountingMin(),controllerInfoBean.getCountingSec());
+            mMainView.clientResponseMeetingContinue(agendaIndex, documentIndex, upLevelTitle,
+                    controllerInfoBean.getCountingMin(),controllerInfoBean.getCountingSec(),
+                    controllerInfoBean.getMeetingBeginTimeHour(),
+                    controllerInfoBean.getMeetingBeginTimeMin());
 
         }
         //暂停
@@ -160,6 +163,12 @@ public class MainPresenter implements MainContract.Presenter {
             controllerInfoBean.setAgendaChange(false);
             controllerInfoBean.setAgendaTimeCountDown(true);
             controllerInfoBean.setUpLevelTitle("文件");
+            String meetingBeginTimeHour = SharedPreferencesUtil.getInstance(mContext).
+                    getString(Constant.MEETING_BEGIN_TIME_HOUR, "00");
+            String meetingBeginTimeMin = SharedPreferencesUtil.getInstance(mContext).
+                    getString(Constant.MEETING_BEGIN_TIME_MIN, "00");
+            controllerInfoBean.setMeetingBeginTimeHour(meetingBeginTimeHour);
+            controllerInfoBean.setMeetingBeginTimeMin(meetingBeginTimeMin);
             String json = mGson.toJson(controllerInfoBean);
             ControllerUtil.getInstance().sendMessage(json);
 

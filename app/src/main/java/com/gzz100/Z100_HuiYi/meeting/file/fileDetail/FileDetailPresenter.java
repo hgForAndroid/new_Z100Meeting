@@ -155,6 +155,12 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setAgendaTimeCountDown(isAgendaTimeCountDown);
             mControllerInfoBean.setCountingMin(min);
             mControllerInfoBean.setCountingSec(sec);
+            String meetingBeginTimeHour = SharedPreferencesUtil.getInstance(mContext).
+                    getString(Constant.MEETING_BEGIN_TIME_HOUR, "00");
+            String meetingBeginTimeMin = SharedPreferencesUtil.getInstance(mContext).
+                    getString(Constant.MEETING_BEGIN_TIME_MIN, "00");
+            mControllerInfoBean.setMeetingBeginTimeHour(meetingBeginTimeHour);
+            mControllerInfoBean.setMeetingBeginTimeMin(meetingBeginTimeMin);
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
@@ -181,6 +187,12 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setAgendaTimeCountDown(isAgendaTimeCountDown);
             mControllerInfoBean.setCountingMin(min);
             mControllerInfoBean.setCountingSec(sec);
+            String meetingBeginTimeHour = SharedPreferencesUtil.getInstance(mContext).
+                    getString(Constant.MEETING_BEGIN_TIME_HOUR, "00");
+            String meetingBeginTimeMin = SharedPreferencesUtil.getInstance(mContext).
+                    getString(Constant.MEETING_BEGIN_TIME_MIN, "00");
+            mControllerInfoBean.setMeetingBeginTimeHour(meetingBeginTimeHour);
+            mControllerInfoBean.setMeetingBeginTimeMin(meetingBeginTimeMin);
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)

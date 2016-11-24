@@ -26,14 +26,31 @@ public interface MainContract {
 
         /**
          * 客户端响应继续
-         * @param agendaIndex
-         * @param documentIndex
-         * @param upLevelTitle
-         * @param countingMin
-         * @param countingSec
+         * @param agendaIndex              议程序号
+         * @param documentIndex             文件序号
+         * @param upLevelTitle              上级标题
+         * @param countingMin               倒计时时间，分
+         * @param countingSec               倒计时时间，秒
+         * @param meetingBeginTimeHour      会议已开始时间，时
+         * @param meetingBeginTimeMin       会议已开始时间，分
          */
         void clientResponseMeetingContinue(int agendaIndex, int documentIndex, String upLevelTitle,
-                                           String countingMin, String countingSec);
+                                           String countingMin, String countingSec,String meetingBeginTimeHour,
+                                           String meetingBeginTimeMin);
+
+        /**
+         * 临时进入会议的客户端响应会议进行中
+         * @param agendaIndex              议程序号
+         * @param documentIndex             文件序号
+         * @param upLevelTitle              上级标题
+         * @param countingMin               倒计时时间，分
+         * @param countingSec               倒计时时间，秒
+         * @param meetingBeginTimeHour      会议已开始时间，时
+         * @param meetingBeginTimeMin       会议已开始时间，分
+         */
+        void tempClientResponseMeetingContinue(int agendaIndex, int documentIndex, String upLevelTitle,
+                                           String countingMin, String countingSec,String meetingBeginTimeHour,
+                                               String meetingBeginTimeMin);
 
         /**
          * 客户端响应暂停

@@ -123,4 +123,7 @@ public class NavBarView extends RelativeLayout {
         mTvState.setText(currentState);
         mTvState.setVisibility(View.VISIBLE);
     }
+    public String getCurrentMeetingStateString(){
+        return mTvState.getText().toString();
+    }
 }

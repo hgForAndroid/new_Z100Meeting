@@ -36,14 +36,14 @@ public abstract class BaseEntity<T> implements Func1<BaseResultEntity<T>, T> {
 
     @Override
     public T call(BaseResultEntity<T> httpResult) {
-        if (httpResult.getCode() == -1) {//如果取值不成功，调用该方法，之后
+        if (httpResult.getCode() == 0) {
+            return httpResult.getResult();
+        }else {//如果取值不成功，调用该方法，之后
             // TODO: 2016/10/31  服务器返回码为-1，代表失败，显示错误信息，是否该仍异常？
             ToastUtil.showMessage(httpResult.getMsg(), Toast.LENGTH_LONG);
-            Log.e("q请求码 ===== ",httpResult.getCode()+"   消息  ：："+httpResult.getMsg());
+//            Log.e("q请求码 ===== ",httpResult.getCode()+"   消息  ：："+httpResult.getMsg());
 //            throw new HttpTimeException(httpResult.getMsg());
             return null;
-        }else {
-            return httpResult.getResult();
         }
     }
 

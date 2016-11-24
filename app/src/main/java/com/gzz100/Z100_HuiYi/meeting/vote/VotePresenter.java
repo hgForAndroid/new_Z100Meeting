@@ -151,6 +151,8 @@ public class VotePresenter implements VoteContract.Presenter {
             @Override
             public void onFail() {
                 mVoteView.showVoteFinishedInf(false);
+                SharedPreferencesUtil.getInstance(mContext).
+                        putBoolean(Constant.IS_VOTE_COMMIT, false);
             }
         });
     }

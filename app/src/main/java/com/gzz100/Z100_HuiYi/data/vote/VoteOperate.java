@@ -19,6 +19,8 @@ import java.util.List;
 * create at 2016/9/7 15:32
 */
 
+
+
 public class VoteOperate {
     private static VoteOperate instance;
     private DBHelper mDBHelper;

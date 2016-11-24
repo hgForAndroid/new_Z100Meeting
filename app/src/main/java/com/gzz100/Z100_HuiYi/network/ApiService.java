@@ -28,6 +28,7 @@ public interface ApiService {
      */
     @GET("/api/Common/RequestMeetingList")
     Observable<BaseResultEntity<List<MeetingBean>>> getMeetingList(@Query("IMEI") String IMEI);
+
     /**
      * 开启会议
      * @param meetingID     会议id
@@ -74,7 +75,7 @@ public interface ApiService {
     @Headers("Content-Type: application/json")
     @POST("api/Common/UploadVoteResult")
 //    @FormUrlEncoded
-    Observable<BaseResultEntity<UpLoadVote>> uploadVoteResult(@Body UpLoadVote data);
+    Observable<BaseResultEntity<String>> uploadVoteResult(@Body UpLoadVote data);
 
     /**
      * 开启或结束投票

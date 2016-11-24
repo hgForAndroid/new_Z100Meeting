@@ -29,6 +29,9 @@ public class ControllerInfoBean implements Serializable,Cloneable{
     private String countingSec;
 
     private boolean controlTempPeople;
+    //下面两个时间，是在在会议临时有人进入，主持人控制端需要发送的，给客户端进行显示，当前会议已经开始了多久
+    private String meetingBeginTimeHour;//会议已经进行的时间，时
+    private String meetingBeginTimeMin;//会议已经进行的时间，分
 
     public ControllerInfoBean() {
     }
@@ -162,5 +165,21 @@ public class ControllerInfoBean implements Serializable,Cloneable{
 
     public void setControlTempPeople(boolean controlTempPeople) {
         this.controlTempPeople = controlTempPeople;
+    }
+
+    public String getMeetingBeginTimeHour() {
+        return meetingBeginTimeHour;
+    }
+
+    public void setMeetingBeginTimeHour(String meetingBeginTimeHour) {
+        this.meetingBeginTimeHour = meetingBeginTimeHour;
+    }
+
+    public String getMeetingBeginTimeMin() {
+        return meetingBeginTimeMin;
+    }
+
+    public void setMeetingBeginTimeMin(String meetingBeginTimeMin) {
+        this.meetingBeginTimeMin = meetingBeginTimeMin;
     }
 }

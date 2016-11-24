@@ -1,5 +1,6 @@
 package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -58,16 +59,15 @@ import butterknife.OnClick;
 public class FileDetailActivity extends BaseActivity implements FileDetailContract.DetailView,
         View.OnClickListener, AdapterView.OnItemClickListener, ControllerView.IOnControllerListener,
         OnAllVoteItemClickListener {
-    public static final String BUNDLE = "bundle";
-    public static final String AGENDA_INDEX = "agendaIndex";
-    public static final String FILE_INDEX = "fileIndex";
-    public static final String UP_LEVEL_TITLE = "upLevelTitle";
-    public static final String PASSIVE = "passive";
-    public static final String IS_HOST_FROM_MAIN = "isHostFromMain";
-    public static final String IS_AGENDA_TIME_COUNT_DOWN = "isAgendaTimeCountDown";
-    public static final String MIN = "min";
-    public static final String SEC = "sec";
-
+    private static final String BUNDLE = "bundle";
+    private static final String AGENDA_INDEX = "agendaIndex";
+    private static final String FILE_INDEX = "fileIndex";
+    private static final String UP_LEVEL_TITLE = "upLevelTitle";
+    private static final String PASSIVE = "passive";
+    private static final String IS_HOST_FROM_MAIN = "isHostFromMain";
+    private static final String IS_AGENDA_TIME_COUNT_DOWN = "isAgendaTimeCountDown";
+    private static final String MIN = "min";
+    private static final String SEC = "sec";
     /**
      * 跳转到文件详情界面
      *
@@ -123,9 +123,9 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
      * false：表示没有开始过会议。
      */
     private boolean mIsAgendaTimeCountDown;
-    private String mCountingMin;
-    private String mCountingSec;
-    private VoteListDialog mDialog;
+    private String mCountingMin;//倒计时，分
+    private String mCountingSec;//倒计时，秒
+    private VoteListDialog mDialog;//投票列表对话框
     private int mAgendaSum;//议程总数
     private int mAgendaIndex;//当前的议程序号
     private int mFileIndex;//当前显示的文件序号
@@ -135,7 +135,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     /**
      * 是否是被动状态，支持人点击开始或继续而跳转进来的，代表被动，值为true
      */
-    private boolean mPassive;
+    private boolean mPassive = false;
     /**
      * 主持人设备从主界面跳转过来本界面，不是从文件界面点击文件跳转。
      * 该值为true时，代表主持人点击控制条的开始或者继续。
@@ -158,10 +158,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
      * 是否为主持人
      */
     private boolean isHost;
-
     private int mVoteId;//投票id
     private ProgressDialog mProgressDialog;//下载文件时的进度对话框
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +172,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mPresenter = new FileDetailPresenter(null, this, this);
         //获取传过来的数据
         dataFormUpLevel();
-
     }
 
     private void showControlBar() {
@@ -209,7 +206,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mFileList = FileOperate.getInstance(this).queryFileList(mAgendaIndex);
             mFileName = mFileList.get(mFileIndex).getDocumentName();
         }
-
         if (mBundle != null)
             initData();
     }
@@ -250,7 +246,12 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (mPassive) {
             mNavBarView.setCurrentMeetingState("（开会中）");
         } else {
-            mNavBarView.setCurrentMeetingState("（未开始）");
+            if (SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_STATE,-1)
+                    == Constant.MEETING_STATE_PAUSE){
+                mNavBarView.setCurrentMeetingState("（暂停中）");
+            }else {
+                mNavBarView.setCurrentMeetingState("（未开始）");
+            }
         }
         if (mIsHostFromMain) {//主持人点击控制条的开始或者继续，需要重置开会状态
             mMeetingState = Constant.MEETING_STATE_BEGIN;
@@ -268,11 +269,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mNavBarView.setTimeHour(StringUtils.resetNum(mMin));
             mNavBarView.setTimeMin(StringUtils.resetNum(mSec));
         }
-        //议程时间有剩余，才开始倒计时
-//        if (!mNavBarView.getTimeHour().equals("00") && !mNavBarView.getTimeMin().equals("00")){
         mMyHandler = new MyHandler(this);
         countingTime();//开始倒计时
-//        }
         //设置文件列表数据
         mFileDetailAdapter = new FileDetailAdapter(mFileList, this);
         mFileNameRcv.setAdapter(mFileDetailAdapter);
@@ -295,9 +293,26 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mPresenter.begin(mControllerInfoBean, mMeetingState, mAgendaIndex, mFileIndex, mUpLevelText);
             EventBus.getDefault().post("开会中");//通知主界面更新会议状态
         } else {//结束
-            String deviceIMEI = MPhone.getDeviceIMEI(this);
-            int meetingId = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
-            mPresenter.startEndMeeting(deviceIMEI, meetingId);//开始访问服务器，请求结束会议，成功后调用endMeetingSuccess
+            Dialog dialog = new AlertDialog.Builder(FileDetailActivity.this)
+                    .setTitle("提示")
+                    .setMessage("是否结束当前会议？")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String deviceIMEI = MPhone.getDeviceIMEI(FileDetailActivity.this);
+                            int meetingId = SharedPreferencesUtil.getInstance(FileDetailActivity.this)
+                                    .getInt(Constant.MEETING_ID, -1);
+                            //开始访问服务器，请求结束会议，成功后调用endMeetingSuccess
+                            mPresenter.startEndMeeting(deviceIMEI, meetingId);
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+            dialog.setCanceledOnTouchOutside(false);//只能点击确定或取消才能让对话框消失
         }
     }
 
@@ -313,15 +328,30 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     @Override
     public void pauseMeeting(View view) {
         if ("暂停".equals(((Button) view).getText().toString())) {
-            mMeetingState = Constant.MEETING_STATE_PAUSE;
-            //通知所有客户端，客户端调用本类方法  respondMeetingPause
-            //主持人端调用本类方法   meetingPause
-            mPresenter.pause(mControllerInfoBean, mMeetingState);
-            //需要保存当前停止的时间，分和秒，重新开始后需要设置回这个时间
-            saveCountingMinAndSec(mNavBarView.getTimeHour(), mNavBarView.getTimeMin());
-            //保存当前的议程序号与议程文件序号，重新开始后需要设置回这个议程以及该议程的文件序号
-            savePauseAgendaIndexAndDocumentIndex(mAgendaIndex, mFileIndex);
-            EventBus.getDefault().post("暂停中");//通知主界面更新会议状态
+            Dialog dialog = new AlertDialog.Builder(FileDetailActivity.this)
+                    .setTitle("提示")
+                    .setMessage("是否暂停会议？")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mMeetingState = Constant.MEETING_STATE_PAUSE;
+                            //通知所有客户端，客户端调用本类方法  respondMeetingPause
+                            //主持人端调用本类方法   meetingPause
+                            mPresenter.pause(mControllerInfoBean, mMeetingState);
+                            //需要保存当前停止的时间，分和秒，重新开始后需要设置回这个时间
+                            saveCountingMinAndSec(mNavBarView.getTimeHour(), mNavBarView.getTimeMin());
+                            //保存当前的议程序号与议程文件序号，重新开始后需要设置回这个议程以及该议程的文件序号
+                            savePauseAgendaIndexAndDocumentIndex(mAgendaIndex, mFileIndex);
+                            EventBus.getDefault().post("暂停中");//通知主界面更新会议状态
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+            dialog.setCanceledOnTouchOutside(false);//只能点击确定或取消才能让对话框消失
         } else {//继续
             mMeetingState = Constant.MEETING_STATE_CONTINUE;
             //为了暂停时，设备不在文件详情界面，而从主界面跳进来，所以得传递一个当前倒计时时间参数值，
@@ -374,9 +404,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mDialog.show();
     }
 
-    @Override
-    public void voteResult(View view) {//控制条的投票结果按钮已经去掉,该方法已经没用到
-    }
+    @Override//控制条的投票结果按钮已经去掉,该方法已经没用到
+    public void voteResult(View view) {}
 
     @Override
     public void onVoteStartStopButtonClick(View view, int position) {
@@ -424,17 +453,14 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         ActivityStackManager.pop();
     }
 
-    @Override
-    public void showVoteResult() {//显示结果现在直接显示对话框，所以该方法没有用到
-    }
+    @Override//显示结果现在直接显示对话框，所以该方法没有用到
+    public void showVoteResult() {}
 
     private static class MyHandler extends Handler {
         private WeakReference<FileDetailActivity> activityWeakReference;
-
         public MyHandler(FileDetailActivity activity) {
             activityWeakReference = new WeakReference<FileDetailActivity>(activity);
         }
-
         @Override
         public void handleMessage(Message msg) {
             FileDetailActivity fileDetailActivity = activityWeakReference.get();
@@ -466,7 +492,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             //如果会议继续，但是分秒都已为0 ，不进行倒计时
             if (mIsAgendaTimeCountDown && mSec == 0 && mMin == 0) {
                 ToastUtil.showMessage("当前议程已结束");
-//                mMeetingState = Constant.MEETING_STATE_BEGIN;
             } else {
                 Message message = Message.obtain();
                 message.what = 0x00;
@@ -474,7 +499,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             }
         }
     }
-
 
     /**
      * 设置分钟的显示值，如1-9，则在前面加上“0”，否则直接返回该值的字符串
@@ -564,12 +588,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void respondAgendaHasChange(ControllerInfoBean controllerInfoBean) {
-        mMeetingState = Constant.MEETING_STATE_BEGIN;
         if (mAgendaIndex != controllerInfoBean.getAgendaIndex()) {
             //客户端当前的议程跟暂停前的不一致，需要还原
             respondAgendaTimeIsCounting(controllerInfoBean.isAgendaTimeCountDown());
             respondAgendaIndexChange(controllerInfoBean);
-
         } else {
             //在议程跟暂停前的一致时，客户端当前的文件序号跟暂停前的不一致，需要还原
             if (mFileIndex != controllerInfoBean.getDocumentIndex()) {
@@ -580,7 +602,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                     substring(0, mFileList.get(mFileIndex).getDocumentName().indexOf("."));
             mNavBarView.setTitle(name);
             mNavBarView.setCurrentMeetingState("(开会中)");
-
             //时间显示与暂停前的时间显示有不一致的地方，需要重新设置回来，之后再进行时间倒计时
             if (!mNavBarView.getTimeHour().equals(controllerInfoBean.getCountingMin()) ||
                     !mNavBarView.getTimeMin().equals(controllerInfoBean.getCountingSec())) {
@@ -603,13 +624,11 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;
         mIsAgendaChange = controllerInfoBean.isAgendaChange();
-
         //设置时间
         mMin = Integer.valueOf(controllerInfoBean.getCountingMin());
         mSec = Integer.valueOf(controllerInfoBean.getCountingSec());
         mNavBarView.setTimeHour(getMin());
         mNavBarView.setTimeMin(getSec(true));
-
         if (mNavBarView.getTimeHour().equals("00") &&
                 mNavBarView.getTimeMin().equals("00")) {
             ToastUtil.showMessage("议程已结束");
@@ -620,11 +639,9 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             message.what = 0x00;
             mMyHandler.sendMessage(message);
         }
-
         if (controllerInfoBean.getAgendaIndex() != mAgendaIndex) {
             //客户端当前界面跟暂停前的界面不一致，需要将界面信息还原到暂停前的状态
             agendaContentChange(controllerInfoBean.getAgendaIndex(), controllerInfoBean.getDocumentIndex());
-
         } else {
             if (mFileIndex != controllerInfoBean.getDocumentIndex()) {
                 //在当前界面，但是，已经切换了议程内的文件
@@ -683,10 +700,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 mNavBarView.setTimeHour(controllerInfoBean.getCountingMin());
                 mNavBarView.setTimeMin(controllerInfoBean.getCountingSec());
             }
-
             if (isHost && mMeetingState != Constant.MEETING_STATE_PAUSE)
                 saveCountingMinAndSec(getMin(), getSec(true));
-
             if (mMeetingState == Constant.MEETING_STATE_BEGIN ||
                     mMeetingState == Constant.MEETING_STATE_CONTINUE) {
                 //切换议程时，当状态为开始时，才会开始倒计时
@@ -701,7 +716,6 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     /**
      * 切换议程后，重设议程的各部分内容
-     *
      * @param agendaIndex 议程序号
      */
     @Override
@@ -709,6 +723,9 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (mIsAgendaChange || mIsAgendaTimeCountDown) {
             mAgendaIndex = agendaIndex;
             mNavBarView.setMeetingStateOrAgendaState("议程" + agendaIndex + "/" + mAgendaSum);
+            if (!mNavBarView.getCurrentMeetingStateString().equals("(开会中)")){
+                mNavBarView.setCurrentMeetingState("(开会中)");
+            }
             mDocuments = FileOperate.getInstance(FileDetailActivity.this).queryFileList(agendaIndex);
             if (mDocuments != null && mDocuments.size() > 0) {
                 mFileList = mDocuments;
@@ -733,6 +750,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void respondAgendaIndexChange(ControllerInfoBean controllerInfoBean) {
+        mMeetingState = Constant.MEETING_STATE_BEGIN;
         resetAgendaTimeCounting(controllerInfoBean, controllerInfoBean.getAgendaIndex());
         resetAgendaContent(controllerInfoBean.getAgendaIndex());
     }
@@ -750,6 +768,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void respondMeetingBegin(boolean isAgendaChange) {
+        mMeetingState = Constant.MEETING_STATE_BEGIN;
         mIsAgendaChange = isAgendaChange;
         mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;
@@ -765,10 +784,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mNavBarView.setCurrentMeetingState("(暂停中)");
         mPassive = false;
         mMyHandler.removeCallbacksAndMessages(null);
-
         tempSec = Integer.valueOf(mNavBarView.getTimeMin());
         tempMin = Integer.valueOf(mNavBarView.getTimeHour());
         mIsAgendaChange = false;
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_STATE,Constant.MEETING_STATE_PAUSE);
     }
 
     @Override
@@ -909,6 +928,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mMyHandler.removeCallbacksAndMessages(null);
         mIsAgendaChange = false;
         saveCountingMinAndSec(mNavBarView.getTimeHour(), mNavBarView.getTimeMin());
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_STATE,Constant.MEETING_STATE_PAUSE);
     }
 
     @Override

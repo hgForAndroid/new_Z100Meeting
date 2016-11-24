@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,7 +31,14 @@ import butterknife.ButterKnife;
  */
 
 public class DelegateDetailActivity extends BaseActivity implements DelegateDetailContract.View, View.OnClickListener {
-
+    private static final String BUNDLE = "bundle";
+    private static final String UP_LEVEL_TEXT = "upLevelText";
+    private static final String DELEGATE_NAME = "delegate_name";
+    private static final String DELEGATE_DEPARTMENT = "delegate_department";
+    private static final String DELEGATE_ROLE = "delegate_role";
+    private static final String DELEGATE_JOB = "delegate_job";
+    private static final String DELEGATE_AGENDA_LIST = "delegate_agenda_list";
+    private static final String DELEGATE_DETAIL_INFO = "delegate_detail_info";
     /**
      * @param activity     当前Activity
      * @param delegateBean 传输的信息
@@ -49,16 +57,6 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
 
         activity.startActivity(intent);
     }
-
-    public static final String BUNDLE = "bundle";
-    public static final String UP_LEVEL_TEXT = "upLevelText";
-    public static final String DELEGATE_NAME = "delegate_name";
-    public static final String DELEGATE_DEPARTMENT = "delegate_department";
-    public static final String DELEGATE_ROLE = "delegate_role";
-    public static final String DELEGATE_JOB = "delegate_job";
-    public static final String DELEGATE_AGENDA_LIST = "delegate_agenda_list";
-    public static final String DELEGATE_DETAIL_INFO = "delegate_detail_info";
-
     @BindView(R.id.id_delegate_detail_tbv)
     NavBarView mNavBarView;
     @BindView(R.id.id_delegate_detail_name)
@@ -156,5 +154,14 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
     public void onClick(View v) {
         //返回上一级
         ActivityStackManager.pop();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ActivityStackManager.pop();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

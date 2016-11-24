@@ -6,10 +6,9 @@ package com.gzz100.Z100_HuiYi.utils;
 */
 
 public class Constant {
-    public static final String MULTI_IP = "239.0.0.1";
-    public static final int MULTI_PORT = 30001;
-
-    public static final int TCP_PORT = 9898;
+    public static final String MULTI_IP = "239.0.0.1";//组播地址
+    public static final int MULTI_PORT = 30001;//组播端口
+    public static final int TCP_PORT = 9898;//tcp端口
 
     /**
      * 参会代表界面中，角色标签的类型
@@ -92,6 +91,18 @@ public class Constant {
      * 存储会议结束的时的系统时间
      */
     public static final String ENDING_CURRENT_TIME = "endCurrentTime";
+    /**
+     * 存储当前会议已经进行的时间，时
+     * 该时间只有主持人端需要存储，在有临时人员进行会议后，再把该值一起发送给刚进入会议的客户端平板，
+     * 用于显示会议已经进行的时间
+     */
+    public static final String MEETING_BEGIN_TIME_HOUR = "meetingBeginTimeHour";
+    /**
+     * 存储当前会议已经进行的时间，分
+     * 该时间只有主持人端需要存储，在有临时人员进行会议后，再把该值一起发送给刚进入会议的客户端平板，
+     * 用于显示会议已经进行的时间
+     */
+    public static final String MEETING_BEGIN_TIME_MIN = "meetingBeginTimeMin";
 
     /**
      * 会议的状态值
@@ -127,5 +138,9 @@ public class Constant {
      * 按下暂停后用于保存当前的议程文件序号
      */
     public static final String PAUSE_DOCUMENT_INDEX = "pause_document_index";
+    /**
+     * 会议状态
+     */
+    public static final String MEETING_STATE = "meetingState";
 
 }
