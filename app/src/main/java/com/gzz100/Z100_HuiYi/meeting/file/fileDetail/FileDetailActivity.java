@@ -684,7 +684,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void resetAgendaTimeCounting(ControllerInfoBean controllerInfoBean, int agendaIndex) {
-        mPassive = true;
+        if (mMeetingState == Constant.MEETING_STATE_BEGIN ||
+                mMeetingState == Constant.MEETING_STATE_CONTINUE){
+            mPassive = true;
+        }
         if (mIsAgendaChange || mIsAgendaTimeCountDown) {
             if (!mIsAgendaTimeCountDown) {
                 //取议程时传入的是mAgendaIndex-1，因为存储议程时，是从0开始的
@@ -723,7 +726,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (mIsAgendaChange || mIsAgendaTimeCountDown) {
             mAgendaIndex = agendaIndex;
             mNavBarView.setMeetingStateOrAgendaState("议程" + agendaIndex + "/" + mAgendaSum);
-            if (!mNavBarView.getCurrentMeetingStateString().equals("(开会中)")){
+            if (mMeetingState == Constant.MEETING_STATE_BEGIN &&
+                    !mNavBarView.getCurrentMeetingStateString().equals("(开会中)")){
                 mNavBarView.setCurrentMeetingState("(开会中)");
             }
             mDocuments = FileOperate.getInstance(FileDetailActivity.this).queryFileList(agendaIndex);
@@ -772,6 +776,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mIsAgendaChange = isAgendaChange;
         mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_STATE,-1);
     }
 
     //是否已经切换了议程
@@ -902,6 +907,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;
         countingTime();
+        SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_STATE,-1);
     }
 
     @Override

@@ -51,9 +51,8 @@ public class SendMulticastService extends Service {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-
             while (true){
-                try {
+               try {
                     SystemClock.sleep(1000);
                 }catch (Exception e){
                     e.printStackTrace();

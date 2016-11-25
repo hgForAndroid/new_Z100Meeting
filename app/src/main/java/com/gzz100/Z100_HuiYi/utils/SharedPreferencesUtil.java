@@ -235,6 +235,7 @@ public class SharedPreferencesUtil {
         remove(Constant.ENDING_CURRENT_TIME);
         remove(Constant.IS_VOTE_BEGIN);
         remove(Constant.IS_VOTE_COMMIT);
+        remove(Constant.MEETING_STATE);
     }
 
     /**
