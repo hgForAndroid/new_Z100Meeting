@@ -459,6 +459,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void startVote(View view) {
         String buttonContent = mControllerView.getVoteAndEndVoteText();
         if ("投票".equals(buttonContent)) {
+            if (mMeetingState == Constant.MEETING_STATE_NOT_BEGIN){
+                ToastUtil.showMessage("会议未开始！");
+                return;
+            }
             if (mMeetingState == Constant.MEETING_STATE_ENDING){
                 ToastUtil.showMessage("会议已结束！");
                 return;
