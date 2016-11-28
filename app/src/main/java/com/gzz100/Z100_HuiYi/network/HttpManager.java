@@ -52,7 +52,7 @@ public class HttpManager {
         if (INSTANCE == null) {
             synchronized (HttpManager.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new HttpManager(context);
+                    INSTANCE = new HttpManager(context.getApplicationContext());
                 }
             }
         }
