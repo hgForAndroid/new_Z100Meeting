@@ -27,7 +27,7 @@ public class MeetingRemoteDataSource implements MeetingDataSource {
 
     public static MeetingRemoteDataSource getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new MeetingRemoteDataSource(context);
+            INSTANCE = new MeetingRemoteDataSource(context.getApplicationContext());
             mContext = context;
         }
         return INSTANCE;

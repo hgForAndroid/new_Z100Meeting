@@ -33,7 +33,7 @@ public class FileLocalDataSource implements FileDataSource {
 
     public static FileLocalDataSource getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new FileLocalDataSource(context);
+            INSTANCE = new FileLocalDataSource(context.getApplicationContext());
         }
         return INSTANCE;
     }

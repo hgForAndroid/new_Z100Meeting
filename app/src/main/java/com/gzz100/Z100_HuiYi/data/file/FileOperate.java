@@ -33,7 +33,7 @@ public class FileOperate {
         if (instance == null){
             synchronized (FileOperate.class){
                 if (instance == null){
-                    instance = new FileOperate(context);
+                    instance = new FileOperate(context.getApplicationContext());
                 }
             }
         }

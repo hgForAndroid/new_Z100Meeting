@@ -32,7 +32,7 @@ public class VoteRemoteDataSource implements VoteDataSource{
 
     public static VoteRemoteDataSource getInstance(@NonNull Context context){
         if(INSTANCE == null){
-            INSTANCE = new VoteRemoteDataSource(context);
+            INSTANCE = new VoteRemoteDataSource(context.getApplicationContext());
         }
         return INSTANCE;
     }

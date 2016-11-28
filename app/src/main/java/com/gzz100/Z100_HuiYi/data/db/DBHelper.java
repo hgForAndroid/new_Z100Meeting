@@ -60,7 +60,7 @@ private static final String CREATE_TABLE_DELEGATE =
         if (instance == null){
             synchronized (DBHelper.class){
                 if (instance == null){
-                    instance = new DBHelper(context);
+                    instance = new DBHelper(context.getApplicationContext());
                 }
             }
         }

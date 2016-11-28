@@ -35,7 +35,7 @@ public class VoteOperate {
         if (instance == null){
             synchronized (VoteOperate.class){
                 if (instance == null){
-                    instance = new VoteOperate(context);
+                    instance = new VoteOperate(context.getApplicationContext());
                 }
             }
         }

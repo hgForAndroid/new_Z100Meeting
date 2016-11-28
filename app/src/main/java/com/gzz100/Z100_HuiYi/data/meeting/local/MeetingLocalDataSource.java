@@ -29,7 +29,7 @@ public class MeetingLocalDataSource implements MeetingDataSource {
 
     public static MeetingLocalDataSource getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new MeetingLocalDataSource(context);
+            INSTANCE = new MeetingLocalDataSource(context.getApplicationContext());
             mContext = context;
         }
         return INSTANCE;

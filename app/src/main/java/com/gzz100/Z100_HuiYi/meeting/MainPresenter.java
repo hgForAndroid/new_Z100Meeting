@@ -65,6 +65,7 @@ public class MainPresenter implements MainContract.Presenter {
         else if (controllerInfoBean.getMeetingState() == Constant.MEETING_STATE_CONTINUE) {
             //结束投票，将该值重置为false，该值只有正在投票才为true
             SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_VOTE_BEGIN, false);
+            SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_VOTE_COMMIT, false);
             SharedPreferencesUtil.getInstance(mContext).putInt(Constant.BEGIN_VOTE_ID, -1);
 
             mMainView.clientResponseMeetingContinue(agendaIndex, documentIndex, upLevelTitle,

@@ -687,6 +687,9 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (mMeetingState == Constant.MEETING_STATE_BEGIN ||
                 mMeetingState == Constant.MEETING_STATE_CONTINUE){
             mPassive = true;
+            if (agendaIndex != mAgendaIndex){
+                mIsAgendaChange = true;
+            }
         }
         if (mIsAgendaChange || mIsAgendaTimeCountDown) {
             if (!mIsAgendaTimeCountDown) {

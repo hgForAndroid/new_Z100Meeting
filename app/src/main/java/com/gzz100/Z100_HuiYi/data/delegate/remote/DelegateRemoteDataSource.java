@@ -28,7 +28,7 @@ public class DelegateRemoteDataSource implements DelegateDataSource{
 
     public static DelegateRemoteDataSource getInstance(@NonNull Context context){
         if(INSTANCE==null)
-            INSTANCE=new DelegateRemoteDataSource(context);
+            INSTANCE=new DelegateRemoteDataSource(context.getApplicationContext());
         return INSTANCE;
     }
 

@@ -36,7 +36,7 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
         if (mInstance == null){
             synchronized (SelectMeetingRemoteDataSource.class){
                 if (mInstance == null) {
-                    mInstance = new SelectMeetingRemoteDataSource(context);
+                    mInstance = new SelectMeetingRemoteDataSource(context.getApplicationContext());
                 }
             }
         }

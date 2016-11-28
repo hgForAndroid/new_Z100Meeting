@@ -28,7 +28,7 @@ public class SignInRemoteDataSource implements SignInDataSource {
         if (mInstance == null){
             synchronized (SignInRemoteDataSource.class){
                 if (mInstance == null) {
-                    mInstance = new SignInRemoteDataSource(context);
+                    mInstance = new SignInRemoteDataSource(context.getApplicationContext());
                 }
             }
         }

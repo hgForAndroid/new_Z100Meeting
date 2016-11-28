@@ -27,7 +27,7 @@ public class FileRemoteDataSource implements FileDataSource {
 
     public static FileRemoteDataSource getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new FileRemoteDataSource(context);
+            INSTANCE = new FileRemoteDataSource(context.getApplicationContext());
             mContext = context;
         }
         return INSTANCE;

@@ -26,7 +26,7 @@ public class VoteLocalDataSource implements VoteDataSource{
 
     public static VoteLocalDataSource getInstance(@NonNull Context context){
         if(INSTANCE == null){
-            INSTANCE = new VoteLocalDataSource(context);
+            INSTANCE = new VoteLocalDataSource(context.getApplicationContext());
         }
         return INSTANCE;
     }

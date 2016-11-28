@@ -32,7 +32,7 @@ public class DelegateLocalDataSource implements DelegateDataSource {
     public static DelegateLocalDataSource getInstance(@NonNull Context context)
     {
         if(INSTANCE==null)
-            INSTANCE=new DelegateLocalDataSource(context);
+            INSTANCE=new DelegateLocalDataSource(context.getApplicationContext());
         return INSTANCE;
     }
 

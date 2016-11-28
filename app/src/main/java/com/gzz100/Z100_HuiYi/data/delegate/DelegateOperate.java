@@ -24,7 +24,7 @@ public class DelegateOperate {
 
     public static DelegateOperate getInstance(Context context) {
         if (INSTANCE == null)
-            return INSTANCE = new DelegateOperate(context);
+            return INSTANCE = new DelegateOperate(context.getApplicationContext());
         return INSTANCE;
     }
 

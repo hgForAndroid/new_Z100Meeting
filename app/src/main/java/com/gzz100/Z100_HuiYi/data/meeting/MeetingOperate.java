@@ -32,7 +32,7 @@ public class MeetingOperate {
         if (instance == null){
             synchronized (MeetingOperate.class){
                 if (instance == null){
-                    instance = new MeetingOperate(context);
+                    instance = new MeetingOperate(context.getApplicationContext());
                 }
             }
         }
