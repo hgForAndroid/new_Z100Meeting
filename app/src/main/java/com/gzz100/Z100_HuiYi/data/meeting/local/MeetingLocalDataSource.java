@@ -24,13 +24,13 @@ public class MeetingLocalDataSource implements MeetingDataSource {
     private MeetingOperate mMeetingOperate;
 
     private MeetingLocalDataSource(@NonNull Context context) {
+        mContext = context;
         mMeetingOperate = MeetingOperate.getInstance(context);
     }
 
     public static MeetingLocalDataSource getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
             INSTANCE = new MeetingLocalDataSource(context.getApplicationContext());
-            mContext = context;
         }
         return INSTANCE;
     }

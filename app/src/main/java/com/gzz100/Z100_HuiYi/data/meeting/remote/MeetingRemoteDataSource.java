@@ -22,13 +22,13 @@ public class MeetingRemoteDataSource implements MeetingDataSource {
     private MeetingOperate mMeetingOperate;
 
     private MeetingRemoteDataSource(@NonNull Context context) {
+        mContext = context;
         mMeetingOperate = MeetingOperate.getInstance(context);
     }
 
     public static MeetingRemoteDataSource getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
             INSTANCE = new MeetingRemoteDataSource(context.getApplicationContext());
-            mContext = context;
         }
         return INSTANCE;
     }

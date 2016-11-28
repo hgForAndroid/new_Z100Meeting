@@ -23,12 +23,12 @@ public class FileRemoteDataSource implements FileDataSource {
 
     private FileRemoteDataSource(@NonNull Context context) {
         mFileOperate = FileOperate.getInstance(context);
+        mContext = context;
     }
 
     public static FileRemoteDataSource getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
             INSTANCE = new FileRemoteDataSource(context.getApplicationContext());
-            mContext = context;
         }
         return INSTANCE;
     }
