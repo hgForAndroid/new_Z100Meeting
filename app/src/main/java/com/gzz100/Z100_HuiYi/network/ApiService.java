@@ -96,5 +96,5 @@ public interface ApiService {
      * @return
      */
     @GET("api/Host/CheckUpdate")
-    Observable<BaseResultEntity<Update>> checkUpdate(@Query("IMEI")String IMEI,@Query("meetingID")String meetingID);
+    Observable<BaseResultEntity<Update>> checkUpdate(@Query("IMEI")String IMEI,@Query("meetingID")int meetingID);
 }

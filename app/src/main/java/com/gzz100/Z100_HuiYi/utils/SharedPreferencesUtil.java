@@ -1,26 +1,17 @@
 package com.gzz100.Z100_HuiYi.utils;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.util.Base64;
-
-import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.tcpController.Client;
 import com.gzz100.Z100_HuiYi.tcpController.Server;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.Set;
 /**
-* SharedPreferences操作工具类
+* SharedPreferences操作工具类。
 * @author XieQXiong
 * create at 2016/9/22 10:15
 */
@@ -42,7 +33,7 @@ public class SharedPreferencesUtil {
 
     public static SharedPreferencesUtil getInstance(Context context) {
         if (null == mInstance) {
-            mInstance = new SharedPreferencesUtil(context);
+            mInstance = new SharedPreferencesUtil(context.getApplicationContext());
             sp = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
             editor = sp.edit();
         }
@@ -70,7 +61,7 @@ public class SharedPreferencesUtil {
     }
 
     /**
-     * 获取指定StringSet，若查无结果，则返回默认值
+     * 获取指定StringSet，若查无结果，则返回默认值。
      * 调用此方法，需API>=11
      *
      * @param key       关键字
@@ -149,7 +140,7 @@ public class SharedPreferencesUtil {
     }
 
     /**
-     * 向SharedPreferences写入Set<String>类型参数
+     * 向SharedPreferences写入Set<String>类型参数，
      * 调用此方法，需API>=11
      *
      * @param key    关键字

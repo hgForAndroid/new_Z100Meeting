@@ -8,6 +8,8 @@ import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
+import com.gzz100.Z100_HuiYi.data.Vote;
+import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
 import com.gzz100.Z100_HuiYi.data.vote.VoteOperate;
@@ -24,24 +26,61 @@ import java.util.Map;
 * create at 2016/11/9 9:00
 */
 public class WriteDatabaseService extends IntentService {
-
-    private static final String KEY_MEETINGSUMMARYBEAN = "meetingSummaryBean";
+    private static final String KEY_IS_UPDATE = "IS_UPDATE";
+    private static final String KEY_MEETING_SUMMARY_BEAN = "meetingSummaryBean";
     private MeetingSummaryBean mMeetingSummaryBean;
 
     public WriteDatabaseService() {
         super("WriteDatabaseService");
     }
     // TODO: Customize helper method
-    public static void startWriteDatabaseService(Context context,MeetingSummaryBean meetingSummaryBean) {
+    public static void startWriteDatabaseService(Context context,MeetingSummaryBean meetingSummaryBean,
+                                                 boolean isUpdate) {
         Intent intent = new Intent(context, WriteDatabaseService.class);
-        intent.putExtra(KEY_MEETINGSUMMARYBEAN,meetingSummaryBean);
+        intent.putExtra(KEY_IS_UPDATE,isUpdate);
+        intent.putExtra(KEY_MEETING_SUMMARY_BEAN,meetingSummaryBean);
         context.startService(intent);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        mMeetingSummaryBean = (MeetingSummaryBean) intent.getSerializableExtra(KEY_MEETINGSUMMARYBEAN);
-        splitAndSaveDataToDatabase(mMeetingSummaryBean);
+        boolean isUpdate = intent.getBooleanExtra(KEY_IS_UPDATE, false);
+        mMeetingSummaryBean = (MeetingSummaryBean) intent.getSerializableExtra(KEY_MEETING_SUMMARY_BEAN);
+        if (isUpdate){//有更新
+            //先删除表中数据
+            deleteTablesDataFromDatabase();
+            splitAndUpdateDateToDatabase(mMeetingSummaryBean);
+        }else {
+            splitAndSaveDataToDatabase(mMeetingSummaryBean);
+        }
+    }
+    /**
+     * 删除数据变化的表的数据
+     */
+    private void deleteTablesDataFromDatabase() {
+        DBHelper.getInstance(this.getApplicationContext()).deleteAllTablesAllData();
+    }
+
+    /**
+     * 拆分数据，更新数据库中文件表，议程表，投票表
+     * @param meetingSummaryBean
+     */
+    private void splitAndUpdateDateToDatabase(MeetingSummaryBean meetingSummaryBean) {
+        saveAgendaList(meetingSummaryBean);
+        saveDocumentList(meetingSummaryBean);
+        saveMeetingInfo(meetingSummaryBean);
+        insertVotes(meetingSummaryBean.getVoteList());
+    }
+    /**
+     * 将获取的新的投票文件插入数据库中
+     * @param voteList
+     */
+    private void insertVotes(List<Vote> voteList) {
+        if (voteList != null && voteList.size() > 0){
+            List<Vote> votes = VoteOperate.getInstance(this.getApplicationContext()).queryVoteList();
+            votes.addAll(voteList);
+            VoteOperate.getInstance(this.getApplicationContext()).updateVoteList(votes);
+        }
     }
 
 

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -26,6 +27,7 @@ import com.gzz100.Z100_HuiYi.multicast.MulticastController;
 import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
+import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
@@ -202,6 +204,28 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     @Override
     public void setPresenter(SignInContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Dialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("提示")
+                    .setMessage("退出系统？")
+                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferencesUtil.getInstance(SignInActivity.this).killAllRunningService();
+                            //删除会议前预下载的所有文件
+                            AppUtil.DeleteFolder(AppUtil.getCacheDir(SignInActivity.this));
+                            ActivityStackManager.exit();
+                        }
+                    })
+                    .setNegativeButton("否", null)
+                    .create();
+            dialog.show();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

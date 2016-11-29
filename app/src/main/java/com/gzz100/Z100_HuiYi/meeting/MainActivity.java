@@ -159,7 +159,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mFragments.add(mFileFragment);
         mFragments.add(mAboutFragment);
         mFragments.add(mVoteFragment);
-        //测试
         if (MyAPP.getInstance().getUserRole() == 1) {//主持人
             mControllerView = ControllerView.getInstance(this);
             mFl = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -207,7 +206,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     /**
-     * 静态内部类Handler，使用弱引用，防止内存泄露
+     * 静态内部类Handler，使用弱引用，防止内存泄露。
      */
     private static class MyHandler extends Handler{
         private WeakReference<MainActivity> activityWeakReference;
@@ -240,7 +239,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         String newHour = hour >= 10 ? "" + hour : "0" + hour;
         return newHour;
     }
-
     public String getMin() {
         String newMin = min >= 10 ? "" + min : "0" + min;
         if (newMin.equals("60")) {

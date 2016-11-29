@@ -85,13 +85,44 @@ private static final String CREATE_TABLE_DELEGATE =
      */
     public void deleteTable(){
         mDatabase = instance.getReadableDatabase();
-        String sql1 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_FILE;
-        String sql2 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_AGENDA;
-        String sql3 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE;
-        String sql4 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_MEETING_INFO;
-        mDatabase.execSQL(sql1);
-        mDatabase.execSQL(sql2);
-        mDatabase.execSQL(sql3);
-        mDatabase.execSQL(sql4);
+        mDatabase.beginTransaction();
+        try{
+            String sql1 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_FILE;
+            String sql2 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_AGENDA;
+            String sql3 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE;
+            String sql4 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_MEETING_INFO;
+            mDatabase.execSQL(sql1);
+            mDatabase.execSQL(sql2);
+            mDatabase.execSQL(sql3);
+            mDatabase.execSQL(sql4);
+            mDatabase.setTransactionSuccessful();
+        }finally{
+            mDatabase.endTransaction();
+        }
+        mDatabase.close();
+    }
+
+    /**
+     * 删除议程表，文件表，概况表内的所有数据。
+     * 该方法是在检查到服务器有文件的更新后，从服务器获取信息，重新往这三张表中插入数据。
+     */
+    public boolean deleteAllTablesAllData(){
+        boolean success = false;
+        mDatabase = instance.getReadableDatabase();
+        mDatabase.beginTransaction();
+        try{
+            String sql1 = "delete from "+PersistenceContract.ColumnsName.TABLE_NAME_FILE;
+            String sql2 = "delete from "+PersistenceContract.ColumnsName.TABLE_NAME_AGENDA;
+            String sql3 = "DROP TABLE "+PersistenceContract.ColumnsName.TABLE_NAME_MEETING_INFO;
+            mDatabase.execSQL(sql1);
+            mDatabase.execSQL(sql2);
+            mDatabase.execSQL(sql3);
+            mDatabase.setTransactionSuccessful();
+            success = true;
+        }finally{
+            mDatabase.endTransaction();
+        }
+        mDatabase.close();
+        return success;
     }
 }

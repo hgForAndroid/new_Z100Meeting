@@ -11,9 +11,9 @@ import rx.Subscriber;
 public class UpdatePost extends BaseEntity {
     private Subscriber mSubscriber;
     private String IMEI;
-    private String meetingID;
+    private int meetingID;
 
-    public UpdatePost(Subscriber subscriber, String imei, String meetingID) {
+    public UpdatePost(Subscriber subscriber, String imei, int meetingID) {
         this.mSubscriber = subscriber;
         IMEI = imei;
         this.meetingID = meetingID;

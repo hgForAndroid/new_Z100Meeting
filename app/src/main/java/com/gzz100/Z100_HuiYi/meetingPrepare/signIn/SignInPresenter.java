@@ -85,7 +85,7 @@ public class SignInPresenter implements SignInContract.Presenter {
                 //是为了避免刚进入主场景界面，用户列表还未写入
                 saveDelegateList(meetingSummary);
                 mView.showMainActivity();
-                WriteDatabaseService.startWriteDatabaseService(mContext,meetingSummary);
+                WriteDatabaseService.startWriteDatabaseService(mContext,meetingSummary,false);
             }
 
             @Override
