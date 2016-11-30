@@ -5,6 +5,7 @@ import android.view.View;
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
+import com.gzz100.Z100_HuiYi.data.Update;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 
 import java.io.File;
@@ -167,6 +168,23 @@ public interface FileDetailContract {
          * @param voteId
          */
         void respondVoteBegin(int voteId);
+
+        /**
+         * 处理主持人发来的更新消息，
+         * 马上进行文件更新
+         */
+        void respondUpdate();
+
+        /**
+         * 文件有更新，需要界面提示
+         */
+        void fileHasUpdate();
+
+        /**
+         * 文件更新有误，界面提示
+         * @param error 服务器返回的错误信息
+         */
+        void fileUpdateError(String error);
     }
 
     interface Presenter extends BasePresenter{
@@ -314,5 +332,13 @@ public interface FileDetailContract {
          * @param documentPosition 点击的文件序号
          */
         void handleFileClickFromHost(ControllerInfoBean controllerInfoBean, int meetingState, int agendaIndex, int documentPosition);
+
+        /**
+         * 访问服务器，获取最新数据并更新。
+         * @param controllerInfoBean   消息实体，切换后将信息填充到该实体类，再进行发送。
+         * @param meetingState    会议状态。
+         */
+        void updateTheNewDate(ControllerInfoBean controllerInfoBean, int meetingState);
+
     }
 }

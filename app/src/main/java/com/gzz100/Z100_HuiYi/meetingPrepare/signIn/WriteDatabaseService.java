@@ -9,11 +9,14 @@ import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.Vote;
+import com.gzz100.Z100_HuiYi.data.eventBean.UpdateCompletedEvent;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
 import com.gzz100.Z100_HuiYi.data.vote.VoteOperate;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +73,7 @@ public class WriteDatabaseService extends IntentService {
         saveDocumentList(meetingSummaryBean);
         saveMeetingInfo(meetingSummaryBean);
         insertVotes(meetingSummaryBean.getVoteList());
+        EventBus.getDefault().post(new UpdateCompletedEvent(true));
     }
     /**
      * 将获取的新的投票文件插入数据库中

@@ -96,10 +96,15 @@ public class ControllerInfoBean implements Serializable,Cloneable{
         this.voteState = voteState;
     }
 
+    /**
+     * 未更新0；待更新 1
+     */
     public int getIsUpdate() {
         return IsUpdate;
     }
-
+    /**
+     * 未更新0；待更新 1
+     */
     public void setIsUpdate(int isUpdate) {
         IsUpdate = isUpdate;
     }

@@ -25,7 +25,9 @@ import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
+import com.gzz100.Z100_HuiYi.data.Update;
 import com.gzz100.Z100_HuiYi.data.Vote;
+import com.gzz100.Z100_HuiYi.data.eventBean.UpdateCompletedEvent;
 import com.gzz100.Z100_HuiYi.data.eventBean.DownLoadComplete;
 import com.gzz100.Z100_HuiYi.data.eventBean.PeopleIn;
 import com.gzz100.Z100_HuiYi.data.file.FileOperate;
@@ -831,6 +833,95 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         EventBus.getDefault().post(vote);
         ActivityStackManager.pop();//销毁
     }
+
+    @Override
+    public void respondUpdate() {
+        mPresenter.updateTheNewDate(mControllerInfoBean,mMeetingState);
+        showFileIsDownLoading("正在更新文件中，请稍等...");
+        //停止时间倒计时
+        mMyHandler.removeCallbacksAndMessages(null);
+    }
+
+    @Override
+    public void fileHasUpdate() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("服务器文件有更新");
+        dialog.setMessage("马上更新文件,通知客户端更新");
+        dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mPresenter.updateTheNewDate(mControllerInfoBean,mMeetingState);
+                showFileIsDownLoading("正在更新文件中，请稍等...");
+                //停止时间倒计时
+                mMyHandler.removeCallbacksAndMessages(null);
+            }
+        }).setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                dialog = null;
+            }
+        }).show();
+
+    }
+
+    @Override
+    public void fileUpdateError(String error) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("更新提示");
+        dialog.setMessage("更新有误，错误："+error+",请联系服务器人员。");
+        dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                dialog = null;
+            }
+        }).setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                dialog = null;
+            }
+        }).show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showAfterUpdateCompleted(UpdateCompletedEvent event){
+        if (event.isUpdateCompleted()){
+            if (mProgressDialog != null && mProgressDialog.isShowing()){
+                mProgressDialog.dismiss();
+                mProgressDialog = null;
+            }
+
+            List<AgendaModel> agendas = FileOperate.getInstance(this).queryAgendaList();
+            mAgendaSum = agendas.size();
+            mAgendaDuration = agendas.get(mAgendaIndex - 1).getAgendaDuration();//返回的议程序号从1开始
+            mFileList = FileOperate.getInstance(this).queryFileList(mAgendaIndex);
+            mFileName = mFileList.get(mFileIndex).getDocumentName();
+
+            mNavBarView.setTitle(mFileName.substring(0, mFileName.indexOf(".")));//当前文件名称
+            //当前议程的在全部议程中的进度
+            mNavBarView.setMeetingStateOrAgendaState("议程" + mAgendaIndex + "/" + mAgendaSum);
+            mMin = mAgendaDuration;
+            mSec = 0;
+            mNavBarView.setTimeHour(StringUtils.resetNum(mMin));
+            mNavBarView.setTimeMin(StringUtils.resetNum(mSec));
+            Message message = Message.obtain();
+            message.what = 0x00;
+            mMyHandler.sendMessageDelayed(message, 1000);
+
+            mFileDetailAdapter = new FileDetailAdapter(mFileList, this);
+            mFileNameRcv.setAdapter(mFileDetailAdapter);
+            mFileNameRcv.setOnItemClickListener(this);
+            mFileNameRcv.setSelection(mFileIndex);
+            mFileDetailAdapter.setSelectedItem(mFileIndex);
+            mFileDetailAdapter.notifyDataSetInvalidated();
+            //加载文件显示
+            mPresenter.loadFile(mFileList.get(mFileIndex));
+
+        }
+    }
+
     @Override
     public void slideLeft(int distanceX) {
         mSlideLayout.setVisibility(View.GONE);

@@ -42,4 +42,5 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     /*MPAndroidCharts 第三方图形库*/
     compile 'com.github.PhilJay:MPAndroidChart:v2.0.9'
+    compile 'org.jetbrains:annotations-java5:15.0'
 }
