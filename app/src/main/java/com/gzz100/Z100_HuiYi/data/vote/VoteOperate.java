@@ -50,7 +50,7 @@ public class VoteOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_VOTE_LIST,data);
         mDatabase = mDBHelper.getReadableDatabase();
         mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_VOTE,null,values);
-        mDatabase.close();
+//        mDatabase.close();
     }
 
     /**
@@ -65,7 +65,7 @@ public class VoteOperate {
         mDatabase = mDBHelper.getReadableDatabase();
         mDatabase.update(PersistenceContract.ColumnsName.TABLE_NAME_VOTE,values,
                 PersistenceContract.ColumnsName.COLUMN_NAME_VOTE_INDEX+"=?",new String[]{Constant.COLUMNS_VOTE_INDEX+""});
-        mDatabase.close();
+//        mDatabase.close();
     }
 
     /**
@@ -85,7 +85,7 @@ public class VoteOperate {
             documents = (List<Vote>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();
-        mDatabase.close();
+//        mDatabase.close();
         return documents;
     }
 

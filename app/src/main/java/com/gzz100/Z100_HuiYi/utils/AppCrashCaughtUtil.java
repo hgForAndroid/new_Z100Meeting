@@ -63,15 +63,13 @@ public class AppCrashCaughtUtil implements Thread.UncaughtExceptionHandler {
             // 2,异常崩溃信息投递到服务器,如果需要
             saveToServer(mContext, ex);
         }
-        // 3,应用准备退出
-        showToast(mContext, "很抱歉,程序发生异常,即将推出.");
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         if (MyAPP.getInstance().getUserRole() != 1){
-            ClientSendMessageUtil.getInstance().sendMessage("exit");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ClientSendMessageUtil.getInstance().sendMessage("exit");
+                }
+            }).start();
         }
         SharedPreferencesUtil.getInstance(mContext).clearKeyInfo();//清缓存
         SharedPreferencesUtil.getInstance(mContext).killAllRunningService();//杀服务
@@ -80,6 +78,13 @@ public class AppCrashCaughtUtil implements Thread.UncaughtExceptionHandler {
         mContext.deleteDatabase(DBHelper.DB_NAME);//删除数据库
         ActivityStackManager.clear();//清Activity
         android.os.Process.killProcess(android.os.Process.myPid());
+        // 3,应用准备退出
+        showToast(mContext, "很抱歉,程序发生异常,即将推出.");
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 

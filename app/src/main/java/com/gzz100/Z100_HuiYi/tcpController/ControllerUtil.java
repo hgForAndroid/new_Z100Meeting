@@ -55,9 +55,9 @@ public class ControllerUtil {
      *
      * @param jsonBean json字符串
      */
-    public void sendLastSocketMessage(String jsonBean) {
+    public void sendLastSocketMessage(String deviceIp,String jsonBean) {
         if (mIControllerListener != null)
-            mIControllerListener.sendLastSocketMessage(jsonBean);
+            mIControllerListener.sendLastSocketMessage(deviceIp,jsonBean);
     }
 
 }

@@ -12,5 +12,10 @@ public interface IControllerListener {
      */
     void sendMessage(String message);
 
-    void sendLastSocketMessage(String message);
+    /**
+     * 会议有人临时进入，发送消息给该人员设备，让其进入会议状态
+     * @param deviceIp  设备ip
+     * @param message   信息
+     */
+    void sendLastSocketMessage(String deviceIp,String message);
 }

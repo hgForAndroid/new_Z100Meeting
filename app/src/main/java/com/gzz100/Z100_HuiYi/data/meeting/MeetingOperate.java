@@ -51,7 +51,7 @@ public class MeetingOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE,data);
         mDatabase = mDBHelper.getReadableDatabase();
         mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE,null,values);
-        mDatabase.close();
+//        mDatabase.close();
     }
 
     /**
@@ -71,7 +71,7 @@ public class MeetingOperate {
             userList = (List<DelegateModel>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();
-        mDatabase.close();
+//        mDatabase.close();
         return userList;
     }
 
@@ -87,7 +87,7 @@ public class MeetingOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_MEETING_INFO_DATA,data);
         mDatabase = mDBHelper.getReadableDatabase();
         mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_MEETING_INFO,null,values);
-        mDatabase.close();
+//        mDatabase.close();
     }
 
     /**
@@ -107,7 +107,7 @@ public class MeetingOperate {
             meetingInfo = (MeetingInfo) ObjectTransverter.ByteToObject(data);
         }
         cursor.close();
-        mDatabase.close();
+//        mDatabase.close();
         return meetingInfo;
     }
 

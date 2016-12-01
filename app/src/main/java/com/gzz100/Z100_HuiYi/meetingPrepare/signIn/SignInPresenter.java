@@ -42,7 +42,6 @@ public class SignInPresenter implements SignInContract.Presenter {
                     //保存当前用户角色
                     saveUserRole(userBean.getUserRole());
                     saveUserId(userBean.getUserID());
-                    saveUserName(userBean.getUserName());
                     mView.showDelegate(userBean);
                     //开启下载
                     mView.startDownLoad(userBean.getDocumentURLList());
@@ -54,14 +53,6 @@ public class SignInPresenter implements SignInContract.Presenter {
                 }
             });
         }
-    }
-
-    /**
-     * 保存用户名，用于主场景显示当前参会人员背景不同
-     * @param userName
-     */
-    private void saveUserName(String userName) {
-        SharedPreferencesUtil.getInstance(mContext).putString(Constant.USER_NAME,userName);
     }
 
     /**

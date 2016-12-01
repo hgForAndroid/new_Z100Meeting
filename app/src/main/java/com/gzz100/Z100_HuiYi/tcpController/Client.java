@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,6 +46,7 @@ public class Client extends Service implements IControllerListener {
         Log.e(TAG, "存本地的平板ip是 ：" + ip);
         new Thread(mRunnable).start();
 //        new Thread(received).start();
+
     }
 
     private Runnable mRunnable = new Runnable() {
@@ -134,7 +136,7 @@ public class Client extends Service implements IControllerListener {
     }
 
     @Override
-    public void sendLastSocketMessage(String message) {
+    public void sendLastSocketMessage(String deviceIp,String message) {
 
     }
 }

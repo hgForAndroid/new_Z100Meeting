@@ -184,7 +184,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     }
 
     @Override
-    public void controlTempPeopleIn(ControllerInfoBean controllerInfoBean, int meetingState,
+    public void controlTempPeopleIn(String deviceIp,ControllerInfoBean controllerInfoBean, int meetingState,
                                     int agendaIndex, int DocumentIndex, String upLevelText,
                                     boolean isAgendaChange, boolean isAgendaTimeCountDown,
                                     String min, String sec) {
@@ -208,7 +208,7 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
-                ControllerUtil.getInstance().sendLastSocketMessage(json);
+                ControllerUtil.getInstance().sendLastSocketMessage(deviceIp,json);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -258,20 +258,20 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void previousAgendaForHost(final ControllerInfoBean controllerInfoBean, final int meetingState, int agendaIndex) {
         //检查更新
-        CheckUpdateRemoteDataSource.getInstance(mContext).checkUpdate(IMEI, mMeetingID,
-                new CheckUpdateDataSource.CheckUpdateCallback() {
-                    @Override
-                    public void update() {
-                        if (Constant.DEBUG)
-                            Log.e(TAG, "previousAgendaForHost: 检查有更新，isUpdate=1");
-                    }
-
-                    @Override
-                    public void notUpdate() {
-                        if (Constant.DEBUG)
-                            Log.e(TAG, "previousAgendaForHost: 检查无更新，isUpdate=0");
-                    }
-                });
+//        CheckUpdateRemoteDataSource.getInstance(mContext).checkUpdate(IMEI, mMeetingID,
+//                new CheckUpdateDataSource.CheckUpdateCallback() {
+//                    @Override
+//                    public void update() {
+//                        if (Constant.DEBUG)
+//                            Log.e(TAG, "previousAgendaForHost: 检查有更新，isUpdate=1");
+//                    }
+//
+//                    @Override
+//                    public void notUpdate() {
+//                        if (Constant.DEBUG)
+//                            Log.e(TAG, "previousAgendaForHost: 检查无更新，isUpdate=0");
+//                    }
+//                });
         agendaIndex -= 1;
         mView.respondAgendaTimeIsCounting(false);
         mView.resetAgendaTimeCounting(controllerInfoBean, agendaIndex);
@@ -298,21 +298,21 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void nextAgendaForHost(final ControllerInfoBean controllerInfoBean, final int meetingState, int agendaIndex) {
         //检查更新
-        CheckUpdateRemoteDataSource.getInstance(mContext).checkUpdate(IMEI, mMeetingID,
-                new CheckUpdateDataSource.CheckUpdateCallback() {
-                    @Override
-                    public void update() {
-                        if (Constant.DEBUG)
-                            Log.e(TAG, "nextAgendaForHost: 检查有更新，isUpdate=1");
-                        mView.fileHasUpdate();
-                    }
-
-                    @Override
-                    public void notUpdate() {
-                        if (Constant.DEBUG)
-                            Log.e(TAG, "nextAgendaForHost: 检查无更新，isUpdate=0");
-                    }
-                });
+//        CheckUpdateRemoteDataSource.getInstance(mContext).checkUpdate(IMEI, mMeetingID,
+//                new CheckUpdateDataSource.CheckUpdateCallback() {
+//                    @Override
+//                    public void update() {
+//                        if (Constant.DEBUG)
+//                            Log.e(TAG, "nextAgendaForHost: 检查有更新，isUpdate=1");
+//                        mView.fileHasUpdate();
+//                    }
+//
+//                    @Override
+//                    public void notUpdate() {
+//                        if (Constant.DEBUG)
+//                            Log.e(TAG, "nextAgendaForHost: 检查无更新，isUpdate=0");
+//                    }
+//                });
 
         agendaIndex += 1;
         mView.respondAgendaTimeIsCounting(false);
@@ -445,35 +445,35 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 
     @Override
     public void updateTheNewDate(ControllerInfoBean controllerInfoBean, int meetingState) {
-
-        try {
-            ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
-            mControllerInfoBean.setMeetingState(meetingState);
-            mControllerInfoBean.setIsUpdate(1);
-            //下面两个值设置未-1，为了在客户端接收到更新信息时，不处理界面
-            mControllerInfoBean.setAgendaIndex(-1);
-            mControllerInfoBean.setDocumentIndex(-1);
-
-            String json = mGson.toJson(mControllerInfoBean);
-            if (ControllerUtil.getInstance().getIControllerListener() != null)
-                ControllerUtil.getInstance().sendMessage(json);
-
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-
-        CheckUpdateRemoteDataSource.getInstance(mContext).fetchUpdateData(IMEI, mMeetingID,
-                new CheckUpdateDataSource.LoadUpdateDataCallback() {
-                    @Override
-                    public void onUpdateDataLoaded(MeetingSummaryBean summaryBean) {
-                        WriteDatabaseService.startWriteDatabaseService(mContext,summaryBean,true);
-                    }
-
-                    @Override
-                    public void onDataNotAvailable(String error) {
-                        ToastUtil.showMessage("更新失败："+error);
-                        mView.fileUpdateError(error);
-                    }
-                });
+//
+//        try {
+//            ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
+//            mControllerInfoBean.setMeetingState(meetingState);
+//            mControllerInfoBean.setIsUpdate(1);
+//            //下面两个值设置未-1，为了在客户端接收到更新信息时，不处理界面
+//            mControllerInfoBean.setAgendaIndex(-1);
+//            mControllerInfoBean.setDocumentIndex(-1);
+//
+//            String json = mGson.toJson(mControllerInfoBean);
+//            if (ControllerUtil.getInstance().getIControllerListener() != null)
+//                ControllerUtil.getInstance().sendMessage(json);
+//
+//        } catch (CloneNotSupportedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        CheckUpdateRemoteDataSource.getInstance(mContext).fetchUpdateData(IMEI, mMeetingID,
+//                new CheckUpdateDataSource.LoadUpdateDataCallback() {
+//                    @Override
+//                    public void onUpdateDataLoaded(MeetingSummaryBean summaryBean) {
+//                        WriteDatabaseService.startWriteDatabaseService(mContext,summaryBean,true);
+//                    }
+//
+//                    @Override
+//                    public void onDataNotAvailable(String error) {
+//                        ToastUtil.showMessage("更新失败："+error);
+//                        mView.fileUpdateError(error);
+//                    }
+//                });
     }
 }

@@ -253,6 +253,7 @@ public interface FileDetailContract {
 
         /**
          * 发消息，让临时进入会议的人员的平板进入受控状态  的操作
+         * @param deviceIp      当前人员所持设备的ip
          * @param controllerInfoBean   发送的信息实体
          * @param meetingState    会议状态
          * @param agendaIndex     议程序号
@@ -263,7 +264,7 @@ public interface FileDetailContract {
          * @param min              倒计时的分
          * @param sec              倒计时的秒
          */
-        void controlTempPeopleIn(ControllerInfoBean controllerInfoBean, int meetingState,
+        void controlTempPeopleIn(String deviceIp,ControllerInfoBean controllerInfoBean, int meetingState,
                     int agendaIndex,int DocumentIndex, String upLevelText, boolean isAgendaChange,
                     boolean isAgendaTimeCountDown,String min,String sec);
 

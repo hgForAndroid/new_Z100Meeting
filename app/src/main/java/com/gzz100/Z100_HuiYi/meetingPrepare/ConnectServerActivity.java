@@ -141,23 +141,4 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
         //等待接收主持人端发送过来的数据
         mPresenter.receivedKeyInfoFromHost();
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK){
-            Dialog dialog = new AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage("退出系统？")
-                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityStackManager.exit();
-                        }
-                    })
-                    .setNegativeButton("否",null)
-                    .create();
-            dialog.show();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }

@@ -25,7 +25,6 @@ import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
-import com.gzz100.Z100_HuiYi.data.Update;
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.eventBean.UpdateCompletedEvent;
 import com.gzz100.Z100_HuiYi.data.eventBean.DownLoadComplete;
@@ -1115,7 +1114,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void somePeopleIn(PeopleIn peopleIn){
         if (peopleIn.isPeopleIn()){
-            mPresenter.controlTempPeopleIn(mControllerInfoBean, Constant.MEETING_STATE_BEGIN,
+            mPresenter.controlTempPeopleIn(peopleIn.getDeviceIp(),mControllerInfoBean, Constant.MEETING_STATE_BEGIN,
                     mAgendaIndex, mFileIndex, mUpLevelText, mIsAgendaChange, true,
                     mNavBarView.getTimeHour(), mNavBarView.getTimeMin());
         }

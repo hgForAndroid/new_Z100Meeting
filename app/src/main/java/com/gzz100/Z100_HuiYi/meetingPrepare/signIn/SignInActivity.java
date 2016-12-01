@@ -26,6 +26,8 @@ import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
 import com.gzz100.Z100_HuiYi.multicast.MulticastController;
 import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
+import com.gzz100.Z100_HuiYi.tcpController.Client;
+import com.gzz100.Z100_HuiYi.tcpController.ClientSendMessageUtil;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -77,6 +79,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        ActivityStackManager.clearExceptOne(this);
         ButterKnife.bind(this);
         initGetIntent();
         mPresenter = new SignInPresenter(this,this);
@@ -137,7 +140,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     public void showDelegate(UserBean userBean) {
         mTvPosition.setText(userBean.getUserJob());
         mTvName.setText(userBean.getUserName());
-
+        SharedPreferencesUtil.getInstance(this).putString(Constant.USER_NAME,userBean.getUserName());
         sendKeyMessageToClients();
 
     }
@@ -155,6 +158,16 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
             startService(intent);
 
             mPresenter.startTCPService();
+        }else{
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String ip = MPhone.getWIFILocalIpAdress(SignInActivity.this.getApplicationContext());
+                    ClientSendMessageUtil.getInstance().sendMessage(mTvName.getText().toString()+","+ip);
+                }
+            }).start();
+
         }
     }
 

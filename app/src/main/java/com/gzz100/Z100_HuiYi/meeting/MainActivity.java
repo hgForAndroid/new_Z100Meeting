@@ -66,6 +66,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener,
         ViewPager.OnPageChangeListener, ICommunicate, ControllerView.IOnControllerListener,
@@ -706,6 +708,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                         .setPositiveButton("是", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                if (MyAPP.getInstance().getUserRole() != 1){
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ClientSendMessageUtil.getInstance().sendMessage("exit");
+                                        }
+                                    }).start();
+                                }
                                 SharedPreferencesUtil.getInstance(MainActivity.this).killAllRunningService();
                                 SharedPreferencesUtil.getInstance(MainActivity.this).clearKeyInfo();
                                 //删除会议前预下载的所有文件

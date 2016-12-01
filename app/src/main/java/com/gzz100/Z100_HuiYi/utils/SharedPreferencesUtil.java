@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+
+import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
 import com.gzz100.Z100_HuiYi.tcpController.Client;
 import com.gzz100.Z100_HuiYi.tcpController.Server;
 
@@ -240,7 +242,7 @@ public class SharedPreferencesUtil {
             mContext.stopService(new Intent(mContext, Client.class));
         }
         if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.multicast.SendMulticastService")) {
-            mContext.stopService(new Intent(mContext, Client.class));
+            mContext.stopService(new Intent(mContext, SendMulticastService.class));
         }
     }
 
