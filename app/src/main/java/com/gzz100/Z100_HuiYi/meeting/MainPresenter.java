@@ -3,6 +3,7 @@ package com.gzz100.Z100_HuiYi.meeting;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
@@ -52,10 +53,16 @@ public class MainPresenter implements MainContract.Presenter {
                 SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_VOTE_BEGIN, false);
                 SharedPreferencesUtil.getInstance(mContext).remove(Constant.BEGIN_VOTE_ID);
                 if (controllerInfoBean.isControlTempPeople()){
-                    mMainView.tempClientResponseMeetingContinue(agendaIndex, documentIndex, upLevelTitle,
-                            controllerInfoBean.getCountingMin(),controllerInfoBean.getCountingSec(),
-                            controllerInfoBean.getMeetingBeginTimeHour(),
-                            controllerInfoBean.getMeetingBeginTimeMin());
+                    if (controllerInfoBean.getTempPeopleInCurrentState() == Constant.MEETING_STATE_BEGIN){
+                        mMainView.tempClientResponseMeetingContinue(agendaIndex, documentIndex, upLevelTitle,
+                                controllerInfoBean.getCountingMin(),controllerInfoBean.getCountingSec(),
+                                controllerInfoBean.getMeetingBeginTimeHour(),
+                                controllerInfoBean.getMeetingBeginTimeMin());
+                    }else {
+                        mMainView.tempClientResponseMeetingPauseOrEnd(controllerInfoBean.getTempPeopleInCurrentState(),
+                                controllerInfoBean.getMeetingBeginTimeHour(),controllerInfoBean.getMeetingBeginTimeMin());
+                    }
+
                 }else {
                     mMainView.clientResponseMeetingBegin(agendaIndex, documentIndex, upLevelTitle);
                 }
@@ -77,6 +84,10 @@ public class MainPresenter implements MainContract.Presenter {
         //暂停
         else if (controllerInfoBean.getMeetingState() == Constant.MEETING_STATE_PAUSE) {
             mMainView.clientResponseMeetingPause();
+            if (controllerInfoBean.isControlTempPeople()){//人员进入时，当前的会议状态是暂停
+                mMainView.tempClientResponseMeetingPauseOrEnd(controllerInfoBean.getTempPeopleInCurrentState(),
+                        controllerInfoBean.getMeetingBeginTimeHour(),controllerInfoBean.getMeetingBeginTimeMin());
+            }
         } else if (controllerInfoBean.getMeetingState() == Constant.MEETING_STATE_ENDING) {
             SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_MEETING_END, true);
             mMainView.clientResponseMeetingEnd();
@@ -268,6 +279,25 @@ public class MainPresenter implements MainContract.Presenter {
                         mMainView.hostResponseLaunchOrCloseVoteFail(startOrEnd);
                     }
                 });
+    }
+
+    @Override
+    public void controlTempPeopleIn(String deviceIp, ControllerInfoBean controllerInfoBean, int MeetingState, String currentMeetingHour, String currentMeetingMin) {
+        try {
+            ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
+            mControllerInfoBean.setMeetingState(MeetingState);
+            mControllerInfoBean.setControlTempPeople(true);//有临时人员进来，让他受控
+            mControllerInfoBean.setMeetingBeginTimeHour(currentMeetingHour);
+            mControllerInfoBean.setMeetingBeginTimeMin(currentMeetingMin);
+            //临时人员进入时，当前的会议状态
+            mControllerInfoBean.setTempPeopleInCurrentState(MyAPP.getInstance().isMeetingIsProgress());
+
+            String json = mGson.toJson(mControllerInfoBean);
+            if (ControllerUtil.getInstance().getIControllerListener() != null)
+                ControllerUtil.getInstance().sendLastSocketMessage(deviceIp,json);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

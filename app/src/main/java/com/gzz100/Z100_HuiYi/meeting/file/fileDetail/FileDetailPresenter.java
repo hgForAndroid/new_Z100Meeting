@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
+import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
@@ -205,6 +206,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
                     getString(Constant.MEETING_BEGIN_TIME_MIN, "00");
             mControllerInfoBean.setMeetingBeginTimeHour(meetingBeginTimeHour);
             mControllerInfoBean.setMeetingBeginTimeMin(meetingBeginTimeMin);
+            //临时人员进入时，当前的会议状态
+            mControllerInfoBean.setTempPeopleInCurrentState(MyAPP.getInstance().isMeetingIsProgress());
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)

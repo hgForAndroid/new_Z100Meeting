@@ -995,7 +995,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void meetingBegin() {
-        MyAPP.getInstance().setMeetingIsProgress(true);
+        MyAPP.getInstance().setMeetingIsProgress(2);
         mControllerView.setBeginAndEndText("结束");
         mNavBarView.setCurrentMeetingState("(开会中)");
         mPassive = true;
@@ -1005,7 +1005,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void meetingEnding() {
-        MyAPP.getInstance().setMeetingIsProgress(false);
+        MyAPP.getInstance().setMeetingIsProgress(8);
         mNavBarView.setCurrentMeetingState("(已结束)");
         mPassive = false;
         if (!mPassive)
@@ -1015,11 +1015,13 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mControllerView.setStartAndEndButtonNotClickable(false);
         mControllerView.setPauseAndContinueButtonNotClickable(false);
         mControllerView.setStartVoteButtonNotClickable(false);
+        //会议结束，关闭组播
+        SharedPreferencesUtil.getInstance(this).killAllRunningService();
     }
 
     @Override
     public void meetingPause() {
-        MyAPP.getInstance().setMeetingIsProgress(false);
+        MyAPP.getInstance().setMeetingIsProgress(4);
         mControllerView.setPauseAndContinueText("继续");
         mNavBarView.setCurrentMeetingState("(暂停中)");
         mPassive = false;
@@ -1032,7 +1034,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     @Override
     public void meetingContinue() {//主持人会议继续
-        MyAPP.getInstance().setMeetingIsProgress(true);
+        MyAPP.getInstance().setMeetingIsProgress(2);
         String tempCountingMin = SharedPreferencesUtil.getInstance(this.getApplicationContext())
                 .getString(Constant.COUNTING_MIN, "00");//暂停后保存的议程时间倒计时的  分钟
         String tempCountingSec = SharedPreferencesUtil.getInstance(this.getApplicationContext())

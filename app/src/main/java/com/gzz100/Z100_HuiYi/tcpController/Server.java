@@ -66,7 +66,8 @@ public class Server extends Service implements IControllerListener {
                     Log.e("来自客户端的消息 ： ", message);
 
                     if (message.equals("haha")) {
-                        if (MyAPP.getInstance().isMeetingIsProgress()) {//会议进行中
+                        int meetingIsProgress = MyAPP.getInstance().isMeetingIsProgress();
+                        if (meetingIsProgress == 2 || meetingIsProgress == 4 || meetingIsProgress == 8 ) {//会议进行中
                             Log.e(TAG, "run: 会议进行中，发送消息给客户端");
                             EventBus.getDefault().post(new PeopleIn(true, s.getInetAddress().getHostAddress().toString()));
                         }

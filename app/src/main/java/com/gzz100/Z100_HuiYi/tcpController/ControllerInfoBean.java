@@ -33,6 +33,10 @@ public class ControllerInfoBean implements Serializable,Cloneable{
     private String meetingBeginTimeHour;//会议已经进行的时间，时
     private String meetingBeginTimeMin;//会议已经进行的时间，分
 
+    /**
+     * 2:开始     4：暂停      8：结束
+     */
+    private int tempPeopleInCurrentState;
     public ControllerInfoBean() {
     }
 
@@ -186,5 +190,13 @@ public class ControllerInfoBean implements Serializable,Cloneable{
 
     public void setMeetingBeginTimeMin(String meetingBeginTimeMin) {
         this.meetingBeginTimeMin = meetingBeginTimeMin;
+    }
+
+    public int getTempPeopleInCurrentState() {
+        return tempPeopleInCurrentState;
+    }
+
+    public void setTempPeopleInCurrentState(int tempPeopleInCurrentState) {
+        this.tempPeopleInCurrentState = tempPeopleInCurrentState;
     }
 }

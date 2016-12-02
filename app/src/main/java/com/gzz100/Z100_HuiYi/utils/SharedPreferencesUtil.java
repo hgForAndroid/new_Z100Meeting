@@ -246,4 +246,10 @@ public class SharedPreferencesUtil {
         }
     }
 
+    public void killSendMulticastService(){
+        if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.multicast.SendMulticastService")) {
+            mContext.stopService(new Intent(mContext, SendMulticastService.class));
+        }
+    }
+
 }

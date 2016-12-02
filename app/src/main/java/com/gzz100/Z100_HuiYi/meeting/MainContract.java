@@ -53,6 +53,15 @@ public interface MainContract {
                                                String meetingBeginTimeMin);
 
         /**
+         * 临时人员进入，如果是暂停状态或结束状态。
+         * @param meetingState              会议状态
+         * @param meetingBeginTimeHour      会议已开始时间，时
+         * @param meetingBeginTimeMin       会议已开始时间，分
+         */
+        void tempClientResponseMeetingPauseOrEnd(int meetingState, String meetingBeginTimeHour,
+                                                 String meetingBeginTimeMin);
+
+        /**
          * 客户端响应暂停
          */
         void clientResponseMeetingPause();
@@ -187,5 +196,15 @@ public interface MainContract {
         void hostLaunchOrCloseVote(String IMEI,int meetingId,int voteId,int startOrEnd,
                                    ControllerInfoBean mControllerInfoBean,int meetingState);
 
+        /**
+         * 主持人处于暂停状态，临时有人进入会议，通知该人员设备显示会议已进行的时间以及状态
+         * @param deviceIp                  人员设备IP
+         * @param controllerInfoBean        消息
+         * @param MeetingState              当前会议状态
+         * @param currentMeetingHour        时间，时
+         * @param currentMeetingMin         时间，秒
+         */
+        void controlTempPeopleIn(String deviceIp,ControllerInfoBean controllerInfoBean,int MeetingState,
+                                 String currentMeetingHour,String currentMeetingMin);
     }
 }

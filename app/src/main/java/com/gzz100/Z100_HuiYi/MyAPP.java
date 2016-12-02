@@ -50,13 +50,17 @@ public class MyAPP extends Application {
         return userRole;
     }
 
-    private boolean meetingIsProgress;
+    private int meetingIsProgress;
 
-    public boolean isMeetingIsProgress() {
+    public int isMeetingIsProgress() {
         return meetingIsProgress;
     }
 
-    public void setMeetingIsProgress(boolean meetingIsProgress) {
+    /**
+     * 会议进行中，目前会议进行的状态。
+     * @param meetingIsProgress   2：开始。  4：暂停   8：结束
+     */
+    public void setMeetingIsProgress(int meetingIsProgress) {
         this.meetingIsProgress = meetingIsProgress;
     }
 }
