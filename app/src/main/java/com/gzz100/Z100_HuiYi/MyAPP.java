@@ -18,7 +18,7 @@ public class MyAPP extends Application {
         return mInstance;
     }
     @Override
-    public void onCreate() {
+    public void onCreate() {//haha
         super.onCreate();
         mInstance = this;
         //初始化崩溃日志收集器
