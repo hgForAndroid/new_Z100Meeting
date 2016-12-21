@@ -5,7 +5,9 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -15,12 +17,21 @@ import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.utils.ScreenSize;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by XieQXiong on 2016/9/2.
  */
 public class MeetingRoomView extends ViewGroup {
+    private ChildViewRect mChildViewRect;
+    //保存所有的View，绑定位置与该位置对应的View
+    private Map<ChildViewRect, View> childViewMap = new HashMap<>();
+    //用于拖动View等操作的帮助类
+    private ViewDragHelper mViewDragHelper;
     private Context mContext;
     //屏幕的宽高
     private int mScreenWidth;
@@ -53,10 +64,12 @@ public class MeetingRoomView extends ViewGroup {
 
     int temp1 = 0;
     int temp2 = 0;
+    private TextView mName;
 
     public MeetingRoomView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
+        mViewDragHelper = ViewDragHelper.create(this, 1.0f, mCallback);
         initScreenSize();
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MeetingRoomView);
 
@@ -92,28 +105,31 @@ public class MeetingRoomView extends ViewGroup {
         if (!changed)
             return;
         int childCount = getChildCount();
-        float widthAll = mRight - mLeft;
-        float heightAll = mBottom - mTop;
-        for (int i = 0; i < childCount; i++) {
+        float widthAll = mRight - mLeft;//外矩形的宽
+        float heightAll = mBottom - mTop;//外矩形的高
+        for (int i = 0; i < childCount; i++) {//遍历子View，进行位置的确认
             int measuredWidth = getChildAt(i).getMeasuredWidth();
             int measuredHeight = getChildAt(i).getMeasuredHeight();
-            int cl;
-            int ct;
-            int cb;
-            int cr;
+            //子View的位置，cl(左),ct(上),cr(右),cb(下)
+            int cl, ct, cr, cb;
             if (i == 0) {
                 cl = (int) (mLeft - measuredWidth - 20);
                 ct = (int) (mBottom - heightAll / 2 - measuredHeight / 2);
                 cr = (int) (mLeft - 20);
                 cb = (int) (mBottom - heightAll / 2 + measuredHeight / 2);
                 getChildAt(i).layout(cl, ct, cr, cb);
-
+                //将位置与对应的View绑定
+                mChildViewRect = new ChildViewRect(cl, ct, cr, cb);
+                childViewMap.put(mChildViewRect, getChildAt(i));
             } else if (i == 9) {
                 cl = (int) mRight + 20;
                 ct = (int) (mBottom - heightAll / 2 - measuredHeight / 2);
                 cr = (int) mRight + 20 + measuredWidth;
                 cb = (int) (mBottom - heightAll / 2 + measuredHeight / 2);
                 getChildAt(i).layout(cl, ct, cr, cb);
+                //将位置与对应的View绑定
+                mChildViewRect = new ChildViewRect(cl, ct, cr, cb);
+                childViewMap.put(mChildViewRect, getChildAt(i));
             } else {
                 if (i % 2 == 0) {
 
@@ -132,10 +148,14 @@ public class MeetingRoomView extends ViewGroup {
                     up += 2;
 
                 }
-                getChildAt(i).layout(cl+ (int) mLeft , ct, cr+ (int) mLeft, cb);
+                getChildAt(i).layout(cl + (int) mLeft, ct, cr + (int) mLeft, cb);
+                //将位置与对应的View绑定
+                //这里的左跟右的位置一定要加上 mLeft
+                //在做的过程中就是因为没加，花了很多时间排查位置对换的错乱问题
+                mChildViewRect = new ChildViewRect(cl + (int) mLeft, ct, cr + (int) mLeft, cb);
+                childViewMap.put(mChildViewRect, getChildAt(i));
             }
         }
-
     }
 
     public void resetUpAndDownValue() {
@@ -152,22 +172,21 @@ public class MeetingRoomView extends ViewGroup {
     public void addUsers(List<DelegateModel> Users, String currentName, final OnUserClickListener onUserClickListener) {
         this.removeAllViews();
         for (int i = 0; i < Users.size(); i++) {
-            View view = View.inflate(this.getContext(), R.layout.user_for_meeting_room, null);
-            TextView name = (TextView) view.findViewById(R.id.id_tv_user_name_meeting_room);
-            Users.get(i).setPicForUser(mContext,name);
+            mName = (TextView) View.inflate(this.getContext(), R.layout.user_for_meeting_room, null);
+            Users.get(i).setPicForUser(mContext, mName);
             String userName = Users.get(i).getDelegateName();
-            name.setText(userName);
+            mName.setText(userName);
             final int finalI = i;
-            view.setOnClickListener(new OnClickListener() {
+            mName.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onUserClickListener.onUserClick(v, finalI);
                 }
             });
             if (userName.equals(currentName)) {
-                Users.get(i).setCurrentDelegate(mContext,name);
+                Users.get(i).setCurrentDelegate(mContext, mName);
             }
-            this.addView(view);
+            this.addView(mName);
         }
         postInvalidate();
 //        requestLayout();
@@ -210,11 +229,133 @@ public class MeetingRoomView extends ViewGroup {
         }
 
     }
-    int i = 1 ;
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         measureChildren(widthMeasureSpec, heightMeasureSpec);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return mViewDragHelper.shouldInterceptTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mViewDragHelper.processTouchEvent(event);
+        return true;
+    }
+
+    private ViewDragHelper.Callback mCallback = new ViewDragHelper.Callback() {
+        //手指拖动的那个View 的坐标位置
+        private ChildViewRect mMoveViewRect;
+
+        /**
+         * 手指按住的那个View
+         * @param child         View
+         * @param pointerId
+         * @return
+         */
+        @Override
+        public boolean tryCaptureView(View child, int pointerId) {
+            mMoveViewRect = new ChildViewRect(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
+            Set<ChildViewRect> childViewRects = childViewMap.keySet();
+            Iterator<ChildViewRect> iterator = childViewRects.iterator();
+            while (iterator.hasNext()) {
+                ChildViewRect childViewRect = iterator.next();
+                if (childViewRect.getLeft() == mMoveViewRect.getLeft()
+                        && childViewRect.getBottom() == mMoveViewRect.getBottom()
+                        && childViewRect.getRight() == mMoveViewRect.getRight()
+                        && childViewRect.getTop() == mMoveViewRect.getTop()) {
+                    //拖动时先把View从childViewMap中移除掉，没有替换的话会在还原位置的时候重新添加到childViewMap
+                    childViewMap.remove(childViewRect);
+                    break;
+                }
+            }
+            return true;
+        }
+        @Override
+        public int clampViewPositionHorizontal(View child, int left, int dx) {
+            //不让控件拖出屏幕，横向
+            final int leftBound = getPaddingLeft();
+            final int rightBound = getWidth() - mName.getWidth() - leftBound;
+            final int newLeft = Math.min(Math.max(left, leftBound), rightBound);
+            return newLeft;
+        }
+
+        @Override
+        public int clampViewPositionVertical(View child, int top, int dy) {
+            //不让控件拖出屏幕，纵向
+            final int topBound = getPaddingTop();
+            final int bottomBound = getHeight() - mName.getHeight() - topBound;
+            final int newTop = Math.min(Math.max(top, topBound), bottomBound);
+            return newTop;
+        }
+
+        //手指释放的时候回调
+        @Override
+        public void onViewReleased(View releasedChild, float xvel, float yvel) {
+            int top = releasedChild.getTop();
+            int left = releasedChild.getLeft();
+            int right = releasedChild.getRight();
+            int bottom = releasedChild.getBottom();
+            Set<ChildViewRect> childViewRects = childViewMap.keySet();
+            Iterator<ChildViewRect> iterator = childViewRects.iterator();
+            //是否有View被覆盖
+            boolean isReplace = false;
+            View beReplaceView = null;
+            ChildViewRect beReplaceChildViewRect = null;
+
+            while (iterator.hasNext()) {
+                ChildViewRect childViewRect = iterator.next();
+                boolean temp1 = bottom >= childViewRect.getTop();
+                boolean temp2 = top <= childViewRect.getBottom();
+                boolean temp3 = right >= childViewRect.getLeft();
+                boolean temp4 = left <= childViewRect.getRight();
+                //如果拖动的那个View覆盖在其中一个子View上
+                if (temp1 && temp2 && temp3 && temp4) {
+                    beReplaceView = childViewMap.get(childViewRect);
+                    beReplaceChildViewRect = childViewRect;
+                    //将这个被替换的位置移除出childViewMap
+                    childViewMap.remove(childViewRect);
+                    //然后将被拖动的View的位置与被覆盖View绑定，让childViewMap的对应关系跟View的个数一致
+                    childViewMap.put(mMoveViewRect, beReplaceView);
+                    isReplace = true;
+                    break;
+                }
+            }
+            if (isReplace) {//交换两个View的位置
+                beReplaceView.layout(mMoveViewRect.getLeft(), mMoveViewRect.getTop(), mMoveViewRect.getRight(), mMoveViewRect.getBottom());
+                releasedChild.layout(beReplaceChildViewRect.getLeft(), beReplaceChildViewRect.getTop(),
+                        beReplaceChildViewRect.getRight(), beReplaceChildViewRect.getBottom());
+                //将被覆盖的View的位置与拖动的View绑定
+                childViewMap.put(beReplaceChildViewRect, releasedChild);
+            } else {
+                //如果拖动的View释放后，没有覆盖任何一个View，则返回到之前的位置，并且从新绑定位置
+                releasedChild.layout(mMoveViewRect.getLeft(), mMoveViewRect.getTop(), mMoveViewRect.getRight(), mMoveViewRect.getBottom());
+                childViewMap.put(mMoveViewRect, releasedChild);
+            }
+        }
+        //在边界拖动时回调
+        @Override
+        public void onEdgeDragStarted(int edgeFlags, int pointerId) {
+        }
+
+        @Override
+        public int getViewHorizontalDragRange(View child) {
+            return getMeasuredWidth() - child.getMeasuredWidth();
+        }
+
+        @Override
+        public int getViewVerticalDragRange(View child) {
+            return getMeasuredHeight() - child.getMeasuredHeight();
+        }
+
+        //拖动View的同时，只要坐标一直在变化，就会一直调用这个方法
+        @Override
+        public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
+            super.onViewPositionChanged(changedView, left, top, dx, dy);
+        }
+    };
 
 }
