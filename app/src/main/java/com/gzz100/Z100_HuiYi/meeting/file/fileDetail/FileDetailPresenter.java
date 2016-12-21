@@ -71,23 +71,10 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
 
     @Override
     public void loadFile(DocumentModel documentModel) {
-        java.io.File file = new java.io.File(AppUtil.getCacheDir(mContext)
-                + "/" + documentModel.getDocumentName());
-        if (!file.exists()) {
-            //下载路径前缀
-            String urlPrefix = "http://" + SharedPreferencesUtil.getInstance(mContext)
-                    .getString(Constant.CURRENT_IP, "") + "/api/Common/DownloadDocument?documentPath=";
-            Intent intent = new Intent(mContext, DownLoadService.class);
-            intent.putExtra("flag", false);
-            intent.putExtra("url", urlPrefix + documentModel.getDocumentPath());
-            intent.putExtra("id", documentModel.getDocumentID());
-            intent.putExtra("name", documentModel.getDocumentName());
-            mContext.startService(intent);
-            mView.showFileIsDownLoading("文件正在下载中，请稍等...");
-        } else {
-//            mView.removePDFView();
-            mView.loadFile(file);
-        }
+        String documentPath = documentModel.getDocumentPath();
+        String path = "http://" + SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP, "")
+                + "/api/Common/DownloadDocument?documentPath=" + documentPath;
+        mView.loadFile(path);
     }
 
     @Override
@@ -400,20 +387,20 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
     @Override
     public void handleFileClickFromHost(final ControllerInfoBean mControllerInfoBean, final int meetingState,
                                         final int agendaIndex, final int documentPosition) {
-        CheckUpdateRemoteDataSource.getInstance(mContext).checkUpdate(IMEI, mMeetingID,
-                new CheckUpdateDataSource.CheckUpdateCallback() {
-                    @Override
-                    public void update() {
-                        if (Constant.DEBUG)
-                            Log.e(TAG, "handleFileClickFromHost: 检查有更新，isUpdate=1");
-                    }
-
-                    @Override
-                    public void notUpdate() {
-                        if (Constant.DEBUG)
-                            Log.e(TAG, "handleFileClickFromHost: 检查无更新，isUpdate=0");
-                    }
-                });
+//        CheckUpdateRemoteDataSource.getInstance(mContext).checkUpdate(IMEI, mMeetingID,
+//                new CheckUpdateDataSource.CheckUpdateCallback() {
+//                    @Override
+//                    public void update() {
+//                        if (Constant.DEBUG)
+//                            Log.e(TAG, "handleFileClickFromHost: 检查有更新，isUpdate=1");
+//                    }
+//
+//                    @Override
+//                    public void notUpdate() {
+//                        if (Constant.DEBUG)
+//                            Log.e(TAG, "handleFileClickFromHost: 检查无更新，isUpdate=0");
+//                    }
+//                });
 
 
         try {

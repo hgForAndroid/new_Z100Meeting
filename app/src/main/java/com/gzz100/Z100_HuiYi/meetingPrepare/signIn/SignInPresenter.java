@@ -44,7 +44,7 @@ public class SignInPresenter implements SignInContract.Presenter {
                     saveUserId(userBean.getUserID());
                     mView.showDelegate(userBean);
                     //开启下载
-                    mView.startDownLoad(userBean.getDocumentURLList());
+//                    mView.startDownLoad(userBean.getDocumentURLList());
                 }
 
                 @Override

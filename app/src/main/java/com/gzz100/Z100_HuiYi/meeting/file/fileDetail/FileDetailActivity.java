@@ -13,6 +13,8 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -51,7 +53,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -107,8 +108,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     NavBarView mNavBarView;//导航栏
     @BindView(R.id.id_slide_rev)
     ListView mFileNameRcv;//侧边文件列表的显示控件
-    @BindView(R.id.id_file_pdf_view)
-    PDFView mPDFView;//显示PDF 文件的控件
+    @BindView(R.id.id_web_view_file_detail)
+    WebView mWebView;//显示PDF 文件的控件
     @BindView(R.id.id_ll_file_detail_controller)
     LinearLayout mLayoutController;//文件列表下面的上一个，下一个操作的布局，角色为主持人时才显示
     @BindView(R.id.id_btn_previous)
@@ -168,11 +169,24 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         setContentView(R.layout.activity_file_detail);
         mSlideLayout = findViewById(R.id.id_slide_layout);
         ButterKnife.bind(this);
+        initWebView();
         //根据用户角色，是否显示控制界面
         showControlBar();
         mPresenter = new FileDetailPresenter(null, this, this);
         //获取传过来的数据
         dataFormUpLevel();
+    }
+
+    private void initWebView() {
+        WebSettings settings = mWebView.getSettings();
+        //支持双指缩放
+        settings.setSupportZoom(true);
+        settings.setBuiltInZoomControls(true);
+        //自适应屏幕
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        //隐藏自带放大缩小控制条
+        settings.setDisplayZoomControls(false);
     }
 
     private void showControlBar() {
@@ -943,13 +957,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     }
 
     @Override
-    public void loadFile(File file) {
-        mPDFView.fromFile(file)
-                .enableSwipe(true)
-                .swipeHorizontal(false)
-                .enableDoubletap(true)
-                .defaultPage(1)
-                .load();
+    public void loadFile(String path) {
+        mWebView.loadUrl(path);
     }
 
     @Override

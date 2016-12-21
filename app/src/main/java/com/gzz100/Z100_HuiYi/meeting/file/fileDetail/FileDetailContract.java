@@ -36,9 +36,9 @@ public interface FileDetailContract {
 
         /**
          * 加载文件
-         * @param file
+         * @param path
          */
-        void loadFile(File file);
+        void loadFile(String path);
 
         /**
          * 提示文件正在下载中
