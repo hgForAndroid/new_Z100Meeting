@@ -72,7 +72,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     //搜索后的布局
     private LinearLayout mLlSearchResult;
     //搜索后的结果的当前议程序号
-    private Integer mSearchAgendaIndex;
+    private int mSearchAgendaIndex;
     //搜索后的文件序号
     private int mSearchFileIndex1;
 
@@ -197,8 +197,10 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void showSearchFileDetail() {
+        //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
+        mMainActivity.removeControllerView();
         String currentTitle = mMainActivity.getCurrentTitle();
-        FileDetailActivity.start(getActivity(), mSearchAgendaIndex, mSearchFileIndex1, currentTitle, false, false, false, "", "");
+        FileDetailActivity.start(getActivity(), mSearchAgendaIndex, mSearchFileIndex1-1, currentTitle, false, false, false, "", "");
     }
 
     @Override

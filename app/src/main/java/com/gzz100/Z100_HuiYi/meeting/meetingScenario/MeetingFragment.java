@@ -71,6 +71,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
     private MeetingContract.Presenter mPresenter;
     private ICommunicate mainActivity;
+    private TextView mStreamer;
 
     @Override
     public void onAttach(Context context) {
@@ -91,6 +92,8 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
         mTopLayout = (RelativeLayout) view.findViewById(R.id.id_rl_meeting_fragment_top);
         mBottomLayout = (FrameLayout) view.findViewById(R.id.id_fl_meeting_fragment_bottom);
+        mStreamer = (TextView) view.findViewById(R.id.id_tv_meeting_fragment_streamer);
+        setStreamer();
         //会议结束界面部分控件
         mEndBegin = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_begin);
         mEndEnding = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_ending);
@@ -100,6 +103,11 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
         ButterKnife.bind(this, view);
         return view;
+    }
+
+    private void setStreamer() {
+        MeetingInfo meetingInfo = MeetingOperate.getInstance(getContext()).queryMeetingInfo(Constant.COLUMNS_MEETING_INFO);
+        mStreamer.setText(meetingInfo.getMeetingName());
     }
 
     @Override

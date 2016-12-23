@@ -65,7 +65,7 @@ public class VoteListDialog extends AlertDialog implements OnAllVoteItemClickLis
 
             @Override
             public void onDataNotAvailable() {
-
+                ToastUtil.showMessage("没有投票文件。");
             }
         });
     }
