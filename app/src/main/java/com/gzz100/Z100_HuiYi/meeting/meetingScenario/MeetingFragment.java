@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
@@ -25,6 +26,7 @@ import com.gzz100.Z100_HuiYi.data.meeting.MeetingOperate;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
+import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -91,6 +93,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
         mOthers = (TextView) view.findViewById(R.id.id_tv_meeting_fragment_others);
 
         mWebView = (WebView) view.findViewById(R.id.id_webView_end);
+        mWebView.getSettings().setJavaScriptEnabled(true);
 
 
         mTopLayout = (RelativeLayout) view.findViewById(R.id.id_rl_meeting_fragment_top);
@@ -147,6 +150,13 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
             }else {
                 mPresenter.fetchMeetingEndData(hour,min,meetingDuration,currentTime);
             }
+
+            //WebView显示会议结束后的概述
+//            mWebView.setVisibility(View.VISIBLE);
+//            String meetingEndingSummary = HttpManager.getInstance(getContext()).getServerIP()
+//                    + SharedPreferencesUtil.getInstance(getContext()).getInt(Constant.MEETING_ID, -1);
+//            mWebView.loadUrl(meetingEndingSummary);
+
         }else {//会议未结束
             mPresenter.start();
         }
@@ -175,7 +185,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     public void onDestroyView() {
         super.onDestroyView();
         mPresenter.resetFirstLoad();
-        mMeetingRoomView.resetUpAndDownValue();
+//        mMeetingRoomView.resetUpAndDownValue();
         mUsers.clear();
     }
 

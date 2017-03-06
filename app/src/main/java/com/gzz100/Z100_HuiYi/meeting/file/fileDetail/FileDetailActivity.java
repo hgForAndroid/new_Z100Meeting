@@ -227,14 +227,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             mAgendaSum = agendas.size();
             mAgendaDuration = agendas.get(mAgendaIndex - 1).getAgendaDuration();//返回的议程序号从1开始
             mFileList = FileOperate.getInstance(this).queryFileList(mAgendaIndex);
-            if (mFileList != null && mFileList.size() > 0){
+            if (mFileList != null && mFileList.size() > 0) {
                 mDocuments = mFileList;
                 mFileName = mFileList.get(mFileIndex).getDocumentName();
             }
-//            else {
-//                ToastUtil.showMessage("该议程没有文件");
-//            }
-
             initData();
         }
     }
@@ -265,9 +261,9 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     private void initData() {
         mNavBarView.setFallBackDisplay(true);//显示返回的按钮
         mNavBarView.setFallBackListener(this);//返回上一级的监听
-        if (TextUtils.isEmpty(mFileName)){
+        if (TextUtils.isEmpty(mFileName)) {
             mNavBarView.setTitle("当前议程没有文件");
-        }else {
+        } else {
             mNavBarView.setTitle(mFileName.substring(0, mFileName.indexOf(".")));//当前文件名称
         }
         mNavBarView.setUpLevelText(mUpLevelText);//上一级名称
@@ -327,6 +323,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 public void content() {
                     mMeetingState = Constant.MEETING_STATE_BEGIN;
                     mPresenter.begin(mControllerInfoBean, mMeetingState, mAgendaIndex, mFileIndex, mUpLevelText);
+                    /**
+                     * 通知主界面显示状态为“开会中”。
+                     * 调用{@link MainActivity#setCurrentMeetingState(String)}
+                     */
                     EventBus.getDefault().post("开会中");//通知主界面更新会议状态
                 }
             });
@@ -348,6 +348,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     public void endMeetingSuccess() {
         mMeetingState = Constant.MEETING_STATE_ENDING;
         mPresenter.ending(mControllerInfoBean, mMeetingState);
+        /**
+         * 通知主界面显示状态为“已结束”。
+         * 调用{@link MainActivity#setCurrentMeetingState(String)}
+         */
         EventBus.getDefault().post("已结束");//通知主界面更新会议状态
     }
 
@@ -364,6 +368,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                     saveCountingMinAndSec(mNavBarView.getTimeHour(), mNavBarView.getTimeMin());
                     //保存当前的议程序号与议程文件序号，重新开始后需要设置回这个议程以及该议程的文件序号
                     savePauseAgendaIndexAndDocumentIndex(mAgendaIndex, mFileIndex);
+                    /**
+                     * 通知主界面显示状态为“暂停中”。
+                     * 调用{@link MainActivity#setCurrentMeetingState(String)}
+                     */
                     EventBus.getDefault().post("暂停中");//通知主界面更新会议状态
                 }
             });
@@ -383,6 +391,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                             .getInt(Constant.PAUSE_DOCUMENT_INDEX, 0);
                     mPresenter.meetingContinue(mControllerInfoBean, mMeetingState, pauseAgendaIndex, pauseDocumentIndex,
                             mUpLevelText, mIsAgendaChange, true, tempCountingMin, tempCountingSec);
+                    /**
+                     * 通知主界面显示状态为“开会中”。
+                     * 调用{@link MainActivity#setCurrentMeetingState(String)}
+                     */
                     EventBus.getDefault().post("开会中");//通知主界面更新会议状态
                 }
             });
@@ -419,7 +431,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mVoteListDialog.setIVoteDialogDelete(new IVoteDialogDelete() {
             @Override
             public void deleteVoteDialog(View view) {
-                if (mVoteListDialog != null && mVoteListDialog.isShowing()){
+                if (mVoteListDialog != null && mVoteListDialog.isShowing()) {
                     mVoteListDialog.dismiss();
                 }
             }
@@ -429,17 +441,18 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     /**
      * 弹出的投票的对话框中的 “投票”  按钮。
+     *
      * @param view
      * @param position
      */
     @Override
     public void onVoteStartStopButtonClick(View view, int position) {
-        if (mMeetingState == Constant.MEETING_STATE_ENDING){
+        if (mMeetingState == Constant.MEETING_STATE_ENDING) {
             ToastUtil.showMessage(R.string.string_meeting_already_ending);
             return;
         }
         //会议是开启状态
-        if (mMeetingState == Constant.MEETING_STATE_BEGIN || mMeetingState == Constant.MEETING_STATE_CONTINUE){
+        if (mMeetingState == Constant.MEETING_STATE_BEGIN || mMeetingState == Constant.MEETING_STATE_CONTINUE) {
             String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
             int meetingId = SharedPreferencesUtil.getInstance(this.getApplicationContext())
                     .getInt(Constant.MEETING_ID, -1);
@@ -447,7 +460,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, mVoteId);
             //启动投票，成功则调用本类方法   launchVoteSuccess
             mPresenter.launchVote(deviceIMEI, meetingId, mVoteId, 0);
-        }else {//其他状态，比如暂停
+        } else {//其他状态，比如暂停
             ToastUtil.showMessage(R.string.string_not_start_meeting);
             return;
         }
@@ -468,6 +481,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     /**
      * 弹出的投票的对话框中的 “查看结果”  按钮。
+     *
      * @param view
      * @param position
      */
@@ -481,7 +495,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         voteResultDialog.setIVoteDialogDelete(new IVoteDialogDelete() {
             @Override
             public void deleteVoteDialog(View view) {
-                if (voteResultDialog != null && voteResultDialog.isShowing()){
+                if (voteResultDialog != null && voteResultDialog.isShowing()) {
                     voteResultDialog.dismiss();
                 }
             }
@@ -492,17 +506,31 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     @Override
     public void showVote() {
         mVoteListDialog.dismiss();
+        /**
+         * 通知主界面显示投票的fragment,
+         * 调用{@link MainActivity#hostShowVoteFragment(Integer)}
+         */
         EventBus.getDefault().post(MainActivity.PAGE_SIX);
         mRootView.removeView(mControllerView);
+        /**
+         * 通知主界面重新添加控制条。
+         * 调用{@link MainActivity#reAddControllerView(Long)}
+         */
         EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
+        /**
+         * 通知主界面显示状态为“投票中”。
+         * 调用{@link MainActivity#setCurrentMeetingState(String)}
+         */
         EventBus.getDefault().post("投票中");
         ActivityStackManager.pop();
     }
 
     @Override//显示结果现在直接显示对话框，所以该方法没有用到
-    public void showVoteResult() {
-    }
+    public void showVoteResult() {}
 
+    /**
+     * 静态内部类，使用弱引用，避免FileDetailActivity被重复引用导致内存溢出。
+     */
     private static class MyHandler extends Handler {
         private WeakReference<FileDetailActivity> activityWeakReference;
 
@@ -804,7 +832,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 mFileNameRcv.setOnItemClickListener(this);
                 mFileDetailAdapter.setSelectedItem(mFileIndex);
                 mFileDetailAdapter.notifyDataSetInvalidated();
-            }else{//议程没有文件
+            } else {//议程没有文件
                 ToastUtil.showMessage(R.string.string_no_file);
                 mNavBarView.setTitle("当前议程没有文件");
                 mWebView.setVisibility(View.GONE);
@@ -882,15 +910,27 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mPassive = false;//客户端不再受控
     }
 
+    /**
+     * 响应投票.
+     * @param voteId
+     */
     @Override
     public void respondVoteBegin(int voteId) {
         Vote vote = new Vote();
         vote.setVoteID(voteId);
-        //客户端接收到投票开始信号，通知主界面，存储投票id，显示投票界面
+        /**
+         * 客户端接收到投票开始信号，通知主界面，存储投票id，显示投票界面
+         * 发送消息给MainActivity，{@link MainActivity#clientShowVoteFragment(Vote)}接收。
+         */
         EventBus.getDefault().post(vote);
         ActivityStackManager.pop();//销毁
     }
 
+    /**
+     * 同{@link #fileHasUpdate()},{@link #fileHasUpdate()},{@link #fileUpdateError(String)},
+     * {@link #showAfterUpdateCompleted(UpdateCompletedEvent)}
+     * 这些方法均是更新文件的方法，目前未使用。
+     */
     @Override
     public void respondUpdate() {
         mPresenter.updateTheNewDate(mControllerInfoBean, mMeetingState);
@@ -992,6 +1032,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     /**
      * 文件下载中提示进度条。文件下载已经没有采用，该方法暂未使用到。
+     * 该方法同{@link #showFileIsDownLoading(String)}一样，暂未使用到。
      *
      * @param tip
      */
@@ -1052,12 +1093,16 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         mPassive = false;
         if (!mPassive)
             mMyHandler.removeCallbacksAndMessages(null);
-        EventBus.getDefault().post(new MeetingEnd(1));//通知主界面当前会议已结束，让其做出相应的处理
+        /**
+         * 通知主界面当前会议已结束，让其做出相应的处理。
+         * 调用{@link MainActivity#handleMeetingEnd(MeetingEnd)}。
+         */
+        EventBus.getDefault().post(new MeetingEnd(1));
         //将控制条全部设置为不能点击，主持人不再控制会议
         mControllerView.setStartAndEndButtonNotClickable(false);
         mControllerView.setPauseAndContinueButtonNotClickable(false);
         mControllerView.setStartVoteButtonNotClickable(false);
-        //会议结束，关闭组播
+        //会议结束，关闭所有服务
         SharedPreferencesUtil.getInstance(this).killAllRunningService();
     }
 
@@ -1172,6 +1217,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         } else {
             if (isHost) {
                 mRootView.removeView(mControllerView);
+                /**
+                 * 通知主界面重新添加控制条。
+                 * 调用{@link MainActivity#reAddControllerView(Long)}
+                 */
                 EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
             }
             ActivityStackManager.pop();
@@ -1182,11 +1231,14 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             //由主持人点击或继续，mPassive为true，暂停、结束为false
-            if (mPassive) {}
-            else {
+            if (mPassive) {
+            } else {
                 if (mControllerView != null) {
                     mRootView.removeView(mControllerView);//本界面先移除控制View
-                    //通知主界面添加控制View,只有这个界面先移除后，主界面才能添加
+                    /**
+                     * 通知主界面添加控制View,只有这个界面先移除后，主界面才能添加.
+                     * 调用{@link MainActivity#reAddControllerView(Long)}
+                     */
                     EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
                 }
                 ActivityStackManager.pop();
@@ -1209,7 +1261,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (mTipDialog != null) {
             mTipDialog.dismiss();
         }
-        if (mWebView != null){
+        if (mWebView != null) {
             mWebView.destroy();
         }
     }

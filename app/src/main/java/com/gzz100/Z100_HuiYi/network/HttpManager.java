@@ -73,8 +73,7 @@ public class HttpManager {
         observable.subscribe(basePar.getSubscriber());
     }
 
-    private String getServerIP(){
-        Log.e("xqx"," ======================"+SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP,""));
+    public String getServerIP(){
         return "http://"+SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP,"");
     }
 

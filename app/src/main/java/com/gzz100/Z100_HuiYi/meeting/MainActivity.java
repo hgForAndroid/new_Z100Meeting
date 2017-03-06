@@ -215,7 +215,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private static class MyHandler extends Handler {
         private WeakReference<MainActivity> activityWeakReference;
 
-        public MyHandler(MainActivity activity) {
+        MyHandler(MainActivity activity) {
             activityWeakReference = new WeakReference<MainActivity>(activity);
         }
 
@@ -541,6 +541,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mNavBarView.setMeetingStateOrAgendaState("已结束");
             SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END, true);
             mMeetingTab.setChecked(true);
+            /**
+             * 通知会议界面显示结束后的信息
+             * 调用{@link MeetingFragment#showEnd(MeetingEnd)}。
+             */
             EventBus.getDefault().post(new MeetingEnd(2));
 
             //将控制条全部设置为不能点击
@@ -809,6 +813,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void clientResponseMeetingEnd() {
         mNavBarView.setMeetingStateOrAgendaState("已结束");
         SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END, true);
+        /**
+         * 通知会议界面显示结束后的信息
+         * 调用{@link MeetingFragment#showEnd(MeetingEnd)}。
+         */
         EventBus.getDefault().post(new MeetingEnd(2));
         //存储会议结束的时间，时  分
         SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_HOUR, mNavBarView.getTimeHour());
@@ -861,6 +869,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END, true);
         //设置主场景界面(MeetingFragment)显示会议结束后的信息
         mMeetingTab.setChecked(true);
+        /**
+         * 通知会议界面显示结束后的信息
+         * 调用{@link MeetingFragment#showEnd(MeetingEnd)}。
+         */
         EventBus.getDefault().post(new MeetingEnd(2));
         //将控制条全部设置为不能点击
         mControllerView.setStartAndEndButtonNotClickable(false);

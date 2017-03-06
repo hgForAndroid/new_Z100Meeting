@@ -53,7 +53,6 @@ public class DelegateOperate {
      */
     public List<DelegateModel> queryDelelgateListByRole(int rolePos) {
 
-        //TODO 这个方法 性能较低
         List<DelegateModel> delegateBeanList = new ArrayList<>();
         mDataBase = mDBHelper.getReadableDatabase();
         String sql = "select " + PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE + " from " + PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE;

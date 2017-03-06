@@ -35,7 +35,7 @@ public class DelegateRemoteDataSource implements DelegateDataSource{
     @Override
     public void getDelegateList(int rolePos, LoadDelegateListCallback callback) {
         //测试数据库
-        //// TODO: 2016/10/7 此处假数据库的逻辑应优化...虽然其实不用
+        ////  2016/10/7 此处假数据库的逻辑应优化...虽然其实不用
 //        List<DelegateBean> delegateBeanList = FakeDataProvider.getDelegateBeanByRolePos(rolePos);
 //
 //        callback.onDelegateListLoaded(delegateBeanList);

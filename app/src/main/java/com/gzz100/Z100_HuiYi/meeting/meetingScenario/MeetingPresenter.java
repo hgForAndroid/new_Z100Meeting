@@ -103,8 +103,6 @@ public class MeetingPresenter implements MeetingContract.Presenter {
                     if (users != null && users.size()>0){
                         //过滤返回的人员集合，将有排位的人员提取出来
                         filterUser(users);
-                        //TODO 需要时再去掉上面的注释,再将下面的注释掉
-//                        mView.showMeetingRoom(users);
                         mDelegateBeen = users;
                         //参会人数大于10个人、
                         int othersNum = 0;

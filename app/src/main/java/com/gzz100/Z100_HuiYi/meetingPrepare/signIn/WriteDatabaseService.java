@@ -36,7 +36,7 @@ public class WriteDatabaseService extends IntentService {
     public WriteDatabaseService() {
         super("WriteDatabaseService");
     }
-    // TODO: Customize helper method
+
     public static void startWriteDatabaseService(Context context,MeetingSummaryBean meetingSummaryBean,
                                                  boolean isUpdate) {
         Intent intent = new Intent(context, WriteDatabaseService.class);
