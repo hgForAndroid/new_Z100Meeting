@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/file_list_min_height">
 
-
         <ImageView
             android:layout_alignParentLeft="true"
             android:id="@+id/id_item_file_image"
@@ -21,7 +20,9 @@
         <TextView
             android:textSize="@dimen/item_file_text_size"
             android:id="@+id/id_item_file_name"
-            style="@style/wrap_content_attr"
+            android:layout_width="wrap_content"
+            android:maxWidth="400dp"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/id_item_file_image"
             android:text="文件名"/>

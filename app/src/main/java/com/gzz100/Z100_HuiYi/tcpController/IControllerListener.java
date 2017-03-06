@@ -13,7 +13,8 @@ public interface IControllerListener {
     void sendMessage(String message);
 
     /**
-     * 会议有人临时进入，发送消息给该人员设备，让其进入会议状态
+     * 会议有人临时进入，发送消息给该人员设备，让其进入会议状态。
+     * 该方法只在主持人端中的{@link Server}中调用，其他的地方不调用。
      * @param deviceIp  设备ip
      * @param message   信息
      */

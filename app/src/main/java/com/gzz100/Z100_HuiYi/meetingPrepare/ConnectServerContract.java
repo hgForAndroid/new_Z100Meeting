@@ -45,7 +45,7 @@ public interface ConnectServerContract {
          * 保存输入的IP
          * @param ip IP地址
          */
-        void saveIp(String ip);
+        void saveIpThenShowSelectMeeting(String ip);
 
         /**
          * 点击 IP 历史记录，取得 IP

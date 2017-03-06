@@ -23,9 +23,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * 按照服务器端排座的情况进行排列座位。
  * Created by XieQXiong on 2016/9/2.
  */
-public class MeetingRoomView extends ViewGroup {
+public class MeetingRoomView2 extends ViewGroup {
     private ChildViewRect mChildViewRect;
     //保存所有的View，绑定位置与该位置对应的View
     private Map<ChildViewRect, View> childViewMap = new HashMap<>();
@@ -62,7 +63,7 @@ public class MeetingRoomView extends ViewGroup {
     int down = 1;
     private TextView mName;
 
-    public MeetingRoomView(Context context, AttributeSet attrs) {
+    public MeetingRoomView2(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
         mViewDragHelper = ViewDragHelper.create(this, 1.0f, mCallback);
@@ -90,7 +91,7 @@ public class MeetingRoomView extends ViewGroup {
         mScreenHeight = ScreenSize.getScreenHeight(mContext);
     }
 
-    public MeetingRoomView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MeetingRoomView2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.mContext = context;
         initPaint();
@@ -108,7 +109,9 @@ public class MeetingRoomView extends ViewGroup {
             int measuredHeight = getChildAt(i).getMeasuredHeight();
             //子View的位置，cl(左),ct(上),cr(右),cb(下)
             int cl, ct, cr, cb;
-            if (i == 0) {
+
+            int index = (int) getChildAt(i).getTag();
+            if (index == 1) {
                 cl = (int) (mLeft - measuredWidth - 20);
                 ct = (int) (mBottom - heightAll / 2 - measuredHeight / 2);
                 cr = (int) (mLeft - 20);
@@ -117,7 +120,7 @@ public class MeetingRoomView extends ViewGroup {
                 //将位置与对应的View绑定
                 mChildViewRect = new ChildViewRect(cl, ct, cr, cb);
                 childViewMap.put(mChildViewRect, getChildAt(i));
-            } else if (i == 9) {
+            } else if (index == 10) {
                 cl = (int) mRight + 20;
                 ct = (int) (mBottom - heightAll / 2 - measuredHeight / 2);
                 cr = (int) mRight + 20 + measuredWidth;
@@ -127,21 +130,18 @@ public class MeetingRoomView extends ViewGroup {
                 mChildViewRect = new ChildViewRect(cl, ct, cr, cb);
                 childViewMap.put(mChildViewRect, getChildAt(i));
             } else {
-                if (i % 2 == 0) {
+                if (index % 2 == 0) {
+                    cl = (int) (widthAll * (index-1) / 8 - measuredWidth / 2);
+                    ct = (int) (mTop - measuredHeight - 20);
+                    cr = (int) (widthAll * (index-1) / 8 + measuredWidth / 2);
+                    cb = (int) (mTop - 20);
 
-                    cl = (int) (widthAll * down / 8 - measuredWidth / 2);
-                    ct = (int) (mBottom + 20);
-                    cr = (int) (widthAll * down / 8 + measuredWidth / 2);
-                    cb = (int) (mBottom + measuredHeight + 20);
-
-                    down += 2;
                 } else {
 
-                    cl = (int) (widthAll * up / 8 - measuredWidth / 2);
-                    ct = (int) (mTop - measuredHeight - 20);
-                    cr = (int) (widthAll * up / 8 + measuredWidth / 2);
-                    cb = (int) (mTop - 20);
-                    up += 2;
+                    cl = (int) (widthAll * (index-2) / 8 - measuredWidth / 2);
+                    ct = (int) (mBottom + 20);
+                    cr = (int) (widthAll * (index-2) / 8 + measuredWidth / 2);
+                    cb = (int) (mBottom + measuredHeight + 20);
 
                 }
                 getChildAt(i).layout(cl + (int) mLeft, ct, cr + (int) mLeft, cb);
@@ -181,12 +181,13 @@ public class MeetingRoomView extends ViewGroup {
             if (userName.equals(currentName)) {
                 Users.get(i).setCurrentDelegate(mContext, mName);
             }
+            mName.setTag(Users.get(i).getSeatIndex());
             this.addView(mName);
         }
         postInvalidate();
     }
 
-    public MeetingRoomView(Context context) {
+    public MeetingRoomView2(Context context) {
         super(context);
         this.mContext = context;
         initPaint();

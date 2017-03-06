@@ -2,6 +2,7 @@ package com.gzz100.Z100_HuiYi.network;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.network.entity.BaseEntity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -33,7 +34,6 @@ public class HttpManager {
 
     private Context mContext;
 
-    //构造方法私有
     public HttpManager(Context context) {
         mContext = context;
         //手动创建一个OkHttpClient并设置超时时间
@@ -59,10 +59,6 @@ public class HttpManager {
         return INSTANCE;
     }
 
-    public ApiService getApiService(){
-        return mApiService;
-    }
-
     /**
      * 处理http请求
      *
@@ -77,8 +73,8 @@ public class HttpManager {
         observable.subscribe(basePar.getSubscriber());
     }
 
-    private String api;
     private String getServerIP(){
+        Log.e("xqx"," ======================"+SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP,""));
         return "http://"+SharedPreferencesUtil.getInstance(mContext).getString(Constant.CURRENT_IP,"");
     }
 

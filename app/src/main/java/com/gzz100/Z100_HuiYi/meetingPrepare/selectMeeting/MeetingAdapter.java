@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
@@ -61,7 +62,8 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingH
 
     class MeetingHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.id_ll_meeting_all)
-        LinearLayout mLlAll;
+//        LinearLayout mLlAll;
+         RelativeLayout mLlAll;
         @BindView(R.id.id_tv_name_item_select_meeting)
         TextView mTvName;
         @BindView(R.id.id_tv_time_item_select_meeting)

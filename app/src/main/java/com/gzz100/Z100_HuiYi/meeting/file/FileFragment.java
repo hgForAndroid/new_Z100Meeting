@@ -27,6 +27,7 @@ import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import java.util.List;
 
@@ -41,14 +42,10 @@ import butterknife.OnClick;
 
 public class FileFragment extends Fragment implements FileContract.View, OnAgendaTabClickListener,
         OnFileItemClickListener, OnSearchItemClickListener, View.OnClickListener {
-    //    @BindView(R.id.id_edt_fgm_file)
     private AutoCompleteTextView mEdtSearchContent;
-    //    @BindView(R.id.id_btn_fgm_file)
     private Button mBtnSearch;
     private Button mBtnSearchClear;
-    //    @BindView(R.id.id_rev_fgm_tab)
     private RecyclerView mAgendaListRecView;
-    //    @BindView(R.id.id_rev_fgm_file_list)
     private RecyclerView mFileListRecView;
     private RecyclerView mSearchResultRecView;
     private FileContract.Presenter mPresenter;
@@ -95,8 +92,6 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public void onStart() {
         super.onStart();
-        if (Constant.DEBUG)
-            Log.e("文件界面 == ","start");
         mPresenter.start();
     }
 
@@ -104,7 +99,6 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_file, container, false);
-//        Log.e("FileFragment -->","onCreateView");
         mEdtSearchContent = (AutoCompleteTextView) view.findViewById(R.id.id_edt_fgm_file);
         mBtnSearch = (Button) view.findViewById(R.id.id_btn_fgm_file);
         mBtnSearchClear = (Button) view.findViewById(R.id.id_btn_fgm_file_clear);
@@ -118,14 +112,12 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
         mBtnSearch.setOnClickListener(this);
         mBtnSearchClear.setOnClickListener(this);
-//        mUnbinder = ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        mUnbinder.unbind();
         mPresenter.setFirstLoad(true);
     }
 
@@ -134,11 +126,16 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         switch (view.getId()) {
             case R.id.id_btn_fgm_file:
                 String content = mEdtSearchContent.getText().toString().trim();
-                if (TextUtils.isEmpty(content))
-                    Toast.makeText(getActivity(), "请输入搜索关键字", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(content)) {
+//                    Toast.makeText(getActivity(), R.string.string_input_search_key_word, Toast.LENGTH_SHORT).show();
+                    mAgendaListRecView.setVisibility(View.VISIBLE);
+                    mFileListRecView.setVisibility(View.VISIBLE);
+                    mFileAttrListView.setVisibility(View.VISIBLE);
 
-                else
+                    mLlSearchResult.setVisibility(View.GONE);
+                } else {
                     mPresenter.searchFileOrName(content);
+                }
                 break;
             case R.id.id_btn_fgm_file_clear:
                 mEdtSearchContent.setText(null);
@@ -147,8 +144,14 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         }
     }
 
+    /**
+     * 当前会议有议程时，调用该方法显示议程列表。
+     *
+     * @param agendas 议程列表
+     */
     @Override
     public void showAgendaList(List<AgendaModel> agendas) {
+        mAgendaListRecView.setVisibility(View.VISIBLE);
         mAgendas = agendas;
         mAgendaAdapter = new AgendaListTabAdapter(getContext(), agendas);
         //横向展示
@@ -160,8 +163,14 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         mAgendaAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * 切换议程，议程存在文件，调用该方法。
+     *
+     * @param documentBeen
+     */
     @Override
     public void showFilesList(List<DocumentModel> documentBeen) {
+        mFileListRecView.setVisibility(View.VISIBLE);
         mDocumentBeen = documentBeen;
         mFileListAdapter = new FileListAdapter(getContext(), documentBeen);
         //纵向展示
@@ -200,7 +209,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
         mMainActivity.removeControllerView();
         String currentTitle = mMainActivity.getCurrentTitle();
-        FileDetailActivity.start(getActivity(), mSearchAgendaIndex, mSearchFileIndex1-1, currentTitle, false, false, false, "", "");
+        FileDetailActivity.start(getActivity(), mSearchAgendaIndex, mSearchFileIndex1 - 1, currentTitle, false, false, false, "", "");
     }
 
     @Override
@@ -208,14 +217,22 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         return isAdded();
     }
 
+    /**
+     * 切换议程时，如果该议程没有对应的议程文件，则调用该方法。
+     */
     @Override
     public void showNoFileList() {
-
+        mFileListRecView.setVisibility(View.GONE);
+        ToastUtil.showMessage(R.string.string_no_file);
     }
 
+    /**
+     * 当前会议没有议程时，调用该方法。
+     */
     @Override
     public void showNoAgendaList() {
-
+        mAgendaListRecView.setVisibility(View.GONE);
+        ToastUtil.showMessage(R.string.string_no_agendas);
     }
 
     @Override
@@ -256,7 +273,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
                 if (!(mEdtSearchContent.getText().toString().isEmpty())) {
                     mBtnSearchClear.setVisibility(View.VISIBLE);
                 } else {
-                   fileListNSearchFileListSwitch();
+                    fileListNSearchFileListSwitch();
                     mBtnSearchClear.setVisibility(View.GONE);
                 }
 
@@ -271,14 +288,13 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         mFileListRecView.setVisibility(View.VISIBLE);
         mFileAttrListView.setVisibility(View.VISIBLE);
         mLlSearchResult.setVisibility(View.GONE);
-
     }
 
 
     @Override
     public void showNoSearchResult() {
 
-        Toast hintToast = Toast.makeText(getContext(), "不存在该文件或该主讲人", Toast.LENGTH_SHORT);
+        Toast hintToast = Toast.makeText(getContext(), R.string.string_file_or_speaker_not_find, Toast.LENGTH_SHORT);
         hintToast.show();
 
     }
@@ -311,15 +327,17 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void onAgendaItemClick(View v, int position) {
-        mPresenter.setAgendaTime(mAgendas.get(position).getAgendaDuration()+"");
+        mPresenter.setAgendaTime(mAgendas.get(position).getAgendaDuration() + "");
         mPresenter.fetchFileList(true, position + 1);
         mAgendaAdapter.setSelectedItem(position);
         mAgendaAdapter.notifyDataSetChanged();
     }
+
     @Override
     public void onFileItemClick(int position) {
         mPresenter.showFileDetail(position);
     }
+
     @Override
     public void onSearchClick(int position) {
         if (mResultDocumentBeen != null && mResultDocumentBeen.size() > 0) {

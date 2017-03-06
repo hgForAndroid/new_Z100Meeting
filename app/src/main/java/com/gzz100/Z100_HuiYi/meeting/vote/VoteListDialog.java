@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.gzz100.Z100_HuiYi.R;
@@ -33,6 +34,17 @@ public class VoteListDialog extends AlertDialog implements OnAllVoteItemClickLis
     private Context mContext;
     private OnAllVoteItemClickListener mOnAllVoteItemClickListener;
     private LinearLayout mRootLayout;
+    private ImageView mImgDeleteDialog;
+    //投票对话框上的 X 按钮的接口
+    private IVoteDialogDelete mIVoteDialogDelete;
+
+    public IVoteDialogDelete getIVoteDialogDelete() {
+        return mIVoteDialogDelete;
+    }
+
+    public void setIVoteDialogDelete(IVoteDialogDelete IVoteDialogDelete) {
+        mIVoteDialogDelete = IVoteDialogDelete;
+    }
 
     public void setOnAllVoteItemClickListener(OnAllVoteItemClickListener onAllVoteItemClickListener) {
         mOnAllVoteItemClickListener = onAllVoteItemClickListener;
@@ -53,6 +65,7 @@ public class VoteListDialog extends AlertDialog implements OnAllVoteItemClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_vote_list);
         mRootLayout = (LinearLayout) findViewById(R.id.id_vote_list_root_layout);
+        mImgDeleteDialog = (ImageView) mRootLayout.findViewById(R.id.id_img_delete_vote_dialog);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ScreenSize.getScreenWidth(mContext)*4/5,ScreenSize.getScreenHeight(mContext)*3/4);
         mRootLayout.setLayoutParams(params);
@@ -66,6 +79,16 @@ public class VoteListDialog extends AlertDialog implements OnAllVoteItemClickLis
             @Override
             public void onDataNotAvailable() {
                 ToastUtil.showMessage("没有投票文件。");
+            }
+        });
+
+        mImgDeleteDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIVoteDialogDelete != null){
+                    mIVoteDialogDelete.deleteVoteDialog(v);
+                }
+
             }
         });
     }

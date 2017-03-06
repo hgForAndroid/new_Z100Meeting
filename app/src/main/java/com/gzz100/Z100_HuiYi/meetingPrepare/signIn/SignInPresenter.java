@@ -3,7 +3,6 @@ package com.gzz100.Z100_HuiYi.meetingPrepare.signIn;
 import android.content.Context;
 import android.content.Intent;
 
-import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
@@ -13,7 +12,6 @@ import com.gzz100.Z100_HuiYi.data.signIn.SignInDataSource;
 import com.gzz100.Z100_HuiYi.data.signIn.SignInRemoteDataSource;
 import com.gzz100.Z100_HuiYi.tcpController.Server;
 import com.gzz100.Z100_HuiYi.utils.Constant;
-import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import java.util.List;
 
@@ -23,7 +21,6 @@ import java.util.List;
 public class SignInPresenter implements SignInContract.Presenter {
     private SignInContract.View mView;
     private Context mContext;
-    private Gson mGson;
 
     public SignInPresenter(Context context,SignInContract.View view) {
         this.mContext = context;
@@ -32,6 +29,13 @@ public class SignInPresenter implements SignInContract.Presenter {
     }
 
     private boolean isFirst = true;
+
+    /**
+     * 获取当前设备对应的参会人员信息
+     * @param fourUpdate
+     * @param IMEI        设备id
+     * @param meetingID   会议id
+     */
     @Override
     public void fetchCurrentUserBean(boolean fourUpdate, String IMEI, int meetingID) {
         if (isFirst || fourUpdate){
@@ -66,6 +70,11 @@ public class SignInPresenter implements SignInContract.Presenter {
         MyAPP.getInstance().setUserId(userId);
     }
 
+    /**
+     * 签到
+     * @param IMEI        设备id
+     * @param meetingID   会议id
+     */
     @Override
     public void signIn(String IMEI,int meetingID) {
         SignInRemoteDataSource.getInstance(mContext).signIn(IMEI, meetingID, new SignInDataSource.LoadMeetingSummaryCallback() {
@@ -99,11 +108,9 @@ public class SignInPresenter implements SignInContract.Presenter {
         //这里开始取数据需要传递参数，所以这个方法先不采用，直接调用  fetchCurrentUserBean
     }
 
-    //这个本来是循环发送组播的，因为跟tcp有冲突，现已没用
-    @Override
-    public void sendMeetingIdAndServerIP(String meetingId,String tcpServerIP) {
-    }
-
+    /**
+     * 开启TCP服务
+     */
     @Override
     public void startTCPService() {
         Intent tcpServiceIntent = new Intent(mContext, Server.class);

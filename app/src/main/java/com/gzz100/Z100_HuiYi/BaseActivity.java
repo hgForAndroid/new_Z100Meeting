@@ -1,7 +1,7 @@
 package com.gzz100.Z100_HuiYi;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -16,7 +16,7 @@ public class BaseActivity extends AppCompatActivity {
         ActivityStackManager.push(this);//加入Activity栈
 //        setContentView(R.layout.activity_base);
     }
-
+    //TODO 这里应该可以不用，之后需要注释测试
     @Override
     public void setContentView(int layoutResID) {
         View mContentLayout = getLayoutInflater().inflate(R.layout.activity_base, null);

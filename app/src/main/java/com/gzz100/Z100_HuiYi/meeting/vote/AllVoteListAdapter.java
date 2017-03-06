@@ -62,7 +62,7 @@ public class AllVoteListAdapter extends RecyclerView.Adapter<AllVoteListAdapter.
                 }
             }
         });
-        if (mVoteList.get(position).getOptionState() == 0){//未投
+        if (mVoteList.get(position).getVoteState() == 0){//未投
             holder.mVoteStartStopButton.setVisibility(View.VISIBLE);
             holder.mCheckResultButton.setVisibility(View.GONE);
         }else {

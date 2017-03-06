@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 /**
+ * RecyclerView每个Item的间隔，可选横向或纵向。
  * Created by XieQXiong on 2016/9/23.
  */
 public class ItemSpaceDecoration extends RecyclerView.ItemDecoration {

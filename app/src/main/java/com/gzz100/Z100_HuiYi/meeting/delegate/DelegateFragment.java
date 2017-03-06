@@ -22,6 +22,7 @@ import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateRepository;
+import com.gzz100.Z100_HuiYi.meeting.MainActivity;
 import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
@@ -37,35 +38,30 @@ import java.util.List;
  * @author DELL
  * create at 2016/9/2
  */
-public class DelegateFragment extends Fragment implements  DelegateContract.View,OnRoleItemClickListener,OnDelegateNameItemClickListener {
+public class DelegateFragment extends Fragment implements  DelegateContract.View,
+        OnRoleItemClickListener,OnDelegateNameItemClickListener {
     AutoCompleteTextView mEdtSearchContent;
     Button mBntSearch;
     RecyclerView mRoleListRecView;
     RecyclerView mDelegateListRecView;
-
-
     private DelegatePresenter mPresenter;
 
     public static DelegateFragment newInstance(){return new DelegateFragment();}
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public void onResume() {
         Log.e("DelegateFragment -->","onResume");
         super.onResume();
-
-
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delegate, container,false);
-//        Log.e("DelegateFragment -->","onCreateView");
         mEdtSearchContent=(AutoCompleteTextView) view.findViewById(R.id.id_edt_fgm_delegate);
         mBntSearch=(Button)view.findViewById(R.id.id_btn_fgm_delegate);
         mRoleListRecView=(RecyclerView)view.findViewById(R.id.id_rev_fgm_tab);
@@ -77,66 +73,27 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
     }
     @Override
     public void onDestroyView() {
-        Log.e("DelegateFragment -->","onDestroyView");
         super.onDestroyView();
         mPresenter.setFirstLoad(true);
         mLastClickedRoleItemPositon= DelegateRepository.rolePosConvertToRoleNum(Constant.DEFAULT_SPEAKER);
     }
 
     @Override
-    public void onDestroy() {
-//        Log.e("DelegateFragment -->","onDestroy");
-        super.onDestroy();
-
-    }
-
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        Log.e("DelegateFragment -->","onActivityCreated");
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    @Override
     public void onStart() {
-//        Log.e("DelegateFragment -->","onStart");
         super.onStart();
         EventBus.getDefault().register(this);
-
-
-    }
-
-    @Override
-    public void onPause() {
-     Log.e("DelegateFragment -->","onPause");
-        super.onPause();
     }
 
     @Override
     public void onStop() {
-        Log.e("DelegateFragment -->","onStop");
         super.onStop();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onDetach() {
-//        Log.e("DelegateFragment -->","onDetach");
-        super.onDetach();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-//        Log.e("DelegateFragment -->","onAttach");
-        super.onAttach(context);
     }
 
     @Override
     public void setPresenter(Object presenter) {
         mPresenter=(DelegatePresenter) presenter;
     }
-
 
     @Override
     public void showRoleList(List<String> roleList) {
@@ -269,6 +226,12 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
 
         mLastClickedRoleItemPositon = currPosition;
     }
+
+    /**
+     * 从主场景界面(MeetingFragment)中点击其他参会人员按钮后，最终会到达该方法。
+     * 上一级是在{@link MainActivity#showDelegate(Boolean)}中调用。
+     * @param showOtherDelegate
+     */
     @Subscribe (threadMode = ThreadMode.MAIN)
     public void setTabToOtherDelegate(Boolean showOtherDelegate){
         mPresenter.fetchDelegateList(Constant.OTHER_DELEGATE);

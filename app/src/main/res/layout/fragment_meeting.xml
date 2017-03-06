@@ -3,6 +3,11 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/id_webView_end"
+        android:visibility="gone"></WebView>
     <RelativeLayout
         android:visibility="gone"
         android:id="@+id/id_rl_meeting_fragment_top"
@@ -99,14 +104,14 @@
         android:id="@+id/id_fl_meeting_fragment_bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingRoomView
+        <com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingRoomView2
             android:id="@+id/id_meeting_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:align_inner_rect="120"
             app:round_rect="true">
 
-        </com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingRoomView>
+        </com.gzz100.Z100_HuiYi.meeting.meetingScenario.MeetingRoomView2>
 
         <TextView
             android:id="@+id/id_tv_meeting_fragment_streamer"

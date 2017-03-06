@@ -1,7 +1,11 @@
 package com.gzz100.Z100_HuiYi.tcpController;
 
 /**
- * Created by XieQXiong on 2016/11/15.
+ * 发送数据的控制器，要使用该类，必须在{@link Client#mRunnable}方法中先调用setIControllerListener方法后，
+ * 才能调用该类中的  sendMessage 方法进行发送数据的操作
+ *
+ * @author XieQXiong
+ *         create at 2016/10/18 11:40
  */
 
 public class ClientSendMessageUtil {

@@ -1,7 +1,5 @@
 package com.gzz100.Z100_HuiYi.fakeData;
 
-import android.graphics.Path;
-
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
@@ -575,7 +573,7 @@ public class FakeDataProvider {
         options2.add(option5);
         options2.add(option6);
         vote2.setVoteOptionsList(options2);
-        vote2.setOptionState(1);
+        vote2.setVoteState(1);
 
         Vote vote3 = new Vote();
         vote3.setVoteID(3);
@@ -592,7 +590,7 @@ public class FakeDataProvider {
         options3.add(option9);
         options3.add(option10);
         vote3.setVoteOptionsList(options3);
-        vote3.setOptionState(0);
+        vote3.setVoteState(0);
 
         votes.add(vote1);
         votes.add(vote2);

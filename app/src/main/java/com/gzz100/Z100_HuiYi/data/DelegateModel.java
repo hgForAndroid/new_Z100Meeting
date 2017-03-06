@@ -22,6 +22,16 @@ public class DelegateModel extends BaseBean{
     private String delegateDetailInfo;
     private List<Integer> delegateAgendaIndexList;
 
+    public int getSeatIndex() {
+        return seatIndex;
+    }
+
+    public void setSeatIndex(int seatIndex) {
+        this.seatIndex = seatIndex;
+    }
+
+    private int seatIndex;
+
     public int getDelegateID() {
         return delegateID;
     }

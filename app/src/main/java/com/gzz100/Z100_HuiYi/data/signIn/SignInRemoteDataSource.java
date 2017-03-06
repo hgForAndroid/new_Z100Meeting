@@ -7,7 +7,6 @@ import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
-import com.gzz100.Z100_HuiYi.network.MySubscriber;
 import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
 import com.gzz100.Z100_HuiYi.network.entity.MeetingSummaryPost;
 import com.gzz100.Z100_HuiYi.network.entity.UserBeanPost;

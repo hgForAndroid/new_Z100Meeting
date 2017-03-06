@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.meeting;
 
 import android.content.Context;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.MyAPP;
@@ -104,7 +105,9 @@ public class MainPresenter implements MainContract.Presenter {
             controllerInfoBean.setDocumentIndex(0);
             controllerInfoBean.setUpLevelTitle("文件");
             String json = mGson.toJson(controllerInfoBean);
-            ControllerUtil.getInstance().sendMessage(json);
+            if (ControllerUtil.getInstance().getIControllerListener() != null){
+                ControllerUtil.getInstance().sendMessage(json);
+            }
             //主持人跳转到文件详情界面
             mMainView.hostResponseMeetingBegin(controllerInfoBean.getAgendaIndex(),
                     controllerInfoBean.getDocumentIndex(), controllerInfoBean.getUpLevelTitle());
@@ -114,6 +117,12 @@ public class MainPresenter implements MainContract.Presenter {
 
     }
 
+    /**
+     * 在{@link MainActivity#hostResponseMeetingEnd()}中调用。
+     * 主持人发起结束会议请求，成功则调用{@link MainActivity#hostEndMeetingSuccess()}方法。
+     * @param IMEI          设备IMEI码
+     * @param meetingId     请求结束的会议id
+     */
     @Override
     public void hostStartEndMeeting(String IMEI, int meetingId) {
         RepositoryUtil.getMeetingRepository(mContext).endMeeting(IMEI, meetingId,
@@ -129,6 +138,12 @@ public class MainPresenter implements MainContract.Presenter {
                 });
     }
 
+    /**
+     * 主持人结束会议
+     * 见{@link MainActivity#startMeeting(View)}中的结束会议逻辑中调用
+     * @param mControllerInfoBean
+     * @param meetingState
+     */
     @Override
     public void hostEndMeeting(ControllerInfoBean mControllerInfoBean, int meetingState) {
         try {

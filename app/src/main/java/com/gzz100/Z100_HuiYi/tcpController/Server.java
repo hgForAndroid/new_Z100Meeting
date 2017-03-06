@@ -3,7 +3,6 @@ package com.gzz100.Z100_HuiYi.tcpController;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.MyAPP;
@@ -21,11 +20,15 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+/**
+* 描述：这是一个主持人端用于发送数据给所有客户端的类。跟Client服务对应。
+* 类名：Server
+* @author XieQXiong
+* create at 2017/2/27 14:45
+*/
 
 public class Server extends Service implements IControllerListener {
     public static final String TAG = "Server";
@@ -47,8 +50,6 @@ public class Server extends Service implements IControllerListener {
         super.onCreate();
         mHashMap = new HashMap<>();
         new Thread(mRunnable).start();
-
-
     }
 
     private Runnable mRunnable = new Runnable() {
@@ -63,22 +64,22 @@ public class Server extends Service implements IControllerListener {
                     //读取客户端发来的消息
                     BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()));
                     String message = input.readLine();
-                    Log.e("来自客户端的消息 ： ", message);
+                    if (Constant.DEBUG)
+                        Log.e("来自客户端的消息 ： ", message);
 
-                    if (message.equals("haha")) {
+                    if (message.equals("hello")) {
                         int meetingIsProgress = MyAPP.getInstance().isMeetingIsProgress();
-                        if (meetingIsProgress == 2 || meetingIsProgress == 4 || meetingIsProgress == 8 ) {//会议进行中
-                            Log.e(TAG, "run: 会议进行中，发送消息给客户端");
+                        if (meetingIsProgress == 2 || meetingIsProgress == 4 || meetingIsProgress == 8) {//会议进行中
+                            if (Constant.DEBUG)
+                                Log.e(TAG, "run: 会议进行中，发送消息给客户端");
                             EventBus.getDefault().post(new PeopleIn(true, s.getInetAddress().getHostAddress().toString()));
                         }
-                    }
-                    else if (message.equals("exit")) {
+                    } else if (message.equals("exit")) {
                         removeFromMap(s);
-                    }
-                    else {
+                    } else {
                         if (message.contains("192")) {
                             splitMessage(message);
-                        }else {
+                        } else {
                             addToMap(s);
                             mOutput = new PrintWriter(s.getOutputStream(), true);
                             mOutput.println("已连接到服务器！！！");
@@ -98,6 +99,11 @@ public class Server extends Service implements IControllerListener {
         }
     };
 
+    /**
+     * 将设备的ip 与 该设备对应的人员 分割，存入mHashMap。
+     * 在客户端设备与主持人端断开连接时，再调用{@link #removeFromMap(Socket)}将mHashMap中这个客户端设备移除
+     * @param message
+     */
     private void splitMessage(String message) {
         String[] split = message.split(",");
         if (split.length > 0) {
@@ -117,7 +123,7 @@ public class Server extends Service implements IControllerListener {
 //        }
 //        else {//有没有保存，put进来，有保存，也put进来，hashMap会覆盖，不会增加Socket
 //            hashMap.remove(ip);
-            hashMap.put(ip,socket);
+        hashMap.put(ip, socket);
 //        }
     }
 
@@ -150,18 +156,16 @@ public class Server extends Service implements IControllerListener {
                 Set<String> keySet = hashMap.keySet();
                 for (String key : keySet) {
                     Socket socket = hashMap.get(key);
-                    if (Constant.DEBUG){
-                        Log.e(TAG, "sendMessage: Socket是否isClosed："+socket.isClosed());
-                        Log.e(TAG, "sendMessage: socket是否还isConnected：" + socket.isConnected());
-                        Log.e(TAG, "sendMessage: socket是否还isBound ：" + socket.isBound());
-                        Log.e(TAG, "sendMessage: socket是否还isInputShutdown ：" + socket.isInputShutdown());
-                        Log.e(TAG, "sendMessage: socket是否还isOutputShutdown ：" + socket.isOutputShutdown());
-                        Log.e(TAG, "sendMessage: socket是否还getOOBInline ：" + socket.getOOBInline());
-
-                    }
-
+//                    if (Constant.DEBUG) {
+//                        Log.e(TAG, "sendMessage: Socket是否isClosed：" + socket.isClosed());
+//                        Log.e(TAG, "sendMessage: socket是否还isConnected：" + socket.isConnected());
+//                        Log.e(TAG, "sendMessage: socket是否还isBound ：" + socket.isBound());
+//                        Log.e(TAG, "sendMessage: socket是否还isInputShutdown ：" + socket.isInputShutdown());
+//                        Log.e(TAG, "sendMessage: socket是否还isOutputShutdown ：" + socket.isOutputShutdown());
+//                        Log.e(TAG, "sendMessage: socket是否还getOOBInline ：" + socket.getOOBInline());
+//
+//                    }
                     mOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8")), true);
-//                    mOut = new PrintWriter(next.getOutputStream(),true);
                     mOut.println(message);
                     if (Constant.DEBUG)
                         Log.e(TAG, "ip  ====== " + socket.getInetAddress().getHostAddress().toString());

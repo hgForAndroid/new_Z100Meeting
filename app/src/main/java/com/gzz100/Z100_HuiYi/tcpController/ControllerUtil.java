@@ -1,7 +1,7 @@
 package com.gzz100.Z100_HuiYi.tcpController;
 
 /**
- * 发送数据的控制器，要使用该类，必须在TcpService中onCreate方法中先调用setIControllerListener方法后，
+ * 发送数据的控制器，要使用该类，必须在{@link Server#mRunnable}方法中先调用setIControllerListener方法后，
  * 才能调用该类中的  sendMessage 方法进行发送数据的操作
  *
  * @author XieQXiong

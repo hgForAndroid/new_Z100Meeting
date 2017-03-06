@@ -28,4 +28,35 @@
     <string name="string_end_meeting_duration">会&#160;议&#160;时&#160;长&#160;：</string>
     <string name="string_end_meeting_record">会&#160;议&#160;纪&#160;要&#160;：</string>
 
+    <string name="string_input_server_ip">请输入服务器IP</string>
+    <string name="string_tip">提示</string>
+    <string name="string_fetch_info_fail">获取信息失败，是否重新获取</string>
+    <string name="string_yes">是</string>
+    <string name="string_no">否</string>
+    <string name="string_exit_system">退出系统？</string>
+
+    <string name="string_launch_vote_fail">开启投票失败！</string>
+    <string name="string_close_vote_fail">关闭投票失败！</string>
+
+    <string name="string_current_agenda_already_end">当前议程已结束</string>
+
+    <string name="string_ensure">确定</string>
+    <string name="string_cancel">取消</string>
+
+    <string name="string_input_search_key_word">请输入搜索关键字</string>
+    <string name="string_file_or_speaker_not_find">不存在该文件或该主讲人</string>
+
+    <string name="string_current_user_not_find">无该用户</string>
+    <string name="string_time_duration_str">请输入带 : 的时间字符串</string>
+
+    <string name="string_no_file">该议程没有文件</string>
+
+    <string name="string_no_meetings">服务器没有会议列表</string>
+
+    <string name="string_no_agendas">没有会议议程</string>
+
+    <string name="string_not_start_meeting">会议未开启</string>
+    <string name="string_meeting_already_ending">会议已结束</string>
+
+
 </resources>

@@ -1,5 +1,7 @@
 package com.gzz100.Z100_HuiYi.utils;
 
+import com.gzz100.Z100_HuiYi.R;
+
 import java.text.DecimalFormat;
 /**
 * @author XieQXiong
@@ -42,13 +44,16 @@ public class StringUtils {
     /**
      * 根据 符号   ：    将时间分割成分秒
      *
-     * @param duration 时间字符串
+     * @param duration 带 : 的时间字符串
      * @return 时分集合
      */
     public static String[] splitDuration(String duration) {
         String[] strings = null;
         if (duration.contains(":")) {
             strings = duration.split(":");
+        }else{
+            ToastUtil.showMessage(R.string.string_time_duration_str);
+            return null;
         }
         return strings;
     }

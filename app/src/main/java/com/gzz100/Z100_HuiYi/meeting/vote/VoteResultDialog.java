@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,6 +40,17 @@ public class VoteResultDialog extends AlertDialog{
     private List<String> mOptionNames;//每个选项的名称，放于柱状图的下边
     private StringBuilder mStringBuilder;//所有的选项与得到的票数的字符串
     private LinearLayout mRootLayout;
+    private ImageView mImgDeleteDialog;
+    //对话框右上方的删除按钮
+    private IVoteDialogDelete mIVoteDialogDelete;
+
+    public IVoteDialogDelete getIVoteDialogDelete() {
+        return mIVoteDialogDelete;
+    }
+
+    public void setIVoteDialogDelete(IVoteDialogDelete IVoteDialogDelete) {
+        mIVoteDialogDelete = IVoteDialogDelete;
+    }
 
     public VoteResultDialog(Context context, int voteId){
         super(context);
@@ -51,6 +63,7 @@ public class VoteResultDialog extends AlertDialog{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_vote_result);
         mRootLayout = (LinearLayout) findViewById(R.id.id_vote_result_root_layout);
+        mImgDeleteDialog = (ImageView) mRootLayout.findViewById(R.id.id_img_delete_vote_result_dialog);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ScreenSize.getScreenWidth(mContext)*4/5,ScreenSize.getScreenHeight(mContext)*3/4);
         mRootLayout.setLayoutParams(params);
@@ -67,6 +80,14 @@ public class VoteResultDialog extends AlertDialog{
             @Override
             public void onDataNotAvailable(String errorString) {
                 showErrorMessage(errorString);
+            }
+        });
+        mImgDeleteDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIVoteDialogDelete != null){
+                    mIVoteDialogDelete.deleteVoteDialog(v);
+                }
             }
         });
     }

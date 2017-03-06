@@ -69,7 +69,7 @@ public class FileLocalDataSource implements FileDataSource {
         List<DocumentModel> documentList = new ArrayList<>();
         List<AgendaModel> agendasList = mFileOperate.queryAgendaList();
 
-        for (int i = 0; i < agendasList.size(); i++) {
+        for (int i = 1; i <= agendasList.size(); i++) {
             List<DocumentModel> documents = mFileOperate.queryFileList(i);
             if (documents != null && documents.size() > 0) {
                 for (DocumentModel document : documents) {

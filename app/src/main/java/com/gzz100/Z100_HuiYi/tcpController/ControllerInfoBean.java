@@ -3,6 +3,7 @@ package com.gzz100.Z100_HuiYi.tcpController;
 import java.io.Serializable;
 
 /**
+ * 主持人端发送给所有客户端的消息实体类。用于存储发送的信息，客户端接收到后处理该消息。
  * Created by XieQXiong on 2016/10/1.
  */
 public class ControllerInfoBean implements Serializable,Cloneable{

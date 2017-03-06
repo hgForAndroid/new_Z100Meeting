@@ -16,6 +16,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+//        debug{
+//            minifyEnabled true  //开启代码混淆
+//            shrinkResources true //去除无用资源
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
     }
 }
 
@@ -37,7 +42,7 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     compile 'com.google.code.gson:gson:2.2.4'
 //    compile 'com.github.barteksc:android-pdf-viewer:2.0.3'
-    compile 'com.github.barteksc:android-pdf-viewer:2.2.0'
+//    compile 'com.github.barteksc:android-pdf-viewer:2.2.0'
     compile 'com.squareup.picasso:picasso:2.3.2'
     compile 'org.greenrobot:eventbus:3.0.0'
     /*MPAndroidCharts 第三方图形库*/

@@ -166,7 +166,7 @@ public class VotePresenter implements VoteContract.Presenter {
         if (votes != null && votes.size() > 0) {
             for (int i = 0; i < votes.size(); i++) {
                 if (votes.get(i).getVoteID() == voteId) {
-                    votes.get(i).setOptionState(1);
+                    votes.get(i).setVoteState(1);
                 }
             }
         }

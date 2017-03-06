@@ -146,11 +146,6 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
          * @param view
          */
         void startVote(View view);
-        /**
-         * 投票结果，显示投票结果
-         * @param view
-         */
-        void voteResult(View view);
     }
     private IOnControllerListener mIOnControllerListener;
     public void setIOnControllerListener(IOnControllerListener IOnControllerListener) {

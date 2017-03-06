@@ -10,5 +10,10 @@ public interface OnIPClickListener {
      * @param position
      */
     void onIPClick(int position);
+
+    /**
+     * 删除序号position的ip地址
+     * @param position
+     */
     void onDelete(int position);
 }

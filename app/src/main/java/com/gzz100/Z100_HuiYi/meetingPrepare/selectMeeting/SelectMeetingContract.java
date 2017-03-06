@@ -50,7 +50,7 @@ public interface SelectMeetingContract {
         /**
          * 保存设备标志码，之后都在本地取
          * @param context     上下文，在存储时需要
-         * @param deviceIMEI  舌标标识码
+         * @param deviceIMEI  设备标识码
          */
         void saveIMEI(Context context, String deviceIMEI);
 

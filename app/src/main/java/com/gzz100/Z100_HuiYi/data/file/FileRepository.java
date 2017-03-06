@@ -51,7 +51,8 @@ public class FileRepository implements FileDataSource {
 
             @Override
             public void onDataNotAvailable() {
-                mFileRemoteDataSource.getFileList(agendaPos,callback);
+                callback.onDataNotAvailable();
+//                mFileRemoteDataSource.getFileList(agendaPos,callback);
             }
         });
     }
@@ -67,7 +68,8 @@ public class FileRepository implements FileDataSource {
 
             @Override
             public void onDataNotAvailable() {
-                mFileRemoteDataSource.getAgendaList(IMEI,userId,callback);
+                callback.onDataNotAvailable();
+//                mFileRemoteDataSource.getAgendaList(IMEI,userId,callback);
             }
         });
     }

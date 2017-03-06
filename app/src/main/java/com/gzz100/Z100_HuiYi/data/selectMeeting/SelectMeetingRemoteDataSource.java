@@ -47,8 +47,6 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
     @Override
     public void fetchMeetingList(@NonNull final LoadMeetingListCallback callback,String IMEI) {
         checkNotNull(callback);
-//        List<MeetingBean> meetings = FakeDataProvider.getMeetings();
-//        callback.onMeetingListLoaded(meetings);
 
         //加载服务器数据
         MeetingPost meetingPost = new MeetingPost(
@@ -63,13 +61,12 @@ public class SelectMeetingRemoteDataSource implements SelectMeetingDataSource {
                         callback.onDataNotAvailable(errorMsg);
                     }
                 }, mContext), IMEI);
-
-        HttpManager httpManager = new HttpManager(mContext);
-        httpManager.doHttpDeal(meetingPost);
+        //这里不使用 HttpManager.getInstance(mContext).doHttpDeal(meetingPost); 的原因是：
         //因为输入的服务器IP，不能保证客户一定输入正确，所以当输入错误IP后，
         // 需要返回输入IP界面重新输入IP，所以在输入IP后的第一个请求不能使用单例
         //之后的请求可以使用单例
-//        HttpManager.getInstance(mContext).doHttpDeal(meetingPost);
+        HttpManager httpManager = new HttpManager(mContext);
+        httpManager.doHttpDeal(meetingPost);
     }
 
     @Override

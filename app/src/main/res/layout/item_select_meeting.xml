@@ -4,7 +4,36 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
     android:paddingBottom="@dimen/distance_twenty_dp">
-    <LinearLayout
+    <!--<LinearLayout-->
+        <!--android:id="@+id/id_ll_meeting_all"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:paddingBottom="10dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:background="#adc"-->
+        <!--android:gravity="center">-->
+        <!--<TextView-->
+            <!--android:id="@+id/id_tv_name_item_select_meeting"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="18sp"-->
+            <!--android:padding="@dimen/distance_five_dp"-->
+            <!--android:text="会议名称"/>-->
+        <!--<TextView-->
+            <!--android:layout_marginRight="24dp"-->
+            <!--android:id="@+id/id_tv_time_item_select_meeting"-->
+            <!--style="@style/selectMeeting_text_view_attr"-->
+            <!--android:text="时间"-->
+            <!--android:gravity="center"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/id_tv_state_item_select_meeting"-->
+            <!--style="@style/selectMeeting_text_view_attr"-->
+            <!--android:text="状态"-->
+            <!--android:gravity="right"-->
+            <!--android:layout_marginRight="32dp"/>-->
+    <!--</LinearLayout>-->
+    <RelativeLayout
         android:id="@+id/id_ll_meeting_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,21 +44,33 @@
         android:gravity="center">
         <TextView
             android:id="@+id/id_tv_name_item_select_meeting"
-            style="@style/selectMeeting_text_view_attr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="400dp"
+            android:textSize="18sp"
+            android:padding="@dimen/distance_five_dp"
             android:text="会议名称"/>
         <TextView
+            android:layout_centerInParent="true"
             android:layout_marginRight="24dp"
             android:id="@+id/id_tv_time_item_select_meeting"
-            style="@style/selectMeeting_text_view_attr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="@dimen/distance_five_dp"
             android:text="时间"
             android:gravity="center"/>
         <TextView
             android:id="@+id/id_tv_state_item_select_meeting"
-            style="@style/selectMeeting_text_view_attr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="@dimen/distance_five_dp"
+            android:layout_alignParentRight="true"
             android:text="状态"
             android:gravity="right"
             android:layout_marginRight="32dp"/>
-    </LinearLayout>
+    </RelativeLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

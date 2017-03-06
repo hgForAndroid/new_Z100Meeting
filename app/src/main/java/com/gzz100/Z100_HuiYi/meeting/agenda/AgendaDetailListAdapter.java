@@ -45,8 +45,8 @@ public class AgendaDetailListAdapter extends RecyclerView.Adapter<AgendaDetailHo
     @Override
     public void onBindViewHolder(AgendaDetailHolder holder, final int position) {
         holder.mAgendaTitleTextView.setText(mAgendaList.get(position).getAgendaName());
-        holder.mAgendaSperkerTextView.setText(mAgendaList.get(position).getAgendaSpeaker());
-        holder.mAgendaTimeTextView.setText(mAgendaList.get(position).getAgendaDuration()+"");
+        holder.mAgendaSperkerTextView.setText("主讲人："+mAgendaList.get(position).getAgendaSpeaker());
+        holder.mAgendaTimeTextView.setText("议程时长："+mAgendaList.get(position).getAgendaDuration()+"分钟");
         holder.mAgendaFileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

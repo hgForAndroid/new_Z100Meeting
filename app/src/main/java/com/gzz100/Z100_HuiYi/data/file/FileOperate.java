@@ -22,8 +22,6 @@ import java.util.List;
 public class FileOperate {
     private static FileOperate instance;
     private DBHelper mDBHelper;
-//    private Context mContext;
-
     private SQLiteDatabase mDatabase;
 
     private FileOperate(Context context) {
@@ -52,7 +50,6 @@ public class FileOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_FILE_LIST,data);
         mDatabase = mDBHelper.getReadableDatabase();
         mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_FILE,null,values);
-//        mDatabase.close();
     }
 
     /**
@@ -72,7 +69,6 @@ public class FileOperate {
             documents = (List<DocumentModel>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();
-//        mDatabase.close();
         return documents;
     }
 
@@ -89,7 +85,6 @@ public class FileOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST,data);
         mDatabase = mDBHelper.getReadableDatabase();
         mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_AGENDA,null,values);
-//        mDatabase.close();
     }
     /**
      * 向数据库中更新 议程序号对应的文件列表
@@ -103,7 +98,6 @@ public class FileOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST,data);
         mDatabase = mDBHelper.getReadableDatabase();
         mDatabase.insert(PersistenceContract.ColumnsName.TABLE_NAME_AGENDA,null,values);
-//        mDatabase.close();
     }
     /**
      * 查询议程列表
@@ -120,8 +114,6 @@ public class FileOperate {
                     PersistenceContract.ColumnsName.COLUMN_NAME_AGENDA_LIST));
             baseBeen = (List<AgendaModel>) ObjectTransverter.byteArrToList(data);
         }
-        cursor.close();
-//        mDatabase.close();
         return baseBeen;
     }
 }

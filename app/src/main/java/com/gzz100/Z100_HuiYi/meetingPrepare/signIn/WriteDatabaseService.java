@@ -123,15 +123,17 @@ public class WriteDatabaseService extends IntentService {
                 documents.put(meetingSummary.getAgendaModelList().get(i).getAgendaIndex(),documentsList);
             }
             List<DocumentModel> documentList = meetingSummary.getDocumentModelList();
-            for (DocumentModel document:documentList){
-                //根据文件的所属议程获取到对应的文件集合，将文件加入该集合
-                documents.get(document.getDocumentAgendaIndex()).add(document);
-            }
-            //保存所有的文件集合，这里用议程数跟文件集合数都可以，他们是等量的
-            for (int i = 0; i < meetingSummary.getAgendaModelList().size(); i++) {
-                int agendaIndex = meetingSummary.getAgendaModelList().get(i).getAgendaIndex();
-                FileOperate.getInstance(this.getApplicationContext()).
-                        insertFileList(agendaIndex,documents.get(agendaIndex));
+            if (documentList != null && documentList.size()>0){
+                for (DocumentModel document:documentList){
+                    //根据文件的所属议程获取到对应的文件集合，将文件加入该集合
+                    documents.get(document.getDocumentAgendaIndex()).add(document);
+                }
+                //保存所有的文件集合，这里用议程数跟文件集合数都可以，他们是等量的
+                for (int i = 0; i < meetingSummary.getAgendaModelList().size(); i++) {
+                    int agendaIndex = meetingSummary.getAgendaModelList().get(i).getAgendaIndex();
+                    FileOperate.getInstance(this.getApplicationContext()).
+                            insertFileList(agendaIndex,documents.get(agendaIndex));
+                }
             }
         }
     }

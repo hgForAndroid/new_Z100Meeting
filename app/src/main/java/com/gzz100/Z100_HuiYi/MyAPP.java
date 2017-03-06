@@ -3,8 +3,6 @@ package com.gzz100.Z100_HuiYi;
 import android.app.Application;
 
 import com.gzz100.Z100_HuiYi.utils.AppCrashCaughtUtil;
-import com.gzz100.Z100_HuiYi.utils.Constant;
-import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 /**
 * 应用类

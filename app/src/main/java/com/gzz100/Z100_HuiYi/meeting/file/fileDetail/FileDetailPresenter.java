@@ -1,26 +1,17 @@
 package com.gzz100.Z100_HuiYi.meeting.file.fileDetail;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
-import com.gzz100.Z100_HuiYi.data.MeetingSummaryBean;
 import com.gzz100.Z100_HuiYi.data.RepositoryUtil;
-import com.gzz100.Z100_HuiYi.data.Update;
-import com.gzz100.Z100_HuiYi.data.checkUpdate.CheckUpdateDataSource;
-import com.gzz100.Z100_HuiYi.data.checkUpdate.CheckUpdateRemoteDataSource;
 import com.gzz100.Z100_HuiYi.data.file.FileDetailRepository;
 import com.gzz100.Z100_HuiYi.data.meeting.MeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.vote.VoteDataSource;
-import com.gzz100.Z100_HuiYi.meetingPrepare.signIn.WriteDatabaseService;
-import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerUtil;
-import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;

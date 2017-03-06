@@ -1,7 +1,6 @@
 package com.gzz100.Z100_HuiYi.meetingPrepare.signIn;
 
 import android.app.Dialog;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,24 +8,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.UserBean;
 import com.gzz100.Z100_HuiYi.meeting.MainActivity;
-import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
-import com.gzz100.Z100_HuiYi.multicast.MulticastController;
 import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
 import com.gzz100.Z100_HuiYi.network.fileDownLoad.service.DownLoadService;
-import com.gzz100.Z100_HuiYi.tcpController.Client;
 import com.gzz100.Z100_HuiYi.tcpController.ClientSendMessageUtil;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
@@ -38,7 +29,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -85,6 +75,9 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         mPresenter = new SignInPresenter(this,this);
     }
 
+    /**
+     * 先获取Intent携带的设备IMEI码，和会议id
+     */
     private void initGetIntent() {
         if (getIntent().getBundleExtra(BUNDLE) != null){
             mDeviceIMEI = getIntent().getBundleExtra(BUNDLE).getString(DEVICE_IMEI);
@@ -96,7 +89,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-
+        //获取当前用户
         mPresenter.fetchCurrentUserBean(false,mDeviceIMEI,mMeetingID);
     }
 
@@ -107,7 +100,17 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     }
 
     /**
-     * 继续下载下一个文件，需下载的文件列表从选择会议获取，在本类中应该保存
+     * 按签到按钮
+     */
+    @OnClick(R.id.id_btn_sign_in)
+    void signIn(){
+        mPresenter.signIn(mDeviceIMEI,mMeetingID);
+    }
+
+    /**
+     * 在{@link DownLoadService#downloadCompleted(String)}中调用
+     * 该方法是下载会议文件的，先已使用webView显示会议文件，该方法已没有使用
+     * 继续下载下一个文件，需下载的文件列表从选择会议获取，在本类中应该保存。
      * @param position    下个文件的序号
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -131,52 +134,55 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         }
     }
 
-    @OnClick(R.id.id_btn_sign_in)
-    void signIn(){
-        mPresenter.signIn(mDeviceIMEI,mMeetingID);
-    }
-
+    /**
+     * 显示该设备对应的参会人员的信息。
+     * @param userBean  参会人员实体类
+     */
     @Override
     public void showDelegate(UserBean userBean) {
         mTvPosition.setText(userBean.getUserJob());
         mTvName.setText(userBean.getUserName());
         SharedPreferencesUtil.getInstance(this).putString(Constant.USER_NAME,userBean.getUserName());
+        //这里发送数据到铭牌成功后才开启tcp服务。
         sendKeyMessageToClients();
-
     }
-    //使用组播发送信息给全部客户端，信息包括 会议id，服务器ip，当前主持人平板设备在局域网内的ip
+    /**
+     * 使用组播发送信息给全部客户端，信息包括 会议id，服务器ip，当前主持人平板设备在局域网内的ip
+     */
     private void sendKeyMessageToClients() {
         //该角色在进入该Activity时，在onStart方法中调用mPresenter.fetchCurrentUserBean(false,mDeviceIMEI,mMeetingID);
         //里面取完值就已经赋值
-        if (MyAPP.getInstance().getUserRole() == 1){//主持人才发送组播,启动TCP服务器端服务
+        if (MyAPP.getInstance().getUserRole() == 1){//主持人端才发送组播,启动TCP服务器端服务
             //开启组播
             String localIpAddress = MPhone.getWIFILocalIpAdress(this.getApplicationContext());
             SharedPreferencesUtil.getInstance(this).putInt(Constant.MEETING_ID,mMeetingID);
-
+            //打开发送组播信息的服务
             Intent intent = new Intent(this,SendMulticastService.class);
             intent.putExtra("localIpAddress",localIpAddress);
             startService(intent);
-
+            //开启tcp服务器
             mPresenter.startTCPService();
         }else{
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     String ip = MPhone.getWIFILocalIpAdress(SignInActivity.this.getApplicationContext());
+                    //发送消息给tcp服务器端，让其保存当前客户端的名字+ip
                     ClientSendMessageUtil.getInstance().sendMessage(mTvName.getText().toString()+","+ip);
                 }
             }).start();
-
         }
     }
 
+    /**
+     * 获取当前设备对应的参会人员信息失败。
+     */
     @Override
     public void showNoDelegate() {
         mDialog = new AlertDialog.Builder(this)
-                .setTitle("提示")
-                .setMessage("获取信息失败，是否重新获取")
-                .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.string_tip)
+                .setMessage(R.string.string_fetch_info_fail)
+                .setPositiveButton(R.string.string_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mPresenter.fetchCurrentUserBean(true,mDeviceIMEI,mMeetingID);
@@ -188,18 +194,19 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
 
     }
 
+    /**
+     * 点击签到后，调用此方法，跳转到主界面。
+     */
     @Override
     public void showMainActivity() {
         MainActivity.toMainActivity(this);
-        if (MyAPP.getInstance().getUserRole() == 1){
-//            if (AppUtil.isServiceRun(this.getApplicationContext(),"com.gzz100.Z100_HuiYi.multicast.ReceivedMultiCastService")){
-//                Log.e("服务在运行","=============================================================================");
-//            }
-//            stopService(new Intent(this, ReceivedMultiCastService.class));
-        }
         ActivityStackManager.pop();
     }
 
+    /**
+     * 开始下载文件。该方法同 {@link #continueDownLoad} 一样，已经不再使用。
+     * @param fileIDs   文件id集合
+     */
     @Override
     public void startDownLoad(List<String> fileIDs) {
         if (fileIDs != null && fileIDs.size() > 0){
@@ -223,9 +230,9 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             Dialog dialog = new AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage("退出系统？")
-                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.string_tip)
+                    .setMessage(R.string.string_exit_system)
+                    .setPositiveButton(R.string.string_yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             SharedPreferencesUtil.getInstance(SignInActivity.this).killAllRunningService();
@@ -234,7 +241,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
                             ActivityStackManager.exit();
                         }
                     })
-                    .setNegativeButton("否", null)
+                    .setNegativeButton(R.string.string_no, null)
                     .create();
             dialog.show();
         }

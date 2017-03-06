@@ -7,11 +7,9 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.data.Update;
 import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
@@ -21,10 +19,6 @@ import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
 
 public class SendMulticastService extends Service {
     private static final String TAG = "SendMulticastService";
@@ -72,7 +66,6 @@ public class SendMulticastService extends Service {
                 }
                 //因为是udp组播发送，循环发送这些值到客户端，确保接收到
                 MulticastController.getDefault().sendMessage(mKeyInfoJson);
-//                Log.e("发送组播 ====== ",mKeyInfoJson);
             }
         }
     };

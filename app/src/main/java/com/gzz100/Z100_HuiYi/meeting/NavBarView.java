@@ -95,6 +95,10 @@ public class NavBarView extends RelativeLayout {
     public void setMeetingStateOrAgendaState(String state){
         mStateOrAgenda.setText(state);
     }
+
+    public String getMeetingStateOrAgendaState(){
+        return mStateOrAgenda.getText().toString();
+    }
     /**
      * 设置导航栏 返回中上一级的标题
      * @param upLevelText  上一级标题

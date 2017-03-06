@@ -4,6 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_bar_height"
     android:background="@color/color_navBar_bg">
+    <ImageView
+        android:visibility="gone"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:src="@mipmap/z100"/>
 
     <TextView
         android:layout_width="wrap_content"

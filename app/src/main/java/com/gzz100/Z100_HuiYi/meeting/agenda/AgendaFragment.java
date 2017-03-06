@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.meeting.agenda;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Bundle;
@@ -69,7 +70,6 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
 
     @Override
     public void onResume() {
-        Log.e("AgendaFragment -->","onResume");
         mPresenter.start();
         super.onResume();
     }
@@ -78,8 +78,6 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_agenda, null);
-        //ButterKnife.bind(this,view);
-//        Log.e("AgendaFragment -->","onCreateView");
         mAgendaRecyclerView = (RecyclerView) view.findViewById(R.id.id_rev_agenda);
         mAgendaDetailRecyclerView = (RecyclerView) view.findViewById(R.id.id_rev_agenda_detail);
         mAgendaTitleTextView = (TextView) view.findViewById(R.id.id_text_view_agenda_title);
@@ -105,25 +103,10 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
                         ObjectAnimator animator = ObjectAnimator
                                 .ofFloat(v, "translationY", v.getTranslationY(), v.getTranslationY()+200f, v.getTranslationY())
                                 .setDuration(150);
-                        animator.addListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-
-                            }
-
+                        animator.addListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 onAgendaItemClick((currentAgendaPositon + 1) % mAgendasList.size());
-                            }
-
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
-
                             }
                         });
                         animator.start();
@@ -132,25 +115,10 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
                         ObjectAnimator animator = ObjectAnimator
                                 .ofFloat(v, "translationY", v.getTranslationY(), v.getTranslationY()-200f, v.getTranslationY())
                                 .setDuration(150);
-                        animator.addListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-
-                            }
-
+                        animator.addListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 onAgendaItemClick((currentAgendaPositon-1 >= 0 ? currentAgendaPositon-1 : mAgendasList.size()-1) % mAgendasList.size());
-                            }
-
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
-
                             }
                         });
                         animator.start();
@@ -236,51 +204,12 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
 
     @Override
     public void onDestroyView() {
-//        Log.e("AgendaFragment -->","onDestroyView");
         super.onDestroyView();
         mPresenter.setFirstLoad(true);
     }
 
     @Override
-    public void onDestroy() {
-//        Log.e("AgendaFragment -->","onDestroy");
-        super.onDestroy();
-    }
-
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        Log.e("AgendaFragment -->","onActivityCreated");
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onStart() {
-//        Log.e("AgendaFragment -->","onStart");
-        super.onStart();
-    }
-
-    @Override
-    public void onPause() {
-//        Log.e("AgendaFragment -->","onPause");
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-//        Log.e("AgendaFragment -->","onStop");
-        super.onStop();
-    }
-
-    @Override
-    public void onDetach() {
-//        Log.e("AgendaFragment -->","onDetach");
-        super.onDetach();
-    }
-
-    @Override
     public void onAttach(Context context) {
-//        Log.e("AgendaFragment -->","onAttach");
         super.onAttach(context);
         mMainActivity = (ICommunicate) context;
     }

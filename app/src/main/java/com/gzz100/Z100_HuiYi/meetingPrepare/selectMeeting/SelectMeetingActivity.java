@@ -14,18 +14,14 @@ import android.widget.TextView;
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
-import com.gzz100.Z100_HuiYi.meeting.MainActivity;
-import com.gzz100.Z100_HuiYi.meetingPrepare.ItemSpaceDecoration;
 import com.gzz100.Z100_HuiYi.meetingPrepare.signIn.SignInActivity;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
-
-import org.w3c.dom.Text;
+import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import java.util.List;
-import java.util.logging.ErrorManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +31,6 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
     public static void toSelectMeetingActivity(Context context) {
         Intent intent = new Intent(context, SelectMeetingActivity.class);
         context.startActivity(intent);
-
     }
 
     @BindView(R.id.id_rcv_select_meeting)
@@ -52,10 +47,13 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_meeting);
         ButterKnife.bind(this);
-        mPresenter = new SelectMeetingPresenter(SelectMeetingActivity.this, this);
+        mPresenter = new SelectMeetingPresenter(this.getApplicationContext(), this);
         saveIMEI();
     }
 
+    /**
+     * 保存设备IMEI码
+     */
     private void saveIMEI() {
         String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
         mPresenter.saveIMEI(this.getApplicationContext(), deviceIMEI);
@@ -76,6 +74,11 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
         mPresenter.fetchMeetingList(true, deviceIMEI);
     }
 
+    /**
+     * 显示会议列表
+     *
+     * @param meetings 会议列表集合
+     */
     @Override
     public void showMeetingList(List<MeetingBean> meetings) {
         if (mMeetings != null)
@@ -84,25 +87,32 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
         mAdapter = new MeetingAdapter(this, meetings);
         mRcvSelectMeeting.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRcvSelectMeeting.setAdapter(mAdapter);
-//        mRcvSelectMeeting.addItemDecoration(new ItemSpaceDecoration(ItemSpaceDecoration.VERTICAL,
-//                (int) getResources().getDimension(R.dimen.distance_twenty_dp)));
         mAdapter.setOnMeetingClickListener(this);
-
     }
 
+    /**
+     * 从服务器获取会议列表失败后，调用该方法。
+     * @param errorMsg  当该值不为空，则代表取数据失败，该值为失败信息。
+     */
     @Override
     public void showNoMeetingList(String errorMsg) {
-        if (TextUtils.isEmpty(errorMsg)){
+        if (TextUtils.isEmpty(errorMsg)) {
             mTvNoMeeting.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mTvNoMeeting.setText(errorMsg);
             mTvNoMeeting.setVisibility(View.VISIBLE);
         }
         mRcvSelectMeeting.setVisibility(View.GONE);
     }
 
+    /**
+     * 主持人选择要开的会议后，调用该方法，跳转到签到界面。
+     * @param IMEI    设备id
+     * @param meetingID   会议id
+     */
     @Override
     public void showSignIn(String IMEI, int meetingID) {
+
         SignInActivity.toSignInActivity(this, IMEI, meetingID);
     }
 
@@ -111,18 +121,29 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
         this.mPresenter = presenter;
     }
 
+    /**
+     * 点击某个会议
+     * @param position   会议序号
+     */
     @Override
     public void onMeetingClick(int position) {
         int meetingID = mMeetings.get(position).getMeetingID();
         String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
         mPresenter.selectMeeting(deviceIMEI, meetingID);
+        Log.e("xqx","会议id === "+meetingID);
     }
 
+    /**
+     * 返回按钮，该方式是可能服务器地址输入错误后，向返回重新输入
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             ActivityStackManager.pop();
-            return  true;
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }

@@ -39,7 +39,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<ResultHolder>{
 
     @Override
     public ResultHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_search_result_file, null);
+        View view = mInflater.inflate(R.layout.item_search_result_file, parent,false);
         return new ResultHolder(view);
     }
 
@@ -55,7 +55,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<ResultHolder>{
         });
         holder.mFileSize.setText(mDocuments.get(position).getDocumentSize()+"kb");
 
-//        holder.mKeynoteSpeaker.setText(mDocuments.get(position).getDocumentSpeaker());
+        mDocuments.get(position).setDocumentSpeaker(mContext,holder.mKeynoteSpeaker);
         mDocuments.get(position).setImageForFile(mContext,holder.mFileImage);
         holder.mAgenda.setText("议程"+mDocuments.get(position).getDocumentAgendaIndex());
 

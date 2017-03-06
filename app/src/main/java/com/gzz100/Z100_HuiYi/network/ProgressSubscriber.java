@@ -29,6 +29,11 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
     //    加载框可自己定义
     private ProgressDialog pd;
 
+    /**
+     * 默认不可取消加载对话框，并且中断请求
+     * @param mSubscriberOnNextListener
+     * @param context
+     */
     public ProgressSubscriber(HttpRxCallbackListener mSubscriberOnNextListener, Context context) {
         this.mSubscriberOnNextListener = mSubscriberOnNextListener;
         this.mActivity = new WeakReference<>(context);
@@ -36,6 +41,12 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         initProgressDialog();
     }
 
+    /**
+     *
+     * @param mSubscriberOnNextListener
+     * @param context
+     * @param cancel   是否可手动取消加载对话框，并且中断请求
+     */
     public ProgressSubscriber(HttpRxCallbackListener mSubscriberOnNextListener, Context context, boolean cancel) {
         this.mSubscriberOnNextListener = mSubscriberOnNextListener;
         this.mActivity = new WeakReference<>(context);
@@ -122,10 +133,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
         } else if (e instanceof ConnectException) {
             errorMsg = "网络中断，请检查您的网络状态或服务器IP是否输入正确";
         } else {
-            if (Constant.DEBUG)
-                Log.e("tag", "error----------->" + e.toString());
             errorMsg = e.getMessage();
-//            errorMsg = "服务器出错，请检查服务器ip是否正确！";
         }
         dismissProgressDialog();
         if (mSubscriberOnNextListener != null) {
@@ -134,7 +142,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
     }
 
     /**
-     * 将onNext方法中的返回结果交给Activity或Fragment自己处理
+     * 将onNext方法中的返回结果交给调用者自己处理
      *
      * @param t 创建Subscriber时的泛型类型
      */

@@ -54,23 +54,25 @@ public class FilePresenter implements FileContract.Presenter {
             mFileRepository.getAgendaList(IMEI, userId, new FileDataSource.LoadAgendaListCallback() {
                 @Override
                 public void onAgendaListLoaded(List<AgendaModel> agendas) {
-                    if (!mFileView.isActive()) {
-                        return;
-                    }
-                    mFileView.showAgendaList(agendas);
-                    mFileView.setAgendasSum(agendas.size());
-                    if (mFirstLoad){
-                        mFileView.setAgendaTime(agendas.get(0).getAgendaDuration()+"");
-                    }
+                    if (agendas != null && agendas.size() > 0) {
+                        if (!mFileView.isActive()) {
+                            return;
+                        }
+                        mFileView.showAgendaList(agendas);
+                        mFileView.setAgendasSum(agendas.size());
+                        if (mFirstLoad) {
+                            mFileView.setAgendaTime(agendas.get(0).getAgendaDuration() + "");
+                        }
 
-                    fetchFileList(false,1);
-
+                        fetchFileList(false, 1);
+                    } else {
+                        mFileView.showNoAgendaList();
+                    }
                 }
 
                 @Override
                 public void onDataNotAvailable() {
                     mFileView.showNoAgendaList();
-
                 }
             });
 
@@ -93,14 +95,11 @@ public class FilePresenter implements FileContract.Presenter {
                     mFileView.showFilesList(documents);
 //                    mFileView.setFileList(documents);
                     mFileView.setAgendaIndex(agendaPos);
-
                 }
 
                 @Override
                 public void onDataNotAvailable() {
-
                     mFileView.showNoFileList();
-
                 }
             });
 
@@ -186,8 +185,7 @@ public class FilePresenter implements FileContract.Presenter {
 
                 }
             });
-        }
-        else{
+        } else {
             searchFileOrName(inputString);
         }
     }
@@ -195,7 +193,7 @@ public class FilePresenter implements FileContract.Presenter {
 
     @Override
     public void start() {
-        fetchAgendaList(false,"","");
+        fetchAgendaList(false, "", "");
 //        setFileSearchAutoCompleteTextViewHint();
     }
 
