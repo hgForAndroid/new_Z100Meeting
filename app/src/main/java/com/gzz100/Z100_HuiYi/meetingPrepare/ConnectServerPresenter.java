@@ -156,7 +156,10 @@ public class ConnectServerPresenter implements ConnectServerContract.Presenter {
                             SharedPreferencesUtil.getInstance(mContext).putString(Constant.CURRENT_IP, keyInfoBean.getServerIP());
                             SharedPreferencesUtil.getInstance(mContext).putString(Constant.TCP_SERVER_IP, keyInfoBean.getTcpServerIP());
                             SharedPreferencesUtil.getInstance(mContext).putInt(Constant.MEETING_ID, keyInfoBean.getMeetingId());
-                            //通知界面，去跳转到签到界面
+                            /**
+                             * 通知界面，去跳转到签到界面
+                             * 调用下面的方法会跳转到{@link ConnectServerActivity#showSignInActivity(KeyInfoBean)}
+                             */
                             mView.showSignInActivity(keyInfoBean);
                         }
                         break;

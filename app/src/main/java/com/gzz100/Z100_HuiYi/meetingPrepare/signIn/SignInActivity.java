@@ -24,6 +24,7 @@ import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
+import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -82,6 +83,8 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         if (getIntent().getBundleExtra(BUNDLE) != null){
             mDeviceIMEI = getIntent().getBundleExtra(BUNDLE).getString(DEVICE_IMEI);
             mMeetingID = getIntent().getBundleExtra(BUNDLE).getInt(MEETING_ID);
+        }else {
+            ToastUtil.showMessage(R.string.string_fetch_meeting_error);
         }
     }
 
@@ -89,7 +92,10 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        //获取当前用户
+        /**
+         * 获取当前用户.
+         * 调用{@link SignInPresenter#fetchCurrentUserBean(boolean, String, int)}
+         */
         mPresenter.fetchCurrentUserBean(false,mDeviceIMEI,mMeetingID);
     }
 

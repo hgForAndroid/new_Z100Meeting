@@ -51,7 +51,7 @@
             android:paddingLeft="50dp"
             android:paddingRight="50dp"
             android:paddingTop="10dp"
-            android:text="签到"
+            android:text="@string/string_sign_in"
             android:textSize="45sp"/>
     </LinearLayout>
 

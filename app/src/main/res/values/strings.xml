@@ -1,5 +1,23 @@
 <resources>
     <string name="app_name">Z100Meeting</string>
+    <string name="string_input_ip_address">请输入IP地址:</string>
+    <string name="string_ip_record">历史记录：</string>
+
+    <string name="string_choose_meeting">请选择会议</string>
+    <string name="string_reFetch_meeting_list">重新获取会议列表</string>
+
+    <string name="string_meeting_name">会议名称</string>
+    <string name="string_time">时间</string>
+    <string name="string_state">状态</string>
+    <string name="string_no_meeting_in_present">当前无会议</string>
+
+    <string name="string_sign_in">签到</string>
+
+    <string name="string_fetch_meeting_error">会议获取失败</string>
+
+
+
+
     <string name="string_main_tab_meeting">会议</string>
     <string name="string_main_tab_delegate">人员</string>
     <string name="string_main_tab_agenda">议程</string>
@@ -8,7 +26,7 @@
     <string name="string_main_tab_vote">投票</string>
 
     <string name="string_file_search_hint">文件名/人名</string>
-    <string name="string_delegate_seach_hint">人名</string>
+    <string name="string_delegate_search_hint">人名</string>
     <string name="string_search">搜索</string>
 
 
@@ -17,7 +35,7 @@
     <string name="string_keynote_Speaker">主讲人</string>
     <string name="string_streamer">横幅</string>
 
-    <string name="string_meeting_name">名&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;称 :</string>
+    <string name="string_name">名&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;称 :</string>
     <string name="string_meeting_begin_time">开会时间 :</string>
     <string name="string_meeting_time">开会时长 :</string>
     <string name="string_meeting_delegate">参会人员 :</string>

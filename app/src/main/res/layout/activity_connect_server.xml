@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:paddingTop="50dp">
 
-
     <EditText
         android:id="@+id/id_edt_connect_server"
         android:layout_width="300dp"
@@ -22,7 +21,7 @@
         android:layout_toLeftOf="@id/id_edt_connect_server"
         android:gravity="center"
         android:padding="@dimen/distance_five_dp"
-        android:text="请输入IP地址:"
+        android:text="@string/string_input_ip_address"
         android:textSize="@dimen/connect_server_text_size"/>
 
     <Button
@@ -30,26 +29,27 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_toRightOf="@id/id_edt_connect_server"
-        android:text="确认"
+        android:text="@string/string_ensure"
         android:textSize="@dimen/connect_server_text_size"/>
 
     <TextView
-        android:layout_marginTop="20dp"
         android:id="@+id/text_record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/id_edt_connect_server"
+        android:layout_marginTop="20dp"
         android:layout_toRightOf="@id/text_ip"
         android:padding="@dimen/distance_five_dp"
-        android:text="历史记录："
+        android:text="@string/string_ip_record"
         android:textSize="@dimen/connect_server_text_size"/>
+
     <android.support.v7.widget.RecyclerView
-        android:overScrollMode="never"
         android:id="@+id/id_rcv_connect_server"
-        android:layout_toRightOf="@id/text_ip"
-        android:layout_below="@id/text_record"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/text_record"
+        android:layout_toRightOf="@id/text_ip"
+        android:overScrollMode="never">
 
     </android.support.v7.widget.RecyclerView>
 </RelativeLayout>

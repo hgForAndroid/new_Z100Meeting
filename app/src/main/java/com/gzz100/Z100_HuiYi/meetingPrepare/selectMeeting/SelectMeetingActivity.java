@@ -28,6 +28,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SelectMeetingActivity extends BaseActivity implements SelectMeetingContract.View, OnMeetingClickListener {
+
+    private String mDeviceIMEI;
+
     public static void toSelectMeetingActivity(Context context) {
         Intent intent = new Intent(context, SelectMeetingActivity.class);
         context.startActivity(intent);
@@ -55,8 +58,8 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
      * 保存设备IMEI码
      */
     private void saveIMEI() {
-        String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
-        mPresenter.saveIMEI(this.getApplicationContext(), deviceIMEI);
+        mDeviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
+        mPresenter.saveIMEI(this.getApplicationContext(), mDeviceIMEI);
     }
 
     @Override
@@ -70,8 +73,7 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
      */
     @OnClick(R.id.id_btn_select_meeting)
     void getMeetingList() {
-        String deviceIMEI = SharedPreferencesUtil.getInstance(this.getApplicationContext()).getString(Constant.DEVICE_IMEI, "");
-        mPresenter.fetchMeetingList(true, deviceIMEI);
+        mPresenter.fetchMeetingList(true, mDeviceIMEI);
     }
 
     /**
@@ -112,7 +114,6 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
      */
     @Override
     public void showSignIn(String IMEI, int meetingID) {
-
         SignInActivity.toSignInActivity(this, IMEI, meetingID);
     }
 

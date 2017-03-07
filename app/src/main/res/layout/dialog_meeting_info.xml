@@ -13,7 +13,7 @@
         <TextView
             style="@style/dialog_meeting_left_text_view_attr"
             android:id="@+id/id_tv_temp_dialog_name"
-            android:text="@string/string_meeting_name"/>
+            android:text="@string/string_name"/>
 
         <TextView
             style="@style/dialog_meeting_right_text_view_attr"

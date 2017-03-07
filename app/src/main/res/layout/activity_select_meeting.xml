@@ -17,14 +17,14 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/distance_five_dp"
             android:textSize="25sp"
-            android:text="请选择会议"/>
+            android:text="@string/string_choose_meeting"/>
         <Button
             android:id="@+id/id_btn_select_meeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/distance_five_dp"
             android:textSize="25sp"
-            android:text="重新获取会议列表"
+            android:text="@string/string_reFetch_meeting_list"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
@@ -34,14 +34,14 @@
         android:orientation="horizontal">
         <TextView
             style="@style/selectMeeting_text_view_attr"
-            android:text="会议名称"/>
+            android:text="@string/string_meeting_name"/>
         <TextView
             style="@style/selectMeeting_text_view_attr"
-            android:text="时间"
+            android:text="@string/string_time"
             android:gravity="center"/>
         <TextView
             style="@style/selectMeeting_text_view_attr"
-            android:text="状态"
+            android:text="@string/string_state"
             android:gravity="right"
             android:layout_marginRight="@dimen/forty_eight"/>
     </LinearLayout>
@@ -61,6 +61,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="当前无会议"/>
+        android:text="@string/string_no_meeting_in_present"/>
 
 </LinearLayout>

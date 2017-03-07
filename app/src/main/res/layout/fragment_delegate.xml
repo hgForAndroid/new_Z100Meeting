@@ -9,7 +9,7 @@
         android:layout_marginLeft="@dimen/distance_ten_dp"
         android:layout_marginTop="@dimen/distance_ten_dp"
         android:background="@drawable/edt_selector"
-        android:hint="@string/string_delegate_seach_hint"
+        android:hint="@string/string_delegate_search_hint"
         android:paddingLeft="@dimen/distance_ten_dp" />
 
     <Button
