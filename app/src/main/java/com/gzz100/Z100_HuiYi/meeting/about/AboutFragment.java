@@ -1,6 +1,5 @@
 package com.gzz100.Z100_HuiYi.meeting.about;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,7 +19,7 @@ import com.gzz100.Z100_HuiYi.R;
 
 public class AboutFragment extends Fragment {
 
-    private TextView mTvFunctionIntrollduce;
+    private TextView mTvFunctionIntroduce;
     private ScrollView mScrollView;
     private boolean expand;//功能列表是否展开
 
@@ -41,21 +40,21 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, null);
 //        ButterKnife.bind(getActivity(),view);
-        mTvFunctionIntrollduce = (TextView) view.findViewById(R.id.id_fragment_about_function_introduce);
+        mTvFunctionIntroduce = (TextView) view.findViewById(R.id.id_fragment_about_function_introduce);
         mScrollView = (ScrollView) view.findViewById(R.id.id_scrollView_of_function);
-//        mTvFunctionIntrollduce.setOnClickListener(new View.OnClickListener() {
+//        mTvFunctionIntroduce.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //                if (expand){
 //                    mScrollView.setVisibility(View.GONE);
 //                    Drawable drawable = getResources().getDrawable(R.drawable.ic_arrows_down);
 //                    drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
-//                    mTvFunctionIntrollduce.setCompoundDrawables(null,null,drawable,null);
+//                    mTvFunctionIntroduce.setCompoundDrawables(null,null,drawable,null);
 //                }else {
 //                    mScrollView.setVisibility(View.VISIBLE);
 //                    Drawable drawable = getResources().getDrawable(R.drawable.ic_arrows_up);
 //                    drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
-//                    mTvFunctionIntrollduce.setCompoundDrawables(null,null,drawable,null);
+//                    mTvFunctionIntroduce.setCompoundDrawables(null,null,drawable,null);
 //                }
 //                expand = !expand;
 //            }

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -73,6 +74,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     private ICommunicate mainActivity;
     private TextView mStreamer;
     private WebView mWebView;
+    private LinearLayout mLayoutMeetingEndingShow;
 
     @Override
     public void onAttach(Context context) {
@@ -106,6 +108,8 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
         mEndDuration = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_duration);
         mEndRecord = (TextView) view.findViewById(R.id.id_tv_end_meeting_fragment_record);
         mBtnExit = (Button) view.findViewById(R.id.id_btn_exit);
+
+        mLayoutMeetingEndingShow = (LinearLayout) view.findViewById(R.id.id_ll_meeting_ending_show_content);
 
         ButterKnife.bind(this, view);
         return view;
@@ -151,8 +155,10 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
                 mPresenter.fetchMeetingEndData(hour,min,meetingDuration,currentTime);
             }
 
-            //WebView显示会议结束后的概述
-//            mWebView.setVisibility(View.VISIBLE);
+            //如果之后要用WebView显示会议结束后的概述，则将下面的代码解注释，并且注释上面的代码
+//            mTopLayout.setVisibility(View.GONE);
+//            mBottomLayout.setVisibility(View.GONE);
+//            mLayoutMeetingEndingShow.setVisibility(View.VISIBLE);
 //            String meetingEndingSummary = HttpManager.getInstance(getContext()).getServerIP()
 //                    + SharedPreferencesUtil.getInstance(getContext()).getInt(Constant.MEETING_ID, -1);
 //            mWebView.loadUrl(meetingEndingSummary);
@@ -209,7 +215,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     /**
      * 退出按钮，该按钮只在会议结束后，显示会议结果时最下面显示。
      */
-    @OnClick(R.id.id_btn_exit)
+    @OnClick({R.id.id_btn_exit,R.id.id_btn_exit2})
     void onExitClick() {
         Dialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.string_tip)

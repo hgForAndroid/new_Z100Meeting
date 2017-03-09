@@ -3,11 +3,35 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
-    <WebView
+    <LinearLayout
+        android:id="@+id/id_ll_meeting_ending_show_content"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/id_webView_end"
-        android:visibility="gone"></WebView>
+        android:orientation="vertical">
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/id_webView_end"></WebView>
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
+            android:paddingTop="@dimen/distance_sixteen"
+            android:paddingBottom="@dimen/distance_sixteen"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <TextView
+                style="@style/ending_meeting_text_view_attr"
+                android:text="您可以继续浏览会议内容或退出"/>
+            <Button
+                style="@style/ending_meeting_text_view_attr"
+                android:id="@+id/id_btn_exit2"
+                android:text="退出"/>
+        </LinearLayout>
+    </LinearLayout>
     <RelativeLayout
         android:visibility="gone"
         android:id="@+id/id_rl_meeting_fragment_top"
