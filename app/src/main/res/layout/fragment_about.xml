@@ -3,14 +3,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/id_fragment_about_pic"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_launcher"/>
+
     <TextView
+        android:id="@+id/id_copy_right"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="关于软件？关于公司？"
-        android:textSize="80dp"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:paddingBottom="@dimen/nav_bar_height"
+        android:text="@string/string_copy_right"
+        android:textSize="20sp"/>
+
+    <LinearLayout
+        android:layout_below="@+id/id_fragment_about_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_above="@id/id_copy_right"
+        android:gravity="center_horizontal">
+        <TextView
+            android:id="@+id/id_fragment_about_function_introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:text="功能介绍"
+            android:textSize="28dp"/>
+        <ScrollView
+            android:layout_margin="1dp"
+            android:background="@drawable/content_function_introduce"
+            android:visibility="visible"
+            android:overScrollMode="never"
+            android:id="@+id/id_scrollView_of_function"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/content_of_function"/>
+        </ScrollView>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/id_fragment_about_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/textView"/>
+        android:layout_below="@+id/id_fragment_about_name"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:text="会议系统提供了一种智能化的开会方式，让开会更加简单便捷。"
+        android:textSize="28sp"
+        android:textStyle="italic"/>
+
+    <TextView
+        android:id="@+id/id_fragment_about_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="5dp"
+        android:text="会议系统"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/id_fragment_about_pic"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
 </RelativeLayout>
