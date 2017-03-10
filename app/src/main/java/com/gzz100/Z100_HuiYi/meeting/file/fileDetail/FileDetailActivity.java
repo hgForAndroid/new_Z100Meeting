@@ -694,6 +694,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             message.what = 0x00;
             mMyHandler.sendMessage(message);
         }
+        mMeetingState = Constant.MEETING_STATE_BEGIN;
     }
 
     @Override
@@ -731,6 +732,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                 mFileDetailAdapter.notifyDataSetInvalidated();
             }
         }
+        mMeetingState = Constant.MEETING_STATE_BEGIN;
     }
 
     /**
@@ -1171,6 +1173,7 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
             message.what = 0x00;
             mMyHandler.sendMessage(message);
         }
+        mMeetingState = Constant.MEETING_STATE_BEGIN;
     }
 
     @Override

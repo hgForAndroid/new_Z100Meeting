@@ -97,7 +97,6 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
         mWebView = (WebView) view.findViewById(R.id.id_webView_end);
         mWebView.getSettings().setJavaScriptEnabled(true);
 
-
         mTopLayout = (RelativeLayout) view.findViewById(R.id.id_rl_meeting_fragment_top);
         mBottomLayout = (FrameLayout) view.findViewById(R.id.id_fl_meeting_fragment_bottom);
         mStreamer = (TextView) view.findViewById(R.id.id_tv_meeting_fragment_streamer);

@@ -629,10 +629,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             });
             mDialog.show();
         } else {
-            String deviceIMEI = MPhone.getDeviceIMEI(this);
-            int meetingID = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
-            int voteId = SharedPreferencesUtil.getInstance(this).getInt(Constant.BEGIN_VOTE_ID, -1);
-            mMainPresenter.hostLaunchOrCloseVote(deviceIMEI, meetingID, voteId, -1, null, 0);
+            boolean voteSubmit = SharedPreferencesUtil.getInstance(this).
+                    getBoolean(Constant.IS_VOTE_COMMIT, false);
+            if (voteSubmit){
+                String deviceIMEI = MPhone.getDeviceIMEI(this);
+                int meetingID = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
+                int voteId = SharedPreferencesUtil.getInstance(this).getInt(Constant.BEGIN_VOTE_ID, -1);
+                mMainPresenter.hostLaunchOrCloseVote(deviceIMEI, meetingID, voteId, -1, null, 0);
+            }else {
+                ToastUtil.showMessage("还未上传投票结果！");
+            }
         }
     }
 
