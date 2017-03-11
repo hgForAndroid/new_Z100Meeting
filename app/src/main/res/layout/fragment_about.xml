@@ -3,12 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/id_fragment_about_pic"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"/>
+    <LinearLayout
+        android:gravity="center"
+        android:id="@+id/id_about_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/id_fragment_about_pic"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/z100"/>
+        <TextView
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="中佰会议系统"/>
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/id_copy_right"
@@ -56,24 +69,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/id_fragment_about_name"
+        android:layout_below="@+id/id_about_top"
         android:gravity="center"
         android:paddingTop="10dp"
-        android:text="会议系统提供了一种智能化的开会方式，让开会更加简单便捷。"
+        android:text="@string/string_meeting_description"
         android:textSize="28sp"
         android:textStyle="italic"/>
-
-    <TextView
-        android:id="@+id/id_fragment_about_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingTop="5dp"
-        android:text="会议系统"
-        android:textSize="35sp"
-        android:textStyle="bold"
-        android:layout_below="@+id/id_fragment_about_pic"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

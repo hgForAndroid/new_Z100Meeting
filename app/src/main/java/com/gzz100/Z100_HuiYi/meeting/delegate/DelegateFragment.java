@@ -217,7 +217,8 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
 
         //mRoleListRecView.getChildAt多的时候会返回空指针，因为已经被Recycle了
 
-        mRoleListRecView.getChildAt(lastClickedRoleItemPositon).findViewById(R.id.id_item_role_layout).setBackgroundColor(getResources().getColor(R.color.color_tab_normal));
+        mRoleListRecView.getChildAt(lastClickedRoleItemPositon).findViewById(R.id.id_item_role_layout).setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        mRoleListRecView.getChildAt(lastClickedRoleItemPositon).findViewById(R.id.id_item_role_layout).setBackgroundResource(R.drawable.content_function_introduce);
         ((TextView) mRoleListRecView.getChildAt(lastClickedRoleItemPositon).findViewById(R.id.id_item_role_name)).setTextColor(getResources().getColor(R.color.color_black));
 
 

@@ -11,7 +11,7 @@
         android:id="@+id/id_item_agenda_name_layout">
         <TextView
             android:id="@+id/id_item_agenda_name_title"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:textColor="@color/color_black"
             android:text="议程标题"
             android:layout_width="200dp"

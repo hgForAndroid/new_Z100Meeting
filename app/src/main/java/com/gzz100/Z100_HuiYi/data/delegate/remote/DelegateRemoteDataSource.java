@@ -53,6 +53,11 @@ public class DelegateRemoteDataSource implements DelegateDataSource{
     }
 
     @Override
+    public void getAllDelegateList(LoadDelegateListCallback callback) {
+
+    }
+
+    @Override
     public void getDelegateNameHint(LoadDelegateNameHintCallback callback) {
 
     }

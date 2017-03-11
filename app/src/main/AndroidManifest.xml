@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
+        android:hardwareAccelerated="true"
         android:name=".MyAPP"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

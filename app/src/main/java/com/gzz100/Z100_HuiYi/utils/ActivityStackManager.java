@@ -37,6 +37,7 @@ public class ActivityStackManager {
             }
             sb.append("[" + i + "] : " + mInstance.mActivityStack.get(i).getLocalClassName() + ", ");
         }
+        Log.e("---------", "showStack:栈情况： "+sb.toString());
         if (mInstance.mActivityStack.size() > 0) {
             return;
         }
@@ -45,6 +46,7 @@ public class ActivityStackManager {
     //压入栈顶
     public static void push(Activity activity) {
         mInstance.mActivityStack.push(activity);
+        Log.e("-----------------", "push: "+mInstance.mActivityStack.get(0).getComponentName().getClassName());
         showStack();
     }
 
@@ -55,6 +57,20 @@ public class ActivityStackManager {
                 mInstance.mActivityStack.push(mInstance.mActivityStack.get(i));
             }
         }
+    }
+
+    /**
+     * 是不是在栈顶的Activity
+     * @param className
+     * @return
+     */
+    public static boolean isFirstStackActivity(String className){
+        if (mInstance.mActivityStack.size() > 0){
+            if (mInstance.mActivityStack.get(0).getComponentName().getClassName().equals(className)){
+                return true;
+            }
+        }
+        return false;
     }
 
     //移除栈顶Activity，并finish

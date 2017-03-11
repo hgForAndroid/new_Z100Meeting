@@ -57,6 +57,11 @@ public class DelegateRepository implements DelegateDataSource {
             });
     }
 
+    @Override
+    public void getAllDelegateList(LoadDelegateListCallback callback) {
+        mDelegateLocalDataSource.getAllDelegateList(callback);
+    }
+
     public static int rolePosConvertToRoleNum(int rolePos){
         int roleNum;
         switch (rolePos)

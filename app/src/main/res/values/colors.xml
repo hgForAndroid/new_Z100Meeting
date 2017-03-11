@@ -22,4 +22,5 @@
 
     <!--会议桌的背景色-->
     <color name="color_meeting_room_bg">#7A7D7D</color>
+    <color name="color_light_gray">#d4d7d7</color>
 </resources>

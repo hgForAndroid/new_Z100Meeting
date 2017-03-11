@@ -137,30 +137,30 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     private void setMeetingShowResult() {
         if (SharedPreferencesUtil.getInstance(getContext()).
                 getBoolean(Constant.IS_MEETING_END, false)) {//会议结束
-            mTopLayout.setVisibility(View.VISIBLE);
-            mBottomLayout.setVisibility(View.GONE);
-            String meetingDuration = MeetingOperate.getInstance(getContext()).
-                    queryMeetingInfo(Constant.COLUMNS_MEETING_INFO).getMeetingDuration();
-            //存储会议结束的时间，时  分
-            String hour = SharedPreferencesUtil.getInstance(getContext()).getString(Constant.ENDING_HOUR, "");
-            String min = SharedPreferencesUtil.getInstance(getContext()).getString(Constant.ENDING_MIN, "");
-            String currentTime = SharedPreferencesUtil.getInstance(getContext()).getString(Constant.ENDING_CURRENT_TIME, "");
-            if (TextUtils.isEmpty(currentTime)){
-                SimpleDateFormat sdf=new SimpleDateFormat("HH:mm");
-                String date= sdf.format(new java.util.Date());
-                SharedPreferencesUtil.getInstance(getContext()).putString(Constant.ENDING_CURRENT_TIME,date);
-                mPresenter.fetchMeetingEndData(hour,min,meetingDuration,date);
-            }else {
-                mPresenter.fetchMeetingEndData(hour,min,meetingDuration,currentTime);
-            }
-
-            //如果之后要用WebView显示会议结束后的概述，则将下面的代码解注释，并且注释上面的代码
-//            mTopLayout.setVisibility(View.GONE);
+//            mTopLayout.setVisibility(View.VISIBLE);
 //            mBottomLayout.setVisibility(View.GONE);
-//            mLayoutMeetingEndingShow.setVisibility(View.VISIBLE);
-//            String meetingEndingSummary = HttpManager.getInstance(getContext()).getServerIP()
-//                    + SharedPreferencesUtil.getInstance(getContext()).getInt(Constant.MEETING_ID, -1);
-//            mWebView.loadUrl(meetingEndingSummary);
+//            String meetingDuration = MeetingOperate.getInstance(getContext()).
+//                    queryMeetingInfo(Constant.COLUMNS_MEETING_INFO).getMeetingDuration();
+//            //存储会议结束的时间，时  分
+//            String hour = SharedPreferencesUtil.getInstance(getContext()).getString(Constant.ENDING_HOUR, "");
+//            String min = SharedPreferencesUtil.getInstance(getContext()).getString(Constant.ENDING_MIN, "");
+//            String currentTime = SharedPreferencesUtil.getInstance(getContext()).getString(Constant.ENDING_CURRENT_TIME, "");
+//            if (TextUtils.isEmpty(currentTime)){
+//                SimpleDateFormat sdf=new SimpleDateFormat("HH:mm");
+//                String date= sdf.format(new java.util.Date());
+//                SharedPreferencesUtil.getInstance(getContext()).putString(Constant.ENDING_CURRENT_TIME,date);
+//                mPresenter.fetchMeetingEndData(hour,min,meetingDuration,date);
+//            }else {
+//                mPresenter.fetchMeetingEndData(hour,min,meetingDuration,currentTime);
+//            }
+
+//            如果之后要用WebView显示会议结束后的概述，则将下面的代码解注释，并且注释上面的代码
+            mTopLayout.setVisibility(View.GONE);
+            mBottomLayout.setVisibility(View.GONE);
+            mLayoutMeetingEndingShow.setVisibility(View.VISIBLE);
+            String meetingEndingSummary = HttpManager.getInstance(getContext()).getServerIP()
+                    + "/Report/Index?meetingID="+SharedPreferencesUtil.getInstance(getContext()).getInt(Constant.MEETING_ID, -1);
+            mWebView.loadUrl(meetingEndingSummary);
 
         }else {//会议未结束
             mPresenter.start();
@@ -248,7 +248,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
         ((TextView) contentView.findViewById(R.id.id_tv_dialog_begin_time)).setText(
                 meetingInfo.getMeetingBeginTime());
         ((TextView) contentView.findViewById(R.id.id_tv_dialog_time)).setText(
-                meetingInfo.getMeetingDuration());
+                meetingInfo.getMeetingDuration()+"分钟");
         ((TextView) contentView.findViewById(R.id.id_tv_dialog_delegate)).setText("计划参会"
                 + meetingInfo.getDelegateNum() + "人");
 //        ((TextView) contentView.findViewById(R.id.id_tv_dialog_delegate)).setText("计划参会"

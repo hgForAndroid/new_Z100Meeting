@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
@@ -31,6 +32,7 @@ import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaPresenter;
 import com.gzz100.Z100_HuiYi.meeting.agenda.RemoveControlViewEvent;
 import com.gzz100.Z100_HuiYi.meeting.delegate.DelegateFragment;
 import com.gzz100.Z100_HuiYi.meeting.delegate.DelegatePresenter;
+import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
 import com.gzz100.Z100_HuiYi.meeting.file.FileFragment;
 import com.gzz100.Z100_HuiYi.meeting.file.FilePresenter;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
@@ -245,6 +247,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 获取小时的字符串，0-9，在数字前面加0，其他的不加。
+     *
      * @return
      */
     public String getHour() {
@@ -254,6 +257,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 获取分钟的字符串，0-9，在数字前面加0，其他的不变。如果到了60，直接变为00。
+     *
      * @return
      */
     public String getMin() {
@@ -293,7 +297,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 mViewPager.setCurrentItem(PAGE_SIX);
                 mNavBarView.mTvTitle.setText(mVoteTab.getText());
                 break;
-            default:break;
+            default:
+                break;
         }
     }
 
@@ -375,7 +380,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     /**
      * 在{@link com.gzz100.Z100_HuiYi.tcpController.Client#mRunnable}
      * 接收信息，主持人发出ControllerInfoBean消息实体，所有客户端在MAinActivity时接收并处理该消息。
-     * @param data    ControllerInfoBean消息实体
+     *
+     * @param data ControllerInfoBean消息实体
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getControllerInfoBean(ControllerInfoBean data) {
@@ -389,7 +395,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      * 在{@link FileDetailActivity#showVote()}
      * 主持人在文件详情界面开始投票之后，销毁掉文件详情界面，通知主界面显示投票界面。
      * 这是主持人端调用的方法。
-     * @param votePage   PAGE_SIX = 5，代表投票的fragment
+     *
+     * @param votePage PAGE_SIX = 5，代表投票的fragment
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void hostShowVoteFragment(Integer votePage) {
@@ -405,7 +412,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     /**
      * 在{@link FileDetailActivity#showVote()}.
      * 文件详情界面主持人控制会议后，将当前会议状态信息发送过来，这里处理当前会议状态，在右上角显示.
-     * @param meetingState   会议状态
+     *
+     * @param meetingState 会议状态
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCurrentMeetingState(String meetingState) {
@@ -422,11 +430,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     /**
      * 在{@link FileDetailActivity#respondVoteBegin(int)}
      * 客户端文件详情接收到投票命令，销毁详情页面后发信息到达此页面，进行处理
-     * @param vote   投票实体，包含投票的id，利用该id显示对应的投票内容。
+     *
+     * @param vote 投票实体，包含投票的id，利用该id显示对应的投票内容。
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void clientShowVoteFragment(Vote vote) {
         if (vote != null) {
+            if (!ActivityStackManager.isFirstStackActivity(this.getComponentName().getClassName())) {
+                ActivityStackManager.clearTop(this);
+            }
+
             SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, vote.getVoteID());
             mVoteTab.setChecked(true);//显示投票界面
         }
@@ -435,6 +448,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     /**
      * 在{@link AgendaFragment#showFileDetail()}
      * 移除控制条
+     *
      * @param removeControlViewEvent
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -450,7 +464,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mVoteResultDialog.dismiss();
             mVoteResultDialog = null;
         }
-        if (mMyHandler != null){
+        if (mMyHandler != null) {
             mMyHandler.removeCallbacksAndMessages(null);
             mMyHandler = null;
         }
@@ -458,6 +472,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 点击控制条的开始、结束按钮
+     *
      * @param view
      */
     @Override
@@ -474,7 +489,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 ToastUtil.showMessage("会议已结束！");
                 return;
             }
-            if (mNavBarView.getMeetingStateOrAgendaState().equals("投票中")){
+            if (mNavBarView.getMeetingStateOrAgendaState().equals("投票中")) {
                 ToastUtil.showMessage("当前投票还未结束，请先结束投票！");
                 return;
             }
@@ -527,6 +542,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      * 因为这两个方法有共同的方法，但是调用的源头方法不同。
      * 该方法是在{@link FileDetailActivity#meetingEnding()}中调用。
      * 处理会议结束事件。
+     *
      * @param meetingEnd
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -556,6 +572,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 点击暂停、继续按钮
+     *
      * @param view
      */
     @Override
@@ -569,7 +586,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 ToastUtil.showMessage("会议已结束！");
                 return;
             }
-            if (mNavBarView.getMeetingStateOrAgendaState().equals("投票中")){
+            if (mNavBarView.getMeetingStateOrAgendaState().equals("投票中")) {
                 ToastUtil.showMessage("当前投票还未结束，请先结束投票！");
                 return;
             }
@@ -602,6 +619,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 点击控制条的投票按钮。
+     *
      * @param view
      */
     @Override
@@ -622,7 +640,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mDialog.setIVoteDialogDelete(new IVoteDialogDelete() {
                 @Override
                 public void deleteVoteDialog(View view) {
-                    if (mDialog != null && mDialog.isShowing()){
+                    if (mDialog != null && mDialog.isShowing()) {
                         mDialog.dismiss();
                     }
                 }
@@ -631,12 +649,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         } else {
             boolean voteSubmit = SharedPreferencesUtil.getInstance(this).
                     getBoolean(Constant.IS_VOTE_COMMIT, false);
-            if (voteSubmit){
+            if (voteSubmit) {
                 String deviceIMEI = MPhone.getDeviceIMEI(this);
                 int meetingID = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
                 int voteId = SharedPreferencesUtil.getInstance(this).getInt(Constant.BEGIN_VOTE_ID, -1);
                 mMainPresenter.hostLaunchOrCloseVote(deviceIMEI, meetingID, voteId, -1, null, 0);
-            }else {
+            } else {
                 ToastUtil.showMessage("还未上传投票结果！");
             }
         }
@@ -644,23 +662,24 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 启动或结束投票
+     *
      * @param view
      * @param position
      */
     @Override
     public void onVoteStartStopButtonClick(View view, int position) {
-        if (mMeetingState == Constant.MEETING_STATE_ENDING){
+        if (mMeetingState == Constant.MEETING_STATE_ENDING) {
             ToastUtil.showMessage(R.string.string_meeting_already_ending);
             return;
         }
         //会议是开启状态
-        if (mMeetingState == Constant.MEETING_STATE_BEGIN || mMeetingState == Constant.MEETING_STATE_CONTINUE){
+        if (mMeetingState == Constant.MEETING_STATE_BEGIN || mMeetingState == Constant.MEETING_STATE_CONTINUE) {
             String deviceIMEI = MPhone.getDeviceIMEI(this);
             int meetingID = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
             mVoteId = mDialog.getVoteId();
             SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, mVoteId);
             mMainPresenter.hostLaunchOrCloseVote(deviceIMEI, meetingID, mVoteId, 0, mControllerInfoBean, mMeetingState);
-        }else {//其他状态，比如暂停
+        } else {//其他状态，比如暂停
             ToastUtil.showMessage(R.string.string_not_start_meeting);
             return;
         }
@@ -669,6 +688,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 显示投票结果
+     *
      * @param view
      * @param position
      */
@@ -682,7 +702,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mVoteResultDialog.setIVoteDialogDelete(new IVoteDialogDelete() {
             @Override
             public void deleteVoteDialog(View view) {
-                if (mVoteResultDialog != null && mVoteResultDialog.isShowing()){
+                if (mVoteResultDialog != null && mVoteResultDialog.isShowing()) {
                     mVoteResultDialog.dismiss();
                 }
             }
@@ -692,9 +712,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 客户端响应会议开始指令的操作。
-     * @param agendaIndex      议程序号
-     * @param documentIndex    文件序号
-     * @param upLevelTitle     上一级标题
+     *
+     * @param agendaIndex   议程序号
+     * @param documentIndex 文件序号
+     * @param upLevelTitle  上一级标题
      */
     @Override
     public void clientResponseMeetingBegin(int agendaIndex, int documentIndex, String upLevelTitle) {
@@ -706,7 +727,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 客户端响应投票指令的操作。
-     * @param VoteId   投票id
+     *
+     * @param VoteId 投票id
      */
     @Override
     public void clientResponseMeetingVote(int VoteId) {
@@ -716,13 +738,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 客户端响应会议继续的指令的操作。
-     * @param agendaIndex              议程序号
-     * @param documentIndex             文件序号
-     * @param upLevelTitle              上级标题
-     * @param countingMin               倒计时时间，分
-     * @param countingSec               倒计时时间，秒
-     * @param meetingBeginTimeHour      会议已开始时间，时
-     * @param meetingBeginTimeMin       会议已开始时间，分
+     *
+     * @param agendaIndex          议程序号
+     * @param documentIndex        文件序号
+     * @param upLevelTitle         上级标题
+     * @param countingMin          倒计时时间，分
+     * @param countingSec          倒计时时间，秒
+     * @param meetingBeginTimeHour 会议已开始时间，时
+     * @param meetingBeginTimeMin  会议已开始时间，分
      */
     @Override
     public void clientResponseMeetingContinue(int agendaIndex, int documentIndex, String upLevelTitle,
@@ -744,13 +767,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     /**
      * 在{@link com.gzz100.Z100_HuiYi.tcpController.Server#mRunnable}
      * 会议，临时有人进入会议中，主持人发送消息通知刚进入的平板进入受控状态
+     *
      * @param peopleIn
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void somePeopleIn(PeopleIn peopleIn){
-        if (peopleIn.isPeopleIn()){
-            if (mMeetingState == Constant.MEETING_STATE_PAUSE){
-                mMainPresenter.controlTempPeopleIn(peopleIn.getDeviceIp(),mControllerInfoBean, mMeetingState,
+    public void somePeopleIn(PeopleIn peopleIn) {
+        if (peopleIn.isPeopleIn()) {
+            if (mMeetingState == Constant.MEETING_STATE_PAUSE) {
+                mMainPresenter.controlTempPeopleIn(peopleIn.getDeviceIp(), mControllerInfoBean, mMeetingState,
                         mNavBarView.getTimeHour(), mNavBarView.getTimeMin());
             }
         }
@@ -758,13 +782,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 临时有人进入会议后，主持人点击继续会议的指令，该客户端响应指令的操作。
-     * @param agendaIndex              议程序号
-     * @param documentIndex             文件序号
-     * @param upLevelTitle              上级标题
-     * @param countingMin               倒计时时间，分
-     * @param countingSec               倒计时时间，秒
-     * @param meetingBeginTimeHour      会议已开始时间，时
-     * @param meetingBeginTimeMin       会议已开始时间，分
+     *
+     * @param agendaIndex          议程序号
+     * @param documentIndex        文件序号
+     * @param upLevelTitle         上级标题
+     * @param countingMin          倒计时时间，分
+     * @param countingSec          倒计时时间，秒
+     * @param meetingBeginTimeHour 会议已开始时间，时
+     * @param meetingBeginTimeMin  会议已开始时间，分
      */
     @Override
     public void tempClientResponseMeetingContinue(int agendaIndex, int documentIndex, String upLevelTitle,
@@ -788,9 +813,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 临时有人进入会议后，主持人点击暂停或结束会议的指令，该客户端响应指令的操作。
-     * @param meetingState              会议状态
-     * @param meetingBeginTimeHour      会议已开始时间，时
-     * @param meetingBeginTimeMin       会议已开始时间，分
+     *
+     * @param meetingState         会议状态
+     * @param meetingBeginTimeHour 会议已开始时间，时
+     * @param meetingBeginTimeMin  会议已开始时间，分
      */
     @Override
     public void tempClientResponseMeetingPauseOrEnd(int meetingState, String meetingBeginTimeHour, String meetingBeginTimeMin) {
@@ -833,9 +859,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 主持人端响应会议开始指令的操作。
-     * @param agendaIndex      议程序号
-     * @param documentIndex     文件序号
-     * @param upLevelTitle      上一级标题
+     *
+     * @param agendaIndex   议程序号
+     * @param documentIndex 文件序号
+     * @param upLevelTitle  上一级标题
      */
     @Override
     public void hostResponseMeetingBegin(int agendaIndex, int documentIndex, String upLevelTitle) {
@@ -900,8 +927,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 没开始投票前，主持人端响应结束投票指令的操作。
-     * @param agendaIndex    议程序号
-     * @param documentId      文件序号
+     *
+     * @param agendaIndex 议程序号
+     * @param documentId  文件序号
      * @param upTitleText
      */
     @Override
@@ -912,11 +940,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 投票已经开始，主持人端响应结束投票指令的操作。
-     * @param agendaIndex    原来的议程序号
-     * @param documentId     原来的议程文件序号
-     * @param upTitleText    上一级标题
-     * @param countingMin    议程倒计时分钟
-     * @param countingSec     议程倒计时秒数
+     *
+     * @param agendaIndex 原来的议程序号
+     * @param documentId  原来的议程文件序号
+     * @param upTitleText 上一级标题
+     * @param countingMin 议程倒计时分钟
+     * @param countingSec 议程倒计时秒数
      */
     @Override
     public void hostResponseEndVoteAlreadyStart(int agendaIndex, int documentId, String upTitleText,
@@ -978,7 +1007,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 主持人端响应开启（关闭）投票失败的指令的操作。
-     * @param failFlag   0：代表开启失败   -1：代表关闭失败
+     *
+     * @param failFlag 0：代表开启失败   -1：代表关闭失败
      */
     @Override
     public void hostResponseLaunchOrCloseVoteFail(int failFlag) {
@@ -991,11 +1021,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     /**
      * 主持人端响应会议继续的指令的操作。
-     * @param agendaIndex     暂停前的议程序号
-     * @param documentIndex    暂停前的文件序号
-     * @param upLevelTitle     上一级标题
-     * @param countingMin      暂停前倒计时分钟
-     * @param countingSec      暂停前倒计时秒钟
+     *
+     * @param agendaIndex   暂停前的议程序号
+     * @param documentIndex 暂停前的文件序号
+     * @param upLevelTitle  上一级标题
+     * @param countingMin   暂停前倒计时分钟
+     * @param countingSec   暂停前倒计时秒钟
      */
     @Override
     public void hostResponseMeetingContinue(int agendaIndex, int documentIndex, String upLevelTitle,
@@ -1034,8 +1065,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                                         }
                                     }).start();
                                 }
-                                if (mTipDialog != null){
-                                    mTipDialog.dismiss();                                }
+                                if (mTipDialog != null) {
+                                    mTipDialog.dismiss();
+                                }
                                 SharedPreferencesUtil.getInstance(MainActivity.this).killAllRunningService();
                                 SharedPreferencesUtil.getInstance(MainActivity.this).clearKeyInfo();
                                 //删除会议前预下载的所有文件

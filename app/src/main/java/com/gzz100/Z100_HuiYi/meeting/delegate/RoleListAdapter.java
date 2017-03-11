@@ -51,6 +51,15 @@ public class RoleListAdapter extends RecyclerView.Adapter<RoleHolder> {
     @Override
     public void onBindViewHolder(RoleHolder holder, final int position) {
 
+        if (mRoleList.get(position).equals("主持人")){
+            holder.mRoleImage.setImageResource(R.drawable.ic_host);
+        }
+        if (mRoleList.get(position).equals("主讲人")){
+            holder.mRoleImage.setImageResource(R.drawable.ic_keynote_speaker);
+        }
+        if (mRoleList.get(position).equals("其他参会代表")){
+            holder.mRoleImage.setImageResource(R.drawable.ic_normal_delegate);
+        }
         holder.mRoleName.setText(mRoleList.get(position));
         holder.mRoleLayout.setOnClickListener(new View.OnClickListener() {
             @Override

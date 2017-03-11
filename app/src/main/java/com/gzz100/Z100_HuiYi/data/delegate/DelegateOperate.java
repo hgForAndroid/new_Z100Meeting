@@ -43,7 +43,7 @@ public class DelegateOperate {
         values.put(PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE, data);
         mDataBase = mDBHelper.getReadableDatabase();
         mDataBase.insert(PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE, null, values);
-        mDataBase.close();
+//        mDataBase.close();
     }
 
 
@@ -63,7 +63,7 @@ public class DelegateOperate {
             delegateBeanList = (List<DelegateModel>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();
-        mDataBase.close();
+//        mDataBase.close();
         List<DelegateModel> returnList = new ArrayList<>();
         for (DelegateModel delegateModel : delegateBeanList) {
             if (delegateModel.getDelegateRole() == rolePos)
@@ -84,7 +84,7 @@ public class DelegateOperate {
             allDelegate = (List<DelegateModel>) ObjectTransverter.byteArrToList(data);
         }
         cursor.close();
-        mDataBase.close();
+//        mDataBase.close();
         return allDelegate;
     }
 }

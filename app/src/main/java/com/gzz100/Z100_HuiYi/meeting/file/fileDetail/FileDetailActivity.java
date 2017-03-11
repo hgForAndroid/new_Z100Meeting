@@ -1264,9 +1264,10 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (mTipDialog != null) {
             mTipDialog.dismiss();
         }
-        if (mWebView != null) {
-            mWebView.destroy();
-        }
+//        if (mWebView != null) {
+//            mWebView.destroy();
+//            mWebView.clearCache(true);
+//        }
     }
 
     /**

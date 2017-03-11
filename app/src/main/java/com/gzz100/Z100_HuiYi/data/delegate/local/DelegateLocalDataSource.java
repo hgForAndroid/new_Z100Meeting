@@ -75,6 +75,17 @@ public class DelegateLocalDataSource implements DelegateDataSource {
     }
 
     @Override
+    public void getAllDelegateList(LoadDelegateListCallback callback) {
+        List<DelegateModel> delegateBeanList = DelegateOperate.getInstance(mContext).queryAllDelegate();
+
+        if(delegateBeanList!=null&&delegateBeanList.size()>0){
+            callback.onDelegateListLoaded(delegateBeanList);
+        }
+        else
+            callback.onDataNotAvailable();
+    }
+
+    @Override
     public void getDelegateNameHint(LoadDelegateNameHintCallback callback) {
 
 //        if (mIsFakeData)

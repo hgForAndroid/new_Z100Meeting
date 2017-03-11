@@ -32,6 +32,7 @@ public interface DelegateDataSource {
     }
 
     void getDelegateList(int rolePos, DelegateDataSource.LoadDelegateListCallback callback);
+    void getAllDelegateList(DelegateDataSource.LoadDelegateListCallback callback);
 
     void getDelegateNameHint(LoadDelegateNameHintCallback callback);
 }

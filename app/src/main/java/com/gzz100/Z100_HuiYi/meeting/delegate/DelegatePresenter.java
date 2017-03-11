@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateDataSource;
+import com.gzz100.Z100_HuiYi.data.delegate.DelegateOperate;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateRepository;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
@@ -19,87 +20,104 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     private final DelegateRepository mDelegateRepository;
     private final DelegateContract.View mDelegateView;
 
-    private boolean IsFirstLoad=true;
+    private boolean IsFirstLoad = true;
 
-    public DelegatePresenter (@NonNull DelegateRepository delegateRepository, DelegateContract.View delegateView) {
-        this.mDelegateRepository = checkNotNull(delegateRepository,"delegateRepository cannot be null");
-        this.mDelegateView = checkNotNull(delegateView,"delegateView cannot be null");
+    public DelegatePresenter(@NonNull DelegateRepository delegateRepository, DelegateContract.View delegateView) {
+        this.mDelegateRepository = checkNotNull(delegateRepository, "delegateRepository cannot be null");
+        this.mDelegateView = checkNotNull(delegateView, "delegateView cannot be null");
         mDelegateView.setPresenter(this);
     }
+
     @Override
     public void start() {
         fetchRoleList();
         fetchDelegateList(DelegateRepository.rolePosConvertToRoleNum(Constant.DEFAULT_SPEAKER));
 //        setDelegateSearchAutoCompleteTextViewHint();
+        setAllDelegate();
+    }
+
+    private void setAllDelegate() {
+        mDelegateRepository.getAllDelegateList(new DelegateDataSource.LoadDelegateListCallback() {
+            @Override
+            public void onDelegateListLoaded(List<DelegateModel> delegateBeans) {
+                if (delegateBeans != null && delegateBeans.size() > 0) {
+                    allDelegate = delegateBeans;
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
     }
 
     @Override
     public void fetchRoleList() {
-            mDelegateRepository.getRoleList(new DelegateDataSource.LoadRoleListCallback() {
-                @Override
-                public void onRoleListLoaded(List<String> roleList) {
-                    mDelegateView.showRoleList(roleList);
+        mDelegateRepository.getRoleList(new DelegateDataSource.LoadRoleListCallback() {
+            @Override
+            public void onRoleListLoaded(List<String> roleList) {
+                mDelegateView.showRoleList(roleList);
 
-                    if(IsFirstLoad){
-                        mDelegateView.showRoleItemDecoration();
-                    }
-
+                if (IsFirstLoad) {
+                    mDelegateView.showRoleItemDecoration();
                 }
 
-                @Override
-                public void onDataNotAvailable() {
-                    mDelegateView.showNoRoleList();
-                }
-            });
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                mDelegateView.showNoRoleList();
+            }
+        });
 
 
     }
 
-    private List<DelegateModel> currRoleDelegateBeanList=new ArrayList<>();
+    private List<DelegateModel> currRoleDelegateBeanList = new ArrayList<>();
+
     @Override
     public void fetchDelegateList(int rolePos) {
 
-            mDelegateRepository.getDelegateList(rolePos, new DelegateDataSource.LoadDelegateListCallback() {
-                @Override
-                public void onDelegateListLoaded(List<DelegateModel> delegateBeans) {
-                    mDelegateView.showDelegateList(delegateBeans);
-                    if(IsFirstLoad){
-                        mDelegateView.showDelegateNameGridItemDecoration();
-                    }
-                    currRoleDelegateBeanList=delegateBeans;
+        mDelegateRepository.getDelegateList(rolePos, new DelegateDataSource.LoadDelegateListCallback() {
+            @Override
+            public void onDelegateListLoaded(List<DelegateModel> delegateBeans) {
+                mDelegateView.showDelegateList(delegateBeans);
+                if (IsFirstLoad) {
+                    mDelegateView.showDelegateNameGridItemDecoration();
                 }
+                currRoleDelegateBeanList = delegateBeans;
+            }
 
-                @Override
-                public void onDataNotAvailable() {
-                    mDelegateView.showNoDelegateList();
-                }
-            });
+            @Override
+            public void onDataNotAvailable() {
+                mDelegateView.showNoDelegateList();
+            }
+        });
     }
 
 
     @Override
     public void setFirstLoad(boolean reLoad) {
-        IsFirstLoad=reLoad;
+        IsFirstLoad = reLoad;
     }
 
-    private List<DelegateModel> allDelegate=new ArrayList<>();
+    private List<DelegateModel> allDelegate = new ArrayList<>();
+
     @Override
     public void searchByName(String nameInput) {
 
-        if(nameInput==null){
+        if (nameInput == null) {
             return;
         }
-        List<String> allDelegateName=new ArrayList<>();
+        List<String> allDelegateName = new ArrayList<>();
 
-        for(DelegateModel delegateBean:allDelegate)
-        {
+        for (DelegateModel delegateBean : allDelegate) {
             allDelegateName.add(delegateBean.getDelegateName());
         }
-        if(allDelegateName.contains(nameInput))
-        {
+        if (allDelegateName.contains(nameInput)) {
             mDelegateView.showDelegateDetail(allDelegate.get(allDelegateName.indexOf(nameInput)));
-        }
-        else{
+        } else {
             //一些提示
             mDelegateView.showNoDelegateDetail();
 
@@ -107,15 +125,13 @@ public class DelegatePresenter implements DelegateContract.Presenter {
     }
 
     @Override
-    public void showDelegateDetail( final int delegateNamePos) {
+    public void showDelegateDetail(final int delegateNamePos) {
 
-        DelegateModel delegateBean=currRoleDelegateBeanList.get(delegateNamePos);
+        DelegateModel delegateBean = currRoleDelegateBeanList.get(delegateNamePos);
 
-        if(delegateBean!=null)
-        {
+        if (delegateBean != null) {
             mDelegateView.showDelegateDetail(delegateBean);
-        }
-        else
+        } else
             mDelegateView.showNoDelegateDetail();
 
 
@@ -127,7 +143,7 @@ public class DelegatePresenter implements DelegateContract.Presenter {
             @Override
             public void onDelegateNameHintLoaded(List<DelegateModel> delegateBeanList) {
                 mDelegateView.setAutoCompleteTextView(delegateBeanList);
-                allDelegate=delegateBeanList;
+                allDelegate = delegateBeanList;
             }
 
             @Override
