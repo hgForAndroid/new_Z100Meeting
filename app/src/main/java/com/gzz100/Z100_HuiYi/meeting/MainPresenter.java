@@ -53,7 +53,7 @@ public class MainPresenter implements MainContract.Presenter {
                 //该值在投票开始时为true
                 SharedPreferencesUtil.getInstance(mContext).putBoolean(Constant.IS_VOTE_BEGIN, false);
                 SharedPreferencesUtil.getInstance(mContext).remove(Constant.BEGIN_VOTE_ID);
-                if (controllerInfoBean.isControlTempPeople()){
+                if (controllerInfoBean.isControlTempPeople()){//有临时人员进入
                     if (controllerInfoBean.getTempPeopleInCurrentState() == Constant.MEETING_STATE_BEGIN){
                         mMainView.tempClientResponseMeetingContinue(agendaIndex, documentIndex, upLevelTitle,
                                 controllerInfoBean.getCountingMin(),controllerInfoBean.getCountingSec(),

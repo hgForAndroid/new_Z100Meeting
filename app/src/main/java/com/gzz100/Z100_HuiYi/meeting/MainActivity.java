@@ -719,7 +719,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Override
     public void clientResponseMeetingBegin(int agendaIndex, int documentIndex, String upLevelTitle) {
-        mRootView.removeView(mControllerView);
+        //主持人才有控制条
+//        mRootView.removeView(mControllerView);
         mNavBarView.setMeetingStateOrAgendaState("开会中");
         FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle, true,
                 false, false, "", "");

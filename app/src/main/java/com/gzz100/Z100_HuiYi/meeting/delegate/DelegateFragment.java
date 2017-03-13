@@ -235,7 +235,7 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
      */
     @Subscribe (threadMode = ThreadMode.MAIN)
     public void setTabToOtherDelegate(Boolean showOtherDelegate){
-        mPresenter.fetchDelegateList(Constant.OTHER_DELEGATE);
-        setRoleItemBackgroundColor(mLastClickedRoleItemPositon,Constant.OTHER_DELEGATE);
+        mPresenter.fetchDelegateList(Constant.DEFAULT_SPEAKER);
+        setRoleItemBackgroundColor(mLastClickedRoleItemPositon,Constant.DEFAULT_SPEAKER);
     }
 }

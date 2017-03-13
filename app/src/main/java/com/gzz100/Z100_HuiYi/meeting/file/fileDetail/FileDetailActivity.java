@@ -1217,8 +1217,28 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
     public void fallback() {//返回
         //由主持人点击或继续，mPassive为true，暂停、结束为false
         if (mPassive) {//无操作
+//            if (isHost){
+//                if (mControllerView != null) {
+//                    mRootView.removeView(mControllerView);
+//                    /**
+//                     * 通知主界面重新添加控制条。
+//                     * 调用{@link MainActivity#reAddControllerView(Long)}
+//                     */
+//                    EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
+//                }
+//                ActivityStackManager.pop();
+//            }
         } else {
-            if (isHost) {
+            backToMain();
+        }
+    }
+
+    /**
+     * 主持人端退出当前界面，返回主界面
+     */
+    private void backToMain() {
+        if (isHost) {
+            if (mControllerView != null) {
                 mRootView.removeView(mControllerView);
                 /**
                  * 通知主界面重新添加控制条。
@@ -1226,8 +1246,8 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
                  */
                 EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
             }
-            ActivityStackManager.pop();
         }
+        ActivityStackManager.pop();
     }
 
     @Override
@@ -1235,16 +1255,19 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             //由主持人点击或继续，mPassive为true，暂停、结束为false
             if (mPassive) {
+//                if (isHost){
+//                    if (mControllerView != null) {
+//                        mRootView.removeView(mControllerView);
+//                        /**
+//                         * 通知主界面重新添加控制条。
+//                         * 调用{@link MainActivity#reAddControllerView(Long)}
+//                         */
+//                        EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
+//                    }
+//                    ActivityStackManager.pop();
+//                }
             } else {
-                if (mControllerView != null) {
-                    mRootView.removeView(mControllerView);//本界面先移除控制View
-                    /**
-                     * 通知主界面添加控制View,只有这个界面先移除后，主界面才能添加.
-                     * 调用{@link MainActivity#reAddControllerView(Long)}
-                     */
-                    EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
-                }
-                ActivityStackManager.pop();
+                backToMain();
             }
             return true;
         }

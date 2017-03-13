@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
@@ -201,6 +202,11 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
         mMainActivity.removeControllerView();
         String currentTitle = mMainActivity.getCurrentTitle();
+//        if (MyAPP.getInstance().isMeetingIsProgress() == 2){
+//            FileDetailActivity.start(getActivity(), mAgendaIndex, mFileIndex, currentTitle, false, false, false, "", "");
+//        }else{
+//            FileDetailActivity.start(getActivity(), mAgendaIndex, mFileIndex, currentTitle, false, false, false, "", "");
+//        }
         FileDetailActivity.start(getActivity(), mAgendaIndex, mFileIndex, currentTitle, false, false, false, "", "");
     }
 
