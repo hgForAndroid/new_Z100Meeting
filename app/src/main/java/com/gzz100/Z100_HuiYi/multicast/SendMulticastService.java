@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.gzz100.Z100_HuiYi.data.Update;
+import com.gzz100.Z100_HuiYi.data.eventBean.KillService;
 import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
 import com.gzz100.Z100_HuiYi.network.MySubscriber;
@@ -18,6 +19,10 @@ import com.gzz100.Z100_HuiYi.network.entity.UpdatePost;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 public class SendMulticastService extends Service {
@@ -28,6 +33,12 @@ public class SendMulticastService extends Service {
     private int mMeetingId;
     private String mDeviceIMEI;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        EventBus.getDefault().register(this);
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -37,10 +48,10 @@ public class SendMulticastService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mDeviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
-        mCurrentIP = SharedPreferencesUtil.getInstance(this).getString(Constant.CURRENT_IP,"");
-        mMeetingId = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID,-1);
+        mCurrentIP = SharedPreferencesUtil.getInstance(this).getString(Constant.CURRENT_IP, "");
+        mMeetingId = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
         String tcpServerIP = intent.getStringExtra("localIpAddress");
-        KeyInfoBean keyInfoBean = new KeyInfoBean(mCurrentIP, mMeetingId,tcpServerIP);
+        KeyInfoBean keyInfoBean = new KeyInfoBean(mCurrentIP, mMeetingId, tcpServerIP);
         Gson gson = new Gson();
         mKeyInfoJson = gson.toJson(keyInfoBean);
 
@@ -58,10 +69,10 @@ public class SendMulticastService extends Service {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            while (true){
-               try {
+            while (true) {
+                try {
                     SystemClock.sleep(1000);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 //因为是udp组播发送，循环发送这些值到客户端，确保接收到
@@ -70,20 +81,20 @@ public class SendMulticastService extends Service {
         }
     };
 
-    private Runnable checkUpdateRunnable = new Runnable(){
+    private Runnable checkUpdateRunnable = new Runnable() {
         @Override
         public void run() {
-            while (true){
+            while (true) {
                 try {
                     SystemClock.sleep(1000);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 UpdatePost updatePost = new UpdatePost(
                         new MySubscriber(new HttpRxCallbackListener<Update>() {
                             @Override
                             public void onNext(Update update) {
-                                if (update.getIsUpdate() == 0){
+                                if (update.getIsUpdate() == 0) {
                                     //有更新
                                 }
                                 Log.e(TAG, "onNext: 调用了CheckUpdate");
@@ -95,10 +106,21 @@ public class SendMulticastService extends Service {
                             }
                         }
                                 , SendMulticastService.this.getApplicationContext()),
-                        mDeviceIMEI,mMeetingId);
+                        mDeviceIMEI, mMeetingId);
                 HttpManager.getInstance(SendMulticastService.this).doHttpDeal(updatePost);
             }
         }
     };
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void kill(KillService k) {
+        if (k.getName().equals("SendMulticastService"))
+            stopSelf();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

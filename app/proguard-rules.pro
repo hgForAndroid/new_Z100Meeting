@@ -1,7 +1,7 @@
  # Add project specific ProGuard rules here.
 # By default, the flags in this document are appended to flags specified
 # in D:\ASpath\sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
+# You can edit the include path and agendaOrder by changing the proguardFiles
 # directive in build.gradle.
 #
 # For more details, see
@@ -19,7 +19,7 @@
 #忽略警告
 #ignorewarnings
 
-#有Gson包，需要添加下面这条，放置类型转换错误
+#有Gson包，需要添加下面这条，防止类型转换错误
 # -keepattributes Signature
 
 #让Gson包不混淆
@@ -34,7 +34,7 @@
 #-keep class android.support.v7.**{ *;}
 
 #-dontwarn android.support.annotation.**
-#-keep class android.support.annotation .**{ *;}
+#-keep class android.support.annotation.**{ *;}
 
 #retrofit 官网声明，如果使用了retrofit，并且有proguard文件，需要以下配置：现先全部注释
 # Platform calls Class.forName on types which do not exist on Android to determine platform.

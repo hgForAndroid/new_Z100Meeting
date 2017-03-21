@@ -28,6 +28,7 @@ import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
 import com.gzz100.Z100_HuiYi.utils.Constant;
+import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import java.util.List;
@@ -199,21 +200,29 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void showFileDetail() {
-        //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
-        mMainActivity.removeControllerView();
+        if (MyAPP.getInstance().isVoting()){
+            ToastUtil.showMessage("投票还未结束");
+            return;
+        }
+        if (MyAPP.getInstance().getUserRole() == 1){
+            //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
+            mMainActivity.removeControllerView();
+        }
         String currentTitle = mMainActivity.getCurrentTitle();
-//        if (MyAPP.getInstance().isMeetingIsProgress() == 2){
-//            FileDetailActivity.start(getActivity(), mAgendaIndex, mFileIndex, currentTitle, false, false, false, "", "");
-//        }else{
-//            FileDetailActivity.start(getActivity(), mAgendaIndex, mFileIndex, currentTitle, false, false, false, "", "");
-//        }
         FileDetailActivity.start(getActivity(), mAgendaIndex, mFileIndex, currentTitle, false, false, false, "", "");
     }
 
     @Override
     public void showSearchFileDetail() {
-        //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
-        mMainActivity.removeControllerView();
+        if (MyAPP.getInstance().isVoting()){
+            ToastUtil.showMessage("投票还未结束");
+            return;
+        }
+        if (MyAPP.getInstance().getUserRole() == 1){
+            //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
+            mMainActivity.removeControllerView();
+        }
+
         String currentTitle = mMainActivity.getCurrentTitle();
         FileDetailActivity.start(getActivity(), mSearchAgendaIndex, mSearchFileIndex1 - 1, currentTitle, false, false, false, "", "");
     }

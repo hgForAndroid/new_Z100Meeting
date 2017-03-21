@@ -17,6 +17,8 @@ import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
+import java.lang.reflect.Constructor;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -77,6 +79,12 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setAgendaIndex(agendaIndex);
             mControllerInfoBean.setDocumentIndex(DocumentIndex);
             mControllerInfoBean.setUpLevelTitle(upLevelText);
+            String hour = SharedPreferencesUtil.getInstance(mContext).getString(Constant.MEETING_BEGIN_TIME_HOUR, "00");
+            String min = SharedPreferencesUtil.getInstance(mContext).getString(Constant.MEETING_BEGIN_TIME_MIN, "00");
+            mControllerInfoBean.setMeetingBeginTimeHour(hour);
+            mControllerInfoBean.setMeetingBeginTimeMin(min);
+
+
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
                 ControllerUtil.getInstance().sendMessage(json);
@@ -107,6 +115,12 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
         try {
             ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
             mControllerInfoBean.setMeetingState(meetingState);
+            String hour = SharedPreferencesUtil.getInstance(mContext).getString(Constant.MEETING_BEGIN_TIME_HOUR, "00");
+            String min = SharedPreferencesUtil.getInstance(mContext).getString(Constant.MEETING_BEGIN_TIME_MIN, "00");
+            mControllerInfoBean.setMeetingBeginTimeHour(hour);
+            mControllerInfoBean.setMeetingBeginTimeMin(min);
+
+            mControllerInfoBean.setInFileDetail(true);
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
@@ -122,6 +136,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
         try {
             ControllerInfoBean mControllerInfoBean = controllerInfoBean.clone();
             mControllerInfoBean.setMeetingState(meetingState);
+
+            mControllerInfoBean.setInFileDetail(false);
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
@@ -152,6 +168,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
                     getString(Constant.MEETING_BEGIN_TIME_MIN, "00");
             mControllerInfoBean.setMeetingBeginTimeHour(meetingBeginTimeHour);
             mControllerInfoBean.setMeetingBeginTimeMin(meetingBeginTimeMin);
+
+            mControllerInfoBean.setInFileDetail(false);
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
@@ -187,6 +205,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             //临时人员进入时，当前的会议状态
             mControllerInfoBean.setTempPeopleInCurrentState(MyAPP.getInstance().isMeetingIsProgress());
 
+            mControllerInfoBean.setInFileDetail(true);
+
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
                 ControllerUtil.getInstance().sendLastSocketMessage(deviceIp,json);
@@ -218,6 +238,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setMeetingState(meetingState);
             mControllerInfoBean.setVoteId(voteId);
             mControllerInfoBean.setVoteBegin(true);
+
+            mControllerInfoBean.setInFileDetail(true);
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
@@ -267,6 +289,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             mControllerInfoBean.setDocumentIndex(-1);
             mControllerInfoBean.setAgendaChange(true);
 
+            mControllerInfoBean.setInFileDetail(true);
+
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
                 ControllerUtil.getInstance().sendMessage(json);
@@ -307,6 +331,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             //这里讲文件序号设置为-1，为了不让切换议程时加载两次文件
             mControllerInfoBean.setDocumentIndex(-1);
             mControllerInfoBean.setAgendaChange(true);
+
+            mControllerInfoBean.setInFileDetail(true);
 
             String json = mGson.toJson(mControllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)
@@ -414,6 +440,8 @@ public class FileDetailPresenter implements FileDetailContract.Presenter {
             controllerInfoBean.setMeetingState(Constant.MEETING_STATE_BEGIN);
             controllerInfoBean.setAgendaIndex(agendaIndex);
             controllerInfoBean.setDocumentIndex(documentPosition);
+
+            controllerInfoBean.setInFileDetail(true);
 
             String json = mGson.toJson(controllerInfoBean);
             if (ControllerUtil.getInstance().getIControllerListener() != null)

@@ -40,10 +40,11 @@
             android:id="@+id/id_tv_up_level"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:textColor="@android:color/transparent"
             android:text="上级标题"
             android:textSize="@dimen/nav_uplevel_text_size"
             android:gravity="center"
-            android:drawableLeft="@drawable/ic_left_black"/>
+            android:drawableLeft="@drawable/ic_home"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/id_ll_bavBar_right"

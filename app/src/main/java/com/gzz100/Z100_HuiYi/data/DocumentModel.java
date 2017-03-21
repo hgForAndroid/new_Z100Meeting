@@ -75,8 +75,10 @@ public class DocumentModel extends BaseBean {
         }else if (!this.documentName.isEmpty() &&
                 (this.documentName.contains(".doc") || this.documentName.contains(".docx"))){
             Picasso.with(context).load(R.mipmap.doc).into(imageView);
-        }else if (!this.documentName.isEmpty() && this.documentName.contains(".xlsx")){
+        }else if (!this.documentName.isEmpty() && (this.documentName.contains(".xls") || this.documentName.contains(".xlsx"))){
             Picasso.with(context).load(R.mipmap.xlsx).into(imageView);
+        }else if (!this.documentName.isEmpty() && (this.documentName.contains(".pptx") || this.documentName.contains(".ppt"))){
+            Picasso.with(context).load(R.mipmap.ppt).into(imageView);
         }
     }
 

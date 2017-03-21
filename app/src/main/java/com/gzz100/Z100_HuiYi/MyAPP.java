@@ -61,4 +61,40 @@ public class MyAPP extends Application {
     public void setMeetingIsProgress(int meetingIsProgress) {
         this.meetingIsProgress = meetingIsProgress;
     }
+
+    private boolean voting ;
+
+    /**
+     * 投票是否进行中
+     * @return
+     */
+    public boolean isVoting() {
+        return voting;
+    }
+
+    /**
+     * 设置投票是否进行中
+     * @param voting
+     */
+    public void setVoting(boolean voting) {
+        this.voting = voting;
+    }
+
+    private boolean hostOutOfMeeting = false;
+
+    /**
+     * 主持人在开会进行中离开文件详情界面，查看其它的内容
+     * @param hostOutOfMeeting  true:离开了  false:还在文件详情界面
+     */
+    public void setHostOutOfMeeting(boolean hostOutOfMeeting){
+        this.hostOutOfMeeting = hostOutOfMeeting;
+    }
+
+    /**
+     * 主持人在开会进行中离开文件详情界面，查看其它的内容
+     * @return  true:离开了  false:还在文件详情界面
+     */
+    public boolean getHostOutOfMeeting(){
+        return this.hostOutOfMeeting;
+    }
 }

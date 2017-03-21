@@ -8,13 +8,15 @@
         android:id="@+id/id_about_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
         <ImageView
             android:id="@+id/id_fragment_about_pic"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/z100"/>
+            android:src="@mipmap/company"/>
         <TextView
             android:textSize="20sp"
             android:layout_width="wrap_content"

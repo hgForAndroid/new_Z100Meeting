@@ -15,8 +15,10 @@ public interface MainContract {
          * @param agendaIndex
          * @param documentIndex
          * @param upLevelTitle
+         * @param meetingTimeHour
+         * @param meetingTimeMin
          */
-        void clientResponseMeetingBegin(int agendaIndex, int documentIndex, String upLevelTitle);
+        void clientResponseMeetingBegin(int agendaIndex, int documentIndex, String upLevelTitle,String meetingTimeHour,String meetingTimeMin);
 
         /**
          * 客户端响应投票
@@ -68,8 +70,10 @@ public interface MainContract {
 
         /**
          * 客户端响应结束
+         * @param hour   结束时间：小时
+         * @param min    结束时间：分钟
          */
-        void clientResponseMeetingEnd();
+        void clientResponseMeetingEnd(String hour,String min);
 
 
         /**
@@ -203,8 +207,14 @@ public interface MainContract {
          * @param MeetingState              当前会议状态
          * @param currentMeetingHour        时间，时
          * @param currentMeetingMin         时间，秒
+         * @param hostBackToMain            主持人在开会过程中返回主界面了。
          */
         void controlTempPeopleIn(String deviceIp,ControllerInfoBean controllerInfoBean,int MeetingState,
-                                 String currentMeetingHour,String currentMeetingMin);
+                                 String currentMeetingHour,String currentMeetingMin,boolean hostBackToMain);
+
+        /**
+         * 程序退出，删除一些保存的数据。
+         */
+        void deleteDateAfterEnding();
     }
 }

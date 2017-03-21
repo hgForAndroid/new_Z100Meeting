@@ -6,17 +6,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 
+import com.gzz100.Z100_HuiYi.data.eventBean.KillService;
 import com.gzz100.Z100_HuiYi.multicast.SendMulticastService;
 import com.gzz100.Z100_HuiYi.tcpController.Client;
 import com.gzz100.Z100_HuiYi.tcpController.Server;
+import com.gzz100.Z100_HuiYi.timerService.AgendaTimerService;
+import com.gzz100.Z100_HuiYi.timerService.MeetingTimerService;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 import java.util.Set;
+
 /**
-* SharedPreferences操作工具类。
-* @author XieQXiong
-* create at 2016/9/22 10:15
-*/
+ * SharedPreferences操作工具类。
+ *
+ * @author XieQXiong
+ *         create at 2016/9/22 10:15
+ */
 
 public class SharedPreferencesUtil {
     /**
@@ -219,7 +226,7 @@ public class SharedPreferencesUtil {
     /**
      * 清除sharedPreference中，对显示有影响的缓存
      */
-    public void clearKeyInfo(){
+    public void clearKeyInfo() {
         remove(Constant.IS_MEETING_END);
         remove(Constant.COUNTING_MIN);
         remove(Constant.COUNTING_SEC);
@@ -229,21 +236,68 @@ public class SharedPreferencesUtil {
         remove(Constant.IS_VOTE_BEGIN);
         remove(Constant.IS_VOTE_COMMIT);
         remove(Constant.MEETING_STATE);
+        remove(Constant.MEETING_BEGIN_TIME_HOUR);
+        remove(Constant.MEETING_BEGIN_TIME_MIN);
+
+        try{
+            //清除WebView缓存
+            mContext.deleteDatabase("webview.db");
+            mContext.deleteDatabase("webviewCache.db");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
      * kill掉正在运行的服务
      */
-    public void killAllRunningService(){
-        if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.tcpController.Server")) {
-            mContext.stopService(new Intent(mContext, Server.class));
-        }
-        if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
-            mContext.stopService(new Intent(mContext, Client.class));
-        }
+    public void killAllRunningService() {
+//        if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.tcpController.Server")) {
+////            mContext.stopService(new Intent(mContext, Server.class));
+//            /**
+//             * {@link Server#kill(KillService)}
+//             */
+//            EventBus.getDefault().post(new KillService("Server"));
+//        }
+//        if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.tcpController.Client")) {
+////            mContext.stopService(new Intent(mContext, Client.class));
+//            /**
+//             * {@link Client#kill(KillService)}
+//             */
+//            EventBus.getDefault().post(new KillService("Client"));
+//        }
         if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.multicast.SendMulticastService")) {
-            mContext.stopService(new Intent(mContext, SendMulticastService.class));
+//            mContext.stopService(new Intent(mContext, SendMulticastService.class));
+            /**
+             * {@link SendMulticastService#kill(KillService)}
+             */
+            EventBus.getDefault().post(new KillService("SendMulticastService"));
         }
+        if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.timerService.AgendaTimerService")) {
+//            mContext.stopService(new Intent(mContext, AgendaTimerService.class));
+            /**
+             * {@link AgendaTimerService#kill(KillService)}
+             */
+            EventBus.getDefault().post(new KillService("AgendaTimerService"));
+        }
+        if (AppUtil.isServiceRun(mContext, "com.gzz100.Z100_HuiYi.timerService.MeetingTimerService")) {
+//            mContext.startService(new Intent(mContext,MeetingTimerService.class));
+            /**
+             * {@link MeetingTimerService#kill(KillService)}
+             */
+            EventBus.getDefault().post(new KillService("MeetingTimerService"));
+        }
+
+        /**
+         * {@link Server#kill(KillService)}
+         */
+        EventBus.getDefault().post(new KillService("Server"));
+
+        /**
+         * {@link Client#kill(KillService)}
+         */
+        EventBus.getDefault().post(new KillService("Client"));
     }
 
 }

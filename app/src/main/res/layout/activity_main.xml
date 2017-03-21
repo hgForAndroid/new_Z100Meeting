@@ -44,10 +44,12 @@
                 android:id="@+id/id_main_fileTab"
                 android:text="@string/string_main_tab_file"
                 style="@style/radio_button_same_attr"/>
+
             <RadioButton
                 android:id="@+id/id_main_aboutTab"
-                android:text="@string/string_main_tab_about"
-                style="@style/radio_button_same_attr"/>
+                style="@style/radio_button_same_attr"
+                android:text="@string/string_main_tab_about"/>
+
             <RadioButton
                 android:id="@+id/id_main_voteTab"
                 android:text="@string/string_main_tab_vote"

@@ -41,8 +41,7 @@ public class VotePresenter implements VoteContract.Presenter {
     @Override
     public void start() {
         mVoteId = SharedPreferencesUtil.getInstance(mContext).getInt(Constant.BEGIN_VOTE_ID, -1);
-        boolean isVoteBegin = SharedPreferencesUtil.getInstance(mContext).
-                getBoolean(Constant.IS_VOTE_BEGIN, false);
+        boolean isVoteBegin = MyAPP.getInstance().isVoting();
         if (isVoteBegin && mVoteId != -1) {//投票开始
             //投票结果是否已经上传
             boolean isVoteCommit = SharedPreferencesUtil.getInstance(mContext).

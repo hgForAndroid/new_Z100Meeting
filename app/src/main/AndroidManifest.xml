@@ -7,16 +7,18 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <!--ProgressSubscriber中的方法showProgressDialog中，添加了这句：
+    <!--
+    ProgressSubscriber中的方法showProgressDialog中，添加了这句：
     pd.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-    需要在配置文件中添加该权限-->
+    需要在配置文件中添加该权限
+    -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
-        android:hardwareAccelerated="true"
         android:name=".MyAPP"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/z100"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -39,7 +41,7 @@
             android:screenOrientation="landscape">
         </activity>
         <activity
-            android:name="com.gzz100.Z100_HuiYi.meeting.MainActivity"
+            android:name=".meeting.MainActivity"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan">
         </activity>
@@ -55,6 +57,10 @@
             android:screenOrientation="landscape">
         </activity>
 
+        <service
+            android:name=".timerService.AgendaTimerService"
+            android:enabled="true"
+            android:exported="true"/>
         <service
             android:name=".multicast.ReceivedMultiCastService"
             android:enabled="true"
@@ -82,6 +88,11 @@
         <service
             android:name=".meetingPrepare.signIn.WriteDatabaseService"
             android:exported="false">
+        </service>
+        <service
+            android:name=".timerService.MeetingTimerService"
+            android:enabled="true"
+            android:exported="true">
         </service>
     </application>
 

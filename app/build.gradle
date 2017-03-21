@@ -7,14 +7,22 @@ android {
 
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 23
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs{
+        release{
+            v2SigningEnabled false
+        }
+
+    }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true   //开启代码混淆
+            //shrinkResources true //去除无用资源
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
 //        debug{
 //            minifyEnabled true  //开启代码混淆

@@ -18,11 +18,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.AgendaModel;
 import com.gzz100.Z100_HuiYi.data.DocumentModel;
 import com.gzz100.Z100_HuiYi.meeting.ICommunicate;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
+import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import java.util.List;
 
@@ -182,8 +184,14 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
 
     @Override
     public void showFileDetail() {
+        if (MyAPP.getInstance().isVoting()){
+            ToastUtil.showMessage("投票还未结束");
+            return;
+        }
+        if (MyAPP.getInstance().getUserRole() == 1){
+            org.greenrobot.eventbus.EventBus.getDefault().post(new RemoveControlViewEvent());
+        }
         String currentTitle = mMainActivity.getCurrentTitle();
-        org.greenrobot.eventbus.EventBus.getDefault().post(new RemoveControlViewEvent());
         FileDetailActivity.start(getActivity(),currentAgendaPositon + 1,0,currentTitle,false,false,false,"","");
     }
 

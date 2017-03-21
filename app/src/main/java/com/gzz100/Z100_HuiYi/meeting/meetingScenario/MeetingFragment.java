@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -54,7 +55,7 @@ import butterknife.OnClick;
 
 public class MeetingFragment extends Fragment implements MeetingContract.View, OnUserClickListener {
 
-//    private MeetingRoomView mMeetingRoomView;
+    //    private MeetingRoomView mMeetingRoomView;
     private MeetingRoomView2 mMeetingRoomView;
     private List<DelegateModel> mUsers = new ArrayList<>();
     //会议结束后显示的布局
@@ -135,8 +136,8 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
      * 否则显示座位的界面
      */
     private void setMeetingShowResult() {
-        if (SharedPreferencesUtil.getInstance(getContext()).
-                getBoolean(Constant.IS_MEETING_END, false)) {//会议结束
+        if (MyAPP.getInstance().isMeetingIsProgress() == 8) {
+
 //            mTopLayout.setVisibility(View.VISIBLE);
 //            mBottomLayout.setVisibility(View.GONE);
 //            String meetingDuration = MeetingOperate.getInstance(getContext()).
@@ -159,12 +160,26 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
             mBottomLayout.setVisibility(View.GONE);
             mLayoutMeetingEndingShow.setVisibility(View.VISIBLE);
             String meetingEndingSummary = HttpManager.getInstance(getContext()).getServerIP()
-                    + "/Report/Index?meetingID="+SharedPreferencesUtil.getInstance(getContext()).getInt(Constant.MEETING_ID, -1);
+                    + "/Report/Index?meetingID=" + SharedPreferencesUtil.getInstance(getContext()).getInt(Constant.MEETING_ID, -1);
+            initWebView();
             mWebView.loadUrl(meetingEndingSummary);
 
-        }else {//会议未结束
+        } else {//会议未结束
             mPresenter.start();
         }
+    }
+
+    private void initWebView() {
+        WebSettings settings = mWebView.getSettings();
+//        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        //支持双指缩放
+        settings.setSupportZoom(true);
+        settings.setBuiltInZoomControls(true);
+        //自适应屏幕
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        //隐藏自带放大缩小控制条
+        settings.setDisplayZoomControls(false);
     }
 
     @Override
@@ -177,6 +192,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
      * 主持人请求结束会议成功，在{@link MainActivity#hostEndMeetingSuccess()}
      * 或{@link MainActivity#handleMeetingEnd(MeetingEnd)}中调用。主持人端有两个调用的原因看后面一个方法的注释。
      * 其他参会人员客户端接收到结束会议的命令，在{@link MainActivity#clientResponseMeetingEnd()}中调用。
+     *
      * @param meetingEnd
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -197,9 +213,10 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     /**
      * 这两个方法均是在会议未结束前才有可能调用到，会议结束后这两个按钮不再显示。
      * 横幅和其他参会人员按钮的事件处理。
+     *
      * @param view
      */
-    @OnClick({R.id.id_tv_meeting_fragment_streamer,R.id.id_tv_meeting_fragment_others })
+    @OnClick({R.id.id_tv_meeting_fragment_streamer, R.id.id_tv_meeting_fragment_others})
     void onStreamerAndOthersClick(View view) {
         switch (view.getId()) {
             case R.id.id_tv_meeting_fragment_streamer:
@@ -214,7 +231,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     /**
      * 退出按钮，该按钮只在会议结束后，显示会议结果时最下面显示。
      */
-    @OnClick({R.id.id_btn_exit,R.id.id_btn_exit2})
+    @OnClick({R.id.id_btn_exit, R.id.id_btn_exit2})
     void onExitClick() {
         Dialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.string_tip)
@@ -225,7 +242,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
                         SharedPreferencesUtil.getInstance(getContext()).killAllRunningService();
                         SharedPreferencesUtil.getInstance(getContext()).clearKeyInfo();
                         //删除会议前预下载的所有文件
-                        AppUtil.DeleteFolder(AppUtil.getCacheDir(getContext()));
+//                        AppUtil.DeleteFolder(AppUtil.getCacheDir(getContext()));
                         getActivity().deleteDatabase(DBHelper.DB_NAME);
                         ActivityStackManager.exit();
                     }
@@ -237,7 +254,8 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
     /**
      * 在{@link MeetingPresenter#getMeetingInfo(Context)}中调用。
-     * @param dialog 会议概况弹窗
+     *
+     * @param dialog      会议概况弹窗
      * @param contentView
      * @param meetingInfo
      */
@@ -248,7 +266,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
         ((TextView) contentView.findViewById(R.id.id_tv_dialog_begin_time)).setText(
                 meetingInfo.getMeetingBeginTime());
         ((TextView) contentView.findViewById(R.id.id_tv_dialog_time)).setText(
-                meetingInfo.getMeetingDuration()+"分钟");
+                meetingInfo.getMeetingDuration() + "分钟");
         ((TextView) contentView.findViewById(R.id.id_tv_dialog_delegate)).setText("计划参会"
                 + meetingInfo.getDelegateNum() + "人");
 //        ((TextView) contentView.findViewById(R.id.id_tv_dialog_delegate)).setText("计划参会"
@@ -266,6 +284,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
     /**
      * 点击人员查看详情。
+     *
      * @param DelegateModel
      */
     @Override
@@ -296,9 +315,9 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
     @Override
     public void setOthersNum(boolean isShow, int othersNum) {
-        if (isShow && othersNum > 0){
+        if (isShow && othersNum > 0) {
             mOthers.setText("其他参会人员（" + othersNum + ")");
-        }else {
+        } else {
             mOthers.setVisibility(View.GONE);
         }
     }
@@ -306,7 +325,8 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     /**
      * 点击了其他参会人员按钮，通知主界面更换界面。
      * 在{@link MainActivity#showDelegate(Boolean)}中调用
-     * @param isShowDelegate  是否显示人员界面
+     *
+     * @param isShowDelegate 是否显示人员界面
      */
     @Override
     public void showDelegate(Boolean isShowDelegate) {

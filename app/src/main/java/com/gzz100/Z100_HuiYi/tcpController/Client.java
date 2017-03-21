@@ -6,10 +6,13 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.gzz100.Z100_HuiYi.data.eventBean.KillService;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,11 +24,12 @@ import java.net.URLDecoder;
 import java.net.UnknownHostException;
 
 /**
-* 描述：这是一个其他参会人员客户端。用于接收主持人端（通过tcp连接的方式）发送过来的数据的类
-* 类名：Client
-* @author XieQXiong
-* create at 2017/2/27 14:45
-*/
+ * 描述：这是一个其他参会人员客户端。用于接收主持人端（通过tcp连接的方式）发送过来的数据的类
+ * 类名：Client
+ *
+ * @author XieQXiong
+ *         create at 2017/2/27 14:45
+ */
 
 public class Client extends Service implements IControllerListener {
     private static final String TAG = "Client";
@@ -33,9 +37,6 @@ public class Client extends Service implements IControllerListener {
     private PrintWriter mOutput;
     private Socket mS;
     private String ip;
-
-    public Client() {
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -45,6 +46,7 @@ public class Client extends Service implements IControllerListener {
     @Override
     public void onCreate() {
         super.onCreate();
+        EventBus.getDefault().register(this);
         ip = SharedPreferencesUtil.getInstance(this.getApplicationContext()).getString(Constant.TCP_SERVER_IP, "");
         if (Constant.DEBUG)
             Log.e(TAG, "存本地的平板ip是 ：" + ip);
@@ -98,7 +100,8 @@ public class Client extends Service implements IControllerListener {
 
     /**
      * 发送消息给主持人端。
-     * @param message   发送的实体类json字符串
+     *
+     * @param message 发送的实体类json字符串
      */
     @Override
     public void sendMessage(String message) {
@@ -121,11 +124,25 @@ public class Client extends Service implements IControllerListener {
      * 在{@link Server#sendLastSocketMessage(String, String)}中才有实现，
      * 该方法是会议过程中临时有人进入会议，通知其平板进入受控状态，是在主持人端的Server中发送消息。
      * 本类属于其他参会人员客户端，不需要实现该方法。
-     * @param deviceIp  设备ip
-     * @param message   信息
+     *
+     * @param deviceIp 设备ip
+     * @param message  信息
      */
     @Override
     public void sendLastSocketMessage(String deviceIp, String message) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void kill(KillService k) {
+        if (k.getName().equals("Client"))
+            stopSelf();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Z100Meeting</string>
+    <string name="app_name">Z100会议系统</string>
     <string name="string_input_ip_address">请输入IP地址:</string>
     <string name="string_ip_record">历史记录：</string>
 
@@ -16,7 +16,7 @@
     <string name="string_fetch_meeting_error">会议获取失败</string>
 
 
-    <string name="string_copy_right">\@copyright 广州中佰信息科技有限公司</string>
+    <string name="string_copy_right">\©copyright 广州中佰信息科技有限公司</string>
 
 
 

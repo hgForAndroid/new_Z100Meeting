@@ -33,6 +33,33 @@ public class ControllerInfoBean implements Serializable,Cloneable{
     //下面两个时间，是在在会议临时有人进入，主持人控制端需要发送的，给客户端进行显示，当前会议已经开始了多久
     private String meetingBeginTimeHour;//会议已经进行的时间，时
     private String meetingBeginTimeMin;//会议已经进行的时间，分
+    /**
+     * 主持人在文件详情界面控制会议流程，主界面应该不参与事件响应.
+     * 因为使用EventBus，所以全部监听事件都会响应，设置这个标志，在主持人在文件详情页面发送消息时，
+     * 将这个标志设置为true，在主界面接收事件后判断这个值为不为true，是就不处理事件。
+     * 在{@link com.gzz100.Z100_HuiYi.meeting.MainPresenter#handleControllerInfoBean(ControllerInfoBean)}
+     */
+    private boolean inFileDetail;
+
+    /**
+     * 主持人在文件详情界面控制会议流程，主界面应该不参与事件响应.
+     * 因为使用EventBus，所以全部监听事件都会响应，设置这个标志，在主持人在文件详情页面发送消息时，
+     * 将这个标志设置为true，在主界面接收事件后判断这个值为不为true，是就不处理事件。
+     * @return
+     */
+    public boolean isInFileDetail() {
+        return inFileDetail;
+    }
+
+    /**
+     * 主持人在文件详情界面控制会议流程，主界面应该不参与事件响应.
+     * 因为使用EventBus，所以全部监听事件都会响应，设置这个标志，在主持人在文件详情页面发送消息时，
+     * 将这个标志设置为true，在主界面接收事件后判断这个值为不为true，是就不处理事件。
+     * @param inFileDetail
+     */
+    public void setInFileDetail(boolean inFileDetail) {
+        this.inFileDetail = inFileDetail;
+    }
 
     /**
      * 2:开始     4：暂停      8：结束

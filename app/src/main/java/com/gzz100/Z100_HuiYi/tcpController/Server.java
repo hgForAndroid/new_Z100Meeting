@@ -6,10 +6,13 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.MyAPP;
+import com.gzz100.Z100_HuiYi.data.eventBean.KillService;
 import com.gzz100.Z100_HuiYi.data.eventBean.PeopleIn;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,12 +26,14 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 /**
-* 描述：这是一个主持人端用于发送数据给所有客户端的类。跟Client服务对应。
-* 类名：Server
-* @author XieQXiong
-* create at 2017/2/27 14:45
-*/
+ * 描述：这是一个主持人端用于发送数据给所有客户端的类。跟Client服务对应。
+ * 类名：Server
+ *
+ * @author XieQXiong
+ *         create at 2017/2/27 14:45
+ */
 
 public class Server extends Service implements IControllerListener {
     public static final String TAG = "Server";
@@ -36,9 +41,8 @@ public class Server extends Service implements IControllerListener {
     private PrintWriter mOut;
     private ServerSocket mServerSocket;
     private Map<String, String> mHashMap;
+    private Thread mThread;
 
-    public Server() {
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -48,9 +52,12 @@ public class Server extends Service implements IControllerListener {
     @Override
     public void onCreate() {
         super.onCreate();
+        EventBus.getDefault().register(this);
         mHashMap = new HashMap<>();
-        new Thread(mRunnable).start();
+        mThread = new Thread(mRunnable);
+        mThread.start();
     }
+
 
     private Runnable mRunnable = new Runnable() {
         @Override
@@ -76,6 +83,7 @@ public class Server extends Service implements IControllerListener {
                         }
                     } else if (message.equals("exit")) {
                         removeFromMap(s);
+                        break;
                     } else {
                         if (message.contains("192")) {
                             splitMessage(message);
@@ -102,6 +110,7 @@ public class Server extends Service implements IControllerListener {
     /**
      * 将设备的ip 与 该设备对应的人员 分割，存入mHashMap。
      * 在客户端设备与主持人端断开连接时，再调用{@link #removeFromMap(Socket)}将mHashMap中这个客户端设备移除
+     *
      * @param message
      */
     private void splitMessage(String message) {
@@ -145,6 +154,7 @@ public class Server extends Service implements IControllerListener {
                 mHashMap.remove(ip);//移除该人名
             }
         }
+        Log.e(TAG, "removeFromMap: hashMap.size() = " + hashMap.size() + "---   mHashMap.size() = " + mHashMap.size());
     }
 
     @Override
@@ -191,5 +201,20 @@ public class Server extends Service implements IControllerListener {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void kill(KillService k) {
+        if (k.getName().equals("Server")){
+            stopSelf();
+            Log.e("xqx", "kill: Server");
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        Log.e("xqx", "onDestroy: Server销毁了");
     }
 }

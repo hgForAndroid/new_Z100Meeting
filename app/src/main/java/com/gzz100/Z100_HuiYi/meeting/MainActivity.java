@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Vote;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
+import com.gzz100.Z100_HuiYi.data.eventBean.Home;
 import com.gzz100.Z100_HuiYi.data.eventBean.PeopleIn;
 import com.gzz100.Z100_HuiYi.meeting.about.AboutFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaFragment;
@@ -48,6 +50,10 @@ import com.gzz100.Z100_HuiYi.meeting.vote.VotePresenter;
 import com.gzz100.Z100_HuiYi.meeting.vote.VoteResultDialog;
 import com.gzz100.Z100_HuiYi.tcpController.ClientSendMessageUtil;
 import com.gzz100.Z100_HuiYi.tcpController.ControllerInfoBean;
+import com.gzz100.Z100_HuiYi.timerService.MeetingOrder;
+import com.gzz100.Z100_HuiYi.timerService.MeetingTimer;
+import com.gzz100.Z100_HuiYi.timerService.MeetingTimerService;
+import com.gzz100.Z100_HuiYi.timerService.TimeFlag;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
@@ -78,7 +84,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private int mVoteId;
     private MainContract.Presenter mMainPresenter;
     private VoteResultDialog mVoteResultDialog;
-    private MyHandler mMyHandler;
     //提示是否现在开启会议的对话框
     private Dialog mTipDialog;
 
@@ -177,8 +182,15 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         defaultSelected();
         initEvent();//滑动，以及tab选择监听
         initPresenter();//初始化各个Fragment 的 Presenter
-        mMyHandler = new MyHandler(this);
-        mMyHandler.sendEmptyMessageDelayed(0x02, 60000);
+
+        startMeetingTimer();
+
+    }
+
+    private void startMeetingTimer() {
+        if (!AppUtil.isServiceRun(this,"com.gzz100.Z100_HuiYi.timerService.MeetingTimerService")){
+            startService(new Intent(this,MeetingTimerService.class));
+        }
     }
 
     private void initPresenter() {
@@ -211,34 +223,34 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mMeetingTab.setChecked(true);
     }
 
-    /**
-     * 静态内部类Handler，使用弱引用，防止内存泄露。
-     */
-    private static class MyHandler extends Handler {
-        private WeakReference<MainActivity> activityWeakReference;
-
-        MyHandler(MainActivity activity) {
-            activityWeakReference = new WeakReference<MainActivity>(activity);
+    private boolean firstIn;
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (!firstIn){
+            /**
+             * 开始倒计时。
+             * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
+             */
+            EventBus.getDefault().post(new MeetingOrder(MeetingTimerService.MEETING_TIME_START));
+            firstIn = !firstIn;
         }
+    }
 
-        @Override
-        public void handleMessage(Message msg) {
-            MainActivity activity = activityWeakReference.get();
-            if (activity != null) {
-                if (msg.what == 0x02) {
-                    activity.min++;
-                    activity.mNavBarView.setTimeMin(activity.getMin());
-                    activity.mNavBarView.setTimeHour(activity.getHour());
-                    if (MyAPP.getInstance().getUserRole() == 1) {
-                        SharedPreferencesUtil.getInstance(activity).putString(Constant.MEETING_BEGIN_TIME_HOUR,
-                                activity.mNavBarView.getTimeHour());
-                        SharedPreferencesUtil.getInstance(activity).putString(Constant.MEETING_BEGIN_TIME_MIN,
-                                activity.mNavBarView.getTimeMin());
-                    }
-                    //一分钟发送一次
-                    this.sendEmptyMessageDelayed(0x02, 60000);
-                }
-            }
+    /**
+     * 更新会议时间
+     * @param timer
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateMeetingTime(MeetingTimer timer){
+        mNavBarView.setTimeHour(timer.getHour());
+        mNavBarView.setTimeMin(timer.getMin());
+        //保存当前会议进行时间，如果有临时人员进入会议，将时间发给他
+        if (MyAPP.getInstance().getUserRole() == 1) {
+            SharedPreferencesUtil.getInstance(this).putString(Constant.MEETING_BEGIN_TIME_HOUR,
+                    mNavBarView.getTimeHour());
+            SharedPreferencesUtil.getInstance(this).putString(Constant.MEETING_BEGIN_TIME_MIN,
+                    mNavBarView.getTimeMin());
         }
     }
 
@@ -401,7 +413,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void hostShowVoteFragment(Integer votePage) {
         if (PAGE_SIX == votePage) {
-            SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_VOTE_BEGIN, true);
+            MyAPP.getInstance().setVoting(true);
             mVoteTab.setChecked(true);
             //设置控制条只有结束投票可点击
 //            mControllerView.setStartAndEndButtonNotClickable(false);
@@ -439,9 +451,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             if (!ActivityStackManager.isFirstStackActivity(this.getComponentName().getClassName())) {
                 ActivityStackManager.clearTop(this);
             }
-
+            MyAPP.getInstance().setVoting(true);
             SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, vote.getVoteID());
             mVoteTab.setChecked(true);//显示投票界面
+            mNavBarView.setMeetingStateOrAgendaState("投票中");
         }
     }
 
@@ -456,19 +469,18 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mRootView.removeView(mControllerView);//移除控制条
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-        if (mVoteResultDialog != null && mVoteResultDialog.isShowing()) {
-            mVoteResultDialog.dismiss();
-            mVoteResultDialog = null;
+    /**
+     * 在{@link FileDetailActivity#fallback()} ()}
+     * @param home
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void backToHome(Home home){
+        if (!ActivityStackManager.isFirstStackActivity(this.getComponentName().getClassName())) {
+            ActivityStackManager.clearTop(this);
         }
-        if (mMyHandler != null) {
-            mMyHandler.removeCallbacksAndMessages(null);
-            mMyHandler = null;
-        }
+        mMeetingTab.setChecked(true);
     }
+
 
     /**
      * 点击控制条的开始、结束按钮
@@ -498,14 +510,43 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     private void checkEndingMeetingImmediately() {
+
+        showTipForAsk("提示", "是否现在结束会议？", new OnTipContent() {
+            @Override
+            public void content() {
+                mMeetingState = Constant.MEETING_STATE_ENDING;
+                mMainPresenter.hostEndMeeting(mControllerInfoBean, mMeetingState);
+            }
+        });
+    }
+
+    private void checkStartMeetingImmediately() {
+
+        showTipForAsk("提示", "是否现在开启会议？", new OnTipContent() {
+            @Override
+            public void content() {
+                mMeetingState = Constant.MEETING_STATE_BEGIN;
+                mMainPresenter.hostStartMeeting(mControllerInfoBean, mMeetingState);
+            }
+        });
+
+    }
+
+    /**
+     * 对话框提示
+     *
+     * @param title        标题
+     * @param message      内容
+     * @param onTipContent 确定按钮回调
+     */
+    private void showTipForAsk(String title, String message, final OnTipContent onTipContent) {
         mTipDialog = new AlertDialog.Builder(MainActivity.this)
-                .setTitle(R.string.string_tip)
-                .setMessage("是否现在结束会议？")
+                .setTitle(title)
+                .setMessage(message)
                 .setPositiveButton(R.string.string_ensure, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mMeetingState = Constant.MEETING_STATE_ENDING;
-                        mMainPresenter.hostEndMeeting(mControllerInfoBean, mMeetingState);
+                        onTipContent.content();
                     }
                 })
                 .setNegativeButton(R.string.string_cancel, new DialogInterface.OnClickListener() {
@@ -517,24 +558,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mTipDialog.setCanceledOnTouchOutside(false);//只能点击确定或取消才能让对话框消失
     }
 
-    private void checkStartMeetingImmediately() {
-        mTipDialog = new AlertDialog.Builder(MainActivity.this)
-                .setTitle(R.string.string_tip)
-                .setMessage("是否现在开启会议？")
-                .setPositiveButton(R.string.string_ensure, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mMeetingState = Constant.MEETING_STATE_BEGIN;
-                        mMainPresenter.hostStartMeeting(mControllerInfoBean, mMeetingState);
-                    }
-                })
-                .setNegativeButton(R.string.string_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
-        mTipDialog.setCanceledOnTouchOutside(false);//只能点击确定或取消才能让对话框消失
+    /**
+     * 当前类的内部接口，用于所有在当前类弹出的对话框点击确定按钮后的回调。
+     */
+    interface OnTipContent {
+        void content();
     }
 
     /**
@@ -550,12 +578,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (meetingEnd.getFlag() == 1) {
             mMeetingState = Constant.MEETING_STATE_ENDING;
             //存储会议结束的时间，时  分
-            SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_HOUR, mNavBarView.getTimeHour());
-            SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_MIN, mNavBarView.getTimeMin());
-            //停止时间
-            mMyHandler.removeCallbacksAndMessages(null);
+//            SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_HOUR, mNavBarView.getTimeHour());
+//            SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_MIN, mNavBarView.getTimeMin());
+            /**
+             * 停止时间
+             * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
+             */
+            EventBus.getDefault().post(new MeetingOrder(Constant.MEETING_STATE_ENDING));
             mNavBarView.setMeetingStateOrAgendaState("已结束");
-            SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END, true);
+//            MyAPP.getInstance().setMeetingIsProgress(8);
+//            SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END, true);
             mMeetingTab.setChecked(true);
             /**
              * 通知会议界面显示结束后的信息
@@ -592,29 +624,46 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             }
             mMeetingState = Constant.MEETING_STATE_PAUSE;
             mMainPresenter.hostPauseMeeting(mControllerInfoBean, mMeetingState);
-        } else {//继续
+        }else if ("开会".equals(((Button) view).getText().toString())){
+            checkBackToMeetingImmediately();
+        }
+        else {//继续
             checkContinueMeetingImmediately();
         }
     }
+    private void checkBackToMeetingImmediately() {
+        showTipForAsk("提示", "是否返回开会状态？", new OnTipContent() {
+            @Override
+            public void content() {
+                int pauseAgendaIndex = SharedPreferencesUtil.getInstance(MainActivity.this)
+                        .getInt(Constant.PAUSE_AGENDA_INDEX, 0);
+                int pauseDocumentIndex = SharedPreferencesUtil.getInstance(MainActivity.this)
+                        .getInt(Constant.PAUSE_DOCUMENT_INDEX, 0);
+                mRootView.removeView(mControllerView);
+                //时间都给负数，因为返回会议之前，时间是一直在倒计时的，不用传时间过去
+                FileDetailActivity.start(MainActivity.this, pauseAgendaIndex,
+                        pauseDocumentIndex, "文件", true, true, true, "-1", "-1");
+                mControllerView.setPauseAndContinueText("暂停");
+                mNavBarView.setMeetingStateOrAgendaState("开会中");
+                MyAPP.getInstance().setMeetingIsProgress(2);
+
+                MyAPP.getInstance().setHostOutOfMeeting(false);
+
+                EventBus.getDefault().post(new TimeFlag(true));
+            }
+        });
+
+    }
 
     private void checkContinueMeetingImmediately() {
-        mTipDialog = new AlertDialog.Builder(MainActivity.this)
-                .setTitle(R.string.string_tip)
-                .setMessage("是否现在继续会议？")
-                .setPositiveButton(R.string.string_ensure, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mMeetingState = Constant.MEETING_STATE_CONTINUE;
-                        mMainPresenter.hostContinueMeeting(mControllerInfoBean, mMeetingState);
-                    }
-                })
-                .setNegativeButton(R.string.string_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
-        mTipDialog.setCanceledOnTouchOutside(false);//只能点击确定或取消才能让对话框消失
+
+        showTipForAsk("提示", "是否现在继续会议？", new OnTipContent() {
+            @Override
+            public void content() {
+                mMeetingState = Constant.MEETING_STATE_CONTINUE;
+                mMainPresenter.hostContinueMeeting(mControllerInfoBean, mMeetingState);
+            }
+        });
     }
 
     /**
@@ -634,6 +683,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 ToastUtil.showMessage("会议已结束！");
                 return;
             }
+            if (MyAPP.getInstance().getHostOutOfMeeting()){
+                ToastUtil.showMessage("请返回会议后再开启投票！");
+                return;
+            }
             //点击投票只是显示投票列表，不用发送消息给客户端
             mDialog = new VoteListDialog(this);
             mDialog.setOnAllVoteItemClickListener(this);
@@ -646,14 +699,21 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 }
             });
             mDialog.show();
-        } else {
+        } else {//结束投票
             boolean voteSubmit = SharedPreferencesUtil.getInstance(this).
                     getBoolean(Constant.IS_VOTE_COMMIT, false);
             if (voteSubmit) {
-                String deviceIMEI = MPhone.getDeviceIMEI(this);
-                int meetingID = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
-                int voteId = SharedPreferencesUtil.getInstance(this).getInt(Constant.BEGIN_VOTE_ID, -1);
-                mMainPresenter.hostLaunchOrCloseVote(deviceIMEI, meetingID, voteId, -1, null, 0);
+
+                showTipForAsk("提示", "结束当前投票？", new OnTipContent() {
+                    @Override
+                    public void content() {
+                        String deviceIMEI = MPhone.getDeviceIMEI(MainActivity.this);
+                        int meetingID = SharedPreferencesUtil.getInstance(MainActivity.this).getInt(Constant.MEETING_ID, -1);
+                        int voteId = SharedPreferencesUtil.getInstance(MainActivity.this).getInt(Constant.BEGIN_VOTE_ID, -1);
+                        mMainPresenter.hostLaunchOrCloseVote(deviceIMEI, meetingID, voteId, -1, null, 0);
+                    }
+                });
+
             } else {
                 ToastUtil.showMessage("还未上传投票结果！");
             }
@@ -718,10 +778,20 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      * @param upLevelTitle  上一级标题
      */
     @Override
-    public void clientResponseMeetingBegin(int agendaIndex, int documentIndex, String upLevelTitle) {
-        //主持人才有控制条
-//        mRootView.removeView(mControllerView);
+    public void clientResponseMeetingBegin(int agendaIndex, int documentIndex, String upLevelTitle,String meetingTimeHour,String meetingTimeMin) {
         mNavBarView.setMeetingStateOrAgendaState("开会中");
+        MyAPP.getInstance().setMeetingIsProgress(2);
+        mNavBarView.setTimeHour(meetingTimeHour);
+        mNavBarView.setTimeMin(meetingTimeMin);
+        /**
+         *校正时间，使得跟主持人时间一致
+         * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
+         */
+        MeetingOrder order = new MeetingOrder(MeetingTimerService.ADJUST_MEETING_TIME_FOR_ALL_CLIENT);
+        order.setHour(Integer.valueOf(meetingTimeHour));
+        order.setMin(Integer.valueOf(meetingTimeMin));
+        EventBus.getDefault().post(order);
+
         FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle, true,
                 false, false, "", "");
     }
@@ -761,8 +831,15 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mNavBarView.setTimeMin(meetingBeginTimeMin);//重设会议进行时间，分
         hour = Integer.valueOf(meetingBeginTimeHour);//时间值赋予当前时间变量
         min = Integer.valueOf(meetingBeginTimeMin);//时间值赋予当前时间变量
-        mMyHandler.removeCallbacksAndMessages(null);//移除所有消息
-        mMyHandler.sendEmptyMessageDelayed(0x02, 60000);//重新发送会议进行时间计时消息
+
+        /**
+         * 校正所有客户端时间。
+         * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
+         */
+        MeetingOrder order = new MeetingOrder(MeetingTimerService.ADJUST_MEETING_TIME_FOR_ALL_CLIENT);
+        order.setHour(Integer.valueOf(meetingBeginTimeHour));
+        order.setMin(Integer.valueOf(meetingBeginTimeMin));
+
     }
 
     /**
@@ -776,7 +853,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (peopleIn.isPeopleIn()) {
             if (mMeetingState == Constant.MEETING_STATE_PAUSE) {
                 mMainPresenter.controlTempPeopleIn(peopleIn.getDeviceIp(), mControllerInfoBean, mMeetingState,
-                        mNavBarView.getTimeHour(), mNavBarView.getTimeMin());
+                        mNavBarView.getTimeHour(), mNavBarView.getTimeMin(),false);
+            }
+            if (mMeetingState == Constant.MEETING_STATE_BEGIN && MyAPP.getInstance().getHostOutOfMeeting()){
+                mMainPresenter.controlTempPeopleIn(peopleIn.getDeviceIp(), mControllerInfoBean, mMeetingState,
+                        mNavBarView.getTimeHour(), mNavBarView.getTimeMin(),true);
             }
         }
     }
@@ -797,8 +878,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                                                   String countingMin, String countingSec,
                                                   String meetingBeginTimeHour, String meetingBeginTimeMin) {
         Integer newSec = Integer.valueOf(countingSec);
-        if (newSec > 3) {//在测试中，临时人员进入会议状态后，议程的倒计时时间的秒总是少3秒左右
-            countingSec = StringUtils.resetNum(newSec - 3);
+        if (newSec > 2) {//在测试中，临时人员进入会议状态后，议程的倒计时时间的秒总是少3秒左右
+            countingSec = StringUtils.resetNum(newSec - 2);
         }
         FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle, true, false,
                 true, countingMin, countingSec);
@@ -808,8 +889,15 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mNavBarView.setTimeMin(meetingBeginTimeMin);//重设会议进行时间，分
         hour = Integer.valueOf(meetingBeginTimeHour);//时间值赋予当前时间变量
         min = Integer.valueOf(meetingBeginTimeMin);//时间值赋予当前时间变量
-        mMyHandler.removeCallbacksAndMessages(null);//移除所有消息
-        mMyHandler.sendEmptyMessageDelayed(0x02, 60000);//重新发送会议进行时间计时消息
+        /**
+         * TODO
+         * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
+         */
+        MeetingOrder order = new MeetingOrder(MeetingTimerService.TEMP_PEOPLE_IN_TIME_START);
+        order.setHour(Integer.valueOf(meetingBeginTimeHour));
+        order.setMin(Integer.valueOf(meetingBeginTimeMin));
+        EventBus.getDefault().post(order);
+
     }
 
     /**
@@ -827,8 +915,17 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mNavBarView.setTimeMin(meetingBeginTimeMin);//重设会议进行时间，分
         hour = Integer.valueOf(meetingBeginTimeHour);//时间值赋予当前时间变量
         min = Integer.valueOf(meetingBeginTimeMin);//时间值赋予当前时间变量
-        mMyHandler.removeCallbacksAndMessages(null);//移除所有消息
-        mMyHandler.sendEmptyMessageDelayed(0x02, 60000);//重新发送会议进行时间计时消息
+
+
+        /**
+         * TODO
+         * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
+         */
+        MeetingOrder order = new MeetingOrder(MeetingTimerService.TEMP_PEOPLE_IN_TIME_START);
+        order.setHour(Integer.valueOf(meetingBeginTimeHour));
+        order.setMin(Integer.valueOf(meetingBeginTimeMin));
+        EventBus.getDefault().post(order);
+
     }
 
     /**
@@ -843,19 +940,28 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      * 客户端响应会议结束指令的操作。
      */
     @Override
-    public void clientResponseMeetingEnd() {
+    public void clientResponseMeetingEnd(String hour,String min) {
         mNavBarView.setMeetingStateOrAgendaState("已结束");
-        SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END, true);
+        MyAPP.getInstance().setMeetingIsProgress(8);
+//        SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END, true);
         /**
          * 通知会议界面显示结束后的信息
          * 调用{@link MeetingFragment#showEnd(MeetingEnd)}。
          */
         EventBus.getDefault().post(new MeetingEnd(2));
         //存储会议结束的时间，时  分
-        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_HOUR, mNavBarView.getTimeHour());
-        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_MIN, mNavBarView.getTimeMin());
-        //停止时间
-        mMyHandler.removeCallbacksAndMessages(null);
+//        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_HOUR, mNavBarView.getTimeHour());
+//        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_MIN, mNavBarView.getTimeMin());
+
+        mNavBarView.setTimeHour(hour);
+        mNavBarView.setTimeMin(min);
+        /**
+         * 停止时间。
+         * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
+         */
+        EventBus.getDefault().post(new MeetingOrder(Constant.MEETING_STATE_ENDING));
+
+        mMeetingTab.setChecked(true);
     }
 
     /**
@@ -897,10 +1003,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         //存储会议结束的时间，时  分
         SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_HOUR, mNavBarView.getTimeHour());
         SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_MIN, mNavBarView.getTimeMin());
-        //停止时间
-        mMyHandler.removeCallbacksAndMessages(null);
+        /**
+         * 停止时间。
+         * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
+         */
+        EventBus.getDefault().post(new MeetingOrder(Constant.MEETING_STATE_ENDING));
         mNavBarView.setMeetingStateOrAgendaState("已结束");
-        SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END, true);
+
+        MyAPP.getInstance().setMeetingIsProgress(8);
         //设置主场景界面(MeetingFragment)显示会议结束后的信息
         mMeetingTab.setChecked(true);
         /**
@@ -920,7 +1030,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Override
     public void hostResponseMeetingEnd() {
-        MyAPP.getInstance().setMeetingIsProgress(8);
         String deviceIMEI = MPhone.getDeviceIMEI(this);
         int meetingId = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
         mMainPresenter.hostStartEndMeeting(deviceIMEI, meetingId);
@@ -1058,23 +1167,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                         .setPositiveButton(R.string.string_yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (MyAPP.getInstance().getUserRole() != 1) {
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            ClientSendMessageUtil.getInstance().sendMessage("exit");
-                                        }
-                                    }).start();
-                                }
-                                if (mTipDialog != null) {
-                                    mTipDialog.dismiss();
-                                }
-                                SharedPreferencesUtil.getInstance(MainActivity.this).killAllRunningService();
-                                SharedPreferencesUtil.getInstance(MainActivity.this).clearKeyInfo();
-                                //删除会议前预下载的所有文件
-                                AppUtil.DeleteFolder(AppUtil.getCacheDir(MainActivity.this));
-                                MainActivity.this.deleteDatabase(DBHelper.DB_NAME);
-                                ActivityStackManager.exit();
+                                mMainPresenter.deleteDateAfterEnding();
                             }
                         })
                         .setNegativeButton(R.string.string_no, null)
@@ -1083,5 +1176,18 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        if (mVoteResultDialog != null && mVoteResultDialog.isShowing()) {
+            mVoteResultDialog.dismiss();
+            mVoteResultDialog = null;
+        }
+        if (mTipDialog != null){
+            mTipDialog.dismiss();
+        }
     }
 }
