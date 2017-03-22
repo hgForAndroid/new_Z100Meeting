@@ -4,6 +4,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
     <LinearLayout
+        android:background="@color/color_background"
         android:id="@+id/id_ll_meeting_ending_show_content"
         android:visibility="gone"
         android:layout_width="match_parent"
@@ -34,6 +35,7 @@
         </LinearLayout>
     </LinearLayout>
     <RelativeLayout
+        android:background="@color/color_background"
         android:visibility="gone"
         android:id="@+id/id_rl_meeting_fragment_top"
         android:layout_width="match_parent"
@@ -125,6 +127,7 @@
         </LinearLayout>
     </RelativeLayout>
     <FrameLayout
+        android:background="@color/color_background"
         android:visibility="visible"
         android:id="@+id/id_fl_meeting_fragment_bottom"
         android:layout_width="match_parent"
@@ -133,6 +136,7 @@
             android:id="@+id/id_meeting_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:inner_background_color="@color/color_light_gray"
             app:align_inner_rect="120"
             app:round_rect="true">
 
@@ -142,10 +146,7 @@
             android:id="@+id/id_tv_meeting_fragment_streamer"
             android:layout_width="match_parent"
             android:layout_height="@dimen/streamer_height"
-            android:layout_marginLeft="@dimen/distance_five_dp"
-            android:layout_marginRight="@dimen/distance_five_dp"
-            android:layout_marginTop="@dimen/distance_five_dp"
-            android:background="#9E9E9E"
+            android:background="@color/color_streamer"
             android:gravity="center"
             android:padding="@dimen/distance_five_dp"
             android:text="@string/string_streamer"

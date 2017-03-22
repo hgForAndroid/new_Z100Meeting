@@ -8,19 +8,28 @@
     <color name="color_black">#000000</color>
 
     <!--导航栏背景颜色-->
-    <color name="color_tab_bg">#F5F5F5</color>
+    <color name="color_tab_bg">#f6eee3</color>
     <!--单个导航默认的颜色-->
     <color name="color_tab_normal">#E0E0E0</color>
     <!--单个导航选中的颜色-->
-    <color name="color_tab_selected">#2196f3</color>
+    <color name="color_tab_selected">#009efc</color>
+
     <!--标题栏的背景色-->
-    <color name="color_navBar_bg">#00bcd4</color>
+    <color name="color_navBar_bg">#009efc</color>
+
     <!--文件名，大小，主讲人   背景色-->
     <color name="color_file_size_bg">#E0E0E0</color>
     <!--文件界面  议程列表的背景色-->
     <color name="color_agenda_list_bg">#00BCD4</color>
 
     <!--会议桌的背景色-->
-    <color name="color_meeting_room_bg">#7A7D7D</color>
-    <color name="color_light_gray">#d4d7d7</color>
+    <color name="color_meeting_room_bg">#009efc</color>
+
+    <color name="color_light_gray">#f6eee3</color>
+
+    <!--整体色调-->
+    <color name="color_background">#f6eee3</color>
+    <!--横幅颜色-->
+    <color name="color_streamer">#00b8fb</color>
+
 </resources>

@@ -92,8 +92,12 @@ public class MainPresenter implements MainContract.Presenter {
 //                    }
 //
 //                } else {
-                mMainView.clientResponseMeetingBegin(agendaIndex, documentIndex, upLevelTitle,
-                        controllerInfoBean.getMeetingBeginTimeHour(), controllerInfoBean.getMeetingBeginTimeMin());
+
+                if (!controllerInfoBean.isControlTempPeople()){
+                    mMainView.clientResponseMeetingBegin(agendaIndex, documentIndex, upLevelTitle,
+                            controllerInfoBean.getMeetingBeginTimeHour(), controllerInfoBean.getMeetingBeginTimeMin());
+                }
+
 //                }
             }
         }

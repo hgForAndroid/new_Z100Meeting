@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_background">
 
     <AutoCompleteTextView
         android:id="@+id/id_edt_fgm_delegate"
@@ -10,7 +11,7 @@
         android:layout_marginTop="@dimen/distance_ten_dp"
         android:background="@drawable/edt_selector"
         android:hint="@string/string_delegate_search_hint"
-        android:paddingLeft="@dimen/distance_ten_dp" />
+        android:paddingLeft="@dimen/distance_ten_dp"/>
 
     <Button
         android:id="@+id/id_btn_fgm_delegate"
@@ -19,7 +20,7 @@
         android:layout_marginLeft="@dimen/distance_ten_dp"
         android:layout_marginTop="@dimen/distance_ten_dp"
         android:layout_toRightOf="@id/id_edt_fgm_delegate"
-        android:text="搜索" />
+        android:text="搜索"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/id_rev_fgm_tab"

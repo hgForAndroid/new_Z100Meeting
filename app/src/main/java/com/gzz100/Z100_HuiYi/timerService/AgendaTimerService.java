@@ -70,6 +70,9 @@ public class AgendaTimerService extends Service {
                     timer.setMin(weakRef.get().getMin());
                     timer.setSec(weakRef.get().getSec(false));
 //                    Log.e("xqx", "handleMessage: 分："+weakRef.get().getMin()+", 秒："+weakRef.get().getSec(false));
+                    if (weakRef.get().mMin < 0 ){
+                        return;
+                    }
                     weakRef.get().mSec--;
                     if (weakRef.get().flag) {
 //                        Log.e("xqx", "handleMessage: 有发消息到文件详情页面");
