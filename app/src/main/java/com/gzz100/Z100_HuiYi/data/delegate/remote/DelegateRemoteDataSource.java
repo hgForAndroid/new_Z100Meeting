@@ -2,14 +2,9 @@ package com.gzz100.Z100_HuiYi.data.delegate.remote;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateDataSource;
 import com.gzz100.Z100_HuiYi.data.delegate.DelegateOperate;
-import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
-
-import java.util.List;
 
 
 /**

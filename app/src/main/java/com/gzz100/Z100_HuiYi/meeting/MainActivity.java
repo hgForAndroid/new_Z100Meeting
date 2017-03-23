@@ -596,9 +596,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             EventBus.getDefault().post(new MeetingEnd(2));
 
             //将控制条全部设置为不能点击
-            mControllerView.setStartAndEndButtonNotClickable(false);
-            mControllerView.setPauseAndContinueButtonNotClickable(false);
-            mControllerView.setStartVoteButtonNotClickable(false);
+//            mControllerView.setStartAndEndButtonNotClickable(false);
+//            mControllerView.setPauseAndContinueButtonNotClickable(false);
+//            mControllerView.setStartVoteButtonNotClickable(false);
         }
     }
 

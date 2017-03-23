@@ -2,24 +2,15 @@ package com.gzz100.Z100_HuiYi.data.selectMeeting;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
-import com.gzz100.Z100_HuiYi.data.file.local.ObjectTransverter;
-import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.network.HttpManager;
 import com.gzz100.Z100_HuiYi.network.HttpRxCallbackListener;
-import com.gzz100.Z100_HuiYi.network.MySubscriber;
 import com.gzz100.Z100_HuiYi.network.ProgressSubscriber;
 import com.gzz100.Z100_HuiYi.network.entity.MeetingPost;
 import com.gzz100.Z100_HuiYi.network.entity.StartMeetingPost;
-import com.gzz100.Z100_HuiYi.network.entity.StartPost;
 
 import java.util.List;
-
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

@@ -70,15 +70,13 @@ public class DocumentModel extends BaseBean {
     }
 
     public void setImageForFile(Context context, ImageView imageView){
-        if (!this.documentName.isEmpty() && this.documentName.contains(".txt")){
-            Picasso.with(context).load(R.mipmap.txt).into(imageView);
-        }else if (!this.documentName.isEmpty() &&
+        if (!this.documentName.isEmpty() &&
                 (this.documentName.contains(".doc") || this.documentName.contains(".docx"))){
-            Picasso.with(context).load(R.mipmap.doc).into(imageView);
+            Picasso.with(context).load(R.drawable.icon_word).into(imageView);
         }else if (!this.documentName.isEmpty() && (this.documentName.contains(".xls") || this.documentName.contains(".xlsx"))){
-            Picasso.with(context).load(R.mipmap.xlsx).into(imageView);
+            Picasso.with(context).load(R.drawable.icon_excel).into(imageView);
         }else if (!this.documentName.isEmpty() && (this.documentName.contains(".pptx") || this.documentName.contains(".ppt"))){
-            Picasso.with(context).load(R.mipmap.ppt).into(imageView);
+            Picasso.with(context).load(R.drawable.icon_ppt).into(imageView);
         }
     }
 

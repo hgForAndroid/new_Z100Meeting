@@ -90,13 +90,13 @@ public class DelegateBean extends BaseBean{
     public void setPicForUser(Context context, TextView textView){
         Drawable drawable = null;
         if (getRole() == Constant.HOSTS){//主持人
-            drawable = context.getResources().getDrawable(R.drawable.ic_host);
+            drawable = context.getResources().getDrawable(R.drawable.icon_host_normal);
 
         }else if(getRole() == Constant.DEFAULT_SPEAKER){//主讲人
-            drawable = context.getResources().getDrawable(R.drawable.ic_keynote_speaker);
+            drawable = context.getResources().getDrawable(R.drawable.icon_speaker_normal);
 
         }else {//普通参会人员
-            drawable = context.getResources().getDrawable(R.drawable.ic_normal_delegate);
+            drawable = context.getResources().getDrawable(R.drawable.icon_delagate_normal);
 
         }
 
@@ -113,13 +113,13 @@ public class DelegateBean extends BaseBean{
     public void setCurrentDelegate(Context context, TextView textView){
         Drawable drawable = null;
         if (getRole() == Constant.HOSTS){//主持人
-            drawable = context.getResources().getDrawable(R.drawable.ic_host_selected);
+            drawable = context.getResources().getDrawable(R.drawable.icon_host_selected);
 
         }else if(getRole() == Constant.DEFAULT_SPEAKER){//主讲人
-            drawable = context.getResources().getDrawable(R.drawable.ic_keynote_speaker_selected);
+            drawable = context.getResources().getDrawable(R.drawable.icon_speaker_selected);
 
         }else {//普通参会人员
-            drawable = context.getResources().getDrawable(R.drawable.ic_normal_delegate_selected);
+            drawable = context.getResources().getDrawable(R.drawable.icon_delagate_selected);
 
         }
 

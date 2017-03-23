@@ -2,7 +2,6 @@ package com.gzz100.Z100_HuiYi.meeting.delegate;
 
 import com.gzz100.Z100_HuiYi.BasePresenter;
 import com.gzz100.Z100_HuiYi.BaseView;
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 
 import java.util.List;

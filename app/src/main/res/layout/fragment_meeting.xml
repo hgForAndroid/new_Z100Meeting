@@ -121,6 +121,7 @@
                 style="@style/ending_meeting_text_view_attr"
                 android:text="您可以继续浏览会议内容或退出"/>
             <Button
+                android:background="@drawable/button_selector"
                 style="@style/ending_meeting_text_view_attr"
                 android:id="@+id/id_btn_exit"
                 android:text="退出"/>
@@ -159,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="64dp"
-            android:drawableLeft="@drawable/ic_normal_delegate"
+            android:drawableLeft="@drawable/icon_delagate_normal"
             android:gravity="center"
             android:padding="@dimen/distance_five_dp"
             android:text="其他参会人员（8）"

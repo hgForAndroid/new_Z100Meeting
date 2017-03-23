@@ -1,11 +1,9 @@
 package com.gzz100.Z100_HuiYi.data.delegate;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.data.db.PersistenceContract;
@@ -30,20 +28,6 @@ public class DelegateOperate {
 
     private DelegateOperate(Context context) {
         mDBHelper = DBHelper.getInstance(context);
-    }
-
-    /**
-     * @param role
-     * @param delegateBeanList
-     */
-    public void insertDelegateList(int role, List<DelegateBean> delegateBeanList) {
-        byte[] data = ObjectTransverter.ListToByteArr(delegateBeanList);
-        ContentValues values = new ContentValues();
-        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_ROLE, role);
-        values.put(PersistenceContract.ColumnsName.COLUMN_NAME_DELEGATE, data);
-        mDataBase = mDBHelper.getReadableDatabase();
-        mDataBase.insert(PersistenceContract.ColumnsName.TABLE_NAME_DELEGATE, null, values);
-//        mDataBase.close();
     }
 
 

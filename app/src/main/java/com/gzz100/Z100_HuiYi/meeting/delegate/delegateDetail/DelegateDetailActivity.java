@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.meeting.NavBarView;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
@@ -135,13 +134,13 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
      */
     private void setRoleByType(int roleType){
         if (roleType == Constant.DEFAULT_SPEAKER){//主讲人
-            mIvRole.setImageResource(R.drawable.ic_delagate_detail_key_note_speaker);
+            mIvRole.setImageResource(R.drawable.icon_speaker_selected);
             mTvDelegateRole.setText("主讲人");
         }else if (roleType == Constant.HOSTS){//主持人
-            mIvRole.setImageResource(R.drawable.ic_dalegate_detail_host);
+            mIvRole.setImageResource(R.drawable.icon_host_selected);
             mTvDelegateRole.setText("主持人");
         }else if (roleType == Constant.OTHER_DELEGATE){//普通参会人员
-            mIvRole.setImageResource(R.drawable.ic_delegate_detail_normal);
+            mIvRole.setImageResource(R.drawable.icon_delagate_selected);
             mTvDelegateRole.setText("其他参会代表");
         }
     }

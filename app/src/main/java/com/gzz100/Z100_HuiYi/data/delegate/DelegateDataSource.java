@@ -2,7 +2,6 @@ package com.gzz100.Z100_HuiYi.data.delegate;
 
 
 
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 
 import java.util.List;

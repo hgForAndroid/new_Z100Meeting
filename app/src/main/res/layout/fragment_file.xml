@@ -1,155 +1,170 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-                android:background="@color/color_background"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_background">
 
     <AutoCompleteTextView
-        android:layout_marginTop="@dimen/distance_ten_dp"
-        android:layout_marginLeft="@dimen/distance_ten_dp"
         android:id="@+id/id_edt_fgm_file"
         android:layout_width="@dimen/file_search_width"
         android:layout_height="@dimen/file_search_height"
-        android:background="@drawable/edt_selector"
-        android:paddingLeft="@dimen/distance_ten_dp"
-        android:hint="@string/string_file_search_hint"/>
-    <Button
-        android:layout_marginTop="@dimen/distance_ten_dp"
         android:layout_marginLeft="@dimen/distance_ten_dp"
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:background="@drawable/edt_selector"
+        android:hint="@string/string_file_search_hint"
+        android:paddingLeft="@dimen/distance_ten_dp"/>
+
+    <Button
+        android:id="@+id/id_btn_fgm_file_clear"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/file_search_height"
-        android:text="清除"
-        android:textSize="@dimen/item_file_text_size"
-        android:id="@+id/id_btn_fgm_file_clear"
+        android:layout_marginLeft="@dimen/distance_ten_dp"
+        android:layout_marginTop="@dimen/distance_ten_dp"
         android:layout_toRightOf="@id/id_edt_fgm_file"
+        android:text="清除"
         android:visibility="gone"
         />
 
     <Button
-        android:layout_marginTop="@dimen/distance_ten_dp"
-        android:layout_marginLeft="@dimen/distance_ten_dp"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/file_search_height"
-        android:text="@string/string_search"
-        android:textSize="@dimen/item_file_text_size"
         android:id="@+id/id_btn_fgm_file"
-        android:layout_toRightOf="@id/id_btn_fgm_file_clear"/>
+        android:layout_width="@dimen/file_search_height"
+        android:layout_height="@dimen/file_search_height"
+        android:layout_marginLeft="@dimen/distance_ten_dp"
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:layout_toRightOf="@id/id_btn_fgm_file_clear"
+        android:background="@drawable/icon_btn_search"/>
+
     <RelativeLayout
-        android:visibility="visible"
         android:id="@+id/id_rl_fgm_file_normal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/id_edt_fgm_file">
+        android:layout_below="@id/id_edt_fgm_file"
+        android:visibility="visible">
+
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/id_rev_fgm_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/distance_five_dp"
             android:layout_marginTop="@dimen/distance_ten_dp"
-            android:id="@+id/id_rev_fgm_tab"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
             android:overScrollMode="never">
 
         </android.support.v7.widget.RecyclerView>
+
         <RelativeLayout
             android:id="@+id/id_rl_fgm_file"
-            android:layout_marginTop="@dimen/distance_ten_dp"
-            android:layout_below="@id/id_rev_fgm_tab"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id_rev_fgm_tab"
+            android:layout_marginTop="@dimen/distance_ten_dp">
+
             <TextView
-                android:layout_alignParentLeft="true"
                 style="@style/file_name_size_keynote_speaker"
+                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="5dp"
                 android:text="@string/string_file_name"/>
+
             <TextView
+                style="@style/file_name_size_keynote_speaker"
                 android:layout_centerInParent="true"
-                style="@style/file_name_size_keynote_speaker"
                 android:text="@string/string_size"/>
+
             <TextView
-                android:layout_marginRight="5dp"
-                android:layout_alignParentRight="true"
                 style="@style/file_name_size_keynote_speaker"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
                 android:text="@string/string_keynote_Speaker"/>
         </RelativeLayout>
+
         <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="@dimen/distance_ten_dp"
-            android:layout_below="@id/id_rl_fgm_file"
             android:id="@+id/id_rev_fgm_file_list"
-            android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/id_rl_fgm_file"
+            android:layout_marginTop="@dimen/distance_ten_dp"
             android:overScrollMode="never"
             android:paddingBottom="@dimen/tab_height">
 
         </android.support.v7.widget.RecyclerView>
     </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/id_ll_fgm_file_search_result"
-        android:visibility="gone"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/id_edt_fgm_file">
+        android:layout_below="@id/id_edt_fgm_file"
+        android:orientation="vertical"
+        android:visibility="gone">
+
         <LinearLayout
-            android:layout_marginTop="@dimen/distance_ten_dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance_ten_dp">
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="@dimen/distance_five_dp">
+
                 <TextView
-                    android:padding="@dimen/distance_five_dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/item_file_text_size"
-                    android:background="@color/color_file_size_bg"
                     android:layout_marginLeft="5dp"
-                    android:text="@string/string_file_name"/>
+                    android:background="@color/color_file_size_bg"
+                    android:padding="@dimen/distance_five_dp"
+                    android:text="@string/string_file_name"
+                    android:textSize="@dimen/item_file_text_size"/>
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <TextView
-                    android:padding="@dimen/distance_five_dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@color/color_file_size_bg"
+                    android:padding="@dimen/distance_five_dp"
                     android:text="大小"
-                    android:textSize="@dimen/item_file_text_size"
-                    android:background="@color/color_file_size_bg"/>
+                    android:textSize="@dimen/item_file_text_size"/>
+
                 <TextView
-                    android:padding="@dimen/distance_five_dp"
-                    android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@color/color_file_size_bg"
+                    android:padding="@dimen/distance_five_dp"
                     android:text="主讲人"
-                    android:textSize="@dimen/item_file_text_size"
-                    android:background="@color/color_file_size_bg"/>
+                    android:textSize="@dimen/item_file_text_size"/>
 
             </RelativeLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:paddingRight="@dimen/distance_five_dp">
+
                 <TextView
-                    android:padding="@dimen/distance_five_dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/item_file_text_size"
                     android:background="@color/color_file_size_bg"
-                    android:text="@string/string_main_tab_agenda"/>
+                    android:padding="@dimen/distance_five_dp"
+                    android:text="@string/string_main_tab_agenda"
+                    android:textSize="@dimen/item_file_text_size"/>
             </LinearLayout>
 
         </LinearLayout>
+
         <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="@dimen/distance_ten_dp"
-            android:layout_below="@id/id_rl_fgm_file"
             android:id="@+id/id_rev_fgm_file_search_result"
-            android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/id_rl_fgm_file"
+            android:layout_marginTop="@dimen/distance_ten_dp"
             android:paddingBottom="@dimen/tab_height">
 
         </android.support.v7.widget.RecyclerView>

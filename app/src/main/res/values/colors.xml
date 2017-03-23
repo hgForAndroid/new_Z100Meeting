@@ -30,6 +30,8 @@
     <!--整体色调-->
     <color name="color_background">#f6eee3</color>
     <!--横幅颜色-->
-    <color name="color_streamer">#00b8fb</color>
+    <color name="color_streamer">#f94b42</color>
+    
+    <color name="color_main_text">#BFB7B0</color>
 
 </resources>

@@ -52,11 +52,6 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void onResume() {
-        Log.e("DelegateFragment -->","onResume");
-        super.onResume();
-    }
 
     @Nullable
     @Override

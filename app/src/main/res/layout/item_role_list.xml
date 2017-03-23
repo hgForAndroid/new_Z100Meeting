@@ -14,7 +14,7 @@
             android:id="@+id/id_item_role_image"
             android:layout_width="35dp"
             android:layout_height="match_parent"
-            android:src="@drawable/role"/>
+            android:src="@drawable/icon_host_normal"/>
         <TextView
             android:id="@+id/id_item_role_name"
             android:layout_width="wrap_content"

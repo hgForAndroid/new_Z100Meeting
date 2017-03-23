@@ -15,12 +15,12 @@
 
     <Button
         android:id="@+id/id_btn_fgm_delegate"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/file_search_height"
         android:layout_height="@dimen/file_search_height"
         android:layout_marginLeft="@dimen/distance_ten_dp"
         android:layout_marginTop="@dimen/distance_ten_dp"
         android:layout_toRightOf="@id/id_edt_fgm_delegate"
-        android:text="搜索"/>
+        android:background="@drawable/icon_btn_search"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/id_rev_fgm_tab"

@@ -55,6 +55,7 @@
                 android:layout_weight="1">
 
                 <Button
+                    android:background="@drawable/button_selector"
                     android:id="@+id/id_btn_show_agenda_file"
                     android:text="查看文件"
                     android:layout_centerInParent="true"

@@ -3,12 +3,10 @@ package com.gzz100.Z100_HuiYi.data.meeting;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.gzz100.Z100_HuiYi.data.DelegateBean;
 import com.gzz100.Z100_HuiYi.data.DelegateModel;
 import com.gzz100.Z100_HuiYi.data.MeetingInfo;
 import com.gzz100.Z100_HuiYi.data.meeting.local.MeetingLocalDataSource;
 import com.gzz100.Z100_HuiYi.data.meeting.remote.MeetingRemoteDataSource;
-import com.gzz100.Z100_HuiYi.utils.Constant;
 
 import java.util.List;
 

@@ -1180,6 +1180,16 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
         //会议结束，关闭所有服务
 //        SharedPreferencesUtil.getInstance(this).killAllRunningService();
 
+        if (mControllerView != null) {
+            mControllerView.setPauseAndContinueText("开会");
+            mRootView.removeView(mControllerView);
+            /**
+             * 通知主界面重新添加控制条。
+             * 调用{@link MainActivity#reAddControllerView(Long)}
+             */
+            EventBus.getDefault().post(MainActivity.TRIGGER_OF_REMOVE_CONTROLLERVIEW);
+        }
+
         ActivityStackManager.pop();
     }
 

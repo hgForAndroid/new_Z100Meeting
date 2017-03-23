@@ -1,14 +1,11 @@
 package com.gzz100.Z100_HuiYi.meetingPrepare.selectMeeting;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.gzz100.Z100_HuiYi.data.MeetingBean;
 import com.gzz100.Z100_HuiYi.data.selectMeeting.SelectMeetingDataSource;
 import com.gzz100.Z100_HuiYi.data.selectMeeting.SelectMeetingRemoteDataSource;
-import com.gzz100.Z100_HuiYi.fakeData.FakeDataProvider;
 import com.gzz100.Z100_HuiYi.utils.Constant;
-import com.gzz100.Z100_HuiYi.utils.MPhone;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
 
 import java.util.List;

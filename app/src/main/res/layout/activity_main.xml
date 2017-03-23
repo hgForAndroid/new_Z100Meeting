@@ -29,28 +29,34 @@
             android:orientation="horizontal"
             android:gravity="center">
             <RadioButton
+                android:drawableTop="@drawable/main_meeting_selector"
                 android:id="@+id/id_main_meetingTab"
                 android:text="@string/string_main_tab_meeting"
                 style="@style/radio_button_same_attr"/>
             <RadioButton
+                android:drawableTop="@drawable/main_people_selector"
                 android:id="@+id/id_main_delegateTab"
                 android:text="@string/string_main_tab_delegate"
                 style="@style/radio_button_same_attr"/>
             <RadioButton
+                android:drawableTop="@drawable/main_agenda_selector"
                 android:id="@+id/id_main_agendaTab"
                 android:text="@string/string_main_tab_agenda"
                 style="@style/radio_button_same_attr"/>
             <RadioButton
+                android:drawableTop="@drawable/main_file_selector"
                 android:id="@+id/id_main_fileTab"
                 android:text="@string/string_main_tab_file"
                 style="@style/radio_button_same_attr"/>
 
             <RadioButton
+                android:drawableTop="@drawable/main_about_selector"
                 android:id="@+id/id_main_aboutTab"
                 style="@style/radio_button_same_attr"
                 android:text="@string/string_main_tab_about"/>
 
             <RadioButton
+                android:drawableTop="@drawable/main_vote_selector"
                 android:id="@+id/id_main_voteTab"
                 android:text="@string/string_main_tab_vote"
                 style="@style/radio_button_same_attr"/>
