@@ -20,6 +20,7 @@
             android:src="@mipmap/ic_launcher"/>
 
         <TextView
+            android:paddingRight="3dp"
             android:id="@+id/id_tv_item_file_name"
             style="@style/wrap_content_attr"
             android:layout_centerVertical="true"

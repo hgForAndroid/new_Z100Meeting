@@ -2,13 +2,13 @@ package com.gzz100.Z100_HuiYi.meeting.delegate;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
@@ -52,24 +52,35 @@ public class RoleListAdapter extends RecyclerView.Adapter<RoleHolder> {
     public void onBindViewHolder(RoleHolder holder, final int position) {
 
         if (mRoleList.get(position).equals("主持人")){
-            holder.mRoleImage.setImageResource(R.drawable.icon_host_normal);
+            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_black));
+            Drawable drawable = mContext.getResources().getDrawable(R.drawable.icon_host_normal);
+            drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+            holder.mRoleName.setCompoundDrawables(drawable,null,null,null);
         }
         if (mRoleList.get(position).equals("主讲人")){
-            holder.mRoleImage.setImageResource(R.drawable.icon_speaker_normal);
+            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_black));
+            Drawable drawable = mContext.getResources().getDrawable(R.drawable.icon_speaker_normal);
+            drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+            holder.mRoleName.setCompoundDrawables(drawable,null,null,null);
         }
         if (mRoleList.get(position).equals("其他参会代表")){
-            holder.mRoleImage.setImageResource(R.drawable.icon_delagate_normal);
+            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_black));
+            Drawable drawable = mContext.getResources().getDrawable(R.drawable.icon_delegate_normal);
+            drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+            holder.mRoleName.setCompoundDrawables(drawable,null,null,null);
         }
         holder.mRoleName.setText(mRoleList.get(position));
-        holder.mRoleLayout.setOnClickListener(new View.OnClickListener() {
+        holder.mRoleName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnClickListener.onRoleItemClickListener(position);
             }
         });
         if(position==0) {
-            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_white));
-            holder.mRoleLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color_tab_selected));
+            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_tab_selected));
+            Drawable drawable = mContext.getResources().getDrawable(R.drawable.icon_speaker_selected);
+            drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+            holder.mRoleName.setCompoundDrawables(drawable,null,null,null);
         }
     }
 
@@ -82,12 +93,8 @@ public class RoleListAdapter extends RecyclerView.Adapter<RoleHolder> {
 
 class RoleHolder extends RecyclerView.ViewHolder{
 
-    @BindView(R.id.id_item_role_image)
-    ImageView mRoleImage;
     @BindView(R.id.id_item_role_name)
     TextView mRoleName;
-    @BindView(R.id.id_item_role_layout)
-    RelativeLayout mRoleLayout;
     public RoleHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this,itemView);

@@ -69,7 +69,8 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
 
     /**
      * 显示ip历史记录
-     * @param ips   记录的所有ip集合
+     *
+     * @param ips 记录的所有ip集合
      */
     @Override
     public void showHistory(List<String> ips) {
@@ -103,7 +104,8 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
 
     /**
      * 从ip历史记录中选中某个ip后，将其设置到EditText中
-     * @param ip   选中的ip
+     *
+     * @param ip 选中的ip
      */
     @Override
     public void setIPFromHistory(String ip) {
@@ -113,7 +115,8 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
     /**
      * 该方法是除主持人端外，其他所有的客户端接收到组播信息后，跳转到签到页面.
      * 在{@link ConnectServerPresenter#mRunnable}中接收到组播信息后，会调用到该方法。
-     * @param keyInfoBean  关键信息的实体类，包括服务器ip，会议id，主持人端平板ip
+     *
+     * @param keyInfoBean 关键信息的实体类，包括服务器ip，会议id，主持人端平板ip
      */
     @Override
     public void showSignInActivity(KeyInfoBean keyInfoBean) {
@@ -139,6 +142,7 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
 
     /**
      * 删除历史记录中的某个ip
+     *
      * @param position
      */
     @Override

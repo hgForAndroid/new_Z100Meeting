@@ -2,6 +2,7 @@ package com.gzz100.Z100_HuiYi.meeting;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,8 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
     private Button mBtnPauseMeeting;
     private Button mBtnStartVote;
     private View mController_view;
+    private Drawable drawable = null;
+
 
     public ControllerView(Context context) {
         super(context);
@@ -58,6 +61,13 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
      * @param content
      */
     public void setBeginAndEndText(String content){
+//        if ("开始".equals(content)){
+//            drawable = getResources().getDrawable(R.drawable.icon_delegate_normal);
+//        }else {//结束
+//            drawable = getResources().getDrawable(R.drawable.icon_delegate_normal);
+//        }
+//        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+//        mBtnStartMeeting.setCompoundDrawables(null,drawable,null,null);
         mBtnStartMeeting.setText(content);
     }
     /**
@@ -65,6 +75,13 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
      * @param content
      */
     public void setPauseAndContinueText(String content){
+//        if ("暂停".equals(content)){
+//            drawable = getResources().getDrawable(R.drawable.icon_delegate_normal);
+//        }else {//继续/开会
+//            drawable = getResources().getDrawable(R.drawable.icon_delegate_normal);
+//        }
+//        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+//        mBtnPauseMeeting.setCompoundDrawables(null,drawable,null,null);
         mBtnPauseMeeting.setText(content);
     }
     /**
@@ -72,6 +89,13 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
      * @param content
      */
     public void setVoteAndEndVoteText(String content){
+//        if ("投票".equals(content)){
+//            drawable = getResources().getDrawable(R.drawable.icon_vote_selected);
+//        }else {//结束投票
+//            drawable = getResources().getDrawable(R.drawable.icon_delegate_normal);
+//        }
+//        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+//        mBtnStartVote.setCompoundDrawables(null,drawable,null,null);
         mBtnStartVote.setText(content);
     }
 

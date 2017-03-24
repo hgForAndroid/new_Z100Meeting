@@ -140,7 +140,7 @@ public class DelegateDetailActivity extends BaseActivity implements DelegateDeta
             mIvRole.setImageResource(R.drawable.icon_host_selected);
             mTvDelegateRole.setText("主持人");
         }else if (roleType == Constant.OTHER_DELEGATE){//普通参会人员
-            mIvRole.setImageResource(R.drawable.icon_delagate_selected);
+            mIvRole.setImageResource(R.drawable.icon_delegate_selected);
             mTvDelegateRole.setText("其他参会代表");
         }
     }

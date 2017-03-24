@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="64dp"
-            android:drawableLeft="@drawable/icon_delagate_normal"
+            android:drawableLeft="@drawable/icon_delegate_normal"
             android:gravity="center"
             android:padding="@dimen/distance_five_dp"
             android:text="其他参会人员（8）"

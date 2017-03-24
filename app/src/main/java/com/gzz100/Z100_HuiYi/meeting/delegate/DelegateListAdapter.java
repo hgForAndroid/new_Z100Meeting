@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ public class DelegateListAdapter extends RecyclerView.Adapter<DelegateNameHolder
     List<DelegateModel> mDelegateBean;
     OnDelegateNameItemClickListener mListener;
     LayoutInflater mInflate;
+    private Context mContext;
 
 
     public void setDelegateBeanItemClickListener(OnDelegateNameItemClickListener listener){
@@ -34,7 +36,7 @@ public class DelegateListAdapter extends RecyclerView.Adapter<DelegateNameHolder
     public DelegateListAdapter(Context context, List<DelegateModel> delegateBean) {
         mDelegateBean=delegateBean;
         mInflate= LayoutInflater.from(context);
-
+        mContext = context;
 
     }
 
@@ -53,7 +55,7 @@ public class DelegateListAdapter extends RecyclerView.Adapter<DelegateNameHolder
                 mListener.onDelegateNameItemClickListener(position);
             }
         });
-
+        mDelegateBean.get(position).setPicForUserLeft(mContext,holder.mDelegateName);
 
     }
 

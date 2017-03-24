@@ -267,11 +267,15 @@ public class FileDetailActivity extends BaseActivity implements FileDetailContra
 
     private void initData() {
         mNavBarView.setFallBackDisplay(true);//显示返回的按钮
-        mNavBarView.setFallBackListener(this);//返回上一级的监听
+        mNavBarView.setFallBackListener(this);//
         if (TextUtils.isEmpty(mFileName)) {
             mNavBarView.setTitle("当前议程没有文件");
         } else {
-            mNavBarView.setTitle(mFileName.substring(0, mFileName.indexOf(".")));//当前文件名称
+            String name = mFileName.substring(0, mFileName.indexOf("."));
+            if ((name.length()>12)){
+                mNavBarView.setTitleNameSize(20);
+            }
+            mNavBarView.setTitle(name);//当前文件名称
         }
         mNavBarView.setUpLevelText(mUpLevelText);//上一级名称
         //当前议程的在全部议程中的进度

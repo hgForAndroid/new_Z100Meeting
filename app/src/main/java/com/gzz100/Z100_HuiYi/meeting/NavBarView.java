@@ -88,6 +88,9 @@ public class NavBarView extends RelativeLayout {
     public void setTitle(String title){
         mTvTitle.setText(title);
     }
+    public void setTitleNameSize(float size){
+        mTvTitle.setTextSize(size);
+    }
     /**
      * 设置导航栏 右侧状态
      * @param state  主界面：状态  文件详情：第几个议程

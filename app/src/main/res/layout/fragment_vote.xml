@@ -2,105 +2,114 @@
              android:background="@color/color_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/id_rev_all_vote_inf_list"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-    </android.support.v7.widget.RecyclerView>
-    <LinearLayout
-        android:visibility="invisible"
-        android:id="@+id/id_layout_vote_main"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/id_text_view_vote_title"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:text="投票标题"/>
-    <RelativeLayout
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="#afbfff"
-        android:layout_width="match_parent"
-        android:layout_height="100dp">
-        <RelativeLayout
-            android:background="#FFFFFF"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/id_rev_all_vote_inf_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+            <LinearLayout
+                android:visibility="invisible"
+                android:id="@+id/id_layout_vote_main"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/id_text_view_vote_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center"
+                    android:textSize="30sp"
+                    android:text="投票标题"/>
+                <RelativeLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="#afbfff"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+                    <RelativeLayout
+                        android:background="#FFFFFF"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="2dp">
+                        <TextView
+                            android:id="@+id/id_text_view_vote_question"
+                            android:textSize="20sp"
+                            android:layout_margin="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="投票问题"/>
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <TextView
+                        android:id="@+id/id_text_view_vote_needed_number"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="请选择4项："
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp" />
+                    <TextView
+                        android:id="@+id/id_text_view_vote_selected_number"
+                        android:layout_marginTop="5dp"
+                        android:text="(已经选择0项)"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:background="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/id_rev_vote_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                </android.support.v7.widget.RecyclerView>
+
+                <RelativeLayout
+                    android:layout_marginBottom="100dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp">
+                    <Button
+                        android:background="@drawable/button_selector"
+                        android:id="@+id/id_btn_submit_vote"
+                        android:text="提交"
+                        android:layout_centerInParent="true"
+                        android:layout_width="200dp"
+                        android:layout_height="50dp" />
+                </RelativeLayout>
+            </LinearLayout>
+
             <TextView
-                android:id="@+id/id_text_view_vote_question"
-                android:textSize="20sp"
-                android:layout_margin="10dp"
+                android:id="@+id/id_text_view_vote_finished_inf"
+                android:visibility="invisible"
+                android:layout_marginTop="50dp"
+                android:textSize="25sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="投票成功，请等待主持人下一步操作"/>
+            <TextView
+                android:id="@+id/id_iv_vote_fragment_not_begin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="投票问题"/>
-        </RelativeLayout>
+                android:textSize="25sp"
+                android:gravity="center"/>
+        </FrameLayout>
+    </ScrollView>
 
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
-        <TextView
-            android:id="@+id/id_text_view_vote_needed_number"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:text="请选择4项："
-            android:layout_width="wrap_content"
-            android:layout_height="40dp" />
-        <TextView
-            android:id="@+id/id_text_view_vote_selected_number"
-            android:layout_marginTop="5dp"
-            android:text="(已经选择0项)"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:background="#000000"
-        android:layout_width="match_parent"
-        android:layout_height="1px"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/id_rev_vote_options"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-    </android.support.v7.widget.RecyclerView>
-
-    <RelativeLayout
-        android:layout_marginBottom="100dp"
-        android:layout_width="match_parent"
-        android:layout_height="80dp">
-        <Button
-            android:background="@drawable/button_selector"
-            android:id="@+id/id_btn_submit_vote"
-            android:text="提交"
-            android:layout_centerInParent="true"
-            android:layout_width="200dp"
-            android:layout_height="50dp" />
-    </RelativeLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/id_text_view_vote_finished_inf"
-        android:visibility="invisible"
-        android:layout_marginTop="50dp"
-        android:textSize="25sp"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="投票成功，请等待主持人下一步操作"/>
-    <TextView
-        android:id="@+id/id_iv_vote_fragment_not_begin"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="25sp"
-        android:gravity="center"/>
 
 </FrameLayout>

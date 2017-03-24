@@ -47,5 +47,9 @@
 
     <dimen name="forty_eight">48dp</dimen>
 
+    <dimen name="connect_server_text_size">14sp</dimen>
+
+    <dimen name="delegate_role_list_distance">150dp</dimen>
+
 
 </resources>

@@ -36,7 +36,7 @@
                     android:id="@+id/id_delegate_detail_role_image"
                     android:layout_width="108dp"
                     android:layout_height="108dp"
-                    android:src="@drawable/icon_delagate_normal"/>
+                    android:src="@drawable/icon_delegate_normal"/>
 
                 <TextView
                     android:id="@+id/id_delegate_detail_name"

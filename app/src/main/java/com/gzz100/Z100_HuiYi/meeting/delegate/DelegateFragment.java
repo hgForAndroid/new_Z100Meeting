@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.meeting.delegate;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -106,7 +107,7 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
 
     @Override
     public void showRoleItemDecoration() {
-        int space = getResources().getDimensionPixelSize(R.dimen.distance_one_hundred_dp);
+        int space = getResources().getDimensionPixelSize(R.dimen.delegate_role_list_distance);
         mRoleListRecView.addItemDecoration(new RoleItemSpaceDecoration(space));
     }
 
@@ -209,16 +210,33 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
     }
 
     public void setRoleItemBackgroundColor( int lastClickedRoleItemPositon,int currPosition){
-
+        Drawable drawable = null;
         //mRoleListRecView.getChildAt多的时候会返回空指针，因为已经被Recycle了
 
-        mRoleListRecView.getChildAt(lastClickedRoleItemPositon).findViewById(R.id.id_item_role_layout).setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        mRoleListRecView.getChildAt(lastClickedRoleItemPositon).findViewById(R.id.id_item_role_layout).setBackgroundResource(R.drawable.content_function_introduce);
-        ((TextView) mRoleListRecView.getChildAt(lastClickedRoleItemPositon).findViewById(R.id.id_item_role_name)).setTextColor(getResources().getColor(R.color.color_black));
+        TextView last = (TextView) mRoleListRecView.getChildAt(lastClickedRoleItemPositon).findViewById(R.id.id_item_role_name);
+        last.setTextColor(getResources().getColor(R.color.color_black));
+        if (lastClickedRoleItemPositon == 0){
+            drawable = getResources().getDrawable(R.drawable.icon_speaker_normal);
+        }else if (lastClickedRoleItemPositon == 1){
+            drawable = getResources().getDrawable(R.drawable.icon_host_normal);
+        }else {
+            drawable = getResources().getDrawable(R.drawable.icon_delegate_normal);
+        }
+        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+        last.setCompoundDrawables(drawable,null,null,null);
 
 
-        mRoleListRecView.getChildAt(currPosition).findViewById(R.id.id_item_role_layout).setBackgroundColor(getResources().getColor(R.color.color_tab_selected));
-        ((TextView) mRoleListRecView.getChildAt(currPosition).findViewById(R.id.id_item_role_name)).setTextColor(getResources().getColor(R.color.color_white));
+        TextView current = (TextView) mRoleListRecView.getChildAt(currPosition).findViewById(R.id.id_item_role_name);
+        current.setTextColor(getResources().getColor(R.color.color_tab_selected));
+        if (currPosition == 0){
+            drawable = getResources().getDrawable(R.drawable.icon_speaker_selected);
+        }else if (currPosition == 1){
+            drawable = getResources().getDrawable(R.drawable.icon_host_selected);
+        }else {
+            drawable = getResources().getDrawable(R.drawable.icon_delegate_selected);
+        }
+        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+        current.setCompoundDrawables(drawable,null,null,null);
 
         mLastClickedRoleItemPositon = currPosition;
     }

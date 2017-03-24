@@ -7,7 +7,6 @@ import android.widget.TextView;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -96,7 +95,7 @@ public class DelegateBean extends BaseBean{
             drawable = context.getResources().getDrawable(R.drawable.icon_speaker_normal);
 
         }else {//普通参会人员
-            drawable = context.getResources().getDrawable(R.drawable.icon_delagate_normal);
+            drawable = context.getResources().getDrawable(R.drawable.icon_delegate_normal);
 
         }
 
@@ -119,7 +118,7 @@ public class DelegateBean extends BaseBean{
             drawable = context.getResources().getDrawable(R.drawable.icon_speaker_selected);
 
         }else {//普通参会人员
-            drawable = context.getResources().getDrawable(R.drawable.icon_delagate_selected);
+            drawable = context.getResources().getDrawable(R.drawable.icon_delegate_selected);
 
         }
 

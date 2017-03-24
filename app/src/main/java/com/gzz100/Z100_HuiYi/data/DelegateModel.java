@@ -104,7 +104,7 @@ public class DelegateModel extends BaseBean{
             drawable = context.getResources().getDrawable(R.drawable.icon_speaker_normal);
 
         }else {//普通参会人员
-            drawable = context.getResources().getDrawable(R.drawable.icon_delagate_normal);
+            drawable = context.getResources().getDrawable(R.drawable.icon_delegate_normal);
 
         }
 
@@ -127,7 +127,7 @@ public class DelegateModel extends BaseBean{
             drawable = context.getResources().getDrawable(R.drawable.icon_speaker_selected);
 
         }else {//普通参会人员
-            drawable = context.getResources().getDrawable(R.drawable.icon_delagate_selected);
+            drawable = context.getResources().getDrawable(R.drawable.icon_delegate_selected);
 
         }
 
@@ -135,4 +135,28 @@ public class DelegateModel extends BaseBean{
         textView.setCompoundDrawables(null,drawable,null,null);
 
     }
+
+    /**
+     * 为不同类型的用户设置不同的图片
+     * @param context  上下文，用于加载Drawable
+     * @param textView  显示当前人员的TextView
+     */
+    public void setPicForUserLeft(Context context, TextView textView){
+        Drawable drawable = null;
+        if (getDelegateRole() == Constant.HOSTS){//主持人
+            drawable = context.getResources().getDrawable(R.drawable.icon_host_selected);
+
+        }else if(getDelegateRole() == Constant.DEFAULT_SPEAKER){//主讲人
+            drawable = context.getResources().getDrawable(R.drawable.icon_speaker_selected);
+
+        }else {//普通参会人员
+            drawable = context.getResources().getDrawable(R.drawable.icon_delegate_selected);
+
+        }
+
+        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+        textView.setCompoundDrawables(drawable,null,null,null);
+
+    }
+
 }

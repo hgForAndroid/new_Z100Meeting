@@ -1,42 +1,73 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/color_background">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_background">
 
-    <AutoCompleteTextView
-        android:id="@+id/id_edt_fgm_delegate"
-        android:layout_width="@dimen/file_search_width"
-        android:layout_height="@dimen/file_search_height"
-        android:layout_marginLeft="@dimen/distance_ten_dp"
-        android:layout_marginTop="@dimen/distance_ten_dp"
-        android:background="@drawable/edt_selector"
-        android:hint="@string/string_delegate_search_hint"
-        android:paddingLeft="@dimen/distance_ten_dp"/>
-
-    <Button
-        android:id="@+id/id_btn_fgm_delegate"
-        android:layout_width="@dimen/file_search_height"
-        android:layout_height="@dimen/file_search_height"
-        android:layout_marginLeft="@dimen/distance_ten_dp"
-        android:layout_marginTop="@dimen/distance_ten_dp"
-        android:layout_toRightOf="@id/id_edt_fgm_delegate"
-        android:background="@drawable/icon_btn_search"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/id_rev_fgm_tab"
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/id_edt_fgm_delegate"
-        android:layout_marginLeft="@dimen/distance_five_dp"
-        android:layout_marginTop="@dimen/distance_ten_dp">
+        android:layout_height="0dp"
+        android:layout_weight="4">
 
-    </android.support.v7.widget.RecyclerView>
+        <LinearLayout
+            android:id="@+id/id_file_top"
+            android:layout_marginTop="50dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/edt_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <AutoCompleteTextView
+                android:id="@+id/id_edt_fgm_delegate"
+                android:layout_width="@dimen/file_search_width"
+                android:layout_height="@dimen/file_search_height"
+                android:layout_marginLeft="@dimen/distance_ten_dp"
+                android:hint="@string/string_delegate_search_hint"
+                android:background="@null"
+                android:paddingLeft="@dimen/distance_ten_dp"/>
+
+            <Button
+                android:id="@+id/id_btn_fgm_delegate"
+                android:layout_width="@dimen/file_search_height"
+                android:layout_height="@dimen/file_search_height"
+                android:layout_marginLeft="@dimen/distance_ten_dp"
+                android:layout_toRightOf="@id/id_edt_fgm_delegate"
+                android:background="@drawable/icon_btn_search"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingLeft="140dp"
+            android:layout_marginTop="50dp"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@+id/id_file_top"
+                android:id="@+id/id_rev_fgm_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#ccc"/>
 
     <android.support.v7.widget.RecyclerView
+        android:overScrollMode="never"
+        android:layout_gravity="center_horizontal"
         android:id="@+id/id_rev_fgm_delegate_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_below="@id/id_rev_fgm_tab"
         android:layout_marginLeft="@dimen/distance_ten_dp"
-        android:layout_marginTop="@dimen/distance_ten_dp"></android.support.v7.widget.RecyclerView>
-</RelativeLayout>
+        android:layout_marginTop="@dimen/distance_ten_dp"
+        android:layout_weight="6">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>
+
