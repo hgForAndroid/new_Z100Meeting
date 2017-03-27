@@ -70,6 +70,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     private RelativeLayout mRlNormal;
     //搜索后的布局
     private LinearLayout mLlSearchResult;
+    private LinearLayout mLlSearchBar;
     //搜索后的结果的当前议程序号
     private int mSearchAgendaIndex;
     //搜索后的文件序号
@@ -111,6 +112,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
         mRlNormal = (RelativeLayout) view.findViewById(R.id.id_rl_fgm_file_normal);
         mLlSearchResult = (LinearLayout) view.findViewById(R.id.id_ll_fgm_file_search_result);
+        mLlSearchBar = (LinearLayout) view.findViewById(R.id.id_fragment_file_search_bar);
 
         mBtnSearch.setOnClickListener(this);
         mBtnSearchClear.setOnClickListener(this);
@@ -133,6 +135,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
                     mAgendaListRecView.setVisibility(View.VISIBLE);
                     mFileListRecView.setVisibility(View.VISIBLE);
                     mFileAttrListView.setVisibility(View.VISIBLE);
+                    mRlNormal.setVisibility(View.VISIBLE);
 
                     mLlSearchResult.setVisibility(View.GONE);
                 } else {
@@ -173,6 +176,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     @Override
     public void showFilesList(List<DocumentModel> documentBeen) {
         mFileListRecView.setVisibility(View.VISIBLE);
+        mRlNormal.setVisibility(View.VISIBLE);
         mDocumentBeen = documentBeen;
         mFileListAdapter = new FileListAdapter(getContext(), documentBeen);
         //纵向展示
@@ -193,9 +197,13 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
         mAgendaListRecView.setVisibility(View.GONE);
         mFileListRecView.setVisibility(View.GONE);
+        //文件名、大小 ，主讲人那一条布局
         mFileAttrListView.setVisibility(View.GONE);
 
+        mRlNormal.setVisibility(View.GONE);
+
         mLlSearchResult.setVisibility(View.VISIBLE);
+        mLlSearchBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -308,7 +316,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void showNoSearchResult() {
-
+        mRlNormal.setVisibility(View.VISIBLE);
         Toast hintToast = Toast.makeText(getContext(), R.string.string_file_or_speaker_not_find, Toast.LENGTH_SHORT);
         hintToast.show();
 

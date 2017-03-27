@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_ll_bavBar_right"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/id_tv_navBar_state"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingRight="10dp"
+        android:text="未开始"
+        android:textSize="@dimen/nav_uplevel_text_size"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/id_tv_navBar_time_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="00"
+            android:textSize="@dimen/nav_uplevel_text_size"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="@dimen/distance_five_dp"
+            android:text=":"
+            android:textSize="@dimen/nav_uplevel_text_size"/>
+
+        <TextView
+            android:id="@+id/id_tv_navBar_time_min"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="00"
+            android:textSize="@dimen/nav_uplevel_text_size"/>
+    </LinearLayout>
+
+</LinearLayout>

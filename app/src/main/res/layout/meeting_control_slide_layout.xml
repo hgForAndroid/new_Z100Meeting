@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="62dp"
-              android:layout_margin="2dp"
-              android:background="@drawable/bg_control_view"
-              android:gravity="right">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="62dp"
+    android:layout_margin="2dp"
+    android:gravity="right">
 
     <ImageView
         android:id="@+id/id_iv_slide_to_right"

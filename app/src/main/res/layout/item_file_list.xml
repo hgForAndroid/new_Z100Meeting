@@ -44,7 +44,7 @@
             android:layout_alignBaseline="@id/id_item_file_name"
             android:layout_alignParentRight="true"
             android:gravity="center_horizontal"
-            android:paddingRight="@dimen/distance_twenty_dp"
+            android:paddingRight="@dimen/distance_five_dp"
             android:text="人名"
             />
 
