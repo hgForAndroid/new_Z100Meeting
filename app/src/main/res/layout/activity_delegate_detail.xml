@@ -14,50 +14,54 @@
     </com.gzz100.Z100_HuiYi.meeting.NavBarView>
 
     <LinearLayout
+        android:background="@color/color_background"
         android:id="@+id/id_delegate_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/id_delegate_detail_part1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.5"
-            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:orientation="vertical"
             android:paddingLeft="@dimen/distance_sixteen">
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal">
-
-                <ImageView
-                    android:id="@+id/id_delegate_detail_role_image"
-                    android:layout_width="108dp"
-                    android:layout_height="108dp"
-                    android:src="@drawable/icon_delegate_normal"/>
-
-                <TextView
-                    android:id="@+id/id_delegate_detail_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/id_delegate_detail_role_image"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center|bottom"
-                    android:text="姓名"
-                    android:textSize="@dimen/delegate_detail_text_size"/>
-
-
-            </RelativeLayout>
+            <ImageView
+                android:id="@+id/id_delegate_detail_role_image"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/icon_delegate_normal"/>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:orientation="vertical"
                 android:paddingLeft="32sp"
                 android:paddingTop="@dimen/distance_ten_dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/distance_five_dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="姓名："
+                        android:textSize="@dimen/delegate_detail_text_size"/>
+
+                    <TextView
+                        android:id="@+id/id_delegate_detail_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="某部门"
+                        android:textSize="@dimen/delegate_detail_text_size"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -125,77 +129,96 @@
             </LinearLayout>
         </LinearLayout>
 
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="#ccc"/>
+
         <LinearLayout
-            android:id="@+id/id_ll_delegate_detail_agendas"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.5"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/distance_sixteen">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="主讲议程："
-                android:textSize="@dimen/delegate_detail_text_size"/>
             <LinearLayout
+                android:id="@+id/id_ll_delegate_detail_agendas"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:background="@drawable/shape_delegate_detail"
-                android:layout_marginRight="@dimen/distance_sixteen">
+                android:paddingLeft="@dimen/distance_sixteen">
+
                 <TextView
-                    android:visibility="gone"
-                    android:gravity="center_vertical"
-                    android:id="@+id/id_id_tv_delegate_detail_no_agenda"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="无主讲议程"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:paddingTop="20dp"
-                    android:textSize="@dimen/delegate_detail_text_size"
-                    android:paddingLeft="@dimen/distance_five_dp"/>
+                    android:text="主讲内容："
+                    android:textSize="30sp"/>
 
-                <android.support.v7.widget.RecyclerView
-                    android:paddingTop="@dimen/distance_five_dp"
-                    android:id="@+id/id_delegate_detail_part2"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:overScrollMode="never">
+                    android:layout_marginRight="@dimen/distance_sixteen"
+                    android:orientation="vertical">
 
-                </android.support.v7.widget.RecyclerView>
+                    <TextView
+                        android:id="@+id/id_id_tv_delegate_detail_no_agenda"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="50dp"
+                        android:paddingTop="10dp"
+                        android:text="无主讲内容"
+                        android:textSize="@dimen/delegate_detail_text_size"
+                        android:visibility="gone"/>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/id_delegate_detail_part2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:overScrollMode="never"
+                        android:paddingLeft="50dp"
+                        android:paddingTop="@dimen/distance_five_dp">
+
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+
             </LinearLayout>
 
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:gravity="left|top"
-            android:paddingLeft="@dimen/distance_sixteen">
-
-            <TextView
-                android:id="@+id/id_delegate_detail_info_tab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="详细信息："
-                android:textSize="@dimen/delegate_detail_text_size"/>
-
-            <TextView
-                android:background="@drawable/shape_delegate_detail"
-                android:id="@+id/id_delegate_detail_info"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/id_delegate_detail_info_tab"
-                android:text="某详细信息"
-                android:textSize="@dimen/delegate_detail_text_size"
-                android:paddingTop="@dimen/distance_five_dp"
-                android:paddingLeft="@dimen/distance_five_dp"
-                android:layout_marginRight="@dimen/distance_sixteen"
-                android:layout_marginBottom="@dimen/distance_five_dp"/>
-        </RelativeLayout>
+                android:layout_height="2dp"
+                android:background="#ccc"/>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:gravity="left|top"
+                android:paddingLeft="@dimen/distance_sixteen"
+                android:paddingTop="30dp">
 
+                <TextView
+                    android:id="@+id/id_delegate_detail_info_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="个人信息："
+                    android:textSize="30sp"/>
+
+                <TextView
+                    android:id="@+id/id_delegate_detail_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/id_delegate_detail_info_tab"
+                    android:layout_marginBottom="@dimen/distance_five_dp"
+                    android:layout_marginRight="@dimen/distance_sixteen"
+                    android:paddingLeft="50dp"
+                    android:paddingTop="@dimen/distance_ten_dp"
+                    android:text="无"
+                    android:textSize="@dimen/delegate_detail_text_size"/>
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

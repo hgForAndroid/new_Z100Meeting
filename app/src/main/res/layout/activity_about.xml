@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.gzz100.Z100_HuiYi.meeting.about.AboutActivity">
+
+    <com.gzz100.Z100_HuiYi.meeting.NavBarView
+        android:id="@+id/id_activity_about_nbv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.gzz100.Z100_HuiYi.meeting.NavBarView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_background">
+
+        <FrameLayout
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:id="@+id/id_about_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="-70dp">
+
+            <ImageView
+                android:id="@+id/id_fragment_about_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_company"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="300dp"
+                android:textColor="#686565"
+                android:text="中佰会议系统"
+                android:textSize="20sp"/>
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/id_copy_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="@string/string_copy_right"
+            android:textColor="#b7b6b6"
+            android:paddingBottom="@dimen/distance_twenty_dp"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/id_copy_right"
+            android:layout_below="@+id/id_view"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/id_fragment_about_function_introduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:gravity="center"
+                android:paddingBottom="25dp"
+                android:paddingTop="25dp"
+                android:text="功能介绍"
+                android:textColor="#686565"
+                android:textSize="28dp"/>
+
+            <ScrollView
+                android:id="@+id/id_scrollView_of_function"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:overScrollMode="never"
+                android:visibility="visible">
+
+                <include layout="@layout/content_of_function"/>
+            </ScrollView>
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_marginTop="-30dp"
+            android:id="@+id/id_fragment_about_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/string_meeting_description"
+            android:textSize="20sp"
+            android:textColor="@color/color_about_activity_text"
+            android:textStyle="italic"
+            android:layout_below="@+id/id_about_top"
+            android:layout_alignParentStart="true"/>
+
+        <View
+            android:id="@+id/id_view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/id_fragment_about_description"
+            android:layout_marginTop="25dp"
+            android:background="#ccc"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

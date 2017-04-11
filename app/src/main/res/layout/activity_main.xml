@@ -1,76 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_main_fl_root"
+    android:id="@+id/id_main_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+
+    <FrameLayout
+        android:id="@+id/id_main_fl_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.gzz100.Z100_HuiYi.meeting.NavBarView
-            android:id="@+id/id_main_tbv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-        </com.gzz100.Z100_HuiYi.meeting.NavBarView>
-        <android.support.v4.view.ViewPager
-            android:layout_below="@id/id_main_tbv"
+        <RelativeLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.gzz100.Z100_HuiYi.meeting.NavBarView
+                android:id="@+id/id_main_tbv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.gzz100.Z100_HuiYi.meeting.NavBarView>
+
+            <com.gzz100.Z100_HuiYi.meeting.CancelScrollViewPager
+                android:id="@+id/id_main_ViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/id_main_tbv">
+
+            </com.gzz100.Z100_HuiYi.meeting.CancelScrollViewPager>
+
+            <RadioGroup
+                android:id="@+id/id_main_rdg"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tab_height_ninety_six"
+                android:layout_alignParentBottom="true"
+                android:background="@color/color_tab_bg"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/id_main_meetingTab"
+                    style="@style/radio_button_same_attr"
+                    android:layout_marginRight="@dimen/main_radio_group_item_distance_margin_right"
+                    android:drawableTop="@drawable/main_meeting_selector"
+                    android:paddingLeft="@dimen/main_radio_group_item_distance"
+                    android:paddingRight="@dimen/main_radio_group_item_distance"
+                    android:text="@string/string_main_tab_meeting"/>
+
+                <RadioButton
+                    android:id="@+id/id_main_delegateTab"
+                    style="@style/radio_button_same_attr"
+                    android:layout_marginRight="@dimen/main_radio_group_item_distance_margin_right"
+                    android:drawableTop="@drawable/main_people_selector"
+                    android:paddingLeft="@dimen/main_radio_group_item_distance"
+                    android:paddingRight="@dimen/main_radio_group_item_distance"
+                    android:text="@string/string_main_tab_delegate"/>
+
+                <RadioButton
+                    android:id="@+id/id_main_agendaTab"
+                    style="@style/radio_button_same_attr"
+                    android:layout_marginRight="@dimen/main_radio_group_item_distance_margin_right"
+                    android:drawableTop="@drawable/main_agenda_selector"
+                    android:paddingLeft="@dimen/main_radio_group_item_distance"
+                    android:paddingRight="@dimen/main_radio_group_item_distance"
+                    android:text="@string/string_main_tab_agenda"/>
+
+                <RadioButton
+                    android:id="@+id/id_main_fileTab"
+                    style="@style/radio_button_same_attr"
+                    android:layout_marginRight="@dimen/main_radio_group_item_distance_margin_right"
+                    android:drawableTop="@drawable/main_file_selector"
+                    android:paddingLeft="@dimen/main_radio_group_item_distance"
+                    android:paddingRight="@dimen/main_radio_group_item_distance"
+                    android:text="@string/string_main_tab_file"/>
+
+                <RadioButton
+                    android:id="@+id/id_main_voteTab"
+                    style="@style/radio_button_same_attr"
+                    android:drawableTop="@drawable/main_vote_selector"
+                    android:paddingLeft="@dimen/main_radio_group_item_distance"
+                    android:paddingRight="@dimen/main_radio_group_item_distance"
+                    android:text="@string/string_main_tab_vote"/>
+            </RadioGroup>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_above="@id/id_main_rdg"
+                android:background="#ccc"/>
+        </RelativeLayout>
+        <ImageView
+            android:id="@+id/id_img_show_controller"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/id_main_ViewPager">
+            android:src="@drawable/file_detail_slide_to_left"
+            android:layout_gravity="right|center_vertical"/>
+    </FrameLayout>
 
-        </android.support.v4.view.ViewPager>
-        <RadioGroup
-            android:id="@+id/id_main_rdg"
-            android:background="@color/color_tab_bg"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_height"
-            android:orientation="horizontal"
-            android:gravity="center">
-            <RadioButton
-                android:paddingRight="@dimen/distance_five_dp"
-                android:drawableTop="@drawable/main_meeting_selector"
-                android:id="@+id/id_main_meetingTab"
-                android:text="@string/string_main_tab_meeting"
-                style="@style/radio_button_same_attr"/>
-            <RadioButton
-                android:paddingRight="@dimen/distance_five_dp"
-                android:drawableTop="@drawable/main_people_selector"
-                android:id="@+id/id_main_delegateTab"
-                android:text="@string/string_main_tab_delegate"
-                style="@style/radio_button_same_attr"/>
-            <RadioButton
-                android:paddingRight="@dimen/distance_five_dp"
-                android:drawableTop="@drawable/main_agenda_selector"
-                android:id="@+id/id_main_agendaTab"
-                android:text="@string/string_main_tab_agenda"
-                style="@style/radio_button_same_attr"/>
-            <RadioButton
-                android:paddingRight="@dimen/distance_five_dp"
-                android:drawableTop="@drawable/main_file_selector"
-                android:id="@+id/id_main_fileTab"
-                android:text="@string/string_main_tab_file"
-                style="@style/radio_button_same_attr"/>
+</android.support.v4.widget.DrawerLayout>
 
-            <RadioButton
-                android:paddingRight="@dimen/distance_five_dp"
-                android:drawableTop="@drawable/main_about_selector"
-                android:id="@+id/id_main_aboutTab"
-                style="@style/radio_button_same_attr"
-                android:text="@string/string_main_tab_about"/>
-
-            <RadioButton
-                android:drawableTop="@drawable/main_vote_selector"
-                android:id="@+id/id_main_voteTab"
-                android:text="@string/string_main_tab_vote"
-                style="@style/radio_button_same_attr"/>
-        </RadioGroup>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#ccc"
-            android:layout_above="@id/id_main_rdg"/>
-    </RelativeLayout>
-</FrameLayout>
 

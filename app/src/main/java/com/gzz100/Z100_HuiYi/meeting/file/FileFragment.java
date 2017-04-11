@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -33,6 +34,7 @@ import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -51,7 +53,7 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     private RecyclerView mFileListRecView;
     private RecyclerView mSearchResultRecView;
     private FileContract.Presenter mPresenter;
-    private RelativeLayout mFileAttrListView;
+    private LinearLayout mFileAttrListView;
 
     private List<AgendaModel> mAgendas;
     private AgendaListTabAdapter mAgendaAdapter;
@@ -75,6 +77,8 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
     private int mSearchAgendaIndex;
     //搜索后的文件序号
     private int mSearchFileIndex1;
+    //文件界面的根布局
+    private LinearLayout mFileRootLayout;
 
     @Override
     public void onAttach(Context context) {
@@ -108,14 +112,18 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
         mAgendaListRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_tab);
         mFileListRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_file_list);
         mSearchResultRecView = (RecyclerView) view.findViewById(R.id.id_rev_fgm_file_search_result);
-        mFileAttrListView = (RelativeLayout) view.findViewById(R.id.id_rl_fgm_file);
+        mFileAttrListView = (LinearLayout) view.findViewById(R.id.id_rl_fgm_file);
 
         mRlNormal = (RelativeLayout) view.findViewById(R.id.id_rl_fgm_file_normal);
         mLlSearchResult = (LinearLayout) view.findViewById(R.id.id_ll_fgm_file_search_result);
         mLlSearchBar = (LinearLayout) view.findViewById(R.id.id_fragment_file_search_bar);
 
+        mFileRootLayout = (LinearLayout) view.findViewById(R.id.id_file_fragment_root_layout);
+
         mBtnSearch.setOnClickListener(this);
         mBtnSearchClear.setOnClickListener(this);
+        mFileRootLayout.setOnClickListener(this);
+
         return view;
     }
 
@@ -146,6 +154,23 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
                 mEdtSearchContent.setText(null);
                 mEdtSearchContent.clearFocus();
                 break;
+            case R.id.id_file_fragment_root_layout:
+                hideSoftInput(view);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 隐藏软件盘
+     *
+     * @param view
+     */
+    private void hideSoftInput(View view) {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
@@ -208,11 +233,11 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void showFileDetail() {
-        if (MyAPP.getInstance().isVoting()){
+        if (MyAPP.getInstance().isVoting()) {
             ToastUtil.showMessage("投票还未结束");
             return;
         }
-        if (MyAPP.getInstance().getUserRole() == 1){
+        if (MyAPP.getInstance().getUserRole() == 1) {
             //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
             mMainActivity.removeControllerView();
         }
@@ -222,11 +247,11 @@ public class FileFragment extends Fragment implements FileContract.View, OnAgend
 
     @Override
     public void showSearchFileDetail() {
-        if (MyAPP.getInstance().isVoting()){
+        if (MyAPP.getInstance().isVoting()) {
             ToastUtil.showMessage("投票还未结束");
             return;
         }
-        if (MyAPP.getInstance().getUserRole() == 1){
+        if (MyAPP.getInstance().getUserRole() == 1) {
             //通知主界面移除控制View，否则进入FileDetailActivity后无法添加控制View,导致报错
             mMainActivity.removeControllerView();
         }

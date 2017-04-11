@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     private static final String BUNDLE = "bundle";
     private static final String MEETING_ID = "meetingID";
     private static final String DEVICE_IMEI = "deviceIMEI";
+    private static final String MEETING_NAME = "meetingName";
     private String mDeviceIMEI;
     private int mMeetingID;
     private Dialog mDialog;
@@ -47,12 +49,14 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     private String mUrlPrefix;
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mNotificationBuilder;
+    private String mMeetingName;
 
-    public static void toSignInActivity(Context context,String IMEI,int meetingID){
+    public static void toSignInActivity(Context context,String IMEI,int meetingID,String meetingName){
         Intent intent = new Intent(context,SignInActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(DEVICE_IMEI,IMEI);
         bundle.putInt(MEETING_ID,meetingID);
+        bundle.putString(MEETING_NAME,meetingName);
         intent.putExtra(BUNDLE,bundle);
         context.startActivity(intent);
     }
@@ -61,6 +65,8 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
     TextView mTvPosition;
     @BindView(R.id.id_tv_name_sign_in)
     TextView mTvName;
+    @BindView(R.id.id_tv_meeting_name_signIn_activity)
+    TextView mTvMeetingName;
 
     private SignInContract.Presenter mPresenter;
 
@@ -83,8 +89,12 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
         if (getIntent().getBundleExtra(BUNDLE) != null){
             mDeviceIMEI = getIntent().getBundleExtra(BUNDLE).getString(DEVICE_IMEI);
             mMeetingID = getIntent().getBundleExtra(BUNDLE).getInt(MEETING_ID);
+            mMeetingName = getIntent().getBundleExtra(BUNDLE).getString(MEETING_NAME);
         }else {
             ToastUtil.showMessage(R.string.string_fetch_meeting_error);
+        }
+        if (!TextUtils.isEmpty(mMeetingName)){
+            mTvMeetingName.setText(mMeetingName);
         }
     }
 
@@ -165,6 +175,7 @@ public class SignInActivity extends BaseActivity implements SignInContract.View{
             //打开发送组播信息的服务
             Intent intent = new Intent(this,SendMulticastService.class);
             intent.putExtra("localIpAddress",localIpAddress);
+            intent.putExtra("meetingName",mMeetingName);
             startService(intent);
             //开启tcp服务器
             mPresenter.startTCPService();

@@ -73,7 +73,6 @@ public class AgendaPresenter implements AgendaContract.Presenter {
                 @Override
                 public void onDataNotAvailable() {
                     mAgendaView.showNoFileList();
-
                 }
             });
         }

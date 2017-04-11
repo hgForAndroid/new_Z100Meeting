@@ -8,14 +8,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,12 +41,13 @@ import java.util.List;
  * create at 2016/9/2
  */
 public class DelegateFragment extends Fragment implements  DelegateContract.View,
-        OnRoleItemClickListener,OnDelegateNameItemClickListener {
+        OnRoleItemClickListener,OnDelegateNameItemClickListener, View.OnClickListener {
     AutoCompleteTextView mEdtSearchContent;
     Button mBntSearch;
     RecyclerView mRoleListRecView;
     RecyclerView mDelegateListRecView;
     private DelegatePresenter mPresenter;
+    private LinearLayout mDelegateRootLayout;
 
     public static DelegateFragment newInstance(){return new DelegateFragment();}
     @Override
@@ -62,6 +64,9 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
         mBntSearch=(Button)view.findViewById(R.id.id_btn_fgm_delegate);
         mRoleListRecView=(RecyclerView)view.findViewById(R.id.id_rev_fgm_tab);
         mDelegateListRecView=(RecyclerView)view.findViewById(R.id.id_rev_fgm_delegate_list);
+        mDelegateRootLayout = (LinearLayout) view.findViewById(R.id.id_delegate_fragment_root_layout);
+        mDelegateRootLayout.setOnClickListener(this);
+
         mPresenter.start();
         mPresenter.setFirstLoad(false);
         setSearchButton();
@@ -251,4 +256,26 @@ public class DelegateFragment extends Fragment implements  DelegateContract.View
         mPresenter.fetchDelegateList(Constant.DEFAULT_SPEAKER);
         setRoleItemBackgroundColor(mLastClickedRoleItemPositon,Constant.DEFAULT_SPEAKER);
     }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.id_delegate_fragment_root_layout:
+                hideSoftInput(v);
+                break;
+            default:break;
+        }
+    }
+
+    /**
+     * 隐藏软件盘
+     * @param view
+     */
+    private void hideSoftInput(View view){
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null){
+            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+        }
+    }
+
 }

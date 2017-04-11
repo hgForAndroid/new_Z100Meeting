@@ -20,8 +20,38 @@
         android:gravity="center"
         android:maxWidth="500dp"
         android:text="标题"
+        android:textColor="@color/nav_bar_all_text_color"
         android:textSize="@dimen/nav_title_text_size"/>
 
+    <TextView
+        android:id="@+id/id_bracket_left"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/id_tv_navBar_title"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="@dimen/distance_five_dp"
+        android:text="（"
+        android:textColor="@color/nav_bar_all_text_color"
+        android:textSize="@dimen/main_title_side_state_and_time_size"/>
+
+    <include
+        android:id="@+id/id_main_state_and_time"
+        layout="@layout/main_meeting_state_and_time"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/id_bracket_left"/>
+
+    <TextView
+        android:id="@+id/id_bracket_right"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/id_main_state_and_time"
+        android:gravity="center"
+        android:paddingLeft="@dimen/distance_five_dp"
+        android:text="）"
+        android:textColor="@color/nav_bar_all_text_color"
+        android:textSize="@dimen/main_title_side_state_and_time_size"/>
 
     <TextView
         android:id="@+id/id_tv_navBar_meeting_state"
@@ -29,7 +59,9 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/id_tv_navBar_title"
         android:layout_toRightOf="@+id/id_tv_navBar_title"
+        android:paddingLeft="@dimen/distance_twenty_dp"
         android:text="(进行中)"
+        android:textColor="@color/nav_bar_all_text_color"
         android:textSize="@dimen/nav_uplevel_text_size"
         android:visibility="gone"/>
 
@@ -45,12 +77,25 @@
             android:id="@+id/id_tv_up_level"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:drawableLeft="@drawable/ic_home"
+            android:drawableLeft="@drawable/home"
             android:gravity="center"
+            android:paddingLeft="@dimen/distance_ten_dp"
             android:text="上级标题"
             android:textColor="@android:color/transparent"
             android:textSize="@dimen/nav_uplevel_text_size"/>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/id_tv_about_in_nav_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:paddingRight="10dp"
+        android:src="@drawable/icon_about_normal"
+        android:textColor="@color/nav_bar_all_text_color"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/id_ll_bavBar_right"
@@ -66,6 +111,7 @@
             android:gravity="center"
             android:paddingRight="10dp"
             android:text="未开始"
+            android:textColor="@color/nav_bar_all_text_color"
             android:textSize="@dimen/nav_uplevel_text_size"/>
 
         <LinearLayout
@@ -79,6 +125,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="00"
+                android:textColor="@color/nav_bar_all_text_color"
                 android:textSize="@dimen/nav_uplevel_text_size"/>
 
             <TextView
@@ -87,6 +134,7 @@
                 android:gravity="center"
                 android:padding="@dimen/distance_five_dp"
                 android:text=":"
+                android:textColor="@color/nav_bar_all_text_color"
                 android:textSize="@dimen/nav_uplevel_text_size"/>
 
             <TextView
@@ -95,6 +143,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="00"
+                android:textColor="@color/nav_bar_all_text_color"
                 android:textSize="@dimen/nav_uplevel_text_size"/>
         </LinearLayout>
 

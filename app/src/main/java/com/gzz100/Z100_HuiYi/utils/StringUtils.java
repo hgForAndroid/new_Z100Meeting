@@ -1,5 +1,8 @@
 package com.gzz100.Z100_HuiYi.utils;
 
+import android.text.TextUtils;
+import android.widget.TextView;
+
 import com.gzz100.Z100_HuiYi.R;
 
 import java.text.DecimalFormat;
@@ -75,5 +78,21 @@ public class StringUtils {
         }
         return version;
 
+    }
+
+    /**
+     * 设置标题，添加了字体间的间距
+     * @param title  标题
+     */
+    public static void setTitleWithSpace(TextView textView,String title,String space){
+        if (TextUtils.isEmpty(title)){
+            return;
+        }
+        char[] chars = title.toCharArray();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < chars.length; i++) {
+            stringBuilder.append(chars[i]+space);
+        }
+        textView.setText(stringBuilder.toString());
     }
 }

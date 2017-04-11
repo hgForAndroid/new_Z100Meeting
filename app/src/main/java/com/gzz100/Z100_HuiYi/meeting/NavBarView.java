@@ -1,8 +1,11 @@
 package com.gzz100.Z100_HuiYi.meeting;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.TextureView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,6 +29,13 @@ public class NavBarView extends RelativeLayout {
     public TextView mTvTimeMin;
     public TextView mTvUpLevel;
     public TextView mTvState;
+    private TextView mTvBracketLeft;
+    private TextView mTvBracketRight;
+    private View mMeetingAndTime;
+    private TextView mTvMeetingStateAndTimeOfState;
+    private TextView mTvMeetingStateAndTimeOfHour;
+    private TextView mTvMeetingStateAndTimeOfMin;
+    private ImageView mTvAbout;
 
     public NavBarView(Context context) {
         super(context);
@@ -52,6 +62,111 @@ public class NavBarView extends RelativeLayout {
         mTvTimeHour = (TextView) findViewById(R.id.id_tv_navBar_time_hour);
         mTvTimeMin = (TextView) findViewById(R.id.id_tv_navBar_time_min);
         mTvUpLevel = (TextView) findViewById(R.id.id_tv_up_level);
+
+        mTvBracketLeft = (TextView) findViewById(R.id.id_bracket_left);
+        mTvBracketRight = (TextView) findViewById(R.id.id_bracket_right);
+        mMeetingAndTime = findViewById(R.id.id_main_state_and_time);
+        //标题旁边的会议状态、时间
+        mTvMeetingStateAndTimeOfState = (TextView) findViewById(R.id.id_tv_meeting_state_and_time_state);
+        mTvMeetingStateAndTimeOfHour = (TextView) findViewById(R.id.id_tv_meeting_state_and_time_hour);
+        mTvMeetingStateAndTimeOfMin = (TextView) findViewById(R.id.id_tv_meeting_state_and_time_min);
+
+        //导航栏右边的关于按钮
+        mTvAbout = (ImageView) findViewById(R.id.id_tv_about_in_nav_bar);
+
+    }
+
+    /**
+     * 设置标题，添加了字体间的间距
+     * @param title  标题
+     */
+    public void setTitleWithSpace(String title){
+        if (TextUtils.isEmpty(title)){
+            return;
+        }
+        char[] chars = title.toCharArray();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < chars.length; i++) {
+            stringBuilder.append(chars[i]+"  ");
+        }
+        mTvTitle.setText(stringBuilder.toString());
+    }
+
+    /**
+     * 设置导航栏右边的 关于 是否显示
+     * @param display  true，显示；false，隐藏。
+     */
+    public void setAboutDisplay(boolean display){
+        if (display){
+            mTvAbout.setVisibility(VISIBLE);
+        }else {
+            mTvAbout.setVisibility(GONE);
+        }
+    }
+
+    /**
+     * 设置关于的点击监听
+     * @param listener
+     */
+    public void aboutClick(View.OnClickListener listener){
+        mTvAbout.setOnClickListener(listener);
+    }
+
+    /**
+     * 设置标题旁边的会议状态
+     * @param state
+     */
+    public void setMeetingStateAndTimeOfState(String state){
+        mTvMeetingStateAndTimeOfState.setText(state);
+    }
+
+    /**
+     * 设置标题旁边的会议时间，时
+     * @param timeOfHour
+     */
+    public void setMeetingAndTimeOfHour(String timeOfHour){
+        mTvMeetingStateAndTimeOfHour.setText(timeOfHour);
+    }
+
+    /**
+     * 设置标题旁边的会议时间，分
+     * @param timeOfMin
+     */
+    public void setMeetingAndTimeOfMin(String timeOfMin){
+        mTvMeetingStateAndTimeOfMin.setText(timeOfMin);
+    }
+
+    /**
+     * 获取标题旁边的会议时间，时
+     * @return
+     */
+    public String getMeetingAndTimeOfHour(){
+        return mTvMeetingStateAndTimeOfHour.getText().toString();
+    }
+
+    /**
+     * 获取标题旁边的会议时间，分
+     * @return
+     */
+    public String getMeetingAndTimeOfMin(){
+        return mTvMeetingStateAndTimeOfMin.getText().toString();
+    }
+
+
+    /**
+     * 设置标题旁边的会议状态和时间的显示
+     * @param display true，显示；false，隐藏
+     */
+    public void setMeetingAndTimeDisplay(boolean display){
+        if (display){
+            mMeetingAndTime.setVisibility(View.VISIBLE);
+            mTvBracketLeft.setVisibility(View.VISIBLE);
+            mTvBracketRight.setVisibility(View.VISIBLE);
+        }else {
+            mMeetingAndTime.setVisibility(View.GONE);
+            mTvBracketLeft.setVisibility(View.GONE);
+            mTvBracketRight.setVisibility(View.GONE);
+        }
     }
 
     public void setFallBackListener(OnClickListener listener){
@@ -97,6 +212,17 @@ public class NavBarView extends RelativeLayout {
      */
     public void setMeetingStateOrAgendaState(String state){
         mStateOrAgenda.setText(state);
+    }
+    /**
+     * 设置导航栏 右侧状态  ，显示或隐藏
+     * @param display
+     */
+    public void setMeetingStateOrAgendaStateDisplay(boolean display){
+        if (display){
+            mStateOrAgenda.setVisibility(VISIBLE);
+        }else {
+            mStateOrAgenda.setVisibility(GONE);
+        }
     }
 
     public String getMeetingStateOrAgendaState(){

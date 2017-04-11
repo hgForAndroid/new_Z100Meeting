@@ -1,63 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/id_rl_slide_all"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_rl_slide_all"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <LinearLayout
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:id="@+id/id_ll_slide_all"
         android:layout_width="@dimen/file_detail_slide_width"
         android:layout_height="match_parent"
         android:background="@drawable/shape_file_detail_slide"
-        android:paddingTop="@dimen/distance_five_dp"
-        android:orientation="vertical">
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/distance_five_dp">
 
         <ListView
             android:id="@+id/id_slide_rev"
             android:layout_width="match_parent"
-            android:paddingLeft="@dimen/distance_five_dp"
-            android:paddingRight="@dimen/distance_five_dp"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:overScrollMode="never"
             android:divider="@null"
             android:dividerHeight="10dp"
+            android:overScrollMode="never"
+            android:paddingLeft="@dimen/distance_five_dp"
+            android:paddingRight="@dimen/distance_five_dp"
             android:scrollbars="none">
-
         </ListView>
+        <View
+            android:layout_marginTop="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_black"/>
+        <TextView
+            android:id="@+id/id_tv_file_detail_side_layout_agenda"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:text="议程"/>
 
         <LinearLayout
             android:id="@+id/id_ll_file_detail_controller"
             android:layout_width="match_parent"
             android:layout_height="80dp">
+
             <Button
-                android:layout_margin="2dp"
-                android:background="@drawable/button_selector"
                 android:id="@+id/id_btn_previous"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:text="上一个"
-                android:layout_height="match_parent" />
-            <Button
-                android:layout_margin="2dp"
                 android:background="@drawable/button_selector"
+                android:text="上一议程"/>
+
+            <Button
                 android:id="@+id/id_btn_next"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:text="下一个"
-                android:layout_height="match_parent" />
+                android:background="@drawable/button_selector"
+                android:text="下一议程"/>
         </LinearLayout>
 
     </LinearLayout>
+
     <ImageView
+        android:visibility="visible"
         android:id="@+id/id_iv_slide_to_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/id_ll_slide_all"
         android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/id_ll_slide_all"
         android:src="@drawable/file_detail_slide_to_left"/>
 </RelativeLayout>

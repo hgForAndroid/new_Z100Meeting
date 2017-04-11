@@ -42,14 +42,15 @@ public class AgendaListAdapter extends RecyclerView.Adapter<AgendaHolder> {
 
     @Override
     public AgendaHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_agenda_name_list, null);
+        View view = mInflater.inflate(R.layout.item_agenda_name_list, parent,false);
         AgendaHolder holder = new AgendaHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final AgendaHolder holder, final int position) {
-        holder.mAgendaTitle.setText("议程"+mAgendas.get(position).getAgendaIndex()+"："+mAgendas.get(position).getAgendaName());
+//        holder.mAgendaTitle.setText("议程"+mAgendas.get(position).getAgendaIndex()+"："+mAgendas.get(position).getAgendaName());
+        holder.mAgendaTitle.setText("议程"+mAgendas.get(position).getAgendaIndex());
         holder.mAgendaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,9 +69,9 @@ public class AgendaListAdapter extends RecyclerView.Adapter<AgendaHolder> {
             holder.mAgendaLayout.setBackgroundColor(mContext.
                     getResources().getColor(R.color.color_tab_selected));
         }else {
-            holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_black));
+            holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_agenda_index_and_name));
             holder.mAgendaLayout.setBackgroundColor(mContext.
-                    getResources().getColor(R.color.color_tab_normal));
+                    getResources().getColor(R.color.color_background));
         }
     }
 

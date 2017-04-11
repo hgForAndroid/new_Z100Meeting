@@ -1,74 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-    </View>
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/id_agenda_detail_layout"
-        android:background="#d5d8e6"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/color_background"
+        android:orientation="vertical">
+
         <LinearLayout
-            android:background="#FFFFFF"
-            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="2dp"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:orientation="vertical">
 
             <TextView
+                android:paddingLeft="80dp"
+                android:paddingRight="80dp"
                 android:id="@+id/id_text_view_agenda_title"
-                android:gravity="center"
-                android:textSize="30sp"
-                android:text="议程标题"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_weight="2"
+                android:gravity="center"
+                android:paddingTop="200dp"
+                android:text="议程标题"
+                android:textSize="30sp"/>
+
             <TextView
                 android:id="@+id/id_text_view_agenda_speaker"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="主讲人："
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="主讲人："
+                android:textSize="20sp"/>
+
             <TextView
                 android:id="@+id/id_text_view_agenda_time"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="议程时长：5:00"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="议程时长：5:00"
+                android:textSize="20sp"/>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1.5">
 
                 <Button
-                    android:background="@drawable/button_selector"
                     android:id="@+id/id_btn_show_agenda_file"
-                    android:text="查看文件"
-                    android:layout_centerInParent="true"
                     android:layout_width="100dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/ensure_button_shape"
+                    android:text="查看文件"
+                    android:textColor="@color/color_white"/>
 
             </RelativeLayout>
 
         </LinearLayout>
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-    </View>
 
 </LinearLayout>

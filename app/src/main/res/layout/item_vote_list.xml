@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="80dp">
     <LinearLayout
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -23,7 +25,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:gravity="center_vertical"
+                android:paddingLeft="50dp"
                 android:text="投票问题"/>
 
         </LinearLayout>
@@ -31,14 +34,16 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
             <Button
-                android:background="@drawable/button_selector"
+                android:background="@drawable/ensure_button_shape"
+                android:textColor="@color/color_white"
                 android:id="@+id/id_btn_vote_start_or_stop"
                 android:text="开始"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"/>
             <Button
-                android:background="@drawable/button_selector"
+                android:background="@drawable/ensure_button_shape"
+                android:textColor="@color/color_white"
                 android:id="@+id/id_btn_check_result"
                 android:text="查看结果"
                 android:layout_width="wrap_content"
@@ -49,7 +54,7 @@
 
     </LinearLayout>
     <View
-        android:background="#000000"
+        android:background="#6c6c6c"
         android:layout_width="match_parent"
         android:layout_height="1px"/>
 

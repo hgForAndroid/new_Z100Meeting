@@ -1,66 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/forty_eight"
-    android:paddingRight="@dimen/forty_eight"
-    android:paddingTop="50dp"
-    tools:context=".meetingPrepare.selectMeeting.SelectMeetingActivity">
+    android:background="@color/color_background"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/nav_bar_height"
+        android:background="@color/color_navBar_bg">
+
+        <ImageView
+            android:id="@+id/id_btn_back_select_meeting"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/ic_back"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/distance_five_dp"
-            android:textSize="25sp"
-            android:text="@string/string_choose_meeting"/>
-        <Button
-            android:id="@+id/id_btn_select_meeting"
+            android:layout_centerInParent="true"
+            android:padding="@dimen/distance_ten_dp"
+            android:text="@string/string_choose_meeting"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/select_meeting_size"
+            />
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/id_btn_refresh_select_meeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/distance_five_dp"
-            android:textSize="25sp"
-            android:text="@string/string_reFetch_meeting_list"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_refresh"/>
     </RelativeLayout>
 
     <LinearLayout
+        android:paddingLeft="50dp"
+        android:paddingTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:padding="@dimen/distance_five_dp"
+            android:text="@string/string_meeting_name"
+            android:textSize="25sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:padding="@dimen/distance_five_dp"
+            android:text="@string/string_meeting_start_time"
+            android:textSize="25sp"/>
+
         <TextView
             style="@style/selectMeeting_text_view_attr"
-            android:text="@string/string_meeting_name"/>
+            android:gravity="center"
+            android:text="@string/string_state"/>
+
         <TextView
             style="@style/selectMeeting_text_view_attr"
-            android:text="@string/string_time"
-            android:gravity="center"/>
-        <TextView
-            style="@style/selectMeeting_text_view_attr"
-            android:text="@string/string_state"
-            android:gravity="right"
-            android:layout_marginRight="@dimen/forty_eight"/>
+            android:layout_marginLeft="@dimen/distance_twenty_dp"
+            android:layout_marginRight="@dimen/forty_eight"
+            android:gravity="center"
+            android:text="@string/string_select"/>
     </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/id_rcv_select_meeting"
-        android:paddingLeft="@dimen/distance_five_dp"
-        android:paddingTop="@dimen/distance_twenty_dp"
-        android:overScrollMode="never">
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:overScrollMode="never"
+        android:paddingLeft="50dp"
+        android:paddingTop="@dimen/distance_twenty_dp">
 
     </android.support.v7.widget.RecyclerView>
+
     <TextView
         android:id="@+id/id_tv_no_meeting"
-        android:visibility="gone"
-        android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/string_no_meeting_in_present"/>
+        android:text="@string/string_no_meeting_in_present"
+        android:textSize="20sp"
+        android:visibility="gone"/>
 
 </LinearLayout>

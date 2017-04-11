@@ -1,8 +1,10 @@
 package com.gzz100.Z100_HuiYi;
 
 import android.app.Application;
+import android.widget.ImageView;
 
 import com.gzz100.Z100_HuiYi.utils.AppCrashCaughtUtil;
+import com.squareup.picasso.Picasso;
 
 /**
 * 应用类

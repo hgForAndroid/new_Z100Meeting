@@ -11,11 +11,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,6 +35,7 @@ import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.AppUtil;
 import com.gzz100.Z100_HuiYi.utils.Constant;
 import com.gzz100.Z100_HuiYi.utils.SharedPreferencesUtil;
+import com.gzz100.Z100_HuiYi.utils.StringUtils;
 import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -76,6 +79,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     private TextView mStreamer;
     private WebView mWebView;
     private LinearLayout mLayoutMeetingEndingShow;
+    private ProgressBar mProgressBar;
 
     @Override
     public void onAttach(Context context) {
@@ -97,6 +101,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
 
         mWebView = (WebView) view.findViewById(R.id.id_webView_end);
         mWebView.getSettings().setJavaScriptEnabled(true);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.id_meeting_end_progress);
 
         mTopLayout = (RelativeLayout) view.findViewById(R.id.id_rl_meeting_fragment_top);
         mBottomLayout = (FrameLayout) view.findViewById(R.id.id_fl_meeting_fragment_bottom);
@@ -120,7 +125,10 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
      */
     private void setStreamer() {
         MeetingInfo meetingInfo = MeetingOperate.getInstance(getContext()).queryMeetingInfo(Constant.COLUMNS_MEETING_INFO);
-        mStreamer.setText(meetingInfo.getMeetingName());
+
+        StringUtils.setTitleWithSpace(mStreamer,meetingInfo.getMeetingName()," ");
+
+//        mStreamer.setText(meetingInfo.getMeetingName());
     }
 
     @Override
@@ -162,6 +170,14 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
             String meetingEndingSummary = HttpManager.getInstance(getContext()).getServerIP()
                     + "/Report/Index?meetingID=" + SharedPreferencesUtil.getInstance(getContext()).getInt(Constant.MEETING_ID, -1);
             initWebView();
+            mWebView.setWebChromeClient(new WebChromeClient(){
+                @Override
+                public void onProgressChanged(WebView view, int newProgress) {
+                    if (newProgress == 100){
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                }
+            });
             mWebView.loadUrl(meetingEndingSummary);
 
         } else {//会议未结束
@@ -191,7 +207,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     /**
      * 主持人请求结束会议成功，在{@link MainActivity#hostEndMeetingSuccess()}
      * 或{@link MainActivity#handleMeetingEnd(MeetingEnd)}中调用。主持人端有两个调用的原因看后面一个方法的注释。
-     * 其他参会人员客户端接收到结束会议的命令，在{@link MainActivity#clientResponseMeetingEnd()}中调用。
+     * 其他参会人员客户端接收到结束会议的命令，在{@link MainActivity#clientResponseMeetingEnd(String, String)} ()}中调用。
      *
      * @param meetingEnd
      */
@@ -316,7 +332,7 @@ public class MeetingFragment extends Fragment implements MeetingContract.View, O
     @Override
     public void setOthersNum(boolean isShow, int othersNum) {
         if (isShow && othersNum > 0) {
-            mOthers.setText("其他参会人员（" + othersNum + ")");
+            mOthers.setText("其他参会人员（" + othersNum + "）");
         } else {
             mOthers.setVisibility(View.GONE);
         }

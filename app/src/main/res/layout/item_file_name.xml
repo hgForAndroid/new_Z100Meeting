@@ -6,12 +6,11 @@
               android:layout_height="wrap_content">
 <TextView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="64dp"
+    android:layout_height="80dp"
     android:id="@+id/id_tv_item_file_name"
-    android:gravity="center"
     android:textSize="@dimen/item_file_text_size"
-    android:text="test"/>
+    android:ellipsize="middle"
+    android:text="LinearLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.anrLayout xmlns:android=http://schemas.android.comdroid=http://schemas.android.comdroid=http://schemas.android.comdroid=http://schemas.android.comdroid=http://schemas.android.comdroid=http://schemas.android.com/apk/res/android"/>
 
 </LinearLayout>
 

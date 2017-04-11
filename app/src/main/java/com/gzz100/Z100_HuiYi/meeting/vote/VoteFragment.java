@@ -123,7 +123,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
         //隐藏掉两个在最下面布局的控件，避免已经显示而覆盖掉主布局
         mVoteFinishedInfTextView.setVisibility(View.GONE);
         mVoteNotBeginInfTextView.setVisibility(View.GONE);
-        mVoteMainLayout.setVisibility(View.INVISIBLE);
+        mVoteMainLayout.setVisibility(View.GONE);
         AllVoteListAdapter adapter = new AllVoteListAdapter(getContext(), mAllVoteList);
         adapter.setmOnAllVoteItemClickListener(this);
         mAllVoteInfRecyclerView.setLayoutManager(
@@ -133,7 +133,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
 
     @Override
     public void showVoteInf() {
-        mAllVoteInfRecyclerView.setVisibility(View.INVISIBLE);
+        mAllVoteInfRecyclerView.setVisibility(View.GONE);
         //隐藏掉两个在最下面布局的控件，避免已经显示而覆盖掉主布局
         mVoteFinishedInfTextView.setVisibility(View.GONE);
         mVoteNotBeginInfTextView.setVisibility(View.GONE);
@@ -212,7 +212,7 @@ public class VoteFragment extends Fragment implements VoteContract.VoteView,
 
     @Override
     public void showVoteFinishedInf(boolean isSuccessful) {
-        mVoteMainLayout.setVisibility(View.INVISIBLE);
+        mVoteMainLayout.setVisibility(View.GONE);
         mVoteNotBeginInfTextView.setVisibility(View.GONE);
         if(isSuccessful){
             mVoteFinishedInfTextView.setText("投票成功，等待主持人下一步操作");

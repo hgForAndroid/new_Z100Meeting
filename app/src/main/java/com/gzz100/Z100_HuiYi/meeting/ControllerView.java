@@ -3,13 +3,11 @@ package com.gzz100.Z100_HuiYi.meeting;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.R;
 
 /**
@@ -61,13 +59,13 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
      * @param content
      */
     public void setBeginAndEndText(String content){
-//        if ("开始".equals(content)){
-//            drawable = getResources().getDrawable(R.drawable.icon_delegate_normal);
-//        }else {//结束
-//            drawable = getResources().getDrawable(R.drawable.icon_delegate_normal);
-//        }
-//        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
-//        mBtnStartMeeting.setCompoundDrawables(null,drawable,null,null);
+        if ("开始".equals(content)){
+            drawable = getResources().getDrawable(R.drawable.play_normal);
+        }else {//结束
+            drawable = getResources().getDrawable(R.drawable.end_normal);
+        }
+        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+        mBtnStartMeeting.setCompoundDrawables(null,drawable,null,null);
         mBtnStartMeeting.setText(content);
     }
     /**
@@ -75,13 +73,13 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
      * @param content
      */
     public void setPauseAndContinueText(String content){
-//        if ("暂停".equals(content)){
-//            drawable = getResources().getDrawable(R.drawable.icon_delegate_normal);
-//        }else {//继续/开会
-//            drawable = getResources().getDrawable(R.drawable.icon_delegate_normal);
-//        }
-//        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
-//        mBtnPauseMeeting.setCompoundDrawables(null,drawable,null,null);
+        if ("暂停".equals(content)){
+            drawable = getResources().getDrawable(R.drawable.pause_normal);
+        }else {//继续/开会
+            drawable = getResources().getDrawable(R.drawable.play_normal);
+        }
+        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+        mBtnPauseMeeting.setCompoundDrawables(null,drawable,null,null);
         mBtnPauseMeeting.setText(content);
     }
     /**
@@ -92,7 +90,7 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
 //        if ("投票".equals(content)){
 //            drawable = getResources().getDrawable(R.drawable.icon_vote_selected);
 //        }else {//结束投票
-//            drawable = getResources().getDrawable(R.drawable.icon_delegate_normal);
+//            drawable = getResources().getDrawable(R.drawable.icon_vote_selected);
 //        }
 //        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
 //        mBtnStartVote.setCompoundDrawables(null,drawable,null,null);
@@ -120,7 +118,25 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
         mBtnStartVote.setClickable(clickable);
     }
 
+    public View getShowOrHideView(){
+        if (mIvSlideToRight != null){
+            return mIvSlideToRight;
+        }
+        return null;
+    }
 
+    public void showOrHide(View v){
+        if (isHide){//滑出
+            ObjectAnimator.ofFloat(mController_view,"translationX",
+                    mController_view.getWidth()-v.getWidth(),0.0f).setDuration(300).start();
+            ((ImageView)v).setImageResource(R.drawable.file_detail_slide_to_right);
+        }else {//隐藏
+            ObjectAnimator.ofFloat(mController_view,"translationX",0.0f,
+                    mController_view.getWidth()-v.getWidth()).setDuration(300).start();
+            ((ImageView)v).setImageResource(R.drawable.file_detail_slide_to_left);
+        }
+        isHide = !isHide;
+    }
 
     //是否已经隐藏
     private boolean isHide = false;
@@ -128,17 +144,8 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.id_iv_slide_to_right://向右缩
-
-                if (isHide){//滑出
-                    ObjectAnimator.ofFloat(mController_view,"translationX",
-                            mController_view.getWidth()-v.getWidth(),0.0f).setDuration(300).start();
-                    ((ImageView)v).setImageResource(R.drawable.file_detail_slide_to_right);
-                }else {//隐藏
-                    ObjectAnimator.ofFloat(mController_view,"translationX",0.0f,
-                            mController_view.getWidth()-v.getWidth()).setDuration(300).start();
-                    ((ImageView)v).setImageResource(R.drawable.file_detail_slide_to_left);
-                }
-                isHide = !isHide;
+                mOnHideControllerViewListener.hide(v);
+//                showOrHide(v);
                 break;
             case R.id.id_btn_start_meeting://开始
                 mIOnControllerListener.startMeeting(v);
@@ -151,6 +158,15 @@ public class ControllerView extends LinearLayout implements View.OnClickListener
                 break;
 
         }
+    }
+
+    public interface IOnHideControllerViewListener{
+        void hide(View view);
+    }
+    private IOnHideControllerViewListener mOnHideControllerViewListener;
+
+    public void setOnHideControllerViewListener(IOnHideControllerViewListener onHideControllerViewListener) {
+        mOnHideControllerViewListener = onHideControllerViewListener;
     }
 
     public interface IOnControllerListener{

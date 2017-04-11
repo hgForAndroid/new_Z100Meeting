@@ -8,8 +8,7 @@
     <RelativeLayout
         android:id="@+id/id_ip_all"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/id_tv_item_ip"
@@ -17,20 +16,17 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/distance_five_dp"
             android:text="192.168.1.110"
+            android:layout_centerVertical="true"
             android:textSize="@dimen/connect_server_text_size"/>
 
         <ImageView
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
             android:id="@+id/id_iv_delete_item_ip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="100dp"
             android:src="@drawable/ic_delete"/>
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#ccc"/>
 
 </LinearLayout>

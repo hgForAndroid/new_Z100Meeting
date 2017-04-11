@@ -144,13 +144,13 @@ public class DelegateModel extends BaseBean{
     public void setPicForUserLeft(Context context, TextView textView){
         Drawable drawable = null;
         if (getDelegateRole() == Constant.HOSTS){//主持人
-            drawable = context.getResources().getDrawable(R.drawable.icon_host_selected);
+            drawable = context.getResources().getDrawable(R.drawable.icon_host_normal);
 
         }else if(getDelegateRole() == Constant.DEFAULT_SPEAKER){//主讲人
-            drawable = context.getResources().getDrawable(R.drawable.icon_speaker_selected);
+            drawable = context.getResources().getDrawable(R.drawable.icon_speaker_normal);
 
         }else {//普通参会人员
-            drawable = context.getResources().getDrawable(R.drawable.icon_delegate_selected);
+            drawable = context.getResources().getDrawable(R.drawable.icon_delegate_normal);
 
         }
 

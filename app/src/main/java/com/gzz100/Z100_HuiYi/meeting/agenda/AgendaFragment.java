@@ -202,12 +202,12 @@ public class AgendaFragment extends Fragment implements AgendaContract.View, OnA
 
     @Override
     public void showNoAgendaList() {
-
+        ToastUtil.showMessage("当前会议没有议程！");
     }
 
     @Override
     public void showNoFileList() {
-
+        ToastUtil.showMessage("该议程没有文件存在！");
     }
 
     @Override

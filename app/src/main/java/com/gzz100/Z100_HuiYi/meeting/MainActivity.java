@@ -4,11 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,24 +17,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.gzz100.Z100_HuiYi.BaseActivity;
 import com.gzz100.Z100_HuiYi.MyAPP;
 import com.gzz100.Z100_HuiYi.R;
 import com.gzz100.Z100_HuiYi.data.Vote;
-import com.gzz100.Z100_HuiYi.data.db.DBHelper;
 import com.gzz100.Z100_HuiYi.data.eventBean.Home;
 import com.gzz100.Z100_HuiYi.data.eventBean.PeopleIn;
+import com.gzz100.Z100_HuiYi.meeting.about.AboutActivity;
 import com.gzz100.Z100_HuiYi.meeting.about.AboutFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaFragment;
 import com.gzz100.Z100_HuiYi.meeting.agenda.AgendaPresenter;
 import com.gzz100.Z100_HuiYi.meeting.agenda.RemoveControlViewEvent;
 import com.gzz100.Z100_HuiYi.meeting.delegate.DelegateFragment;
 import com.gzz100.Z100_HuiYi.meeting.delegate.DelegatePresenter;
-import com.gzz100.Z100_HuiYi.meeting.delegate.delegateDetail.DelegateDetailActivity;
 import com.gzz100.Z100_HuiYi.meeting.file.FileFragment;
 import com.gzz100.Z100_HuiYi.meeting.file.FilePresenter;
 import com.gzz100.Z100_HuiYi.meeting.file.fileDetail.FileDetailActivity;
@@ -66,26 +65,33 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener,
         ViewPager.OnPageChangeListener, ICommunicate, ControllerView.IOnControllerListener,
         OnAllVoteItemClickListener, MainContract.View {
     private ControllerView mControllerView;
-    private FrameLayout.LayoutParams mFl;
+    /**
+     *  这个是用来点击箭头滑出控制条的布局参数，现在已经换成{@link #mLayoutParams}
+     */
+//    private FrameLayout.LayoutParams mFl;
     private int mMeetingState = Constant.MEETING_STATE_NOT_BEGIN;
     private ControllerInfoBean mControllerInfoBean;
     private VoteListDialog mDialog;
     private int mVoteId;
+    /**
+     * 具体实现为{@link MainPresenter}
+     */
     private MainContract.Presenter mMainPresenter;
     private VoteResultDialog mVoteResultDialog;
     //提示是否现在开启会议的对话框
     private Dialog mTipDialog;
+    private DrawerLayout.LayoutParams mLayoutParams;
 
     public static void toMainActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -100,8 +106,17 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     FrameLayout mRootView;
     @BindView(R.id.id_main_tbv)
     NavBarView mNavBarView;
+
     @BindView(R.id.id_main_ViewPager)
-    ViewPager mViewPager;
+//    ViewPager mViewPager;
+    CancelScrollViewPager mViewPager;
+
+    @BindView(R.id.id_main_drawer_layout)
+    DrawerLayout mDrawerLayout;
+
+    @BindView(R.id.id_img_show_controller)
+    ImageView mImgShowController;
+
     @BindView(R.id.id_main_rdg)
     RadioGroup mTabGroup;
     @BindView(R.id.id_main_meetingTab)
@@ -112,8 +127,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     RadioButton mAgendaTab;
     @BindView(R.id.id_main_fileTab)
     RadioButton mFileTab;
-    @BindView(R.id.id_main_aboutTab)
-    RadioButton mAboutTab;
+//    @BindView(R.id.id_main_aboutTab)
+//    RadioButton mAboutTab;
     @BindView(R.id.id_main_voteTab)
     RadioButton mVoteTab;
 
@@ -124,15 +139,15 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private AgendaFragment mAgendaFragment;
     private FileFragment mFileFragment;
     private VoteFragment mVoteFragment;
-    private AboutFragment mAboutFragment;
+//    private AboutFragment mAboutFragment;
 
     //几个代表页面的常量
     public static final int PAGE_ONE = 0;
     public static final int PAGE_TWO = 1;
     public static final int PAGE_THREE = 2;
     public static final int PAGE_FOUR = 3;
-    public static final int PAGE_FIVE = 4;
-    public static final int PAGE_SIX = 5;
+//    public static final int PAGE_FIVE = 4;
+    public static final int PAGE_SIX = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +169,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             }).start();
         }
 
+        mViewPager.setCancelScroll(false);
+
     }
 
     private void init() {
@@ -161,20 +178,51 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mDelegateFragment = DelegateFragment.newInstance();
         mAgendaFragment = AgendaFragment.newInstance();
         mFileFragment = FileFragment.newInstance();
-        mAboutFragment = AboutFragment.newInstance();
+//        mAboutFragment = AboutFragment.newInstance();
         mVoteFragment = VoteFragment.newInstance();
         mFragments.add(mMeetingFragment);
         mFragments.add(mDelegateFragment);
         mFragments.add(mAgendaFragment);
         mFragments.add(mFileFragment);
-        mFragments.add(mAboutFragment);
+//        mFragments.add(mAboutFragment);
         mFragments.add(mVoteFragment);
         if (MyAPP.getInstance().getUserRole() == 1) {//主持人
             mControllerView = ControllerView.getInstance(this);
-            mFl = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            mFl.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-            mRootView.addView(mControllerView, mFl);
+            //无滑动
+//            mFl = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            mFl.gravity = Gravity.RIGHT;
+//            mRootView.addView(mControllerView, mFl);
+
+            //拖动出来时，其他背景色不会变暗
+            mDrawerLayout.setScrimColor(Color.TRANSPARENT);
+
+            mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+                @Override
+                public void onDrawerSlide(View drawerView, float slideOffset) {
+                    mImgShowController.setAlpha(1-slideOffset);
+                }
+                @Override
+                public void onDrawerOpened(View drawerView) {}
+                @Override
+                public void onDrawerClosed(View drawerView) {}
+                @Override
+                public void onDrawerStateChanged(int newState) {}
+            });
+
+            //可滑动
+            mLayoutParams = new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            mLayoutParams.gravity = Gravity.END | Gravity.RIGHT;
+            mDrawerLayout.addView(mControllerView, mLayoutParams);
+
             mControllerView.setIOnControllerListener(this);
+            mControllerView.setOnHideControllerViewListener(new ControllerView.IOnHideControllerViewListener() {
+                @Override
+                public void hide(View view) {
+                    if (mDrawerLayout.isDrawerOpen(Gravity.END)){
+                        mDrawerLayout.closeDrawer(Gravity.END);
+                    }
+                }
+            });
             //发送消息的实体
             mControllerInfoBean = new ControllerInfoBean();
         }
@@ -185,6 +233,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         startMeetingTimer();
 
+    }
+
+    @OnClick(R.id.id_img_show_controller)
+    public void showControllerView(){
+        if (!mDrawerLayout.isDrawerOpen(Gravity.END)){
+            mDrawerLayout.openDrawer(Gravity.END);
+        }
     }
 
     private void startMeetingTimer() {
@@ -218,8 +273,24 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mMainFragmentAdapter = new MainFragmentAdapter(getSupportFragmentManager(), mFragments);
         mViewPager.setAdapter(mMainFragmentAdapter);
         mViewPager.setCurrentItem(PAGE_ONE);
-        mNavBarView.mTvTitle.setText(mMeetingTab.getText());
-        mNavBarView.setMeetingStateOrAgendaState("未开始");
+
+        //设置导航栏最右边的状态跟时间隐藏
+        mNavBarView.setTimeAndStateDisplay(false);
+        //设置  "关于"   显示
+        mNavBarView.setAboutDisplay(true);
+        mNavBarView.aboutClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AboutActivity.startAboutActivity(MainActivity.this);
+            }
+        });
+
+//        mNavBarView.mTvTitle.setText(mMeetingTab.getText());
+        mNavBarView.setTitleWithSpace(mMeetingTab.getText().toString());
+
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("未开始");
+//        mNavBarView.setMeetingStateOrAgendaState("未开始");
         mMeetingTab.setChecked(true);
     }
 
@@ -243,8 +314,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateMeetingTime(MeetingTimer timer){
-        mNavBarView.setTimeHour(timer.getHour());
-        mNavBarView.setTimeMin(timer.getMin());
+        // 设置标题旁边的时间
+        mNavBarView.setMeetingAndTimeOfHour(timer.getHour());
+        mNavBarView.setMeetingAndTimeOfMin(timer.getMin());
+
+//        mNavBarView.setTimeHour(timer.getHour());
+//        mNavBarView.setTimeMin(timer.getMin());
         //保存当前会议进行时间，如果有临时人员进入会议，将时间发给他
         if (MyAPP.getInstance().getUserRole() == 1) {
             SharedPreferencesUtil.getInstance(this).putString(Constant.MEETING_BEGIN_TIME_HOUR,
@@ -284,30 +359,38 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if (mDrawerLayout.isDrawerOpen(Gravity.END)){
+            mDrawerLayout.closeDrawer(Gravity.END);
+        }
         switch (checkedId) {
             case R.id.id_main_meetingTab://会议主场景
                 mViewPager.setCurrentItem(PAGE_ONE);
-                mNavBarView.mTvTitle.setText(mMeetingTab.getText());
+//                mNavBarView.mTvTitle.setText(mMeetingTab.getText());
+                mNavBarView.setTitleWithSpace(mMeetingTab.getText().toString());
                 break;
             case R.id.id_main_delegateTab://人员界面
                 mViewPager.setCurrentItem(PAGE_TWO);
-                mNavBarView.mTvTitle.setText(mDelegateTab.getText());
+//                mNavBarView.mTvTitle.setText(mDelegateTab.getText());
+                mNavBarView.setTitleWithSpace(mDelegateTab.getText().toString());
                 break;
             case R.id.id_main_agendaTab://议程界面
                 mViewPager.setCurrentItem(PAGE_THREE);
-                mNavBarView.mTvTitle.setText(mAgendaTab.getText());
+//                mNavBarView.mTvTitle.setText(mAgendaTab.getText());
+                mNavBarView.setTitleWithSpace(mAgendaTab.getText().toString());
                 break;
             case R.id.id_main_fileTab://文件界面
                 mViewPager.setCurrentItem(PAGE_FOUR);
-                mNavBarView.mTvTitle.setText(mFileTab.getText());
+//                mNavBarView.mTvTitle.setText(mFileTab.getText());
+                mNavBarView.setTitleWithSpace(mFileTab.getText().toString());
                 break;
-            case R.id.id_main_aboutTab://关于界面
-                mViewPager.setCurrentItem(PAGE_FIVE);
-                mNavBarView.mTvTitle.setText(mAboutTab.getText());
-                break;
+//            case R.id.id_main_aboutTab://关于界面
+//                mViewPager.setCurrentItem(PAGE_FIVE);
+//                mNavBarView.mTvTitle.setText(mAboutTab.getText());
+//                break;
             case R.id.id_main_voteTab://投票界面
                 mViewPager.setCurrentItem(PAGE_SIX);
-                mNavBarView.mTvTitle.setText(mVoteTab.getText());
+//                mNavBarView.mTvTitle.setText(mVoteTab.getText());
+                mNavBarView.setTitleWithSpace(mVoteTab.getText().toString());
                 break;
             default:
                 break;
@@ -338,9 +421,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 case PAGE_FOUR:
                     mFileTab.setChecked(true);
                     break;
-                case PAGE_FIVE:
-                    mAboutTab.setChecked(true);
-                    break;
+//                case PAGE_FIVE:
+//                    mAboutTab.setChecked(true);
+//                    break;
                 case PAGE_SIX:
                     mVoteTab.setChecked(true);
                     break;
@@ -355,12 +438,21 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         return mNavBarView.mTvTitle.getText().toString();
     }
 
+    private void addControllerViewToParent(){
+        mDrawerLayout.addView(mControllerView,mLayoutParams);
+    }
+    private void removeControllerViewFromParent(){
+        mDrawerLayout.removeView(mControllerView);
+    }
+
     /**
      * 移除控制条
      */
     @Override
     public void removeControllerView() {
-        mRootView.removeView(mControllerView);
+//        mRootView.removeView(mControllerView);
+//        mDrawerLayout.removeView(mControllerView);
+        removeControllerViewFromParent();
     }
 
     /**
@@ -373,7 +465,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void reAddControllerView(Long reAdd) {
         if (reAdd == TRIGGER_OF_REMOVE_CONTROLLERVIEW) {
-            mRootView.addView(mControllerView, mFl);
+//            mRootView.addView(mControllerView, mFl);
+//            mDrawerLayout.addView(mControllerView, mLayoutParams);
+            addControllerViewToParent();
             mControllerView.setIOnControllerListener(this);
         }
     }
@@ -429,7 +523,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCurrentMeetingState(String meetingState) {
-        mNavBarView.setMeetingStateOrAgendaState(meetingState);
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState(meetingState);
+//        mNavBarView.setMeetingStateOrAgendaState(meetingState);
         if ("暂停中".equals(meetingState)) {
             mMeetingState = Constant.MEETING_STATE_PAUSE;
         } else if ("开会中".equals(meetingState)) {
@@ -454,7 +550,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             MyAPP.getInstance().setVoting(true);
             SharedPreferencesUtil.getInstance(this).putInt(Constant.BEGIN_VOTE_ID, vote.getVoteID());
             mVoteTab.setChecked(true);//显示投票界面
-            mNavBarView.setMeetingStateOrAgendaState("投票中");
+            // 设置标题旁边的会议状态
+            mNavBarView.setMeetingStateAndTimeOfState("投票中");
+//            mNavBarView.setMeetingStateOrAgendaState("投票中");
         }
     }
 
@@ -466,7 +564,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void removeControlView(RemoveControlViewEvent removeControlViewEvent) {
-        mRootView.removeView(mControllerView);//移除控制条
+//        mRootView.removeView(mControllerView);//移除控制条
+//        mDrawerLayout.removeView(mControllerView);//移除控制条
+        removeControllerViewFromParent();
     }
 
     /**
@@ -585,9 +685,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
              * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
              */
             EventBus.getDefault().post(new MeetingOrder(Constant.MEETING_STATE_ENDING));
-            mNavBarView.setMeetingStateOrAgendaState("已结束");
-//            MyAPP.getInstance().setMeetingIsProgress(8);
-//            SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END, true);
+
+            // 设置标题旁边的会议状态
+            mNavBarView.setMeetingStateAndTimeOfState("已结束");
+//            mNavBarView.setMeetingStateOrAgendaState("已结束");
             mMeetingTab.setChecked(true);
             /**
              * 通知会议界面显示结束后的信息
@@ -595,10 +696,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
              */
             EventBus.getDefault().post(new MeetingEnd(2));
 
-            //将控制条全部设置为不能点击
-//            mControllerView.setStartAndEndButtonNotClickable(false);
-//            mControllerView.setPauseAndContinueButtonNotClickable(false);
-//            mControllerView.setStartVoteButtonNotClickable(false);
         }
     }
 
@@ -639,12 +736,17 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                         .getInt(Constant.PAUSE_AGENDA_INDEX, 0);
                 int pauseDocumentIndex = SharedPreferencesUtil.getInstance(MainActivity.this)
                         .getInt(Constant.PAUSE_DOCUMENT_INDEX, 0);
-                mRootView.removeView(mControllerView);
+//                mRootView.removeView(mControllerView);
+//                mDrawerLayout.removeView(mControllerView);
+                removeControllerViewFromParent();
                 //时间都给负数，因为返回会议之前，时间是一直在倒计时的，不用传时间过去
                 FileDetailActivity.start(MainActivity.this, pauseAgendaIndex,
                         pauseDocumentIndex, "文件", true, true, true, "-1", "-1");
                 mControllerView.setPauseAndContinueText("暂停");
-                mNavBarView.setMeetingStateOrAgendaState("开会中");
+
+                // 设置标题旁边的会议状态
+                mNavBarView.setMeetingStateAndTimeOfState("开会中");
+//                mNavBarView.setMeetingStateOrAgendaState("开会中");
                 MyAPP.getInstance().setMeetingIsProgress(2);
 
                 MyAPP.getInstance().setHostOutOfMeeting(false);
@@ -779,10 +881,18 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Override
     public void clientResponseMeetingBegin(int agendaIndex, int documentIndex, String upLevelTitle,String meetingTimeHour,String meetingTimeMin) {
-        mNavBarView.setMeetingStateOrAgendaState("开会中");
+
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("开会中");
+//        mNavBarView.setMeetingStateOrAgendaState("开会中");
         MyAPP.getInstance().setMeetingIsProgress(2);
-        mNavBarView.setTimeHour(meetingTimeHour);
-        mNavBarView.setTimeMin(meetingTimeMin);
+
+        // 设置标题旁边的时间
+        mNavBarView.setMeetingAndTimeOfHour(meetingTimeHour);
+        mNavBarView.setMeetingAndTimeOfMin(meetingTimeMin);
+
+//        mNavBarView.setTimeHour(meetingTimeHour);
+//        mNavBarView.setTimeMin(meetingTimeMin);
         /**
          *校正时间，使得跟主持人时间一致
          * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
@@ -804,7 +914,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void clientResponseMeetingVote(int VoteId) {
         mVoteTab.setChecked(true);
-        mNavBarView.setMeetingStateOrAgendaState("投票中");
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("投票中");
+//        mNavBarView.setMeetingStateOrAgendaState("投票中");
     }
 
     /**
@@ -824,11 +936,19 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                                               String meetingBeginTimeHour, String meetingBeginTimeMin) {
         FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle, true, false,
                 true, countingMin, countingSec);
-        mNavBarView.setMeetingStateOrAgendaState("开会中");
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("开会中");
+//        mNavBarView.setMeetingStateOrAgendaState("开会中");
+
         mVoteFragment.onDestroyView();
+
+        // 设置标题旁边的时间
+        mNavBarView.setMeetingAndTimeOfHour(meetingBeginTimeHour);
+        mNavBarView.setMeetingAndTimeOfMin(meetingBeginTimeMin);
+
         //会议继续时，将所有客户端的会议进行时间与主持人控制端的会议进行时间进行校正
-        mNavBarView.setTimeHour(meetingBeginTimeHour);//重设会议进行时间，时
-        mNavBarView.setTimeMin(meetingBeginTimeMin);//重设会议进行时间，分
+//        mNavBarView.setTimeHour(meetingBeginTimeHour);//重设会议进行时间，时
+//        mNavBarView.setTimeMin(meetingBeginTimeMin);//重设会议进行时间，分
         hour = Integer.valueOf(meetingBeginTimeHour);//时间值赋予当前时间变量
         min = Integer.valueOf(meetingBeginTimeMin);//时间值赋予当前时间变量
 
@@ -883,14 +1003,23 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
         FileDetailActivity.start(this, agendaIndex, documentIndex, upLevelTitle, true, false,
                 true, countingMin, countingSec);
-        mNavBarView.setMeetingStateOrAgendaState("开会中");
+
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("开会中");
+//        mNavBarView.setMeetingStateOrAgendaState("开会中");
         mVoteFragment.onDestroyView();
-        mNavBarView.setTimeHour(meetingBeginTimeHour);//重设会议进行时间，时
-        mNavBarView.setTimeMin(meetingBeginTimeMin);//重设会议进行时间，分
+
+
+        // 设置标题旁边的时间
+        mNavBarView.setMeetingAndTimeOfHour(meetingBeginTimeHour);
+        mNavBarView.setMeetingAndTimeOfMin(meetingBeginTimeMin);
+
+
+//        mNavBarView.setTimeHour(meetingBeginTimeHour);//重设会议进行时间，时
+//        mNavBarView.setTimeMin(meetingBeginTimeMin);//重设会议进行时间，分
         hour = Integer.valueOf(meetingBeginTimeHour);//时间值赋予当前时间变量
         min = Integer.valueOf(meetingBeginTimeMin);//时间值赋予当前时间变量
         /**
-         * TODO
          * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
          */
         MeetingOrder order = new MeetingOrder(MeetingTimerService.TEMP_PEOPLE_IN_TIME_START);
@@ -909,16 +1038,22 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Override
     public void tempClientResponseMeetingPauseOrEnd(int meetingState, String meetingBeginTimeHour, String meetingBeginTimeMin) {
-        mNavBarView.setMeetingStateOrAgendaState("暂停中");
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("暂停中");
+//        mNavBarView.setMeetingStateOrAgendaState("暂停中");
         mVoteFragment.onDestroyView();
-        mNavBarView.setTimeHour(meetingBeginTimeHour);//重设会议进行时间，时
-        mNavBarView.setTimeMin(meetingBeginTimeMin);//重设会议进行时间，分
+
+        // 设置标题旁边的时间
+        mNavBarView.setMeetingAndTimeOfHour(meetingBeginTimeHour);
+        mNavBarView.setMeetingAndTimeOfMin(meetingBeginTimeMin);
+
+//        mNavBarView.setTimeHour(meetingBeginTimeHour);//重设会议进行时间，时
+//        mNavBarView.setTimeMin(meetingBeginTimeMin);//重设会议进行时间，分
         hour = Integer.valueOf(meetingBeginTimeHour);//时间值赋予当前时间变量
         min = Integer.valueOf(meetingBeginTimeMin);//时间值赋予当前时间变量
 
 
         /**
-         * TODO
          * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
          */
         MeetingOrder order = new MeetingOrder(MeetingTimerService.TEMP_PEOPLE_IN_TIME_START);
@@ -933,7 +1068,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Override
     public void clientResponseMeetingPause() {
-        mNavBarView.setMeetingStateOrAgendaState("暂停中");
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("暂停中");
+//        mNavBarView.setMeetingStateOrAgendaState("暂停中");
     }
 
     /**
@@ -941,7 +1078,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Override
     public void clientResponseMeetingEnd(String hour,String min) {
-        mNavBarView.setMeetingStateOrAgendaState("已结束");
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("已结束");
+//        mNavBarView.setMeetingStateOrAgendaState("已结束");
         MyAPP.getInstance().setMeetingIsProgress(8);
 //        SharedPreferencesUtil.getInstance(this).putBoolean(Constant.IS_MEETING_END, true);
         /**
@@ -953,8 +1092,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 //        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_HOUR, mNavBarView.getTimeHour());
 //        SharedPreferencesUtil.getInstance(this).putString(Constant.ENDING_MIN, mNavBarView.getTimeMin());
 
-        mNavBarView.setTimeHour(hour);
-        mNavBarView.setTimeMin(min);
+        // 设置标题旁边的时间
+        mNavBarView.setMeetingAndTimeOfHour(hour);
+        mNavBarView.setMeetingAndTimeOfMin(min);
+
+//        mNavBarView.setTimeHour(hour);
+//        mNavBarView.setTimeMin(min);
         /**
          * 停止时间。
          * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
@@ -973,10 +1116,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Override
     public void hostResponseMeetingBegin(int agendaIndex, int documentIndex, String upLevelTitle) {
-        mRootView.removeView(mControllerView);
+//        mRootView.removeView(mControllerView);
+//        mDrawerLayout.removeView(mControllerView);
+        removeControllerViewFromParent();
         FileDetailActivity.start(this, agendaIndex,
                 documentIndex, upLevelTitle, true, true, false, "", "");
-        mNavBarView.setMeetingStateOrAgendaState("开会中");
+
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("开会中");
+
+//        mNavBarView.setMeetingStateOrAgendaState("开会中");
         mControllerView.setBeginAndEndText("结束");
         MyAPP.getInstance().setMeetingIsProgress(2);
     }
@@ -988,7 +1137,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void hostResponseMeetingPause() {
         MyAPP.getInstance().setMeetingIsProgress(4);
         mControllerView.setPauseAndContinueText("继续");
-        mNavBarView.setMeetingStateOrAgendaState("暂停中");
+
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("暂停中");
+//        mNavBarView.setMeetingStateOrAgendaState("暂停中");
     }
 
     /**
@@ -1008,7 +1160,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
          * 在{@link MeetingTimerService#handleMeetingOrder(MeetingOrder)}中处理。
          */
         EventBus.getDefault().post(new MeetingOrder(Constant.MEETING_STATE_ENDING));
-        mNavBarView.setMeetingStateOrAgendaState("已结束");
+
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("已结束");
+//        mNavBarView.setMeetingStateOrAgendaState("已结束");
 
         MyAPP.getInstance().setMeetingIsProgress(8);
         //设置主场景界面(MeetingFragment)显示会议结束后的信息
@@ -1044,7 +1199,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Override
     public void hostResponseEndVoteWithoutStart(int agendaIndex, int documentId, String upTitleText) {
-        mRootView.removeView(mControllerView);
+//        mRootView.removeView(mControllerView);
+        removeControllerViewFromParent();
         FileDetailActivity.start(this, agendaIndex, documentId, upTitleText, true, true, false, "", "");
     }
 
@@ -1060,7 +1216,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void hostResponseEndVoteAlreadyStart(int agendaIndex, int documentId, String upTitleText,
                                                 String countingMin, String countingSec) {
-        mRootView.removeView(mControllerView);
+//        mRootView.removeView(mControllerView);
+        removeControllerViewFromParent();
         FileDetailActivity.start(this, agendaIndex,
                 documentId, upTitleText, true, true, true, countingMin, countingSec);
     }
@@ -1072,7 +1229,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void hostResponseVoteEnd() {
         mControllerView.setVoteAndEndVoteText("投票");
         mControllerView.setPauseAndContinueText("暂停");
-        mNavBarView.setMeetingStateOrAgendaState("开会中");
+
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("开会中");
+//        mNavBarView.setMeetingStateOrAgendaState("开会中");
         //结束投票后，能对控制条的其他按钮进行操作
         mControllerView.setPauseAndContinueButtonNotClickable(true);
         mControllerView.setStartAndEndButtonNotClickable(true);
@@ -1088,7 +1248,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void hostResponseLaunchVoteSuccess() {
         mMeetingState = Constant.MEETING_STATE_BEGIN;
-        mNavBarView.setMeetingStateOrAgendaState("开会中");
+
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("开会中");
+//        mNavBarView.setMeetingStateOrAgendaState("开会中");
         mControllerView.setBeginAndEndText("结束");
         if ("继续".equals(mControllerView.getBeginAndEndText())) {
             mControllerView.setBeginAndEndText("暂停");
@@ -1141,11 +1304,15 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void hostResponseMeetingContinue(int agendaIndex, int documentIndex, String upLevelTitle,
                                             String countingMin, String countingSec) {
-        mRootView.removeView(mControllerView);
+//        mRootView.removeView(mControllerView);
+        removeControllerViewFromParent();
         FileDetailActivity.start(this, agendaIndex,
                 documentIndex, "文件", true, true, true, countingMin, countingSec);
         mControllerView.setPauseAndContinueText("暂停");
-        mNavBarView.setMeetingStateOrAgendaState("开会中");
+
+        // 设置标题旁边的会议状态
+        mNavBarView.setMeetingStateAndTimeOfState("开会中");
+//        mNavBarView.setMeetingStateOrAgendaState("开会中");
         MyAPP.getInstance().setMeetingIsProgress(2);
     }
 

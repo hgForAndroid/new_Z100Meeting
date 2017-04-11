@@ -1,11 +1,16 @@
 package com.gzz100.Z100_HuiYi.meetingPrepare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -17,6 +22,7 @@ import com.gzz100.Z100_HuiYi.multicast.KeyInfoBean;
 import com.gzz100.Z100_HuiYi.tcpController.Client;
 import com.gzz100.Z100_HuiYi.utils.ActivityStackManager;
 import com.gzz100.Z100_HuiYi.utils.MPhone;
+import com.gzz100.Z100_HuiYi.utils.ScreenSize;
 import com.gzz100.Z100_HuiYi.utils.ToastUtil;
 
 import java.util.List;
@@ -26,12 +32,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ConnectServerActivity extends BaseActivity implements ConnectServerContract.View, OnIPClickListener {
-    @BindView(R.id.id_edt_connect_server)
-    EditText mEdtIP;
-    @BindView(R.id.text_record)
-    TextView mTvRecord;
-    @BindView(R.id.id_rcv_connect_server)
-    RecyclerView mRcvRecord;//显示ip历史记录的控件
+
+    @BindView(R.id.id_btn_ensure_activity_connect_server)
+    Button mBtnEnsure;
+    @BindView(R.id.id_exp_activity_connect_server)
+    ExpandableEditText mExpandableEditText;
 
     private ConnectServerContract.Presenter mPresenter;
     private List<String> mIPs;//输入的所有ip
@@ -45,6 +50,7 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
         setContentView(R.layout.activity_connect_server);
         ButterKnife.bind(this);
         mPresenter = new ConnectServerPresenter(this.getApplicationContext(), this);
+        mExpandableEditText.setDropDownEnable(ScreenSize.dp2px(this, 500), 500);
     }
 
     @Override
@@ -57,14 +63,33 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
         mPresenter.start();
     }
 
-    @OnClick(R.id.id_btn_connect_server)
-    void onClick() {
-        mIp = mEdtIP.getText().toString().trim();
+    @OnClick(R.id.id_btn_ensure_activity_connect_server)
+    public void onEnsureClick() {
+        mIp = mExpandableEditText.getContent();
         if (TextUtils.isEmpty(mIp)) {
             ToastUtil.showMessage(R.string.string_input_server_ip);
             return;
         }
         mPresenter.saveIpThenShowSelectMeeting(mIp);
+    }
+
+    @OnClick(R.id.id_ll_activity_connect_server)
+    public void clickOutSideArea(View view) {
+        //点击外面的区域，如果显示着下拉框，则隐藏掉下拉
+        mExpandableEditText.dismiss();
+        hideSoftInput(view);
+    }
+
+    /**
+     * 隐藏软件盘
+     *
+     * @param view
+     */
+    private void hideSoftInput(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     /**
@@ -74,14 +99,18 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
      */
     @Override
     public void showHistory(List<String> ips) {
-        mTvRecord.setVisibility(View.VISIBLE);
-        mRcvRecord.setVisibility(View.VISIBLE);
         mIPs = ips;
         mAdapter = new IPAdapter(this, mIPs);
-        mRcvRecord.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mRcvRecord.addItemDecoration(new ItemSpaceDecoration(ItemSpaceDecoration.VERTICAL,
+//        mRcvRecord.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+//        mRcvRecord.addItemDecoration(new ItemSpaceDecoration(ItemSpaceDecoration.VERTICAL,
+//                (int) getResources().getDimension(R.dimen.distance_five_dp)));
+//        mRcvRecord.setAdapter(mAdapter);
+
+        mExpandableEditText.addItemDecoration(new ItemSpaceDecoration(ItemSpaceDecoration.VERTICAL,
                 (int) getResources().getDimension(R.dimen.distance_five_dp)));
-        mRcvRecord.setAdapter(mAdapter);
+        mExpandableEditText.setAdapterForDropDown(mAdapter);
+
+
         mAdapter.setOnIPClickListener(this);
     }
 
@@ -90,8 +119,9 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
      */
     @Override
     public void showNoHistory() {
-        mTvRecord.setVisibility(View.GONE);
-        mRcvRecord.setVisibility(View.GONE);
+//        mTvRecord.setVisibility(View.GONE);
+//        mRcvRecord.setVisibility(View.GONE);
+        mExpandableEditText.dismiss();
     }
 
     /**
@@ -109,7 +139,9 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
      */
     @Override
     public void setIPFromHistory(String ip) {
-        mEdtIP.setText(ip);
+//        mEdtIP.setText(ip);
+        mExpandableEditText.setContentForEditText(ip);
+        mExpandableEditText.dismiss();
     }
 
     /**
@@ -125,7 +157,7 @@ public class ConnectServerActivity extends BaseActivity implements ConnectServer
         //获取到后台服务器的ip，以及开启的会议id后，跳转到签到界面
         //还需要当前设备的IMEI
         String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
-        SignInActivity.toSignInActivity(this, deviceIMEI, keyInfoBean.getMeetingId());
+        SignInActivity.toSignInActivity(this, deviceIMEI, keyInfoBean.getMeetingId(), keyInfoBean.getMeetingName());
         ActivityStackManager.pop();//这里pop掉是因为客户端不需要重新回来输入ip地址
     }
 

@@ -9,7 +9,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="100dp"
-        android:background="@color/color_tab_normal"
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
@@ -19,10 +18,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/distance_ten_dp"
+            android:drawableTop="@drawable/icon_file_normal"
             android:text="议程1"
-            android:textColor="@android:color/black"/>
+            android:gravity="center"
+            android:textColor="@color/color_agenda_item_text"/>
 
         <TextView
+            android:visibility="gone"
             android:textSize="@dimen/item_file_text_size"
             android:id="@+id/id_item_agenda_title"
             android:layout_width="@dimen/distance_one_hundred_dp"

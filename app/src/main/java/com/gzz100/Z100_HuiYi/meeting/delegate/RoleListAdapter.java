@@ -52,19 +52,19 @@ public class RoleListAdapter extends RecyclerView.Adapter<RoleHolder> {
     public void onBindViewHolder(RoleHolder holder, final int position) {
 
         if (mRoleList.get(position).equals("主持人")){
-            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_black));
+            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_delegate_all_text));
             Drawable drawable = mContext.getResources().getDrawable(R.drawable.icon_host_normal);
             drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
             holder.mRoleName.setCompoundDrawables(drawable,null,null,null);
         }
         if (mRoleList.get(position).equals("主讲人")){
-            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_black));
+            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_delegate_all_text));
             Drawable drawable = mContext.getResources().getDrawable(R.drawable.icon_speaker_normal);
             drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
             holder.mRoleName.setCompoundDrawables(drawable,null,null,null);
         }
         if (mRoleList.get(position).equals("其他参会代表")){
-            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_black));
+            holder.mRoleName.setTextColor(mContext.getResources().getColor(R.color.color_delegate_all_text));
             Drawable drawable = mContext.getResources().getDrawable(R.drawable.icon_delegate_normal);
             drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
             holder.mRoleName.setCompoundDrawables(drawable,null,null,null);

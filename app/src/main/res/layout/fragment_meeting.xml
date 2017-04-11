@@ -1,24 +1,37 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
     <LinearLayout
         android:background="@color/color_background"
         android:id="@+id/id_ll_meeting_ending_show_content"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <WebView
-            android:overScrollMode="never"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:id="@+id/id_webView_end"></WebView>
+            android:layout_weight="1">
+            <WebView
+                android:overScrollMode="never"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/id_webView_end">
+
+            </WebView>
+            <ProgressBar
+                android:id="@+id/id_meeting_end_progress"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Base.Widget.AppCompat.ProgressBar"/>
+
+        </FrameLayout>
+
         <LinearLayout
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="@dimen/tab_height_ninety_six"
             android:paddingTop="@dimen/distance_sixteen"
             android:paddingBottom="@dimen/distance_sixteen"
             android:orientation="vertical"
@@ -110,7 +123,7 @@
         </ScrollView>
         <LinearLayout
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="@dimen/tab_height_ninety_six"
             android:paddingTop="@dimen/distance_sixteen"
             android:paddingBottom="@dimen/distance_sixteen"
             android:orientation="vertical"
@@ -151,7 +164,7 @@
             android:gravity="center"
             android:padding="@dimen/distance_five_dp"
             android:text="@string/string_streamer"
-            android:textColor="@color/color_white"
+            android:textColor="@color/color_streamer_text"
             android:textSize="@dimen/streamer_text_size"/>
 
         <TextView
@@ -159,10 +172,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_marginBottom="64dp"
+            android:layout_marginBottom="@dimen/tab_height_ninety_six"
             android:drawableLeft="@drawable/icon_delegate_normal"
             android:gravity="center"
             android:padding="@dimen/distance_five_dp"
+            android:textColor="@color/color_meeting_scenario_name"
             android:text="其他参会人员（8）"
             android:textSize="20sp"/>
     </FrameLayout>

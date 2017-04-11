@@ -6,6 +6,7 @@
     <dimen name="each_tab_width">80dp</dimen>
     <!--标签栏的高-->
     <dimen name="tab_height">64dp</dimen>
+    <dimen name="tab_height_ninety_six">96dp</dimen>
     <!--导航栏的高 -->
     <dimen name="nav_bar_height">64dp</dimen>
     <!--导航栏的中间标题的字体大小-->
@@ -36,7 +37,7 @@
     <!--文件界面 文件列表  文字大小-->
     <dimen name="item_file_text_size">20sp</dimen>
     <!--文件详情界面侧滑栏的宽度-->
-    <dimen name="file_detail_slide_width">200dp</dimen>
+    <dimen name="file_detail_slide_width">280dp</dimen>
     <dimen name="file_detail_slide_search_width">100dp</dimen>
     <!--人员详情界面全部字体大小-->
     <dimen name="delegate_detail_text_size">25sp</dimen>
@@ -50,6 +51,19 @@
     <dimen name="connect_server_text_size">14sp</dimen>
 
     <dimen name="delegate_role_list_distance">150dp</dimen>
+    <!--主界面标题旁边的会议状态以及时间的字体大小-->
+    <dimen name="main_title_side_state_and_time_size">20sp</dimen>
+    <!--主界面标签栏的每个item的间距-->
+    <dimen name="main_radio_group_item_distance_margin_right">40dp</dimen>
+
+    <dimen name="main_radio_group_item_distance">10dp</dimen>
+
+    <dimen name="control_bar_text_size">20sp</dimen>
+    <!--请选择会议的文字大小-->
+    <dimen name="select_meeting_size">25sp</dimen>
+
+    <!--文件界面  文件名、大小、主讲人   的字体大小-->
+    <dimen name="file_name_size_speaker">20sp</dimen>
 
 
 </resources>

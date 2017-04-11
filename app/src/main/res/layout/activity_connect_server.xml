@@ -1,56 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="50dp">
+    android:background="@color/color_background"
+    android:gravity="center_horizontal"
+    android:id="@+id/id_ll_activity_connect_server"
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/id_edt_connect_server"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/edt_selector"
-        android:text="119.29.192.18:89"/>
+    <FrameLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_company"/>
 
-    <TextView
-        android:id="@+id/text_ip"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/app_name_for_show"
+            android:textSize="30sp"/>
+    </FrameLayout>
+
+    <com.gzz100.Z100_HuiYi.meetingPrepare.ExpandableEditText
+        android:layout_marginTop="100dp"
+        android:id="@+id/id_exp_activity_connect_server"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_toLeftOf="@+id/id_edt_connect_server"
-        android:gravity="center"
-        android:padding="@dimen/distance_five_dp"
-        android:text="@string/string_input_ip_address"
-        android:textSize="@dimen/connect_server_text_size"/>
+        android:layout_height="wrap_content">
+
+    </com.gzz100.Z100_HuiYi.meetingPrepare.ExpandableEditText>
 
     <Button
-        android:id="@+id/id_btn_connect_server"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_toRightOf="@+id/id_edt_connect_server"
-        android:text="@string/string_ensure"
-        android:textSize="@dimen/connect_server_text_size"/>
-
-    <TextView
-        android:id="@+id/text_record"
+        android:layout_marginTop="100dp"
+        android:id="@+id/id_btn_ensure_activity_connect_server"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/id_edt_connect_server"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@id/text_ip"
-        android:padding="@dimen/distance_five_dp"
-        android:text="@string/string_ip_record"
-        android:textSize="@dimen/connect_server_text_size"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/id_rcv_connect_server"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/text_record"
-        android:layout_toRightOf="@id/text_ip"
-        android:overScrollMode="never">
-
-    </android.support.v7.widget.RecyclerView>
-</RelativeLayout>
+        android:paddingBottom="10dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/color_white"
+        android:textSize="25sp"
+        android:background="@drawable/ensure_button_shape"
+        android:text="确定"/>
+</LinearLayout>

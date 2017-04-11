@@ -1,6 +1,7 @@
 package com.gzz100.Z100_HuiYi.meeting.file;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,21 +55,35 @@ public class AgendaListTabAdapter extends RecyclerView.Adapter<AgendaHolder>{
             }
         });
         if (position == 0){
-            holder.mAgendaIndex.setTextColor(mContext.getResources().getColor(R.color.color_white));
-            holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_white));
-            holder.mLayout.setBackgroundColor(mContext.
-                    getResources().getColor(R.color.color_tab_selected));
+            holder.mAgendaIndex.setTextColor(mContext.getResources().getColor(R.color.color_navBar_bg));
+//            holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_white));
+
+            Drawable drawable = mContext.getResources().getDrawable(R.drawable.icon_file_selected);
+            drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+            holder.mAgendaIndex.setCompoundDrawables(null,drawable,null,null);
+//            holder.mLayout.setBackgroundColor(mContext.
+//                    getResources().getColor(R.color.color_tab_selected));
         }
         if (selectedPosition == position){
-            holder.mAgendaIndex.setTextColor(mContext.getResources().getColor(R.color.color_white));
-            holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_white));
-            holder.mLayout.setBackgroundColor(mContext.
-                    getResources().getColor(R.color.color_tab_selected));
+            holder.mAgendaIndex.setTextColor(mContext.getResources().getColor(R.color.color_navBar_bg));
+//            holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_white));
+
+            Drawable drawable = mContext.getResources().getDrawable(R.drawable.icon_file_selected);
+            drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+            holder.mAgendaIndex.setCompoundDrawables(null,drawable,null,null);
+//            holder.mLayout.setBackgroundColor(mContext.
+//                    getResources().getColor(R.color.color_tab_selected));
         }else {
-            holder.mAgendaIndex.setTextColor(mContext.getResources().getColor(R.color.color_black));
+            holder.mAgendaIndex.setTextColor(mContext.getResources().getColor(R.color.color_agenda_item_text));
             holder.mAgendaTitle.setTextColor(mContext.getResources().getColor(R.color.color_black));
-            holder.mLayout.setBackgroundColor(mContext.
-                    getResources().getColor(R.color.color_tab_normal));
+
+            Drawable drawable = mContext.getResources().getDrawable(R.drawable.icon_file_normal);
+            drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+            holder.mAgendaIndex.setCompoundDrawables(null,drawable,null,null);
+
+
+//            holder.mLayout.setBackgroundColor(mContext.
+//                    getResources().getColor(R.color.color_tab_normal));
         }
 
     }

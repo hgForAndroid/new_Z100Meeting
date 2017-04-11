@@ -3,55 +3,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="450dp">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="@string/string_function_introduce_one"
-        android:textSize="24sp"/>
+        style="@style/about_activity_function_introduce"
+        android:text="@string/string_function_introduce_one"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="@string/string_function_introduce_two"
-        android:textSize="24sp"/>
+        style="@style/about_activity_function_introduce"
+        android:text="@string/string_function_introduce_two"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="@string/string_function_introduce_three"
-        android:textSize="24sp"/>
+        style="@style/about_activity_function_introduce"
+        android:text="@string/string_function_introduce_three"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="@string/string_function_introduce_four"
-        android:textSize="24sp"/>
+        style="@style/about_activity_function_introduce"
+        android:text="@string/string_function_introduce_four"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
+        style="@style/about_activity_function_introduce"
         android:text="@string/string_function_introduce_five"
-        android:textSize="24sp"/>
+        />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="@string/string_function_introduce_six"
-        android:textSize="24sp"/>
+        style="@style/about_activity_function_introduce"
+        android:text="@string/string_function_introduce_six"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="@string/string_function_introduce_seven"
-        android:textSize="24sp"/>
+        style="@style/about_activity_function_introduce"
+        android:text="@string/string_function_introduce_seven"/>
 
 </LinearLayout>

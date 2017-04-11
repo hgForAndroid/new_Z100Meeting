@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="500dp"
+    android:background="@drawable/expandable_bg"
+    android:layout_height="54dp">
+    <EditText
+        android:paddingLeft="10dp"
+        android:hint="@string/string_input_ip_address"
+        android:text="@string/ip"
+        android:id="@+id/id_edit_text"
+        android:layout_width="452dp"
+        android:background="@null"
+        android:layout_height="54dp"/>
+    <Button
+        android:id="@+id/id_expand"
+        android:background="@drawable/ic_drop_down"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_weight="2">
 
         <ImageView
             android:id="@+id/id_iv_item_file_image_result"
@@ -28,37 +28,30 @@
             android:text="文件名"
             android:textSize="@dimen/item_file_text_size"/>
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
-
-        <TextView
-            android:id="@+id/id_tv_item_file_size_result"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="大小"
-            android:textSize="@dimen/item_file_text_size"/>
-
-        <TextView
-            android:id="@+id/id_tv_item_file_key_note_speaker_result"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="主讲人"
-            android:textSize="@dimen/item_file_text_size"/>
-    </LinearLayout>
-
     <TextView
         android:id="@+id/id_tv_item_file_agenda_result"
-
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:text="议程"
+        android:textSize="@dimen/item_file_text_size"/>
+    <TextView
+        android:id="@+id/id_tv_item_file_key_note_speaker_result"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="right"
-        android:text="议程"
+        android:gravity="center"
+        android:text="主讲人"
         android:textSize="@dimen/item_file_text_size"/>
+    <TextView
+        android:id="@+id/id_tv_item_file_size_result"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:text="大小"
+        android:gravity="center"
+        android:textSize="@dimen/item_file_text_size"/>
+
+
 </LinearLayout>

@@ -30,6 +30,7 @@ import butterknife.OnClick;
 public class SelectMeetingActivity extends BaseActivity implements SelectMeetingContract.View, OnMeetingClickListener {
 
     private String mDeviceIMEI;
+    private String mMeetingName;
 
     public static void toSelectMeetingActivity(Context context) {
         Intent intent = new Intent(context, SelectMeetingActivity.class);
@@ -71,7 +72,7 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
     /**
      * 重新获取会议列表
      */
-    @OnClick(R.id.id_btn_select_meeting)
+    @OnClick(R.id.id_btn_refresh_select_meeting)
     void getMeetingList() {
         mPresenter.fetchMeetingList(true, mDeviceIMEI);
     }
@@ -114,7 +115,7 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
      */
     @Override
     public void showSignIn(String IMEI, int meetingID) {
-        SignInActivity.toSignInActivity(this, IMEI, meetingID);
+        SignInActivity.toSignInActivity(this, IMEI, meetingID,mMeetingName);
     }
 
     @Override
@@ -129,13 +130,16 @@ public class SelectMeetingActivity extends BaseActivity implements SelectMeeting
     @Override
     public void onMeetingClick(int position) {
         int meetingID = mMeetings.get(position).getMeetingID();
-
-        Log.e("xqx", "onMeetingClick: 会议id = "+meetingID);
+        mMeetingName = mMeetings.get(position).getMeetingName();
 
         String deviceIMEI = MPhone.getDeviceIMEI(this.getApplicationContext());
         mPresenter.selectMeeting(deviceIMEI, meetingID);
     }
 
+    @OnClick(R.id.id_btn_back_select_meeting)
+    public void fallback(){
+        ActivityStackManager.pop();
+    }
     /**
      * 返回按钮，该方式是可能服务器地址输入错误后，向返回重新输入
      * @param keyCode

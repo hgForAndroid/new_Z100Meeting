@@ -11,6 +11,7 @@ public class KeyInfoBean {
     private String serverIP;
     private int meetingId;
     private String tcpServerIP;
+    private String meetingName;
 
     public KeyInfoBean(String serverIP, int meetingId, String tcpServerIP) {
         this.serverIP = serverIP;
@@ -40,5 +41,13 @@ public class KeyInfoBean {
 
     public void setTcpServerIP(String tcpServerIP) {
         this.tcpServerIP = tcpServerIP;
+    }
+
+    public String getMeetingName() {
+        return meetingName;
+    }
+
+    public void setMeetingName(String meetingName) {
+        this.meetingName = meetingName;
     }
 }

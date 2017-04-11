@@ -38,7 +38,7 @@ public class VoteOptionListAdapter extends RecyclerView.Adapter<VoteOptionHolder
 
     @Override
     public VoteOptionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.item_vote_option_list, null);
+        View view = mLayoutInflater.inflate(R.layout.item_vote_option_list, parent,false);
         VoteOptionHolder holder = new VoteOptionHolder(view);
         return holder;
     }

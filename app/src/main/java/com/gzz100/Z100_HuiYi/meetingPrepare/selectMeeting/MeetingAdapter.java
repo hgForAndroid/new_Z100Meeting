@@ -37,7 +37,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingH
 
     @Override
     public MeetingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_select_meeting,null);
+        View view = mInflater.inflate(R.layout.item_select_meeting,parent,false);
         return new MeetingHolder(view);
     }
 
@@ -46,7 +46,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingH
         holder.mTvName.setText(meetings.get(position).getMeetingName());
         holder.mTvTime.setText(meetings.get(position).getMeetingBeginTime());
         meetings.get(position).setMeetingState(holder.mTvState);
-        holder.mLlAll.setOnClickListener(new View.OnClickListener() {
+        holder.mTvSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnClickListener.onMeetingClick(position);
@@ -61,15 +61,14 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingH
     }
 
     class MeetingHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.id_ll_meeting_all)
-//        LinearLayout mLlAll;
-         RelativeLayout mLlAll;
         @BindView(R.id.id_tv_name_item_select_meeting)
         TextView mTvName;
         @BindView(R.id.id_tv_time_item_select_meeting)
         TextView mTvTime;
         @BindView(R.id.id_tv_state_item_select_meeting)
         TextView mTvState;
+        @BindView(R.id.id_tv_select_item_select_meeting)
+        TextView mTvSelect;
         public MeetingHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

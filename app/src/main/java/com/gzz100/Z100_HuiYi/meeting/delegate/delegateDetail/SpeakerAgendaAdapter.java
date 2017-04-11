@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gzz100.Z100_HuiYi.R;
+import com.gzz100.Z100_HuiYi.data.AgendaModel;
 
 import java.util.List;
 
@@ -19,9 +20,9 @@ import butterknife.ButterKnife;
  */
 public class SpeakerAgendaAdapter extends RecyclerView.Adapter<SpeakerAgendaAdapter.AgendaHolder> {
     private Context mContext;
-    private List<Integer> agendaList;
+    private List<AgendaModel> agendaList;
     private LayoutInflater mInflater;
-    public SpeakerAgendaAdapter(Context context, List<Integer> agendaList) {
+    public SpeakerAgendaAdapter(Context context, List<AgendaModel> agendaList) {
         mContext = context;
         this.agendaList = agendaList;
         mInflater = LayoutInflater.from(context);
@@ -29,14 +30,15 @@ public class SpeakerAgendaAdapter extends RecyclerView.Adapter<SpeakerAgendaAdap
 
     @Override
     public AgendaHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_delegate_detail_agenda, null);
+        View view = mInflater.inflate(R.layout.item_delegate_detail_agenda, parent,false);
         AgendaHolder holder = new AgendaHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(AgendaHolder holder, int position) {
-        holder.mTvAgenda.setText("议程"+agendaList.get(position));
+        holder.mTvAgenda.setText("议程"+agendaList.get(position).getAgendaIndex());
+        holder.mTvAgendaContent.setText(agendaList.get(position).getAgendaName());
     }
 
     @Override
@@ -47,6 +49,8 @@ public class SpeakerAgendaAdapter extends RecyclerView.Adapter<SpeakerAgendaAdap
     class AgendaHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.id_tv_item_delegate_detail)
         TextView mTvAgenda;
+        @BindView(R.id.id_tv_item_delegate_detail_agenda_content)
+        TextView mTvAgendaContent;
         public AgendaHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

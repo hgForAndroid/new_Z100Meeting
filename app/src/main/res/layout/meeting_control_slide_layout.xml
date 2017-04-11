@@ -2,8 +2,9 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="62dp"
+    android:layout_height="match_parent"
     android:layout_margin="2dp"
+    android:orientation="horizontal"
     android:gravity="right">
 
     <ImageView
@@ -11,38 +12,47 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:paddingRight="10dp"
+        android:padding="5dp"
         android:src="@drawable/file_detail_slide_to_right"/>
 
-    <Button
-        android:id="@+id/id_btn_start_meeting"
+    <LinearLayout
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginBottom="2dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/button_selector"
-        android:text="开始"
-        android:textSize="20sp"/>
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/id_btn_start_meeting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/control_button_selector"
+            android:drawableTop="@drawable/play_normal"
+            android:text="开始"
+            android:textColor="@color/color_main_text"
+            android:textSize="@dimen/control_bar_text_size"/>
 
-    <Button
-        android:id="@+id/id_btn_pause_meeting"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="2dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/button_selector"
-        android:text="暂停"
-        android:textSize="20sp"/>
+        <Button
+            android:id="@+id/id_btn_pause_meeting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/control_button_selector"
+            android:drawableTop="@drawable/pause_normal"
+            android:text="暂停"
+            android:textColor="@color/color_main_text"
+            android:textSize="@dimen/control_bar_text_size"/>
 
-    <Button
-        android:id="@+id/id_btn_start_vote"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="2dp"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/button_selector"
-        android:text="投票"
-        android:textSize="20sp"/>
+        <Button
+            android:id="@+id/id_btn_start_vote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/control_button_selector"
+            android:drawableTop="@drawable/vote_normal"
+            android:text="投票"
+            android:textColor="@color/color_main_text"
+            android:textSize="@dimen/control_bar_text_size"/>
+    </LinearLayout>
+
 </LinearLayout>

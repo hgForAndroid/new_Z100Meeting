@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.gzz100.Z100_HuiYi.R;
 
 /**
-* 文件详情
+* 关于
 * @author XieQXiong
 * create at 2016/8/23 17:01
 */

@@ -29,9 +29,28 @@
 
     <!--整体色调-->
     <color name="color_background">#f6eee3</color>
+
+    <color name="color_background2">#f5f5f4</color>
     <!--横幅颜色-->
     <color name="color_streamer">#f94b42</color>
-    
-    <color name="color_main_text">#BFB7B0</color>
+    <color name="color_streamer_text">#E8D128</color>
 
+    <color name="color_main_text">#BFB7B0</color>
+    <!--导航栏上的全部文字颜色-->
+    <color name="nav_bar_all_text_color">#fff</color>
+
+    <!--会议界面，所有人员名字的颜色-->
+    <color name="color_meeting_scenario_name">#BFB7B0</color>
+    <!--关于界面的字体颜色，如：系统介绍，功能介绍-->
+    <color name="color_about_activity_text">#9f9f9f</color>
+
+    <!--文件界面    文件名、大小、主持人  字体颜色-->
+    <color name="color_file_name_size_speaker">#717171</color>
+    <!--文件界面  议程列表的item的字体默认颜色-->
+    <color name="color_agenda_item_text">#BFB7B0</color>
+    <!--人员界面  全部的文字颜色-->
+    <color name="color_delegate_all_text">#717070</color>
+
+    <!--议程界面  议程序号、议程名  颜色-->
+    <color name="color_agenda_index_and_name">#716D68</color>
 </resources>

@@ -51,7 +51,9 @@ public class SendMulticastService extends Service {
         mCurrentIP = SharedPreferencesUtil.getInstance(this).getString(Constant.CURRENT_IP, "");
         mMeetingId = SharedPreferencesUtil.getInstance(this).getInt(Constant.MEETING_ID, -1);
         String tcpServerIP = intent.getStringExtra("localIpAddress");
+        String meetingName = intent.getStringExtra("meetingName");
         KeyInfoBean keyInfoBean = new KeyInfoBean(mCurrentIP, mMeetingId, tcpServerIP);
+        keyInfoBean.setMeetingName(meetingName);
         Gson gson = new Gson();
         mKeyInfoJson = gson.toJson(keyInfoBean);
 

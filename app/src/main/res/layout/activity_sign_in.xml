@@ -4,55 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_background"
     android:orientation="vertical"
     tools:context=".meetingPrepare.signIn.SignInActivity">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/id_tv_meeting_name_signIn_activity"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7"
-        android:orientation="vertical">
+        android:layout_height="64dp"
+        android:background="@color/color_streamer"
+        android:gravity="center"
+        android:padding="@dimen/distance_five_dp"
+        android:textColor="@color/color_streamer_text"
+        android:textSize="@dimen/streamer_text_size"/>
 
-        <TextView
-            android:id="@+id/id_tv_position_sign_in"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7"
-            android:gravity="center"
-            android:text="职位名称"
-            android:textSize="50sp"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/sign_in_image"/>
 
-        <TextView
-            android:id="@+id/id_tv_name_sign_in"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:text="名字"
-            android:textSize="45sp"/>
-    </LinearLayout>
-
-    <View
+    <TextView
+        android:id="@+id/id_tv_position_sign_in"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000"/>
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="职位名称"
+        android:textSize="50sp"/>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/id_tv_name_sign_in"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="50dp"
+        android:paddingTop="50dp"
+        android:text="名字"
+        android:textSize="45sp"/>
 
-        <Button
-            android:id="@+id/id_btn_sign_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:paddingTop="10dp"
-            android:text="@string/string_sign_in"
-            android:textSize="45sp"/>
-    </LinearLayout>
+    <Button
+        android:id="@+id/id_btn_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/ensure_button_shape"
+        android:paddingBottom="10dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingTop="10dp"
+        android:text="@string/string_sign_in"
+        android:textColor="@color/color_white"
+        android:textSize="45sp"/>
 
 </LinearLayout>

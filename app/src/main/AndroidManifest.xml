@@ -26,12 +26,21 @@
             android:name=".meetingPrepare.ConnectServerActivity"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+            <!--</intent-filter>-->
+        </activity>
+        <!--这个Activity是用于在签到页面一次性获取会议信息，并展示出来-->
+        <activity android:name=".meetingPrepare.signIn.onestep.OneStepSignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name=".meetingPrepare.selectMeeting.SelectMeetingActivity"
             android:screenOrientation="landscape">
@@ -44,6 +53,10 @@
             android:name=".meeting.MainActivity"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity
+            android:name=".meeting.about.AboutActivity"
+            android:screenOrientation="landscape">
         </activity>
         <activity android:name=".BaseActivity">
         </activity>

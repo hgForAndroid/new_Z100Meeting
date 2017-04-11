@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Z100会议系统</string>
-    <string name="string_input_ip_address">请输入IP地址:</string>
+    <string name="app_name_for_show">中佰会议系统</string>
+
+    <string name="string_input_ip_address">请输入IP地址 ：192.168.1.110:80</string>
+    <string name="ip">119.29.192.18:80</string>
+
     <string name="string_ip_record">历史记录：</string>
 
     <string name="string_choose_meeting">请选择会议</string>
@@ -8,7 +12,9 @@
 
     <string name="string_meeting_name">会议名称</string>
     <string name="string_time">时间</string>
+    <string name="string_meeting_start_time">开会时间</string>
     <string name="string_state">状态</string>
+    <string name="string_select">选择</string>
     <string name="string_no_meeting_in_present">当前无会议</string>
 
     <string name="string_sign_in">签到</string>
@@ -17,8 +23,6 @@
 
 
     <string name="string_copy_right">copyright ©广州中佰信息科技有限公司</string>
-
-
 
 
     <string name="string_main_tab_meeting">会议</string>
@@ -80,7 +84,7 @@
     <string name="string_meeting_already_ending">会议已结束</string>
 
     <!--功能介绍-->
-    <string name="string_function_introduce_one">1、实时显示会议进行时间。（界面右上方）</string>
+    <string name="string_function_introduce_one">1、实时显示会议进行时间。</string>
     <string name="string_function_introduce_two">2、随时查看与会人员详细信息。</string>
     <string name="string_function_introduce_three">3、查看会议的所有议程。</string>
     <string name="string_function_introduce_four">4、查看会议的所有文件。</string>
@@ -91,7 +95,6 @@
 
     <string name="string_meeting_description">本系统是为了能够帮助会议组织者极大地降低工作强度，同时响应国家低碳、环保的号召力而编写的</string>
 
-
-
+    <string name="string_affirm">确认</string>
 
 </resources>
